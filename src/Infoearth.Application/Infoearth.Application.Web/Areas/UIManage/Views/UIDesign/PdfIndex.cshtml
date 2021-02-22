@@ -1,0 +1,359 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 24px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+
+    //$(function () {
+    //    InitialPage();
+
+
+
+
+    //});
+    //初始化页面
+    //function InitialPage() {
+
+    //    $(window).resize(function (e) {
+    //        window.setTimeout(function () {
+    //            $('#abc').height($(window).height() - 20);
+    //        }, 200);
+    //        e.stopPropagation();
+    //    });
+    //}
+
+
+
+</script>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">PDF导出</div>
+ 
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+        
+
+    </div>
+ 
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、引入JS文件
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">< script src="~/App/bower_components/pdf/html2canvas.js">< /script >
+
+
+</p>
+
+                      
+
+                            <p class="orm_item_title_note1">
+                                < script src="~/App/bower_components/pdf/jspdf.min.js">< /script >
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                < script src="~/App/bower_components/pdf/pdfHelper.js">< /script >
+                            </p>
+
+                          
+                        </div>
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、 文件介绍
+                    </td>
+                   
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1"><b>html2canvas.js和jspdf.min.js为第三方提供；pdfHelper.js由我方人员封装方法</b></p>
+
+                            <p class="orm_item_title_note1" style="color:green">//jdom:div控件(任意dom元素)</p>
+
+                            <p class="orm_item_title_note1" style="color:green">
+                                //height:dom元素高度
+                            </p>
+
+                            <p class="orm_item_title_note1" style="color:green">
+                                //allowTaint:是否允许跨域，默认false
+                            </p>
+                            <p class="orm_item_title_note1" style="color:green">//isClone:是否导出显示区域下方的内容</p> 
+                            <p class="orm_item_title_note1">
+                                function exportPDF(jdom, height, allowTaint, isClone) {</p>
+                            <p class="orm_item_title_note1">
+                                &nbsp &nbsp &nbsp var dom = jdom;</p>
+                            <p class="orm_item_title_note1">
+                                &nbsp &nbsp &nbsp if (isClone) {</p>
+                            <p class="orm_item_title_note1">
+                                &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var copyDom = jdom.clone();
+                            </p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp   copyDom.width(jdom.width() + "px");</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  copyDom.height(jdom.height() + "px");</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp   dom = copyDom;</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp   $(document.body).append(dom);</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  }</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  html2canvas(dom, {</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp allowTaint: allowTaint,</p>
+                            <p class="orm_item_title_note1" style="color:green">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  //useCORS: true,</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp height: height,</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp background: '#fff',</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp onrendered: function (canvas) {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp if (isClone) {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp dom.remove();</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp }</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var contentWidth = canvas.width;</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var contentHeight = canvas.height;</p>
+                            <p class="orm_item_title_note1" style="color:green">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //一页pdf显示html页面生成的canvas高度;</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var pageHeight = contentWidth / 592.28 * 841.89;</p>
+                            <p class="orm_item_title_note1" style="color:green">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //未生成pdf的html页面高度</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var leftHeight = contentHeight;</p>
+                            <p class="orm_item_title_note1" style="color:green">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp//pdf页面偏移</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  var position = 0;</p>
+                            <p class="orm_item_title_note1" style="color:green">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //a4纸的尺寸[595.28,841.89]，html页面生成的canvas在pdf中图片的宽高</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var imgWidth = 595.28;</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp var imgHeight = 592.28 / contentWidth * contentHeight;</p>
+                            <p class="orm_item_title_note1">
+                                &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp    var pageData = canvas.toDataURL('image/jpeg', 1.0);
+                            </p>
+
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  var pdf = new jsPDF('', 'pt', 'a4');</p>
+
+                            <p class="orm_item_title_note1" style="color:green">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)</p>
+                            <p class="orm_item_title_note1" style="color:green">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //当内容未超过pdf一页显示的范围，无需分页</p>
+                            <p class="orm_item_title_note1">    &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  if (leftHeight < pageHeight) {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp pdf.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight);</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp } else {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp while (leftHeight > 0) {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp pdf.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp leftHeight -= pageHeight;</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp position -= 841.89;</p>
+                            <p class="orm_item_title_note1" style="color:green">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp //避免添加空白页</p>
+                            <p class="orm_item_title_note1">    &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp&nbsp &nbsp &nbsp if (leftHeight > 0) {</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp pdf.addPage();</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  }</p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp }</p>
+                            <p class="orm_item_title_note1">
+                                &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp }
+                            </p>
+                            <p class="orm_item_title_note1">  &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp  pdf.save('PDF文档.pdf');</p>
+                            <p class="orm_item_title_note1">   &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp }</p>
+                            <p class="orm_item_title_note1"> &nbsp &nbsp &nbsp  })</p>
+                           
+
+</div>
+                    </td>
+                   
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、方法调用
+                    </td>
+                  
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1"> exportPDF($("#pdfTest"), $("#pdfTest").height(), false, true)</p>
+
+                        
+                        </div>
+                    </td>
+                   
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+ 
+
+
+
+</div>
+

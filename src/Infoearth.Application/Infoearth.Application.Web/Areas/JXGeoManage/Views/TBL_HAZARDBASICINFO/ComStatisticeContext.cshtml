@@ -1,0 +1,556 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@System.Web.Optimization.Styles.Render("~/Content/disaster/Base.css")
+@System.Web.Optimization.Styles.Render("~/Content/disaster/GeoMap2.css")
+@section Scripts{
+<script>
+    var keyValue = request('HkeyValue');
+    var authToken = getAuthorizationToken();
+    var _pageCount = 0;
+    var _pageIndex = 0;
+    var _projectID = "";
+    var _queryUrl = "";
+    var _administrator;
+    var _queryLevel = "";
+    var _colName = "";
+    var _pageSize = 100;//每页显示100条记录
+    var _allCount = 0;
+    var selectedRowIndex = 0; var zd = "";
+    var UnionStatisticsSql1 = "";//最终传入后台的拼接sql语句
+    $(document).ready(function () {
+        //检查字段
+        $(".tongji-tiaojian-left-top1 a").each(function (index, a) {
+            if (a) {
+                $(a).dblclick(function () {
+                    //如果文本框里面存在，不能重复添加条件
+                    if (($(".chaxunyuju")[0].innerHTML).toString().indexOf(a.innerHTML.toString()) == -1) {
+                        //var value = "";
+                        //if (a.innerHTML == "威胁财产(万元)") {
+                        //    aaa = " 威胁财产"
+                        //    value = "威胁财产";
+                        //}
+                        //else if (a.innerHTML == "威胁人口(人)") {
+                        //    aaa = " 威胁人口"
+                        //    value = "威胁人口";
+                        //}
+                        //else if (a.innerHTML == "毁坏房屋(间)") {
+                        //    aaa = " 毁坏房屋"
+                        //    value = "毁坏房屋";
+                        //}
+ 
+                        $(".chaxunyuju").val($(".chaxunyuju").val() + " " + a.innerHTML);
+                        $(".zdnew").val($(".zdnew").val() + " " + a.innerHTML)
+                        //_colName = value;
+                        QueryMethod(a.innerHTML);
+                    }
+                    else {
+                        alert("该条件已添加！");
+                    }
+                });
+            }
+        });
+        LoadGrid();
+        HideValue();
+        //检查
+        $("#btnVertify").click(function () {
+            var sqlStr = $("#yuJuArea").val();
+            if (sqlStr == "") {
+                dialogMsg("请填写组合条件", 0);
+            }
+            else {
+                $.ajax({
+                    url: "../../api/TBL_HAZARDBASICINFOApi/CheckExpression",
+                    data: { sqlWhere: CreplaceE(sqlStr) },
+                    type: 'get',
+                    success: function (data) {
+                        if (data.type == "3") {
+                            learun.loading({ isShow: false });
+                            learun.dialogMsg({ msg: data.message, type: -1 });
+                        } else {
+                            learun.loading({ isShow: false });
+                            learun.dialogMsg({ msg: data.message, type: 1 });
+                        }
+                    },
+                    beforeSend: function (c, b) {
+                        if (authToken != null)
+                            c.setRequestHeader("Authorization", authToken);
+                        learun.loading({ isShow: true, text: "正在检查语句" });
+                    },
+                    complete: function () {
+                        learun.loading({ isShow: false });
+                    },
+                    cache: false
+                })
+            }
+        });
+        //计算方法
+        $(".tongji-tiaojian-left-top2 a").each(function (index, a) {
+            if (a) {
+                $(a).click(function () {
+
+                    //$(".chaxunyuju")[0].innerHTML += " " + a.innerHTML; //把选中的项添加到查询语句中
+                    //$($(".chaxunyuju")[0]).text() += " " + a.innerHTML; //把选中的项添加到查询语句中
+                    var aa = $($(".chaxunyuju")[0]).val(); var aaa = $($(".zdnew")[0]).val();
+                    var b = $(a).text();
+                    $($(".chaxunyuju")[0]).text(aa + " " + b);
+                    $(".chaxunyuju").val(aa + " " + b);
+                    $($(".zdnew")[0]).text(aa + " " + b);
+                    $(".zdnew").val(aaa + " " + b);
+                })
+            }
+        });
+        //清除
+        $("#btnClear").click(function () {
+            $(".chaxunyuju").text(""); $(".chaxunyuju").html("");
+            $(".chaxunyuju").val("");
+            $(".zdnew").val("");
+            $("#gridTable1").jqGrid("clearGridData");
+        });
+
+        /*****************************方法*****************************/
+        //查询
+        function HideValue() {
+            $('#gridTable1').jqGrid("hideCol", ["DISASTERNAME", "UNIFIEDCODE",
+    "PROVINCENAME", "CITYNAME", "COUNTYNAME", "TOWNNAME", "LOCATION", "LONGITUDE",
+    "LATITUDE", "OUTDOORCODE", "INDOORCODE", "DISASTERLEVEL", "DANGERLEVEL", "X", "Y", "Z",
+    "GROUNDWATERTYPE", "TREATMENTSUGGESTION", "TECTONICREGION", "MONITORSUGGESTION",
+    "STABLETREND", "CURSTABLESTATUS", "THREATENASSETS", "THREATENPEOPLE", "HIDDENDANGER",
+    "DISASTERTYPE", "DESTROYEDHOME", "DESTROYEDROAD", "DESTROYEDCANAL"]);
+        }
+        var queryJson = {};
+
+        function QueryMethod(ShowName) {
+            queryJson.ssx = ShowName;
+            $("#gridTable1").jqGrid("clearGridData");
+            $("#gridTable1").jqGrid('setGridParam', {
+                async: false,
+                height: $(window).height() - 90,
+                datatype: "json",
+                postData: { queryJson: JSON.stringify(queryJson) },
+                url: "../../api/TBL_HAZARDBASICINFOApi/GetPageListJsonByZhtj",
+                onSelectRow: function (rowId, status) {
+                    selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                },
+                onCellSelect: function (rowid, index, contents, event) {
+                    // $(".chaxunyuju")[0].innerHTML += " \'" + contents + "\'"; //把选中项添加到语句中
+                    if ($(contents).length > 1) {
+                        zd = $($(contents)[1]).text();
+                        contents = $($(contents)[0]).text();
+                    } else {
+                        zd = contents;
+                    }
+                    var a11 = " \'" + contents + "\'";
+                    var a12 = " \'" + zd + "\'";
+                    
+                    $(".chaxunyuju").val($(".chaxunyuju").val() + a11);
+                    $(".zdnew").val($(".zdnew").val() + a12);
+                },
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+                }
+            }).trigger('reloadGrid');
+            HideValue();
+            switch (ShowName) {
+                case "灾害点名称":
+                    $('#gridTable1').jqGrid("showCol", ["DISASTERNAME"]);
+                    break;
+                case "灾害点编号":
+                    $('#gridTable1').jqGrid("showCol", ["UNIFIEDCODE"]);
+                    break;
+                case "省":
+                    $('#gridTable1').jqGrid("showCol", ["PROVINCENAME"]);
+                    break;
+                case "市":
+                    $('#gridTable1').jqGrid("showCol", ["CITYNAME"]);
+                    break;
+                case "县":
+                    $('#gridTable1').jqGrid("showCol", ["COUNTYNAME"]);
+                    break;
+                case "乡镇":
+                    $('#gridTable1').jqGrid("showCol", ["TOWNNAME"]);
+                    break;
+                case "地理位置":
+                    $('#gridTable1').jqGrid("showCol", ["LOCATION"]);
+                    break;
+                case "经度":
+                    $('#gridTable1').jqGrid("showCol", ["LONGITUDE"]);
+                    break;
+                case "纬度":
+                    $('#gridTable1').jqGrid("showCol", ["LATITUDE"]);
+                    break;
+                case "野外编号":
+                    $('#gridTable1').jqGrid("showCol", ["OUTDOORCODE"]);
+                    break;
+                case "室内编号":
+                    $('#gridTable1').jqGrid("showCol", ["INDOORCODE"]);
+                    break;
+                case "灾害等级":
+                    $('#gridTable1').jqGrid("showCol", ["DISASTERLEVEL"]);
+                    break;
+                case "险情等级":
+                    $('#gridTable1').jqGrid("showCol", ["DANGERLEVEL"]);
+                    break;
+                case "X":
+                    $('#gridTable1').jqGrid("showCol", ["X"]);
+                    break;
+                case "Y":
+                    $('#gridTable1').jqGrid("showCol", ["Y"]);
+                    break;
+                case "Z":
+                    $('#gridTable1').jqGrid("showCol", ["Z"]);
+                    break;
+                case "地下水类型":
+                    $('#gridTable1').jqGrid("showCol", ["GROUNDWATERTYPE"]);
+                    break;
+                case "防治建议":
+                    $('#gridTable1').jqGrid("showCol", ["TREATMENTSUGGESTION"]);
+                    break;
+                case "构造部位":
+                    $('#gridTable1').jqGrid("showCol", ["TECTONICREGION"]);
+                    break;
+                case "监测建议":
+                    $('#gridTable1').jqGrid("showCol", ["MONITORSUGGESTION"]);
+                    break;
+                case "今后变化趋势":
+                    $('#gridTable1').jqGrid("showCol", ["STABLETREND"]);
+                    break;
+                case "目前稳定程度":
+                    $('#gridTable1').jqGrid("showCol", ["CURSTABLESTATUS"]);
+                    break;
+                case "威胁财产":
+                    $('#gridTable1').jqGrid("showCol", ["THREATENASSETS"]);
+                    break;
+                case "威胁人口":
+                    $('#gridTable1').jqGrid("showCol", ["THREATENPEOPLE"]);
+                    break;
+                case "隐患点":
+                    $('#gridTable1').jqGrid("showCol", ["HIDDENDANGER"]);
+                    break;
+                case "灾害点类型":
+                    $('#gridTable1').jqGrid("showCol", ["DISASTERTYPE"]);
+                    break;
+                case "毁坏房屋":
+                    $('#gridTable1').jqGrid("showCol", ["DESTROYEDHOME"]);
+                    break;
+                case "毁路":
+                    $('#gridTable1').jqGrid("showCol", ["DESTROYEDROAD"]);
+                    break;
+                case "毁渠":
+                    $('#gridTable1').jqGrid("showCol", ["DESTROYEDCANAL"]);
+                    break;
+                default:
+                    $('#gridTable1').jqGrid("showCol", [ShowName]);
+                    break;
+            }
+        }
+        var dataArr = [];
+        //初次加载数据，并隐藏所有列
+        function LoadGrid() {
+            var $gridTable = $('#gridTable1');
+            $gridTable.jqGrid({
+                async: false,
+                autowidth: true,
+                height: $(window).height() - 90,
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                datatype: 'local',
+                //data: dataArr,
+                //postData: { queryJson: ""},
+                //url: "../../api/TBL_HAZARDBASICINFOApi/GetPageListJsonByZhtj",
+                //datatype: "json",
+                colModel: [
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 255, align: 'left', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 255, align: 'left', sortable: true },
+                { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 255, align: 'left', sortable: true },
+                { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 255, align: 'left', sortable: true },
+                { label: '县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 255, align: 'left', sortable: true },
+                { label: '乡镇', name: 'TOWNNAME', index: 'TOWNNAME', width: 255, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 255, align: 'left', sortable: true },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 255, align: 'left', sortable: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 255, align: 'left', sortable: true },
+                { label: '野外编号', name: 'OUTDOORCODE', index: 'OUTDOORCODE', width: 255, align: 'left', sortable: true },
+                { label: '室内编号', name: 'INDOORCODE', index: 'INDOORCODE', width: 255, align: 'left', sortable: true },
+                {
+                    label: '灾害等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                {
+                    label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                { label: 'X', name: 'X', index: 'X', width: 255, align: 'left', sortable: true },
+                { label: 'Y', name: 'Y', index: 'Y', width: 255, align: 'left', sortable: true },
+                { label: 'Z', name: 'Z', index: 'Z', width: 255, align: 'left', sortable: true },
+                {
+                    label: '地下水类型', name: 'GROUNDWATERTYPE', index: 'GROUNDWATERTYPE', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                {
+                    label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                { label: '构造部位', name: 'TECTONICREGION', index: 'TECTONICREGION', width: 255, align: 'left', sortable: true },
+                {
+                    label: '监测建议', name: 'MONITORSUGGESTION', index: 'MONITORSUGGESTION', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                {
+                    label: '今后变化趋势', name: 'STABLETREND', index: 'STABLETREND', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                {
+                    label: '目前稳定程度', name: 'CURSTABLESTATUS', index: 'CURSTABLESTATUS', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                { label: '威胁财产（万元）', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 255, align: 'left', sortable: true },
+                { label: '威胁人口（人）', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 255, align: 'left', sortable: true },
+                {
+                    label: '隐患点', name: 'HIDDENDANGER', index: 'HIDDENDANGER', width: 255, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null) {
+                            if (cellvalue.indexOf("--") > 0) {
+                                return '<span  class=\"\">' + cellvalue.split("--")[0] + '</span><span  style="display:none;">' + cellvalue.split("--")[1] + '</span>';
+                            }
+                        }
+                    }
+                },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 255, align: 'left', sortable: true },
+                { label: '毁坏房屋（间）', name: 'DESTROYEDHOME', index: 'DESTROYEDHOME', width: 255, align: 'left', sortable: true },
+                { label: '毁路', name: 'DESTROYEDROAD', index: 'DESTROYEDROAD', width: 255, align: 'left', sortable: true },
+                { label: '毁渠', name: 'DESTROYEDCANAL', index: 'DESTROYEDCANAL', width: 255, align: 'left', sortable: true },
+                ],
+                viewrecords: true,
+                rowNum: 30,
+                rowList: [100, 200, 300],
+                pager: "#gridPager1",
+                sortname: 'UNIFIEDCODE',
+                sortorder: 'desc',
+                rownumbers: false,
+                shrinkToFit: false,
+                gridview: true,
+                onSelectRow: function (rowId, status) {
+                    selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                },
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+                }
+            });
+        }
+
+        //保存组合查询条件
+        function SaveConditionWhere(value) {
+
+        }
+
+        //清空组合查询条件
+        function ClearConditionWhere() {
+            whereSql = "";
+        }
+        /*****************************方法*****************************/
+    });
+    function qcnew() {
+        $(".chaxunyuju").text("");
+        $(".chaxunyuju").html("");
+        $(".chaxunyuju").val(""); $(".zdnew").val("");
+        $("#gridTable1").jqGrid("clearGridData");
+    }
+    //保存表单;
+    function AcceptClick() {
+       // $(".zdnew").val(zd);
+        //传入后台
+    }
+    //中文字段替换成数据库字段名
+    function CreplaceE(UnionStatisticsSql) {
+        var reg1 = new RegExp("灾害点名称", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg1, "DISASTERNAME");
+        var reg2 = new RegExp("灾害点编号", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg2, "UNIFIEDCODE");
+        var reg3 = new RegExp("省", "");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg3, "PROVINCENAME");
+        var reg4 = new RegExp("市", "");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg4, "CITYNAME");
+        var reg5 = new RegExp("县", "");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg5, "COUNTYNAME");
+        var reg6 = new RegExp("乡镇", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg6, "TOWNNAME");
+        var reg7 = new RegExp("地理位置", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg7, "LOCATION");
+        var reg8 = new RegExp("经度", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg8, "LONGITUDE");
+        var reg9 = new RegExp("纬度", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg9, "LATITUDE");
+        var reg10 = new RegExp("野外编号", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg10, "OUTDOORCODE");
+        var reg11 = new RegExp("室内编号", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg11, "INDOORCODE");
+        var reg12 = new RegExp("灾害等级", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg12, "DISASTERLEVEL");
+        var reg13 = new RegExp("险情等级", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg13, "DANGERLEVEL");
+        var reg14 = new RegExp("地下水类型", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg14, "GROUNDWATERTYPE");
+        var reg15 = new RegExp("防治建议", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg15, "TREATMENTSUGGESTION")
+        var reg16 = new RegExp("构造部位", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg16, "TECTONICREGION");
+        var reg17 = new RegExp("监测建议", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg17, "MONITORSUGGESTION");
+        var reg18 = new RegExp("今后变化趋势", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg18, "STABLETREND");
+        var reg19 = new RegExp("目前稳定程度", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg19, "CURSTABLESTATUS");
+        var reg20 = new RegExp("威胁财产", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg20, "THREATENASSETS");
+        var reg21 = new RegExp("威胁人口", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg21, "THREATENPEOPLE");
+        var reg22 = new RegExp("隐患点", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg22, "HIDDENDANGER");
+        var reg23 = new RegExp("灾害点类型", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg23, "DISASTERTYPE");
+        var reg24 = new RegExp("毁坏房屋", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg24, "DESTROYEDHOME");
+        var reg25 = new RegExp("毁路", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg25, "DESTROYEDROAD");
+        var reg26 = new RegExp("毁渠", "g");
+        UnionStatisticsSql = UnionStatisticsSql.replace(reg26, "DESTROYEDCANAL");
+        console.log(UnionStatisticsSql);
+        return UnionStatisticsSql;
+    }
+</script>
+}
+<style type="text/css">
+    .color:link {
+        color: black;
+        display: block;
+        height: 24px;
+        line-height: 24px;
+        padding-left: 3px;
+        text-decoration: none;
+    }
+
+    .color:visited {
+        color: black;
+    }
+
+    .color:hover {
+        color: #0099FF;
+        background-color: #D5EDFE;
+    }
+
+    .q:hover {
+        background: #449d44;
+        border: 1px solid #398439;
+    }
+</style>
+<div class="tongji-tiaojian">
+    <div class="tongji-tiaojian-left">
+        <fieldset class="tongji-tiaojian-left-top">
+            <legend>查询字段</legend>
+            <div class="tongji-tiaojian-left-top1" style="overflow-y: scroll">
+                <a href="javascript:void(0);" class="color">灾害点编号</a>
+                <a href="javascript:void(0);" class="color">灾害点名称</a>
+                <a href="javascript:void(0);" class="color">地理位置</a>
+                <a href="javascript:void(0);" class="color">经度</a>
+                <a href="javascript:void(0);" class="color">纬度</a>
+                <a href="javascript:void(0);" class="color">省</a>
+                <a href="javascript:void(0);" class="color">市</a>
+                <a href="javascript:void(0);" class="color">县</a>
+                <a href="javascript:void(0);" class="color">乡镇</a>
+                <a href="javascript:void(0);" class="color">野外编号</a>
+                <a href="javascript:void(0);" class="color">室内编号</a>
+                <a href="javascript:void(0);" class="color">灾害等级</a>
+                <a href="javascript:void(0);" class="color">险情等级</a>
+                @*<a href="javascript:void(0);" class="color">X</a>
+                <a href="javascript:void(0);" class="color">Y</a>
+                <a href="javascript:void(0);" class="color">Z</a>
+                <a href="javascript:void(0);" class="color">地下水类型</a>*@
+                <a href="javascript:void(0);" class="color">防治建议</a>
+                <a href="javascript:void(0);" class="color">构造部位</a>
+                <a href="javascript:void(0);" class="color">监测建议</a>
+                <a href="javascript:void(0);" class="color">今后变化趋势</a>
+                <a href="javascript:void(0);" class="color">目前稳定程度</a>
+                <a href="javascript:void(0);" class="color">威胁财产</a>
+                <a href="javascript:void(0);" class="color">威胁人口</a>
+                <a href="javascript:void(0);" class="color">隐患点</a>
+                <a href="javascript:void(0);" class="color">灾害点类型</a>
+                <a href="javascript:void(0);" class="color">毁坏房屋</a>
+                <a href="javascript:void(0);" class="color">毁路</a>
+                <a href="javascript:void(0);" class="color">毁渠</a>
+            </div>
+            <div class="tongji-tiaojian-left-top2">
+                <a href="javascript:void(0);" class="fuhao">=</a><a href="javascript:void(0);" class="fuhao"><></a><a href="javascript:void(0);" class="fuhao">Like</a>
+                <a href="javascript:void(0);" class="fuhao">></a><a href="javascript:void(0);" class="fuhao">>=</a><a href="javascript:void(0);" class="fuhao">And</a>
+                <a href="javascript:void(0);" class="fuhao"><</a><a href="javascript:void(0);" class="fuhao"><=</a><a href="javascript:void(0);" class="fuhao">Or</a>
+                <a href="javascript:void(0);" class="fuhao">-</a><a href="javascript:void(0);" class="fuhao">%</a><a href="javascript:void(0);" class="fuhao">(</a>
+                <a href="javascript:void(0);" class="fuhao">)</a><a href="javascript:void(0);" class="fuhao">Not</a><a href="javascript:void(0);" class="fuhao">Is</a>
+                <a href="javascript:void(0);" class="fuhao">null</a>
+            </div>
+            <div class="clear"></div>
+        </fieldset>
+        <fieldset class="tongji-tiaojian-left-bottom">
+            <legend>查询语句</legend>
+            <textarea class="chaxunyuju" id="yuJuArea" style="height:145px;"></textarea>
+            <textarea class="zdnew" id="zdnew" style="height:145px;display:none;"></textarea>
+            <p class="chaxunyuju1">
+                <a href="javascript:void(0);" class="q" id="btnVertify" style="background: #5cb85c; border: 1px solid #4cae4c; color: #fff; height: 28px; line-height: 28px; margin: 0 5px; padding: 0 20px; cursor: pointer; text-decoration: none; display: inline-block; border: 1px solid #ccc; border-radius: 4px;">检查</a>
+                <a href="javascript:void(0);" class="q" id="btnClear" onclick="qcnew();" style="background: #d9534f; border: 1px solid #d43f3a; color: #fff; height: 28px; line-height: 28px; margin: 0 5px; padding: 0 20px; cursor: pointer; text-decoration: none; display: inline-block; border: 1px solid #ccc; border-radius: 4px;">清除</a>
+            </p>
+        </fieldset>
+    </div>
+
+    <fieldset class="tongji-tiaojian-right1">
+        <legend>查询范围</legend>
+        <div class="gridPanel" style="margin-top:3px;">
+            <table id="gridTable1"></table>
+            <div id="gridPager1"></div>
+        </div>
+        @* 
+        <p class="chaxunyuju1"><a href="javascript:void(0);" class="queding" id="btnOk">确定</a><a href="javascript:void(0);" class="quxiao" id="btnCancel">取消</a></p>
+        *@
+    </fieldset>
+</div>

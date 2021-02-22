@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "统计条件";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    .color:link {
+        color: black;
+        display: block;
+        height: 24px;
+        line-height: 24px;
+        padding-left: 3px;
+        text-decoration: none;
+    }
+
+    .color:visited {
+        color: black;
+    }
+
+    .color:hover {
+        color: #fff;
+        background-color: #8dae00;
+    }
+
+    .q:hover {
+        background: #449d44;
+        border: 1px solid #398439;
+    }
+</style>
+<div class="tongji-tiaojian">
+    <div class="tongji-tiaojian-left">
+        <fieldset class="tongji-tiaojian-left-top">
+            <legend style="margin-left:5px">查询字段</legend>
+            <div class="tongji-tiaojian-left-top1" style="overflow-y: scroll">
+                <a href="javascript:void(0);" class="color">灾害体编号</a>
+                <a href="javascript:void(0);" class="color">灾害体名称</a>
+                <a href="javascript:void(0);" class="color">地理位置</a>
+                <a href="javascript:void(0);" class="color">经度</a>
+                <a href="javascript:void(0);" class="color">纬度</a>
+                <a href="javascript:void(0);" class="color">省</a>
+                <a href="javascript:void(0);" class="color">市</a>
+                <a href="javascript:void(0);" class="color">县</a>
+                <a href="javascript:void(0);" class="color">乡镇</a>
+                <a href="javascript:void(0);" class="color">野外编号</a>
+                <a href="javascript:void(0);" class="color">室内编号</a>
+                <a href="javascript:void(0);" class="color">灾害等级</a>
+                <a href="javascript:void(0);" class="color">险情等级</a>
+                <a href="javascript:void(0);" class="color">X</a>
+                <a href="javascript:void(0);" class="color">Y</a>
+                <a href="javascript:void(0);" class="color">Z</a>
+                <a href="javascript:void(0);" class="color">地下水类型</a>
+                <a href="javascript:void(0);" class="color">防治建议</a>
+                <a href="javascript:void(0);" class="color">构造部位</a>
+                <a href="javascript:void(0);" class="color">监测建议</a>
+                <a href="javascript:void(0);" class="color">今后变化趋势</a>
+                <a href="javascript:void(0);" class="color">目前稳定程度</a>
+                <a href="javascript:void(0);" class="color">威胁财产(万元)</a>
+                <a href="javascript:void(0);" class="color">威胁人口(人)</a>
+                <a href="javascript:void(0);" class="color">隐患点</a>
+                <a href="javascript:void(0);" class="color">灾害体类型</a>
+                <a href="javascript:void(0);" class="color">毁坏房屋(间)</a>
+                <a href="javascript:void(0);" class="color">毁路</a>
+                <a href="javascript:void(0);" class="color">毁渠</a>
+            </div>
+            <div class="tongji-tiaojian-left-top2">
+                <a href="javascript:void(0);" class="fuhao">=</a><a href="javascript:void(0);" class="fuhao"><></a><a href="javascript:void(0);" class="fuhao">Like</a>
+                <a href="javascript:void(0);" class="fuhao">></a><a href="javascript:void(0);" class="fuhao">>=</a><a href="javascript:void(0);" class="fuhao">And</a>
+                <a href="javascript:void(0);" class="fuhao"><</a><a href="javascript:void(0);" class="fuhao"><=</a><a href="javascript:void(0);" class="fuhao">Or</a>
+                <a href="javascript:void(0);" class="fuhao">-</a><a href="javascript:void(0);" class="fuhao">%</a><a href="javascript:void(0);" class="fuhao">(</a>
+                <a href="javascript:void(0);" class="fuhao">)</a><a href="javascript:void(0);" class="fuhao">Not</a><a href="javascript:void(0);" class="fuhao">Is</a>
+                <a href="javascript:void(0);" class="fuhao">null</a>
+            </div>
+            <div class="clear"></div>
+        </fieldset>
+        <fieldset class="tongji-tiaojian-left-bottom">
+            <legend>查询语句</legend>
+            <textarea class="chaxunyuju" id="yuJuArea"></textarea>
+            <p class="chaxunyuju1">
+                <a href="javascript:void(0);" class="q" id="btnVertify" style="background: #5cb85c; border: 1px solid #4cae4c; color: #fff; height: 28px; line-height: 28px; margin: 0 5px; padding: 0 20px; cursor: pointer; text-decoration: none; display: inline-block; border: 1px solid #ccc; border-radius: 4px;">检查</a>
+                <a href="javascript:void(0);" class="q" id="btnClear" style="background: #ccc; border: 1px solid #d43f3a; color: #fff; height: 28px; line-height: 28px; margin: 0 5px; padding: 0 20px; cursor: pointer; text-decoration: none; display: inline-block; border: 1px solid #ccc; border-radius: 4px;">清除</a>
+            </p>
+        </fieldset>
+    </div>
+
+    <fieldset style="margin-left: 5px;">
+        <legend>查询范围</legend>
+        <div class="gridPanel" style="margin-top:5px;height:330px;border:solid 1px #ccc">
+            <table id="gridTable1"></table>
+            <div id="gridPager1"></div>
+        </div>
+    </fieldset>
+</div>
+@System.Web.Optimization.Styles.Render(
+    "~/Content/disaster/Base.css",
+"~/Content/disaster/GeoMap2.css")
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/disaster/UnionStatistics.js"
+)
+@section Scripts{
+<script>
+    function AcceptClick() {
+        learun.dialogClose();
+        return $("#yuJuArea").val();
+    }
+</script>
+}

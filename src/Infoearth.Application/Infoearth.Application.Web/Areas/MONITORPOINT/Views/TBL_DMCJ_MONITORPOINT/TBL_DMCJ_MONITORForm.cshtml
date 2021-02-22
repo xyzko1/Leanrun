@@ -1,0 +1,309 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .single_cell{
+        float: left;
+        width: 300px;
+        line-height: 45px;
+        margin-right:20px;
+    }
+    .single_cell  .formTitle{
+        float: left;
+        margin: 5px;
+        height: 28px; 
+        line-height: 28px;
+        display: inline-block;
+        width: 68px;
+        text-align: right;
+    }
+    .single_cell  input{
+        float: left;
+        width: 200px;
+        margin: 8px;
+    }
+</style>
+<div class="ul">
+    <ul class="nav nav-tabs">
+        <li class="active" title="监测数据查询"><a href="#JCSJCX" data-toggle="tab">监测数据查询</a></li>
+        <li title="数据列表"  class="titdata"><a href="#tab_1" data-toggle="tab" id="SJLB">数据列表</a></li>
+    </ul>
+</div>
+<div class="tab-content">
+    <div class="tab-pane in active" id="JCSJCX">
+        <div class="title-search" style="height:44px;">
+            <div class="single_cell">
+                <span class="formTitle">开始时间:</span>
+                <input id="starttime" type="text" class="form-control input-wdatepicker" datefmt="yyyy-MM-dd" onfocus="WdatePicker({ dateFmt: 'yyyy', isShowToday: false, isShowClear: false, maxDate: '#F{$dp.$D(\'endtime\')}' })" />
+            </div>
+            <div class="single_cell">
+                <span class="formTitle" id="line">结束时间</span>
+                <input id="endtime" type="text" class="form-control input-wdatepicker" datefmt="yyyy-MM-dd" onfocus="WdatePicker({ dateFmt: 'yyyy', isShowToday: false, isShowClear: false, minDate: '#F{$dp.$D(\'starttime\')}' })" />
+            </div>
+            <div class="single_cell">
+                <a class="btn btn-primary" onclick="reset()">重置</a>
+                <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+            </div>
+        </div>
+         <div id="divTJ" style="width: 100%; height: 400px;"></div>
+    </div>
+    <div style="margin-top: 10px;float:left;width:100%;" class="tab-pane in" id="tab_1">
+        <table id="gridTable" style="width:100% !important;"></table>
+        <div id="gridPager"></div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/echarts/echarts.min.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+        GetReport();
+        GetGrid();
+        $("#btn_Search").click(function () {
+            GetReport();
+        });
+    })
+    function initControl() {
+       $('#gridTable').width(($('#tab_1').width()));//表格宽度
+        var date = new Date();
+        var startDt = (date.getFullYear() - 5);;
+        var endDt = date.getFullYear();
+        $("#starttime").val(startDt);
+        $("#endtime").val(endDt);
+    }
+    var fillZero = function (val) {
+        if (val.toString().length == 1) {
+            return "0" + val.toString();
+        }
+        return val.toString();
+    }
+    function reset() {
+        $("#starttime").val("");
+        $("#endtime").val("");
+    }
+    //加载Echars报表
+    function GetReport() {
+        var myChart = echarts.init(document.getElementById("divTJ"));
+        //var queryJson = keyValue;
+
+        var dataSeries = [];
+        var dataSeriesY = [];
+        var dataSeriesZ = [];
+        var dataSeriesObj = {
+            name: '',
+            type: '',
+            smooth: true,
+            data: '',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            }
+        };
+        var dataSeriesObjY = {
+            name: '',
+            type: '',
+            smooth: true,
+            data: '',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            }
+        };
+        var dataSeriesObjZ = {
+            name: '',
+            type: '',
+            smooth: true,
+            data: '',
+            itemStyle: {
+                normal: {
+                    label: {
+                        show: true,
+                        position: 'top'
+                    }
+                }
+            }
+        };
+        var queryJson = {};
+        queryJson["MONITORPOINTIDS"] = keyValue;
+        queryJson["STARTYEAR"] = $("#starttime").val();
+        queryJson["ENDYEAR"] = $("#endtime").val();
+        $.ajax({
+            url: '../../api/MONITORPOINT/TBL_DMCJ_MONITORDATA/GetQueryListByMonitorPoint?queryJson=' + JSON.stringify(queryJson),
+            //queryJson: JSON.stringify(queryJson),
+            beforeSend: function (request) {
+                if (authToken) {
+                    request.setRequestHeader("Authorization", authToken);
+                }
+            },
+            async: false,
+            type: "GET",
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data != null && data.Data.length > 0) {
+                    var dataDevicename = [];
+                    for (var i = 0; i < data.Data.length; i++) {
+                        dataDevicename.push(data.Data[i]["监测点名称"]);
+                    }
+                }
+                var dataX = data.Columns;
+                dataX.splice(0, 1);
+                dataX.splice(0, 1);
+                dataX.pop();
+                if (data != null && data.Data.length > 0) {
+                    var dataSeriesShowNew = [];
+                    for (var i = 0; i < data.Data.length; i++) {
+                        var j = [];
+                        for (var key in data.Data[i]) {
+                            j.push(data.Data[i][key]);
+                        }
+                        j.splice(j.length - 3, 3)
+                        dataSeriesShowNew.push(j);
+                    }
+                    
+                }
+                option = {
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+                        },
+                    },
+                    legend: {
+                        show:true,
+                        data: dataDevicename,
+                        x: 'center',
+                        y: 30,
+                        //padding: [5, 35, 5, 5]
+                    },
+                    grid: {
+                        "borderWidth": 0,
+                       // top: 100,
+                        containLabel: true
+                    },
+                    xAxis:
+                        //dataXShow
+                       [{
+                           type: 'category',
+                           //splitNumber: 10,
+                           data:dataX
+                       }]
+                    ,
+                    yAxis: {
+                        type: 'value',
+                        name: '',
+                    },
+                    //series: [
+                    //    {
+                    //        name:dataDevicename,
+                    //        type:'line',
+                    //        data: dataSeriesShowNew
+                    //    }
+                    //],
+                    valueAxis: {
+                        axisLine: {
+                            show:true,
+                        }
+                    }
+                }
+                var Series = [];
+                if (data != null && data.Data.length > 0) {
+                    for (var i = 0; i < dataDevicename.length; i++) {
+                        Series.push({
+                            name: dataDevicename[i],
+                            type: 'line',
+                            data: dataSeriesShowNew[i]
+                        });
+                    }
+                }
+                option.series = Series;
+                myChart.setOption(option, true);
+                //
+                var colModel = [];
+                var params = [];
+                if (!!data) {
+                    if (!!data.Columns) {
+                        for (var i = 0; i < data.Data.length; i++) {
+                            params.push(data.Data[i]);
+                        }
+                        for (var key in data.Data[0]) {
+                            colModel.push({ label: key, name: key, index: key, align: 'center', sortable: true, width: 130 })
+
+                        }
+                        var colModelArr = colModel.slice(colModel.length - 3, 8)
+                        colModel.splice(colModel.length - 3, 2);
+                        colModel.splice(0, 0, colModelArr[0]);
+                        colModel.splice(0, 0, colModelArr[1]);
+                    }
+
+                    //if (!!data.Data) {
+                    //    if (data.Data === "{\"Table\":]}") {
+                    //        data.Data = "{\"Table\":[]}";
+                    //    }
+                    //    params = data.Data;
+                    //    //console.log(params);
+                    //}
+                }
+
+                GetGrid(params, colModel);
+            }, error: function (e) {
+            },
+            cache: false
+        });
+    }
+    function GetGrid(data,colModel) {
+        var queryJson = {};
+        var selectedRowIndex = 0;
+        queryJson["MONITORPOINTIDS"] = keyValue;
+        queryJson["STARTYEAR"] = $("#starttime").val();
+        queryJson["ENDYEAR"] = $("#endtime").val();
+        var $gridTable = $('#gridTable');
+
+        $('#gridTable').jqGrid({
+            datatype: "local",
+            autowidth: true,
+            height: $(window).height() - 120,
+            colModel: colModel,
+            shrinkToFit: true,
+            gridview: true,
+            pager: "#gridPager",
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            sortorder: 'desc',
+            altRows: true,
+            //viewrecords: false,
+            //gridview: true,
+            //rowNum: -1,
+            //rownumbers: true
+        });
+        if (!!data) {
+            for (var i = 0; i < data.length; i++) {
+                $("#gridTable").jqGrid('addRowData', i, data[i]);
+            }
+            if (data.length > 0) {
+                $(".unwritten").css('display', 'none');
+            }
+            else {
+                $(".unwritten").css('display', 'block');
+            }
+        }
+        
+        //禁止列排序
+        var column = $('#gridTable').jqGrid('getGridParam', 'colModel');
+        for (var i = 0; i < column.length; i++) {
+            $('#gridTable').setColProp(column[i].index, { sortable: false });
+        }
+    }
+</script>
+}

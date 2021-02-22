@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+                      <div style="clear:both;"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: 'CGH灾害点编号', name: 'CGHUNIFIEDCODE', index: 'CGHUNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: '类型及规模', name: 'TYPEANDSIZE', index: 'TYPEANDSIZE', width: 100, align: 'left',sortable: true  },
+                { label: '监测负责人', name: 'MONITORHEADER', index: 'MONITORHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '负责人联系电话', name: 'MONITORHEADERTEL', index: 'MONITORHEADERTEL', width: 100, align: 'left',sortable: true  },
+                { label: '主要迹象', name: 'MONITORMAJORSIGNS', index: 'MONITORMAJORSIGNS', width: 100, align: 'left',sortable: true  },
+                { label: '主要手段和方法', name: 'MONITORMEANSMETHODS', index: 'MONITORMEANSMETHODS', width: 100, align: 'left',sortable: true  },
+                { label: '疏散命令发布人', name: 'EVACUATIONCOMMANDPUBLISHER', index: 'EVACUATIONCOMMANDPUBLISHER', width: 100, align: 'left',sortable: true  },
+                { label: '疏散值班电话', name: 'EVACUATIONDUTYPHONE', index: 'EVACUATIONDUTYPHONE', width: 100, align: 'left',sortable: true  },
+                { label: '抢排险单位负责人', name: 'RISKUNITANDHEADER', index: 'RISKUNITANDHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '抢排线值班电话', name: 'RISKDUTYPHONE', index: 'RISKDUTYPHONE', width: 100, align: 'left',sortable: true  },
+                { label: '治安保卫单位负责人', name: 'PUBLICSECURITYUNITANDHEADER', index: 'PUBLICSECURITYUNITANDHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '治安保卫值班电话', name: 'PUBLICSECURITYDUTYPHONE', index: 'PUBLICSECURITYDUTYPHONE', width: 100, align: 'left',sortable: true  },
+                { label: '医疗救护单位负责人', name: 'MEDICALCAREUNITHEADER', index: 'MEDICALCAREUNITHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '医疗救护值班电话', name: 'MEDICALCAREDUTYPHONE', index: 'MEDICALCAREDUTYPHONE', width: 100, align: 'left',sortable: true  },
+                { label: '本卡发放单位', name: 'CARDRELEASUNIT', index: 'CARDRELEASUNIT', width: 100, align: 'left',sortable: true  },
+                { label: '发放单位联系电话', name: 'CARDRELEASUNITTEL', index: 'CARDRELEASUNITTEL', width: 100, align: 'left',sortable: true  },
+                { label: '发放日期', name: 'RELEASEDATE', index: 'RELEASEDATE', width: 100, align: 'left',sortable: true  },
+                { label: '持卡单位或个人', name: 'CARDUNITSINDIVIDUALS', index: 'CARDUNITSINDIVIDUALS', width: 100, align: 'left',sortable: true  },
+                { label: '持卡单位或个人联系电话', name: 'CARDUNITSINDIVIDUALSTEL', index: 'CARDUNITSINDIVIDUALSTEL', width: 100, align: 'left',sortable: true  },
+                { label: '持卡日期', name: 'DATECARD', index: 'DATECARD', width: 100, align: 'left',sortable: true  },
+                { label: '更新时间', name: 'UPDATETIME', index: 'UPDATETIME', width: 100, align: 'left',sortable: true  },
+                { label: '记录状态', name: 'RECORDSTATUS', index: 'RECORDSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '导出状态', name: 'EXPSTATUS', index: 'EXPSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '创建者ID', name: 'CREATORUSERID', index: 'CREATORUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '创建时间', name: 'CREATORTIME', index: 'CREATORTIME', width: 100, align: 'left',sortable: true  },
+                { label: '更新者ID', name: 'UPDATEUSERID', index: 'UPDATEUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '更新次数', name: 'UPDATETIMES', index: 'UPDATETIMES', width: 100, align: 'left',sortable: true  },
+                { label: '监测负责人ID', name: 'MONITORHEADERID', index: 'MONITORHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '疏散命令发布人ID', name: 'EVACUATIONCOMMANDPUBLISHERID', index: 'EVACUATIONCOMMANDPUBLISHERID', width: 100, align: 'left',sortable: true  },
+                { label: '抢排险单位负责人ID', name: 'RISKUNITANDHEADERID', index: 'RISKUNITANDHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '治安保卫单位负责人ID', name: 'PUBLICSECURITYUNITANDHEADERID', index: 'PUBLICSECURITYUNITANDHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '医疗救护单位负责人ID', name: 'MEDICALCAREUNITHEADERID', index: 'MEDICALCAREUNITHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '本卡发放单位ID', name: 'CARDRELEASUNITID', index: 'CARDRELEASUNITID', width: 100, align: 'left',sortable: true  },
+                { label: '抢排险单位', name: 'RISKUNIT', index: 'RISKUNIT', width: 100, align: 'left',sortable: true  },
+                { label: '抢排险单位ID', name: 'RISKUNITID', index: 'RISKUNITID', width: 100, align: 'left',sortable: true  },
+                { label: '治安保卫单位', name: 'PUBLICSECURITYUNIT', index: 'PUBLICSECURITYUNIT', width: 100, align: 'left',sortable: true  },
+                { label: '治安保卫单位ID', name: 'PUBLICSECURITYUNITID', index: 'PUBLICSECURITYUNITID', width: 100, align: 'left',sortable: true  },
+                { label: '医疗救护单位', name: 'MEDICALCAREUNIT', index: 'MEDICALCAREUNIT', width: 100, align: 'left',sortable: true  },
+                { label: '医疗救护单位ID', name: 'MEDICALCAREUNITID', index: 'MEDICALCAREUNITID', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加群测群防工作明白卡',
+            url: '/JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/TBL_QCQF_WORKUNDERSTANDCARDForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑群测群防工作明白卡',
+                url: '/JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/TBL_QCQF_WORKUNDERSTANDCARDForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的群测群防工作明白卡！', 0);
+        }
+    }
+</script>
+}

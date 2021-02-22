@@ -1,0 +1,457 @@
+﻿@{
+    ViewBag.Title = "提交审核页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div id="DZHJManage" style="width:100%;height:45px;background:#fff">
+    <ul class="nav nav-tabs">
+        <li class="active" id="li_HPGL"><a href="#HPGL" data-toggle="tab">待提交</a></li>
+        <li id="li_BTGL"><a href="#BTGL" data-toggle="tab">提交历史</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content" style="height: 100%; width: 100%;">
+        <div class="tab-pane fade in active" id="HPGL" style="height: 100%; width: 100%;">
+            <div style="width:100%;height:80px;">
+                <div style="width:100%;height:40px;display:flex;align-items: center;justify-content: flex-start;">
+                    <span class="spans">关键字:</span><input id="txt_Keyword1" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 20%;" />
+                    <span class="spans">修改类型:</span><div id="updateTypes" type="selectTree" class="ui-select" style="width: 20%;"></div>
+                </div>
+                <div style="width:100%;height:40px;display:flex;align-items: center;justify-content: flex-start;">
+                    <span class="spans">开始时间:</span><input id="StartTime1" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 00:00:00' })" style="width:20%"/>
+                    <span class="spans">结束时间:</span><input id="EndTime1" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 23:59:59' })"  style="width:20%"/>
+                    <a id="btn_Search_Submit" class="btn btn-primary" style="margin-left:30px"><i class="fa fa-search"></i> 查询</a>
+                    <a id="btn_Cancel" onclick="" class="btn btn-primary" style="float:right;margin:0 30px"><i class="fa fa-save"></i>&nbsp;撤销</a>
+                    <a id="btn_Submit" onclick="" class="btn btn-primary" style="float:right;"><i class="fa fa-save"></i>&nbsp;提交审核</a>
+                </div>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="BTGL" style="height: 100%; width: 100%;">
+            <div style="width:100%;height:80px;" id="filter-form">
+                <div style="width:100%;height:40px;display:flex;align-items: center;justify-content: flex-start;">
+                    <span class="spans">关键字:</span><input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 20%;" />
+                    <span class="spans">审核状态:</span><div id="status" type="selectTree" class="ui-select" style="width: 20%;"></div>
+                    <span class="spans">修改类型:</span><div id="updateType" type="selectTree" class="ui-select" style="width: 20%;"></div>
+                </div>
+                <div style="width:100%;height:40px;display:flex;align-items: center;justify-content: flex-start;">
+                    <span class="spans">开始时间:</span><input id="StartTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 00:00:00' })" style="width:20%"/>
+                    <span class="spans">结束时间:</span><input id="EndTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 23:59:59' })"  style="width:20%"/>
+                    <a id="btn_Search" class="btn btn-primary" style="margin-left:30px"><i class="fa fa-search"></i> 查询</a>
+                </div>
+                @*<table style="width:100%;height:40px;" class="from">
+                    <tr>
+                        <td style="width:211px;">
+                            <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 211px;" />
+                        </td>
+                        <td style="padding-left:10px;width:150px">
+                            <div id="status" type="selectTree" class="ui-select"></div>
+                        </td>
+                        <td style="padding-left:10px;width:135px">
+                            <div id="updateType" type="selectTree" class="ui-select"></div>
+                        </td>
+                        <td style="text-align:center;padding-left:5px;"><span>提交时间</span></td>
+                        <td style="width:170px;">
+                            <input id="StartTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 00:00:00' })" />
+                        </td>
+                        <td style="width:180px;padding-left:10px">
+                            <input id="EndTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 23:59:59' })" />
+                        </td>
+                        <td style="padding-left: 5px;">
+                            <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i> 查询</a>
+                        </td>
+                    </tr>
+                </table>*@
+            </div>
+            <div class="gridPanel">
+                <table id="gridTablehistory"></table>
+                <div id="gridPagerhistory"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .spans {
+        display:inline-block;
+        width:100px;
+        min-width:100px;
+        text-align:center;
+        height:40px;
+        line-height:40px
+    }
+    .form-control, .ui-select-text {
+        border-radius:4px;
+    }
+</style>
+
+@section Scripts{
+<script>
+    var authToken = getAuthorizationToken();
+    var bussnessType = request('bussnessType');
+    var columns = [];
+    $(function () {
+        InitialPage();
+        initSelect();
+        GetGrid();
+        GetGridhistor();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        //查询点击事件
+        $("#btn_Search_Submit").click(function () {
+            SearchSubmitEvent();
+        });
+        //提交审核
+        $("#btn_Submit").click(function () {
+            SubmitAudit();
+        });
+        //撤销提交
+        $("#btn_Cancel").click(function () {
+            CancelSubmit();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 110);
+            }, 200);
+            e.stopPropagation();
+        });
+
+        if(bussnessType=="A")
+        {
+            columns = [{ label: '审核ID', name: 'GUID', index: 'GUID', width: 150, align: 'left', sortable: true, hidden: true },
+                { label: '业务ID', name: 'BUSINESSID', index: 'BUSINESSID', width: 150, align: 'left', sortable: true, hidden: true },
+                    {
+                        label: '统一编号', name: 'BASICINFO', index: 'BASICINFO', width: 150, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue !=null&&cellvalue!="") {
+                                return cellvalue.split(',')[2];
+                            } else 
+                                return '';
+                        }
+                    },
+                    {
+                        label: '灾害点名称', name: 'BASICINFO', index: 'BASICINFO', width: 250, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue != null && cellvalue != "") {
+                                return cellvalue.split(',')[1];
+                            } else
+                                return '';
+                        }
+                    },
+                     {
+                         label: '灾害类型', name: 'BASICINFO', index: 'BASICINFO', width: 100, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                             if (cellvalue != null && cellvalue != "") {
+                                 return cellvalue.split(',')[3];
+                             } else
+                                 return '';
+                         }
+                     },
+                    {
+                        label: '审核状态', name: 'STATUS', index: 'STATUS', width: 150, align: 'center', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue == 0) {
+                                return '<span class=\"label label-default\">未提交</span>';
+                            } else if (cellvalue == 1) {
+                                return '<span class=\"label label-default\">待审核</span>';
+                            }else if (cellvalue == 2) {
+                                return '<span class=\"label label-success\">审核通过</span>';
+                            }else if (cellvalue == 3) {
+                                return '<span class=\"label label-danger\">审核不通过</span>';
+                            }else if (cellvalue == 4) {
+                                return '<span class=\"label label-default\">已撤销</span>';
+                            }
+                        }
+                    },
+                    { label: '操作类型', name: 'UPDATETYPE', index: 'UPDATETYPE', width: 100, align: 'center', sortable: true, formatter: "select", editoptions: { value: "A:新增;U:更新;D:销号;R:删除;I:批量导入" } },
+                    { label: '修改日期', name: 'UPDATETIME', index: 'UPDATETIME', width: 200, align: 'left', sortable: true },
+                    { label: '审核人', name: 'AUDITOR', index: 'AUDITOR', width: 200, align: 'center', sortable: true },
+                    {
+                        label: '对比信息', name: 'BASICINFO', index: 'BASICINFO', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue != null && cellvalue != "") {
+                                var guidType = rowObject.BUSINESSID + "," + cellvalue.split(',')[3] + "," + cellvalue.split(',')[2];
+                                //var guidType = cellvalue.split(',')[2] + "," + cellvalue.split(',')[3];
+                                if (rowObject.UPDATETYPE != "U") {
+                                    return "<a style='color:blue;cursor: pointer;' onclick='Compare(\"" + guidType + ",查看" + "\")'>查看</a>";
+                                } else {
+                                    return "<a style='color:blue;cursor: pointer;' onclick='Compare(\"" + guidType + ",对比" + "\")'>对比</a>";
+                                }
+
+                            } else
+                                return '';
+                             
+
+                        } }
+            ];
+        }
+    }
+    var dbwidth = "1360px";
+    function Compare(cellvalue) {
+        var cc = cellvalue.split(',');
+        var type = '01';
+        switch (cc[1]) {
+            case "滑坡":
+                type = '01';
+                break;
+            case "崩塌":
+                type = '02';
+                break;
+            case "泥石流":
+                type = '03';
+                break;
+            case "地面沉降":
+                type = '04';
+                break;
+            case "地面塌陷":
+                type = '05';
+                break;
+            case "地裂缝":
+                type = '06';
+                break;
+            case "斜坡":
+                type = '07';
+                break;
+            default:
+                break;
+        }
+        var title1 = cc[3];
+        var flag = "";
+        if (title1 == "对比") {
+            flag = "true";
+            dbwidth = "100%";
+        } else {
+            dbwidth = "1360px";
+        }
+        dialogOpen({
+            id: 'CompareForm',
+            title: title1 + cc[1] + '信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HarzardCompare?type=' + type + "&keyValue=" + cc[0] + "&dmt=" + cc[2] + "&flag=" + flag,
+            width: dbwidth,
+            height: '',
+            btn: []
+        });
+    }
+
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $("#HPGL").getWebControls();
+        queryJson.bussnessType = bussnessType;
+        queryJson["status"] = "0"; //待提交
+
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 195,
+            url: "../../api/TBL_AUDITINFOApi/GetPageSubmitListJson",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            datatype: "json",
+            colModel: columns,
+            multiselect: true,
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UPDATETIME',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+
+    //查询提交表格函数
+    function SearchSubmitEvent() {
+        var queryJson = $("#HPGL").getWebControls();
+        queryJson.bussnessType = bussnessType;
+        queryJson["status"] = "0"; //待提交
+        queryJson.updateType = queryJson.updateTypes;
+        queryJson.txt_Keyword = queryJson.txt_Keyword1;
+        queryJson.StartTime = queryJson.StartTime1;
+        queryJson.EndTime = queryJson.EndTime1;
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_AUDITINFOApi/GetPageSubmitListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+
+
+
+    //加载表格
+    function GetGridhistor() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTablehistory');
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson.bussnessType = bussnessType;
+        $gridTable.jqGrid({
+            // autowidth: false,
+            width:975,
+            height: $(window).height() - 195,
+            url: "../../api/TBL_AUDITINFOApi/GetPageSubmitListJson",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: columns,
+           // multiselect: true,
+            viewrecords: true,
+            rowList: [30, 50, 100],
+            rowNum: 30,
+            pager: "#gridPagerhistory",
+            sortname: 'UPDATETIME',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson.bussnessType = bussnessType;
+        $("#gridTablehistory").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_AUDITINFOApi/GetPageSubmitListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+
+    //提交审核按钮
+    function SubmitAudit() {
+        var $gridTable = $('#gridTable');
+        var rowIndexs = $gridTable.jqGrid('getGridParam', 'selarrrow');
+        if (rowIndexs.length > 0) {
+            //获取需要提交的数据业务ID
+            var busnessIds = new Array();
+            for (var i = 0; i < rowIndexs.length; i++) {
+                var data = $gridTable.jqGrid('getRowData', rowIndexs[i]);
+                busnessIds.push(data.GUID);
+            }
+
+            $.SaveForm({
+                url: "../../api/TBL_AUDITINFOApi/SubmitAudit",
+                param: { "": busnessIds },
+                loading: "正在提交数据...",
+                authToken: authToken,
+                success: function () {
+                    try {
+                        getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                    } catch (e) {
+                        window.parent.$('#gridTable').trigger('reloadGrid');
+                    }
+                }
+            })
+        }
+        else {
+            dialogMsg('请选择需要提交审核的数据！', 0);
+        }
+    }
+
+
+    //撤销提交按钮
+    function CancelSubmit() {
+        var $gridTable = $('#gridTable');
+        var rowIndexs = $gridTable.jqGrid('getGridParam', 'selarrrow');
+        if (rowIndexs.length > 0) {
+            //获取需要提交的数据业务ID
+            var busnessIds = new Array();
+            for (var i = 0; i < rowIndexs.length; i++) {
+                var data = $gridTable.jqGrid('getRowData', rowIndexs[i]);
+                busnessIds.push(data.GUID);
+            }
+
+            $.SaveForm({
+                url: "../../api/TBL_AUDITINFOApi/CancelSubmit",
+                param: { "": busnessIds },
+                loading: "正在撤销提交...",
+                authToken: authToken,
+                success: function () {
+                    try {
+                        getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                    } catch (e) {
+                        window.parent.$('#gridTable').trigger('reloadGrid');
+                    }
+                }
+            })
+        }
+        else {
+            dialogMsg('请选择需要撤销提交的数据！', 0);
+        }
+    }
+
+    //初始化下拉控件
+    function initSelect() {
+        $("#status").ComboBox({
+            id: "value",
+            text: "label",
+            description: "全部审核状态",
+            height: "170px",
+            data: [
+                { label: "未提交", value: "0" },
+                { label: "待审核", value: "1" },
+                { label: "审核通过", value: "2" },
+                { label: "审核不通过", value: "3" },
+                { label: "已撤销", value: "4" }
+            ]
+        });
+
+        $("#updateType").ComboBox({
+            id: "value",
+            text: "label",
+            description: "全部修改类型",
+            height: "170px",
+            data: [
+                { label: "新增", value: "A" },
+                { label: "更新", value: "U" },
+                { label: "销号", value: "D" },
+                { label: "删除", value: "R" }
+            ]
+        });
+
+        $("#updateTypes").ComboBox({
+            id: "value",
+            text: "label",
+            description: "全部修改类型",
+            height: "170px",
+            data: [
+                { label: "新增", value: "A" },
+                { label: "更新", value: "U" },
+                { label: "销号", value: "D" },
+                { label: "删除", value: "R" }
+            ]
+        });
+    }
+</script>
+}

@@ -1,0 +1,907 @@
+﻿@{
+    ViewBag.Title = "查询统计分析";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="div-main">
+    <div class="div div-left">
+        <ul class="zxq-ul">
+            <li>
+                <p class="head-tit"><strong>险情等级</strong><i class="fa fa-angle-right icon-flag tit-top"></i></p>               
+                <div class="gridPanel">
+                    <table id="gridTable"></table>
+                </div>
+            </li>
+            <li>
+                <p class="head-tit"><strong>灾情等级</strong><i class="fa fa-angle-right icon-flag"></i></p>               
+                <div class="gridPanel">
+                    <table id="gridTable1"></table>
+                </div>
+            </li>
+            <li>
+                <p class="head-tit"><strong>操作类型</strong><i class="fa fa-angle-right icon-flag"></i></p>               
+                <div class="gridPanel">
+                    <table id="gridTable2"></table>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="div div-center">
+        <div class="center-tit">
+            <a id="btn_yhd" class="btn zhType"><i class="fa fa-dot-circle-o"></i> 隐患点</a>
+            <a id="btn_xzd" class="btn"><i class="fa fa-plus"></i> 新增点</a>
+            <a id="btn_xhd" class="btn"><i class="fa fa-trash-o"></i> 销号点</a>            
+        </div>
+        <div class="div-time">
+            <div class="xian"></div>
+            <div class="icon-left"><i class="fa fa-angle-left"></i></div>
+            <div class="btn-date"><a class="icon-btn"></a><p>2016年</p></div>
+            <div class="btn-date"><a class="icon-btn"></a><p>2017年</p></div>
+            <div class="btn-date"><a class="icon-btn"></a><p>2018年</p></div> 
+            <div class="btn-date"><a class="icon-btn thisDate"></a><p>2019年</p></div>
+            <div class="icon-right"><i class="fa fa-angle-right"></i></div>
+        </div>
+        <div>
+            <div id="map"></div>
+            <div id="echart4"></div>
+        </div>
+    </div>
+    <div class="div div-right">
+        <div id="echart1" class="echarts"></div>
+        <div id="echart2" class="echarts"></div>
+        <div id="echart3" class="echarts"></div>
+    </div>
+</div>
+@section Scripts{
+@System.Web.Optimization.Styles.Render( "~/Content/styles/selectTJ.css")
+@System.Web.Optimization.Scripts.Render( "~/Content/scripts/plugins/echarts/echarts4.min.js")
+<script>
+    var authToken = getAuthorizationToken();
+    var usercode, DistrictName, year, Thisyear, echart1, echart2, echart3, echart4, myChart, nameMap = 'chinaMap';
+    var height = $(window).height() - 150;
+    $(function () {
+        $('.gridPanel').eq(0).show();
+        usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+        var date = new Date;
+        year = date.getFullYear();
+        Thisyear=year; //时间轴算事件用到
+        if (!usercode || usercode == "000000" || usercode == "0") {
+            usercode = "000000"
+            DistrictName = "全国"
+            nameMap='china'
+        } else {
+            $.ajax({
+                url: SSOURL+'/api/AdministrativeApi/GetDistrctByCodes/' + usercode,
+                beforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    DistrictName = data.Result[0].DistrictName;
+                }
+            })
+        }
+        $('.div-left').height($(window).height());
+        $('.echarts').height(($(window).height() - 20) / 3);
+        $('#map').height(($(window).height() - 120) * 0.7);
+        $('#echart4').height(($(window).height() - 120) * 0.3);
+        GetGrid();
+        initControl();
+        ajaxEchart(usercode,DistrictName);
+    })
+    $(window).resize(function () {
+        $("table").setGridWidth($('.gridPanel').width());
+        $("table").setGridHeight(height);
+        $('.div-left').height($(window).height());
+        $('.echarts').height(($(window).height() - 20) / 3);
+        $('#map').height(($(window).height() - 120) * 0.7);
+        $('#echart4').height(($(window).height() - 120) * 0.3);
+        if (echart1) {
+            echart1.resize();
+            echart2.resize();
+            echart3.resize();
+            echart4.resize();
+            myChart.resize();
+        }
+    });
+    //菜单点击事件
+    $('.head-tit').click(function () {
+        $(this).parent('li').find('.gridPanel').addClass('active');
+        $('ul').find('.gridPanel').each(function () {
+            if ($(this).hasClass('active')) {
+                return
+            }
+            if (!$(this).is(':hidden')) {
+                $(this).slideUp("slow", function () {
+                    $(this).parent('li').find('.head-tit i').addClass('tit-left').removeClass('tit-top');
+                });
+            }
+        })
+        if (!$(this).parent('li').find('.gridPanel').is(':hidden')) {
+            $(this).parent('li').find('.gridPanel').slideUp("slow");
+            $(this).parent('li').find('.head-tit i:last').addClass('tit-left').removeClass('tit-top');
+        } else {
+            $(this).parent('li').find('.gridPanel').slideDown("slow");
+            $(this).parent('li').find('.head-tit i:last').addClass('tit-top').removeClass('tit-left');
+        }
+        $(this).parent('li').find('.gridPanel').removeClass('active');
+        $(this).parent('li').find('table').setGridWidth($('.gridPanel').width()-2);
+    });
+    //灾害点类型点击事件
+    $('.center-tit .btn').click(function () {
+        if (!$(this).hasClass('zhType')) {
+            $('.center-tit .btn').removeClass('zhType');
+            $(this).addClass('zhType');
+            year = $('.thisDate').next('p').text().replace(/年/, "");
+            initControl();
+        }
+    });
+    //时间轴点击事件
+    $('.icon-btn').click(function () {
+        if (!$(this).hasClass('thisDate')) {
+            $('.icon-btn').removeClass('thisDate');
+            $(this).addClass('thisDate');
+            year = $('.thisDate').next('p').text().replace(/年/, "");
+            initControl();
+            ajaxEchart(usercode,DistrictName);
+        }
+    })
+    //时间轴向左
+    $('.icon-left').click(function () {
+        var firstDate = $('.icon-btn:first').next('p').text().replace(/年/, "");
+        if (firstDate == "2000") {
+            dialogAlert('您查的时间太过久远！', 0);
+            return
+        } else {
+            $('.icon-btn').removeClass('thisDate');
+            $('.icon-btn').each(function () {
+                var Eachyears = Number($(this).next('p').text().replace(/年/, "")) - 1;
+                $(this).next('p').text(Eachyears + "年");
+                if (Eachyears == year) {
+                    $(this).addClass('thisDate');
+                }
+            })
+
+        }
+    })
+    //时间轴向右 
+    $('.icon-right').click(function () {
+        var lastDate = $('.icon-btn:last').next('p').text().replace(/年/, "");
+        if (lastDate == Thisyear) {
+            dialogAlert('当前为最大年份！', 0);
+            return
+        } else {
+            $('.icon-btn').removeClass('thisDate');
+            $('.icon-btn').each(function () {
+                var Eachyears = Number($(this).next('p').text().replace(/年/, "")) + 1;
+                $(this).next('p').text(Eachyears + "年");
+                if (Eachyears == year) {
+                    $(this).addClass('thisDate');
+                }
+            })
+
+        }
+    })
+    function initControl() {
+        var queryJson = { SelectXZQH: usercode, YEAR: year,TYPE:$('.zhType').text().replace(/\s*/g,"")};
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetHistoryStatisticsZHD',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                var datas = [], i = 0;
+                for (key in data.result[0]) {
+                    datas.push({ name: key, value: Number(data.result[0][key] ? data.result[0][key] : 0), code: data.returnValue.columnList[i] });
+                    i++
+                }
+                MapChart(datas,$('.zhType').text().replace(/\s*/g, ""));
+            }
+        })
+    }
+    function ajaxEchart(usercode, DistrictName) {
+        var queryJson = { SelectXZQH: usercode, YEAR: year, };
+        var queryJson1 = { SelectXZQH: usercode, YEAR: year, TYPE: "" };
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetWXRKStatisticsJson',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                var xData = [], yData = [];
+                if (data.result[0]) {
+                    for (key in data.result[0]) {
+                        xData.push(key);
+                        yData.push(data.result[0][key]);
+                    }
+                }
+                var legend = ['威胁人口'];
+                var series = [
+                    {
+                        name: '威胁人口',
+                        type: 'bar',
+                        barMaxWidth: 16,
+                        data: yData,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值', itemStyle: { color: '#ffb656' } },
+                                { type: 'min', name: '最小值', itemStyle: { color: '#ffb656' } }
+                            ],
+
+                        },
+                    }
+                ]
+                echart1= _zzt2('echart1', '威胁人口统计', legend, xData, series);
+            }
+        })
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetWXCCStatisticsJson',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                var xData = [], yData = [];
+                if (data.result[0]) {
+                    for (key in data.result[0]) {
+                        xData.push(key);
+                        yData.push(data.result[0][key]);
+                    }
+                }
+                var legend = ['威胁财产'];
+                var series = [
+                    {
+                        name: '威胁财产',
+                        type: 'bar',
+                        barMaxWidth: 16,
+                        data: yData,
+                        markPoint: {
+                            data: [
+                                { type: 'max', name: '最大值', itemStyle: { color: '#ffb656' } },
+                                { type: 'min', name: '最小值', itemStyle: { color: '#ffb656' } }
+                            ],
+
+                        },
+                    }
+                ]
+                echart2=_zzt2('echart2', '威胁财产统计', legend, xData, series);
+            }
+        })
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetStatisticsByZHLX2',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                var datas = [];
+                for (key in data[0]) {
+                    datas.push({ name: key, value: Number(data[0][key]) });
+                }
+                echart3= _bt("echart3", '灾害类型统计', datas);
+            }
+        })
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetStatisticsByZHLX',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson1) },
+            success: function (data) {
+                var series = [];
+                for (var i = 0; i < data.dataList.length; i++) {
+                    series.push({
+                        name: data.dataList[i].name,
+                        type: 'bar',
+                        stack: '总量',
+                        barMaxWidth: 16,
+                        data: data.dataList[i].data
+                    });
+                }
+                echart4 = _zzt('echart4', year + '年' + DistrictName + '灾害点类型统计', data.columnList, series);
+            }
+        })
+    }
+    function GetGrid() {
+        var $gridTable = $("#gridTable");
+        $gridTable.jqGrid({
+            datatype: "local",
+            height: 100,
+            width:$('li').width(),
+            autowidth: true,
+            colModel: [
+                { label: '行政区划', name: 'district', index: 'district', width: 140, align: 'left', sortable: true},
+                { label: '特大型', name: 'tdx', index: 'tdx', width: 120, align: 'left', sortable: true },
+                { label: '大型', name: 'dx', index: 'dx', width: 120, align: 'left', sortable: true },
+                { label: '中型', name: 'zx', index: 'zx', width: 120, align: 'left', sortable: true },
+                { label: '小型', name: 'xx', index: 'xx', width: 120, align: 'left', sortable: true }
+            ],
+            rowNum: 99999,
+        });
+        var $gridTable = $("#gridTable1");
+        $gridTable.jqGrid({
+            datatype: "local",
+            height: 100,
+            autowidth: true,
+            colModel: [
+                { label: '行政区划', name: 'district', index: 'district', width: 140, align: 'left', sortable: true },
+                { label: '特大型', name: 'tdx', index: 'tdx', width: 120, align: 'left', sortable: true },
+                { label: '大型', name: 'dx', index: 'dx', width: 120, align: 'left', sortable: true },
+                { label: '中型', name: 'zx', index: 'zx', width: 120, align: 'left', sortable: true },
+                { label: '小型', name: 'xx', index: 'xx', width: 120, align: 'left', sortable: true }
+            ],
+            rowNum: 99999
+        });
+        var $gridTable = $("#gridTable2");
+        $gridTable.jqGrid({
+            datatype: "local",
+            height: 100,
+            autowidth: true,
+            colModel: [
+                { label: '行政区划', name: 'district', index: 'district', width: 140, align: 'left', sortable: true },
+                { label: '新增', name: 'insert', index: 'dx', width: 120, align: 'left', sortable: true },
+                { label: '修改', name: 'update', index: 'zx', width: 120, align: 'left', sortable: true },
+                { label: '删除', name: 'delete', index: 'xx', width: 120, align: 'left', sortable: true }
+            ],
+            rowNum: 99999
+        });
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetStatisticsByXQDJ',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                var mydata = [];
+                if (data) {
+                    for (var i = 0; i < data.columnList.length; i++) {
+                        mydata.push({ district: data.columnList[i], tdx: data.dataList[0].data[i], dx: data.dataList[1].data[i], zx: data.dataList[2].data[i], xx: data.dataList[3].data[i] });
+                    }
+                    var dataHeight = mydata.length * 28;
+                    if (height > dataHeight) {
+                        height = dataHeight;
+                    }
+                }
+                $("#gridTable").jqGrid("setGridHeight", height);
+                $("#gridTable").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: mydata,
+                    page: 1
+                }).trigger("reloadGrid");
+            }
+        })
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetStatisticsByZQDJ',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            success: function (data) {
+                var mydata = [];
+                if (data) {
+                    for (var i = 0; i < data.columnList.length; i++) {
+                        mydata.push({ district: data.columnList[i], tdx: data.dataList[0].data[i], dx: data.dataList[1].data[i], zx: data.dataList[2].data[i], xx: data.dataList[3].data[i] });
+                    }
+                    var dataHeight = mydata.length * 28;
+                    if (height > dataHeight) {
+                        height = dataHeight;
+                    }
+                }
+                $("#gridTable1").jqGrid("setGridHeight", height);
+                $("#gridTable1").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: mydata,
+                    page: 1
+                }).trigger("reloadGrid");
+            }
+        })
+        var queryJson = { SelectXZQH: usercode, YEAR: year };
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetTypeStatistics',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: "GET",
+            dataType: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            success: function (data) {
+                var mydata = [];
+                if (data) {
+                    for (key in data[0]) {
+                        if (key != "name")
+                            mydata.push({ district: key, insert: data[0][key], update: data[1][key], delete: data[2][key] });
+                    }
+                    var dataHeight = mydata.length * 28;
+                    if (height > dataHeight) {
+                        height = dataHeight;
+                    }
+                }
+                $("#gridTable2").jqGrid("setGridHeight", height);
+                $("#gridTable2").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: mydata,
+                    page: 1
+                }).trigger("reloadGrid");
+            }
+        })
+    }
+    //柱状图2 legend:名称，yData:X轴数据
+    function _zzt2(echartID, title, legend, xData, series) {
+        var myChart1 = echarts.init(document.getElementById(echartID));
+        myChart1.clear();
+        var option = {
+            title: {
+                show: false,
+                text: title,
+                textStyle: { fontSize: 14, color: '#656565' },
+                x: 'left'
+            },
+            color: ['#6bcbca', '#97ce68', '#4289cc', '#b6a2de', '#5ab1ef', '#19cc9f'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+            },
+            legend: {
+                data: legend,
+                x: 'center',
+                top: '7px'
+            },
+            calculable: true,
+            grid: {
+                left: 60,
+                right: '5%',
+                top: '15%'
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xData,
+                    axisLine: {
+                        lineStyle: { color: '#f1f1f1' }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: "#8c8c8c",
+                        interval: 0,
+                        formatter: function (str) {
+                            var strs = str.split("");
+                            return str //s.join("\n");
+                        }
+                    }
+                }
+            ],
+            yAxis: [{
+                type: 'value',
+                axisLine: {
+                    lineStyle: { color: '#f1f1f1' }
+                },
+                splitLine: {
+                    show: false
+                },
+                axisLabel: { color: "#8c8c8c" }
+            }],
+            series: series
+        };
+        $("#title_echart1").text(title);
+        myChart1.setOption(option);
+        return myChart1;
+    }
+    //饼图
+    function _bt(echartID, text, scaleData) {
+        var myChart2 = echarts.init(document.getElementById(echartID));
+        myChart2.clear();
+        //指定图表配置数据
+        var rich = {
+            white: {
+                color: '#ddd',
+                align: 'center',
+                padding: [3, 0]
+            }
+        };
+        var placeHolderStyle = {
+            normal: {
+                label: {
+                    show: false
+                },
+                labelLine: {
+                    show: false
+                },
+                color: 'rgba(0, 0, 0, 0)',
+                borderColor: 'rgba(0, 0, 0, 0)',
+                borderWidth: 0
+            }
+        };
+        var color = ['#268bf9', '#568be3', '#86b3ff', '#b0ea55', '#00d1aa', '#00b8d4', '#02c6f8'];//['#3fa7dc', '#7091c4', '#5170a2', '#1CA7CB', '#e1ca74', '#34AF4B', '#179D9D']
+        var data = [];
+        for (var i = 0; i < scaleData.length; i++) {
+            data.push({
+                value: scaleData[i].value,
+                name: scaleData[i].name,
+                itemStyle: {
+                    normal: {
+                        borderWidth: 5,
+                        shadowBlur: 0,
+                    }
+                }
+            });
+        }
+        var seriesObj = [{
+            name: '',
+            type: 'pie',
+            color: color,
+            clockWise: false,
+            radius: ['15%', '35%'],
+            hoverAnimation: false,
+            label: {
+                show: true,
+                position: 'outside',
+                formatter: function (params) {
+                    var percent = 0;
+                    var total = 0;
+                    for (var i = 0; i < scaleData.length; i++) {
+                        total += Number(scaleData[i].value);
+                    }
+                    if (total == 0) {
+                        percent = 0
+                    } else {
+                        percent = ((Number(params.value) / total) * 100).toFixed(0);
+                    }
+                    if (params.name !== '') {
+                        return params.name + percent + '%';
+                    } else {
+                        return '';
+                    }
+                },
+                //rich: rich
+            },
+            labelLine: {
+                length: 20,
+                show: true,
+                //color:'#00ffff'
+            },
+            data: data
+        }];
+        var option = {
+            title: {
+                show: false,
+                text: text,
+                x: '20',
+                textStyle: { fontSize: 14, color: '#656565' }
+            },
+            grid: {
+                top: '15%'
+            },
+            tooltip: {
+                show: false
+            },
+            legend: {
+                show: false
+            },
+            toolbox: {
+                show: false
+            },
+            series: seriesObj
+        }
+        $("#title_echart2").text(text);
+        myChart2.setOption(option, true);
+        return myChart2;
+    }
+    //柱状图 legend:名称，yData:Y轴数据,data:X轴数据
+    function _zzt(echartID, legend, yData, series) {
+        var myChart3 = echarts.init(document.getElementById(echartID));
+        myChart3.clear();
+        var option = {
+            title: {
+                show: true,
+                text: legend,
+                textStyle: { fontSize: 14, color: '#656565' },
+                x: '10'
+            },
+            color: ['#FFA60B', '#a3e4e3', '#4289cc', '#95ed54', '#6bcbca', '#02c6f8'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                },
+                formatter: function (params) {
+                    var relVal = params[0].name+"<br/>";
+                    for (var i = 0; i < params.length; i++) {
+                        var str = "&nbsp;&nbsp;";
+                        if (i % 2 == 1) { str += "<br/>" }
+                        relVal += params[i].marker + params[i].seriesName + ' : ' + params[i].value + str;
+                    }
+                    return relVal;
+                }
+            },
+            legend: {
+                data: legend
+            },
+            calculable: true,
+            grid: {
+                left: '10%',
+                right: '5%',
+                top: '15%'
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: yData,
+                    axisLine: {
+                        lineStyle: { color: '#f1f1f1' }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: {
+                        color: "#8c8c8c", interval: 0,
+                        formatter: function (str) {
+                            var strs = str.split("");
+                            return strs.join("\n");
+                        }
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLine: {
+                        lineStyle: {
+                            color: '#f1f1f1'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel: { color: "#8c8c8c" }
+                }
+            ],
+            series: series
+        };
+        $("#title_echart3").text(legend);
+        myChart3.setOption(option);
+        return myChart3;
+    }
+    //地图
+    var geoCoordMap = {}, geoJson, currentCode = '000000', currentName;
+    function MapChart(mapData, tit) {
+        //区县级用户显示上级市地图
+        var fileCode = usercode, xzqh = "province";
+        if (usercode.slice(2, 6) != '0000') {
+            fileCode = usercode.slice(0, 4) + "00";
+            xzqh = "citys";
+        }
+        var maxData = 0;
+        for (var nu = 0; nu < mapData.length; nu++) {
+            if (maxData < Number(mapData[nu].value)) {
+                maxData = Number(mapData[nu].value);
+            }
+        }
+        var convertData = function (data) {
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var geoCoord = geoCoordMap[data[i].name];
+                if (geoCoord) {
+                    res.push({
+                        name: data[i].name,
+                        value: geoCoord.concat(data[i].value),
+                    });
+                }
+            }
+            return res;
+        };
+        var option = {
+            //title: {
+            //    show: false,
+            //    top: 0,
+            //    text: tit,
+            //    subtext: '',
+            //    x: '20',
+            //    textStyle: {
+            //        fontSize: 14, color: '#656565'
+            //    }
+            //},
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params) {
+                    if (!params.value || typeof (params.value) == "undefined") {
+                        return params.name + tit + ' : 0';
+                    } else if (params.value.length > 2 && typeof (params.value) == "object") {
+                        return params.name + tit + ' : ' + params.value[2];
+                    } else {
+                        return params.name + tit + ' : ' + params.value;
+                    }
+                }
+            },  
+            dataRange: {
+                show: true,
+                //splitNumber: 5,
+                padding: [6, 0, 6, 0],
+                itemGap: 3,
+                itemWidth: 16,
+                itemHeight: 80,
+                right: 20,
+                top: 'bottom',
+                min: -1,
+                max: [],//maxData,
+                text: [maxData, '0'],
+                seriesIndex: [1],
+                color: ['#ffa60b', '#71C9E8']
+            },
+            geo: {
+                show: true,
+                map: nameMap,
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: false,
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#031525',
+                        borderColor: '#3B5077',
+                    },
+                    emphasis: {
+                        areaColor: '#568BE3',
+                    }
+                }
+            },
+            series: [{
+                name: '散点',
+                type: 'scatter',
+                coordinateSystem: 'geo',
+                data:[],
+                symbolSize: function (val) {
+                    return 10;
+                },
+                label: {
+                    normal: {
+                        formatter: '{b}',
+                        position: 'right',
+                        show: true
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#506a73'
+                    }
+                }
+            },
+                {
+                    type: 'map',
+                    geoIndex: 0,
+                    aspectScale: 0.75, //长宽比
+                    layoutCenter: ['100%', '100%'],
+                    showLegendSymbol: false, // 存在legend时显示
+                    label: {
+                        show: true,
+                        color: '#757575'
+                    },
+                    itemStyle: {
+                        areaColor: '#f1fefc',
+                        borderWidth: 1,
+                        borderColor: '#fff',
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            color: '#fff'
+                        },
+                        itemStyle: { areaColor: '#488cff' }
+                    },
+                    animation: false,
+                    selectedMode: 'single',
+                    data: [],//mapData
+                },
+
+        {
+            name: '点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            symbol: 'pin', //气泡
+            symbolSize: function (val) {
+                return 35;
+            },
+            label: {
+                normal: {
+                    show: true,
+                    formatter: function (params) {
+                        if (!params.value || typeof (params.value) == "undefined") {
+                            return '0';
+                        } else if (params.value.length > 2 && typeof (params.value) == "object") {
+                            return params.value[2];
+                        } else {
+                            return params.value;
+                        }
+                    },
+                    textStyle: {
+                        fontSize: 9,
+                    }
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#e8515f'
+                }
+            },
+            animation: false,
+            zlevel: 6,
+            data: [],
+        }
+            ]
+        };
+        var loadMap = function () {
+            option.series[0].data = convertData(mapData);
+            option.series[1].data = mapData;
+            option.series[2].data = convertData(mapData);
+            option.dataRange.max = maxData==0?10:maxData;
+            //$("#title_map").text(tit);
+            myChart.setOption(option);
+            //地图点击事件
+            if (!myChart._$handlers.click) {
+                myChart.on('click', function (params) {
+                    if (!params.data) { return; }
+                    if (!params.data.code) {
+                        currentCode = usercode;
+                    } else if (currentCode == params.data.code) {
+                        currentCode = usercode;
+                        currentName = DistrictName;
+                    }else {
+                        currentCode = params.data.code;
+                        currentName = params.name;
+                    }
+                    ajaxEchart(currentCode, currentName);
+                });
+            }
+        }
+        myChart = echarts.init(document.getElementById('map'));
+        myChart.clear();
+        if (!geoJson) {
+            //读取地图json文件
+            var uploadedDataURL = '../../Content/scripts/plugins/echarts/json/' + xzqh + '/' + fileCode + ".json";
+            myChart.showLoading();
+            geoJson = null;
+            $.getJSON(uploadedDataURL, function (data) {
+                geoJson = data;
+                echarts.registerMap(nameMap, geoJson);
+                myChart.hideLoading();
+                var features = geoJson.features;
+                geoCoordMap = {};
+                for (var num = 0; num < features.length; num++) {
+                    var key = features[num].properties.name;
+                    geoCoordMap[key] = features[num].properties.center ? features[num].properties.center : features[num].properties.cp;
+                }
+                loadMap();
+            });
+        }
+        else {
+            echarts.registerMap(nameMap, geoJson);
+            loadMap();
+        }
+    }
+</script>
+}

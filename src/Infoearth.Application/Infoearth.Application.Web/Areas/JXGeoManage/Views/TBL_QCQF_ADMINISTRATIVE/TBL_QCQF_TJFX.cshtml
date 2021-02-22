@@ -1,0 +1,425 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+
+@section Scripts{
+<script>
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            west__size: 160,
+            applyDemoStyles: true,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($('#layout .ui-layout-center').height() - 85);
+            }
+        });
+        var isResize = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $("#itemTree").height($('.ui-layout-west').height() - 45);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载行政区划树
+    //  var AreaCode = 0;
+    var AreaCode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+    if (AreaCode == "000000") {
+        AreaCode = "0";
+    }
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMaps",
+            onnodeclick: function (item) {
+                //console.log(item.id);
+                AreaCode = item.id;
+                $("#gridTable").jqGrid('setGridParam');
+                var queryJson = { AreaCode: AreaCode }
+                $("#gridTable").jqGrid('setGridParam', {
+                    postData: { queryJson: JSON.stringify(queryJson) },
+                    url: "../../JXGeoManage/TBL_QCQF_DISASTERPREVENTION/GetQCQFStatisticsNew",
+                    page: 1
+                }).trigger('reloadGrid');
+            },
+        }    //初始化
+        $("#itemTree").treeview(item);
+    };
+
+    //加载统计表
+    function GetGrid() {
+        var data;
+        var selectedRowIndex = 0;
+        var queryJson = { AreaCode: AreaCode }
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 85,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../JXGeoManage/TBL_QCQF_DISASTERPREVENTION/GetQCQFStatisticsNew",
+            treeGrid: true,
+            treeGridModel: 'adjacency',
+            ExpandColume: 'parent',
+            datatype: "json",
+            colModel: [
+                {
+                    label: '行政区划', name: 'id', index: 'id', width: 230, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return rowObject.data
+                    }
+                },
+                { label: '行政区划', name: 'data', index: 'data', width: 300, align: 'left', sortable: false, hidden: true },
+                { label: '行政区划编码', name: 'code', index: 'code', width: 300, align: 'left', sortable: false, hidden: true },
+                { label: '数据', name: 'datas', index: 'datas', width: 300, align: 'left', sortable: false, hidden: true },
+                { label: '责任人', name: 'MONITORRESPONSIBLE', index: 'MONITORRESPONSIBLE', width: 100, align: 'left', sortable: false },
+                { label: '责任人电话', name: 'MONITORRESPONSIBLETEL', index: 'MONITORRESPONSIBLETEL', width: 100, align: 'left', sortable: false },
+                { label: '群测群防人数量', name: 'count', index: 'count', width: 100, align: 'left', sortable: false },
+                { label: '群测群防点数量', name: 'qcqfcount', index: 'qcqfcount', width: 100, align: 'left', sortable: false },
+                {
+                    label: '短信单发', name: 'DXDF', index: 'DXDF', width: 100, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a style="color:#3185c7;cursor:pointer;" onclick="dxfs(\'df\',\'' + escape(rowObject.MONITORRESPONSIBLE) + '\')">短信单发</a>';
+                    }
+                },
+                {
+                    label: '短信群发', name: 'DXQF', index: 'DXQF', width: 100, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a style="color:#3185c7;cursor:pointer;" onclick="dxfs(\'' + rowObject.id + '\')">短信群发</a>';
+                    }
+                },
+            ],
+            pager: 'false',
+            jsonReader: {
+                root: 'rowsData',
+                repeatitems: false,
+            },
+            treeReader: {
+                level_field: 'level',
+                parent_id_field: 'parent',
+                leaf_field: 'isLeaf',
+                expanded_field: 'expanded'
+            },
+            onSelectRow: function (rowId, status) {
+                var thisId = rowId.slice(0, 3)+'tableflag';//打标记
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+                var ids = $gridTable.jqGrid('getDataIDs');
+                var id = $gridTable.jqGrid('getGridParam', 'selrow');
+                if (id.length == 9) {
+                    if ($('#' + rowId + '_01').length == 0) {
+                        var removeId = [], subdatas = [[]];
+                        var subgrid_table_id = id + "_t";
+                        $('#' + id).after('<tr role="row" id="' + rowId + '_01" tabindex="-1" class="' +thisId+' ui-widget-content jqgrow ui-row-ltr"><td colspan="8"  role="gridcell" style="text-align:left;" title="' + id + '" aria-describedby="gridTable_id"><table id="' + id + '_t"></table></td></tr>')
+                        subgridTable(id + "_t", id);
+                    } else {
+                        if (!$('#' + rowId + '_01').is(':hidden')) {
+                            $('#' + rowId + '_01').hide();
+                        } else {
+                            $('#' + rowId + '_01').show();
+                        }
+                    }
+                }
+            },
+            loadComplete: function () {
+                $('#gridTable .treeclick').click(function () {
+                    var id = $(this).parents('tr').attr('id').slice(0,3);
+                    $('.' + id + 'tableflag').hide();
+                })
+            },
+            gridComplete: function () {
+            }
+        });
+    }
+
+    function subgridTable(subgrid_table_id, c) {
+        var queryJson = { TOWN: c };
+        //$("#" + subgrid_table_id).jqGrid('GridUnload');
+        //if ($("#" + subgrid_table_id).length >= 1) {
+        //    return;
+        //}
+       // $("#gridTable").jqGrid('GridUnload');
+        $("#" + subgrid_table_id).jqGrid({
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            autowidth: true,
+            height: "auto",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: contentPath + "/api/TBL_HAZARDBASICINFOApi/GetPageListJsonNoQCQF",
+            datatype: "json",
+            colModel: [
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 300, align: 'left', sortable: false
+                },
+                {
+                    label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 100, align: 'left', sortable: false
+                },
+                {
+                    label: '市名称', name: 'CITYNAME', index: 'CITYNAME', width: 200, align: 'left', sortable: false
+                },
+                 {
+                     label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 200, align: 'left', sortable: false
+                 },
+               {
+                   label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 200, align: 'left', sortable: false
+               },
+               {
+                   label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 200, align: 'left', sortable: false
+               },
+               {
+                   label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 200, align: 'left', sortable: false
+               },
+            ],
+            viewrecords: false,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            //pager: "#gridPager1",
+            sortname: 'CITYNAME',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex1 = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+            }
+        });
+
+    }
+    function subgridTableOld(subgrid_table_id, data) {
+        $("#" + subgrid_table_id).jqGrid({
+            autowidth: true,
+            height: "auto",
+            datatype: "local",
+            colModel: [
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 300, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var str = removeAllSpace(rowObject.data);
+                        str = str.substring(1, str.length - 1);
+                        cellvalue = JSON.parse(str).DISASTERNAME;
+                        return cellvalue
+                    }
+                },
+                {
+                    label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 100, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var str = removeAllSpace(rowObject.data);
+                        str = str.substring(1, str.length - 1);
+                        cellvalue = JSON.parse(str).DISASTERTYPE;
+                        return cellvalue
+                    }
+                },
+                 {
+                     label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         var str = removeAllSpace(rowObject.data);
+                         str = str.substring(1, str.length - 1);
+                         cellvalue = JSON.parse(str).TOWNNAME;
+                         return cellvalue
+                     }
+                 },
+                 {
+                     label: '监测责任人', name: 'MONITORRESPONSIBLE', index: 'MONITORRESPONSIBLE', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         var str = removeAllSpace(rowObject.data);
+                         str = str.substring(1, str.length - 1);
+                         cellvalue = JSON.parse(str).MONITORRESPONSIBLE;
+                         return cellvalue
+                     }
+                 },
+                 {
+                     label: '监测责任人电话', name: 'MONITORRESPONSIBLETEL', index: 'MONITORRESPONSIBLETEL', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         var str = removeAllSpace(rowObject.data);
+                         str = str.substring(1, str.length - 1);
+                         cellvalue = JSON.parse(str).MONITORRESPONSIBLETEL;
+                         return cellvalue
+                     }
+                 },
+                 {
+                     label: '群测群防人', name: 'GROUPMONITORINGSTAFF', index: 'GROUPMONITORINGSTAFF', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         var str = removeAllSpace(rowObject.data);
+                         str = str.substring(1, str.length - 1);
+                         cellvalue = JSON.parse(str).LOCATION;
+                         return cellvalue
+                     }
+                 },
+                 {
+                     label: '群测群防人电话', name: 'GROUPMONITORINGSTAFFTEL', index: 'GROUPMONITORINGSTAFFTEL', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         var str = removeAllSpace(rowObject.data);
+                         str = str.substring(1, str.length - 1);
+                         cellvalue = JSON.parse(str).LOCATION;
+                         return cellvalue
+                     }
+                 },
+                //{
+                //    label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 200, align: 'left', sortable: false,
+                //    formatter: function (cellvalue, options, rowObject) {
+                //        var str = removeAllSpace(rowObject.data);
+                //        str = str.substring(1, str.length - 1);
+                //        cellvalue = JSON.parse(str).LOCATION;
+                //        return cellvalue
+                //    }
+                //},
+                //{
+                //    label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 150, align: 'left', sortable: false,
+                //    formatter: function (cellvalue, options, rowObject) {
+                //        var str = removeAllSpace(rowObject.data);
+                //        str = str.substring(1, str.length - 1);
+                //        cellvalue = JSON.parse(str).LONGITUDE;
+                //        return cellvalue
+                //    }
+                //},
+                //{
+                //    label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 150, align: 'left', sortable: false,
+                //    formatter: function (cellvalue, options, rowObject) {
+                //        var str = removeAllSpace(rowObject.data);
+                //        str = str.substring(1, str.length - 1);
+                //        cellvalue = JSON.parse(str).LATITUDE;
+                //        return cellvalue
+                //    }
+                //},
+                //{
+                //    label: '短信发送', name: 'DXFS', index: 'DXFS', width: 100, align: 'left', sortable: false,
+                //    formatter: function (cellvalue, options, rowObject) {
+                //        return '<a style="color:#3185c7;cursor:pointer;" onclick="dxfs(\'df\',\'' + escape(rowObject.UsreInfo) + '\')">短信发送</a>'
+                //    }
+                //},
+            ],
+            pager: 'false',
+            onSelectRow: function (rowId, status) {
+            },
+            gridComplete: function () {
+                //$('#' + this.id).setSelection(selectedRowIndex, false);
+                //var data = $gridTable.getRowData();
+            }
+        });
+
+        $("#" + subgrid_table_id).jqGrid('setGridParam', {
+            data: data
+        }).trigger('reloadGrid');
+    }
+    function removeAllSpace(str) {
+        return str.replace(/\s+/g, "");
+    }
+    //责任人info
+    function zrrInfo(userinfo) {
+        dialogOpen({
+            id: 'zrrInfoForm',
+            title: '责任人详情',
+            url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ZRRINFOFrom?userinfo=' + userinfo,
+            width: '400px',
+            height: '300px',
+            btn: null,
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //短信单发，短信群发
+    function dxfs(typeorcode, userinfo) {
+        var url, title;
+        if (typeorcode == 'df') {
+            title = "短信单发";
+            url = "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_LXRFrom?userinfo=" + userinfo;
+        } else {
+            title = "短信群发";
+            url = "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_LXRFrom?typeorcode=" + typeorcode + "&userinfo=qf";
+        }
+        dialogOpen({
+            id: 'dxfsForm',
+            title: title,
+            url: url,
+            width: '900px',
+            height: "800px",
+            btn: ['发送', '取消'],
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+</script>
+}
+<style>
+    html, body {
+        height: 100%;
+    }
+
+    .fa-folder-open {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -16px;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-folder {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px 0;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-file-o {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -32px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight a {
+        color: #fff !important;
+    }
+
+        .ui-state-highlight a, .ui-widget-content .ui-state-highlight a {
+            color: #fff !important;
+        }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="height:100%;">
+        <div class="west-Panel" style="margin:0px;height:100%";>
+            <div class="panel-Title" style="height:40px;line-height:40px;background-color: rgba(236, 247, 255, 1);color:#000">行政区划</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;width:100%;margin-top:0px;">
+            <div id="DZHJManage" class="" style="width: 100%;background: #fff; padding: 0">
+                <div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+                    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                        <i class="fa fa-bars" style="margin: 0 5px;font-weight:900"></i><span>群测群防统计分析</span>
+                    </div>
+                </div>
+                <div class="gridPanel">
+                    <table id="gridTable"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

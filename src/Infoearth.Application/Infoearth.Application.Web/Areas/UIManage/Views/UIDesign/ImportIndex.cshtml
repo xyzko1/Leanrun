@@ -1,0 +1,307 @@
+﻿
+@{
+    ViewBag.Title = "Excel导入";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 28px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+
+    .orm_item_title_note1 img {
+        border: 1px solid #eee;
+        margin: 20px;
+        border-radius: 3px;
+    }
+</style>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">Excel导入</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、调用导入方法需要将导入文件上传至服务器
+                    </td>
+
+                </tr>
+              
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、调用导入方法的文件路径
+
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/import1.png" />
+                            </p>
+
+
+
+
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、调用方法
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                方法一：返回插入的数据集合
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/import2.png" />
+                            </p>
+                            <p class="orm_item_title_note1">
+                                方法二：生成插入语句
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/import3.png" />
+                            </p>
+                          
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、 Excel导入格式
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                1. Sheet页第一页中填写数据导入列、数据库字段信息
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/import4.png" />
+                            </p>
+                            <p class="orm_item_title_note1">
+                                2. 在Sheet页第二页中填写需要导入的数据
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/import5.png" />
+                            </p>
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+</div>

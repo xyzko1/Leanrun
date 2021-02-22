@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+</style>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form"> 
+        <tr>
+            <td class="formTitle">监测点名称<span class="required">*</span></td>
+            <td class="formValue">
+                <input id="MONITORPOINTNAME" type="text" class="form-control"  disabled="disabled"/>
+            </td> 
+            <td class="formTitle">监测点编号<span class="required">*</span></td>
+            <td class="formValue">
+                <input id="MONITORPOINTID" type="text" class="form-control"  disabled="disabled"/>
+            </td>
+        </tr>
+        <tr>  
+            <td class="formTitle">监测时间</td>
+            <td class="formValue">
+                <input id="MONITORTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">大地高程（m）</td>
+            <td class="formValue">
+                <input id="VALUE" type="text" class="form-control"  />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    IDNAME = [];
+    $(function () {
+        var href = window.location.href;
+        IDNAME = unescape(href.split('=')[1]).split('&');
+        $('#MONITORPOINTNAME').val(IDNAME[1]);
+        $('#MONITORPOINTID').val(IDNAME[0]);
+    });
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(IDNAME[0]);
+        $.SaveForm({
+            url: "../../MONITORPOINT/TBL_DMCJ_MONITORDATA/SaveForm?keyValue=",
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

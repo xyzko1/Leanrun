@@ -1,0 +1,86 @@
+﻿@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/scripts/plugins/pdf/html2canvas.js"></script>
+<script src="~/Content/scripts/plugins/pdf/jspdf.min.js"></script>
+<script src="~/Content/scripts/plugins/pdf/pdfHelper.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../DemoManage/Base_Area/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        //exportPDF($(document.body), $(document.body).height(),true,false);
+
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../DemoManage/Base_Area/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$("#gridTable").trigger("reloadGrid");
+                } catch (e) {
+                    window.parent.$("#gridTable").trigger("reloadGrid");
+                }
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;" >
+    <table class="form" id="pdfTest">
+        <tr>
+            <td class="formTitle">区域主键</td>
+            <td class="formValue">
+                <input id="F_AreaId" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">父级主键</td>
+            <td class="formValue">
+                <input id="F_ParentId" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">区域编码</td>
+            <td class="formValue">
+                <input id="F_AreaCode" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">区域名称</td>
+            <td class="formValue">
+                <input id="F_AreaName" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">快速查询</td>
+            <td class="formValue">
+                <input id="F_QuickQuery" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">简拼</td>
+            <td class="formValue">
+                <input id="F_SimpleSpelling" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">层次</td>
+            <td class="formValue">
+                <input id="F_Layer" type="text" class="form-control" />
+        </tr>
+    </table>
+</div>

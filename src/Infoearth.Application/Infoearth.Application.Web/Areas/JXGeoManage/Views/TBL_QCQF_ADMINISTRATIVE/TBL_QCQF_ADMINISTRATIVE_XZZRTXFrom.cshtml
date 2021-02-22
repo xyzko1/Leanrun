@@ -1,0 +1,92 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<style>
+    .center_div {
+        line-height: 40px;
+        text-align: center;
+    }
+
+    .spans {
+        display: inline-block;
+        padding-right: 20px;
+        width: 120px;
+        text-align: right;
+        line-height: 40px;
+        white-space: nowrap;
+    }
+
+    .center_div input {
+        width: 26% !important;
+        min-width: 170px !important;
+    }
+</style>
+<div id="form1">
+    <div style="width: 100%;background: #fff; padding: 36px 0 0 0">
+        <div class="center_div">
+            <span class="spans">村组名称:</span><input id="VILLAGENAME" type="text" class="form-control XZQH" style="display:inline-block;" isvalid="yes" checkexpession="NotNull" />
+            <span class="spans">乡镇名称:</span><input id="TOWNNAME" type="text" class="form-control XZQH" style="display:inline-block;" />
+            <input id="TOWNCODE" type="text" class="form-control" style="display:none;" />
+        </div>
+        <div class="center_div">
+            @*<span class="spans">联系人:</span><input id="UserName" type="text" class="form-control" style="display:inline-block;" readonly="readonly" placeholder="点击选择行政体系联系人" onclick="xzzrr()" />*@
+            @*<input id="CONTACTPEOPLEID" type="text" class="form-control" style="display:none;" />*@
+            <span class="spans">联系人:</span><input id="USERNAME" type="text" class="form-control" style="display:inline-block;" />
+            <span class="spans">手机:</span><input id="Telephone" type="text" class="form-control" style="display:inline-block;" />
+        </div>
+        <div class="center_div" style="margin-top:8px;">
+            <span class="spans">描述:</span>
+            <textarea id="MEMO" class="form-control" style="display:inline-block;width:calc(43% + 196px);vertical-align:middle"></textarea>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var TOWNCODE = request('TOWNCODE');
+    var TOWNNAME = request('TOWNNAME');
+    $(function () {
+        initControl();
+
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_QCQF_VILLAGEINFO/GetFormJson",
+
+
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+        $('#TOWNNAME').val(unescape(TOWNNAME));
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        postData.TOWNCODE = TOWNCODE;
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_QCQF_VILLAGEINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

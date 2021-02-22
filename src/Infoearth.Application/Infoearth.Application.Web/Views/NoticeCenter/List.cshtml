@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+<script type="text/javascript">
+    var status = request('status');
+    $(function () {      
+        InitialPage();
+        GetGrid();
+    });
+    //function InitialPage() {
+    //    //resize重设布局;
+    //    $(window).resize(function (e) {
+    //        window.setTimeout(function () {
+    //            $('#gridTable').setGridWidth(($('.gridPanel').width()));
+    //            $('#gridTable').setGridHeight($(window).height() - 136.5);
+    //        }, 200);
+    //        e.stopPropagation();
+    //    });
+    //}
+
+
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                $(window).resize();
+            }
+        });
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 141.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["Staus"] = $("#queryCondition").find('.dropdown-text').attr('data-value'),
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url:  "/NoticeCenter/GetMsgList",
+            postData: { userId: "@Infoearth.Application.Code.OperatorProvider.Provider.Current().UserId", status:status },
+            datatype: "json",
+            colModel: [
+                 { label: 'F_LogId', name: 'F_LogId', index: 'F_LogId', width: 100, align: 'left', sortable: true, hidden: true },
+                 {
+                     label: '通知标题', name: 'F_MsgTitle', index: 'F_MsgTitle', width: 100, align: 'left', sortable: true,
+                 
+                 },
+                  {
+                      label: '通知内容', name: 'F_Content', index: 'F_Content', width: 300, align: 'left', sortable: true,
+                    
+
+                  },
+                   { label: '发布人', name: 'F_SendId', index: 'F_SendId', width: 100, align: 'left', sortable: true },
+                 { label: '发布时间', name: 'F_CreateDate', index: 'F_CreateDate', width: 150, align: 'left', sortable: true },
+
+                {
+                    label: '查看详情', name: 'F_STAUE', index: 'F_STAUE', width: 100, align: 'center', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+
+
+                        
+                        return "<a class=\"label-success btn\" onclick=\"window.parent.$.learuntab.addTab(this)\" data-href=\"/NoticeCenter/Index?contentid=" + rowObject.F_ContentId + "&userid=" + rowObject.F_UserId + "&sendId=" + rowObject.F_SendId + "\"><i class='fa fa-smile-o'></i>&nbsp;查看</a>";
+                      
+                    }
+                },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'F_CreateDate',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+      
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+
+
+    </script>
+
+
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="panel-Title">消息列表</div>
+
+
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+
+
+
+            </div>
+        </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<div class="row subblock" style="margin:10px; background:#fff;" id="layout">
+            <div class="content">
+                <div class="title" style="margin:0 20px; height:48px;line-height:48px; color:#666666;font-size:16px; border-bottom:2px solid #919191;">
+                    消息列表
+                </div>
+
+
+                <div style="padding:15px 25px;">
+
+
+                    <div class="row" style="line-height: 39px; border-bottom: 1px solid #F1F1F1;">
+                            <a class="col-md-7"  style="text-decoration: none;color:#999999;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0px;" href="javascript:;" onclick="$.learuntab.addTab(this)" data-href="/NoticeCenter/Index">[审批]&nbsp;&nbsp;&nbsp;李好运的报销申请</a>
+                            <label style="float: right;color:#999999;">2016-06-25</label>
+                        </div>
+
+                        <div class="row" style="line-height: 39px; border-bottom: 1px solid #F1F1F1;">
+                            <a class="col-md-7" href="#" style="text-decoration: none;color:#999999;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0px;" onclick="$.learuntab.addTab(this)" data-href="/NoticeCenter/Index">[审批]&nbsp;&nbsp;&nbsp;李好运的报销申请</a>
+                            <label style="float: right;color:#999999;">2016-06-25</label>
+                        </div>
+
+                        <div class="row" style="line-height: 39px; border-bottom: 1px solid #F1F1F1;">
+                            <a class="col-md-7" href="#" style="text-decoration: none;color:#999999;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0px;" onclick="$.learuntab.addTab(this)" data-href="/NoticeCenter/Index">[审批]&nbsp;&nbsp;&nbsp;李好运的报销申请</a>
+                            <label style="float: right;color:#999999;">2016-06-25</label>
+                        </div>
+                  
+
+                </div>
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>*@

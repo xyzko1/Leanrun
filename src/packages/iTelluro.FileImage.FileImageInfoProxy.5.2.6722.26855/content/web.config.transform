@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <system.serviceModel>
+    <bindings>
+      <basicHttpBinding>
+        <binding name="BasicHttpBinding_IFileImageInfoService" maxReceivedMessageSize="2000000000000"
+          messageEncoding="Mtom" />
+      </basicHttpBinding>
+    </bindings>
+    <client>
+      <endpoint address="http://192.168.100.57:8000/MultimediaWebsite/Service/FileImageInfoService.svc"
+        binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IFileImageInfoService"
+        contract="FileImageInfoService.IFileImageInfoService" name="BasicHttpBinding_IFileImageInfoService" />
+    </client>
+  </system.serviceModel>
+</configuration>

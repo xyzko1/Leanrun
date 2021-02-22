@@ -1,0 +1,2483 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>iTelluro.Explorer.GisHelper</name>
+    </assembly>
+    <members>
+        <member name="T:iTelluro.Explorer.GisHelper.BusinessGisHelper">
+            <summary>
+            Gis辅助类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.ContourLine(iTelluro.Explorer.GisHelper.Common.ContourInfo)">
+            <summary>
+            生成等值线
+            </summary>
+            <param name="info">等值线的相关信息</param>
+            <returns>等值线的文件路径</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.PointsToRaserFile(iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo)">
+            <summary>
+            离散点生成栅格文件
+            </summary>
+            <param name="info">离散点相关信息</param>
+            <returns>栅格文件路径</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.Shp2TifByIDW(iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo)">
+            <summary>
+            shp文件插值为tif文件
+            IDW(反距离平方插值)
+            </summary>
+            <param name="info">相关配置信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.Raster2ContourLine(System.String,System.String,System.String,System.String,System.Double)">
+            <summary>
+            栅格文件生成等值线
+            </summary>
+            <param name="tifFilePath">单波段栅格图层的路径(此路径不能包含中文)</param>
+            <param name="shpResultPath">等值线结果路径(此路径不能包含中文)</param>
+            <param name="exePath">gdal_contour.exe所在路径</param>
+            <param name="fldName">字段名称(长度不超过10,英文)</param>
+            <param name="interval">等值线间距</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.Raster2ContourLineFixed(System.String,System.String,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Drawing.Color},System.Boolean)">
+            <summary>
+            栅格文件生成等值线(一组固定值)
+            </summary>
+            <param name="tifFilePath">单波段栅格Tif的路径(此路径不能包含中文)</param>
+            <param name="shpResultPath">等值线Shp结果路径(此路径不能包含中文)</param>
+            <param name="levelVaules">等值线固定值数组(目前小数点只能六位)</param>
+            <param name="colorVaules">等值线固定值对应的颜色(可为空),不为空,长度要与colorVaules一致</param>
+            <param name="isSpline">等值线是否圆滑处理默认为false</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.Raster2ContourPolygon(System.String,System.String,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Drawing.Color})">
+            <summary>
+            生成等值面,不做归一化处理
+            </summary>
+            <param name="tifFilePath">单波段栅格图层的路径(此路径不能包含中文)</param>
+            <param name="shpResultPath">等值面结果路径(此路径不能包含中文)</param>
+            <param name="levelVaules">等值面固定值数组(目前小数点只能六位)(可为空)</param>
+            <param name="colorVaules">等值面固定值对应的颜色(可为空)</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.Raster2ContourPolygonWithGYH(System.String,System.String,System.Collections.Generic.Dictionary{System.Double,System.Collections.Generic.List{System.Double}},System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Drawing.Color})">
+            <summary>
+            生成等值面,做归一化处理
+            </summary>
+            <param name="tifFilePath">单波段栅格图层的路径(此路径不能包含中文)</param>
+            <param name="shpResultPath">等值面结果路径(此路径不能包含中文)</param>
+            <param name="vauleRanges">做归一化处理的判断范围</param>
+            <param name="levelVaules">等值面固定值数组(目前小数点只能六位)(可为空)</param>
+            <param name="colorVaules">等值面固定值对应的颜色(可为空)</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.RasterPolygonize(System.String,System.String)">
+            <summary>
+            栅格矢量化
+            </summary>
+            <param name="tifFilePath">单波段栅格图层的路径(此路径不能包含中文)</param>
+            <param name="shpResultPath">矢量结果路径(此路径不能包含中文)</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.RunExe(System.String,System.String)">
+            <summary>
+            运行外部exe程序
+            </summary>
+            <param name="exeName"></param>
+            <param name="exeArgs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.WriteColorInShp(System.String,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Drawing.Color},System.Boolean)">
+            <summary>
+            向shp文件里面写颜色值并圆滑(等值线)
+            </summary>
+            <param name="shpPath"></param>
+            <param name="vaules"></param>
+            <param name="colorVaules"></param>
+            <param name="isSpline"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.WriteColorInShpExt(System.String,System.Collections.Generic.List{System.Double},System.Collections.Generic.List{System.Drawing.Color})">
+            <summary>
+            等值面颜色处理方法
+            </summary>
+            <param name="shpPath"></param>
+            <param name="vaules"></param>
+            <param name="colorVaules"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.ProcessGeometry(OSGeo.OGR.Geometry)">
+            <summary>
+            圆滑处理
+            </summary>
+            <param name="sourceG"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.BusinessGisHelper.CallBackFun(System.Double,System.IntPtr,System.IntPtr)">
+            <summary>
+            回调函数
+            </summary>
+            <param name="Complete"></param>
+            <param name="Message"></param>
+            <param name="Data"></param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.CatmullRomSpline">
+            <summary>
+            圆滑算法(spline)
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.CatmullRomSpline.Generate(System.Drawing.PointF[],System.Int32)">
+            <summary>
+            Generate spline series of points from array of keyframe points
+            </summary>
+            <param name="points">array of key frame points</param>
+            <param name="numPoints">number of points to generate in spline between each point</param>
+            <returns>array of points describing spline</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.CatmullRomSpline.PointOnCurve(System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Drawing.PointF,System.Single)">
+            <summary>
+            Calculates interpolated point between two points using Catmull-Rom Spline
+            </summary>
+            <remarks>
+            Points calculated exist on the spline between points two and three.
+            </remarks>
+            <param name="p0">First Point</param>
+            <param name="p1">Second Point</param>
+            <param name="p2">Third Point</param>
+            <param name="p3">Fourth Point</param>
+            <param name="t">
+            Normalised distance between second and third point 
+            where the spline point will be calculated
+            </param>
+            <returns>
+            Calculated Spline Point
+            </returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.ContourInfo">
+            <summary>
+            等值线的相关信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.ContourInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.Points">
+            <summary>
+            离散点
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.StartLon">
+            <summary>
+            起始经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.EndLon">
+            <summary>
+            结束经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.StartLat">
+            <summary>
+            起始纬度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.EndLat">
+            <summary>
+            结束纬度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.Width">
+            <summary>
+            生成Tif的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.Height">
+            <summary>
+            生成Tif的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.ResultFileDir">
+            <summary>
+            生成文件的文件夹路径(路径不要带中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.ExeFileDir">
+            <summary>
+            gdal相关Exe所在文件夹路径(不要带中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.IntervalValue">
+            <summary>
+            间隔值
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.CutPolygonWKTList">
+            <summary>
+            剪切范围(只返回此范围的等值线),为空不剪切
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.IsLineColored">
+            <summary>
+            等值线是否进行渐变色设置
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.StartColor">
+            <summary>
+            渐变起始颜色
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ContourInfo.EndColor">
+            <summary>
+            渐变结束颜色
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo">
+            <summary>
+            诱发因素分级信息
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.TDayLevel1CValue">
+            <summary>
+            三日(1)
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.TDayLevel2CValue">
+            <summary>
+            三日(2)
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.TDayLevel3CValue">
+            <summary>
+            三日(3)
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.ODayLevel1CValue">
+            <summary>
+            一日(1)
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.ODayLevel2CValue">
+            <summary>
+            一日(2)
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.CriticalValueInfo.ODayLevel3CValue">
+            <summary>
+            一日(3)
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.FloodInfo">
+            <summary>
+            淹没分析相关信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.FloodInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.FloodInfo.DEMPath">
+            <summary>
+            高层DEM地址
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.FloodInfo.LowElevation">
+            <summary>
+            最低高程,可为0
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.FloodInfo.WeatherRainDatas">
+            <summary>
+            历史降雨量数据
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.FloodInfo.ResultFileDir">
+            <summary>
+            生成文件的文件夹路径(路径不要带中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.FloodInfo.ExeFileDir">
+            <summary>
+            gdal相关Exe所在文件夹路径(不要带中文)
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.GisAnalysisHelper">
+            <summary>
+            Gis分析类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.GisAnalysisHelper.IsPointInPolygon(System.String,System.String)">
+            <summary>
+            点是否在多边形内
+            </summary>
+            <param name="pointWKT">点的WKT</param>
+            <param name="polygonWKT">多边形的WKT</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.GisAnalysisHelper.GeoIntersect(System.String,System.String)">
+            <summary>
+            是否相交或包含(第一个相交或包含第二个)
+            </summary>
+            <param name="firstWKT">第一个空间对象</param>
+            <param name="twoWKT">第二个空间对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.GisAnalysisHelper.GeoTopology(System.String,System.String,iTelluro.Explorer.GisHelper.Common.GisOPType)">
+            <summary>
+            空间对象拓扑
+            </summary>
+            <param name="firstWKT">第一个空间对象</param>
+            <param name="twoWKT">第二个空间对象</param>
+            <param name="opType">拓扑关系</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.GisAnalysisHelper.Buffer(System.String,System.Double)">
+            <summary>
+            缓冲区
+            </summary>
+            <param name="geoWKT">空间对象</param>
+            <param name="distance">缓冲区距离(单位米)</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.GisOPType">
+            <summary>
+            空间操作类型
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.GisOPType.Intersect">
+            <summary>
+            交集
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.GisOPType.Union">
+            <summary>
+            并集
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Common.GisOPType.Difference">
+            <summary>
+            补集
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.Grade">
+            <summary>
+            预警等级
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.PointDataInfo">
+            <summary>
+            离散点信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointDataInfo.Lon">
+            <summary>
+            经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointDataInfo.Lat">
+            <summary>
+            维度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointDataInfo.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo">
+            <summary>
+            离散点生成栅格相关信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.Points">
+            <summary>
+            离散点
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.StartLon">
+            <summary>
+            起始经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.EndLon">
+            <summary>
+            结束经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.StartLat">
+            <summary>
+            起始纬度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.EndLat">
+            <summary>
+            结束纬度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.Width">
+            <summary>
+            生成Tif的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.Height">
+            <summary>
+            生成Tif的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.ResultFileDir">
+            <summary>
+            生成文件的文件夹路径(路径不要带中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.PointsToRasterInfo.ExeFileDir">
+            <summary>
+            gdal相关Exe所在文件夹路径(不要带中文)
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.QXYJInfo">
+            <summary>
+            预警分析相关参数
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Common.QXYJInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.SensitivePath">
+            <summary>
+            易发性分区图地址
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.ForecastRainDatas">
+            <summary>
+            预报雨量数据
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.WeatherRainDatas">
+            <summary>
+            历史降雨量数据(1日)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.WeatherThreeRainDatas">
+            <summary>
+            历史降雨量数据(3日)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.YJMatrix">
+            <summary>
+            预警矩阵
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.CriticalValueInfo">
+            <summary>
+            诱发因素分级
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.ResultFileDir">
+            <summary>
+            生成文件的文件夹路径(路径不要带中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.QXYJInfo.ExeFileDir">
+            <summary>
+            gdal相关Exe所在文件夹路径(不要带中文)
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.ResultInfo">
+            <summary>
+            tif文件信息(空间)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.Lon">
+            <summary>
+            经度(西,左）
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.Lat">
+            <summary>
+            纬度(北,上)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.Width">
+            <summary>
+            宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.Height">
+            <summary>
+            高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.XCell">
+            <summary>
+            横向Cell大小
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.YCell">
+            <summary>
+            纵向Cell大小
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ResultInfo.InGeo">
+            <summary>
+            投影转换参数
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo">
+            <summary>
+            点shp文件栅格化信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.ShpFilePath">
+            <summary>
+            离散点的shp路径(此路径不能包含中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.TifFilePath">
+            <summary>
+            生成的Tif路径(此路径不能包含中文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.StartLon">
+            <summary>
+            起始经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.EndLon">
+            <summary>
+            结束经度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.StartLat">
+            <summary>
+            起始维度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.EndLat">
+            <summary>
+            结束维度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.Width">
+            <summary>
+            生成Tif的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.Height">
+            <summary>
+            生成Tif的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.FiledName">
+            <summary>
+            插值的属性列(shp文件中,长度不超过10，英文)
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.ShpToRasterInfo.ExePath">
+            <summary>
+            gdal_grid.exe的路径
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.CoordCvt.CoordConvert">
+            <summary>
+            坐标转换
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.CoordCvt.CoordConvert.Convert(System.Double,System.Double,iTelluro.Explorer.GisHelper.Common.ResultInfo,System.Int32@,System.Int32@)">
+            <summary>
+            经纬度转像素坐标
+            </summary>
+            <param name="longitude">经度</param>
+            <param name="latitude">维度</param>
+            <param name="resultInfo">Tif文件的空间的信息</param>
+            <param name="x">像素坐标x</param>
+            <param name="y">像素坐标y</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.CoordCvt.CoordConvert.ConvertToLonLat(System.Int32,System.Int32,iTelluro.Explorer.GisHelper.Common.ResultInfo,System.Double@,System.Double@)">
+            <summary>
+            像素坐标转经纬度
+            </summary>
+            <param name="x">像素坐标x</param>
+            <param name="y">像素坐标y</param>
+            <param name="resultInfo">Tif文件的空间的信息</param>
+            <param name="longitude">经度</param>
+            <param name="latitude">维度</param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON">
+            <summary>
+            GeoJSON类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.#ctor(GeoAPI.Geometries.IGeometry,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Creates an instance of this class from <paramref name="geometry"/> and <paramref name="values"/>.
+            </summary>
+            <param name="geometry">The geometry</param>
+            <param name="values">The attribute values</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.SetGeometry(GeoAPI.Geometries.IGeometry)">
+            <summary>
+            Method to set <see cref="P:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.Geometry"/> to <paramref name="converted"/>
+            </summary>
+            <param name="converted">The converted geometry</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="converted"/> is <value>null</value></exception>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.Empty">
+            <summary>
+            Get an empty GeoJSON object
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.Geometry">
+            <summary>
+            Gets the <see cref="T:GeoAPI.Geometries.IGeometry"/> object
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON.Values">
+            <summary>
+            Gets the attributes
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.GeoJsons.GeoJsonHelper.ZipEncoding">
+            <summary>
+            是否压缩编码
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJsonHelper.ConvertShpToGeoJson(System.String,System.String,System.Func{System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean})">
+            <summary>
+            shp文件转换为geojson文件
+            </summary>
+            <param name="shpFilePath">shp文件路径</param>
+            <param name="geoJsonFilePath">geoJson文件路径</param>
+            <param name="filter">属性过滤函数,可为空(根据要素属性过滤要素)</param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter">
+            <summary>
+            GeoJSON writer类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.WriteCoord(GeoAPI.Geometries.Coordinate,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a coordinate to the <paramref name="writer"/>
+            </summary>
+            <param name="coordinate">The coordinate</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.WriteCoord(GeoAPI.Geometries.Coordinate,System.IO.TextWriter)">
+            <summary>
+            Method to write a coordinate to the <paramref name="writer"/>
+            </summary>
+            <param name="coordinate">The coordinate</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.WriteCoord(System.Collections.Generic.IEnumerable{GeoAPI.Geometries.Coordinate},Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a series of coordinates to the <paramref name="writer"/>
+            </summary>
+            <param name="coordinates">The coordinates</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.WriteCoord(System.Collections.Generic.IEnumerable{GeoAPI.Geometries.Coordinate},System.IO.TextWriter)">
+            <summary>
+            Method to write a series of coordinates to the <paramref name="writer"/>
+            </summary>
+            <param name="coordinates">The coordinates</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IGeometry,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="geometry">The geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IGeometry,System.IO.TextWriter)">
+            <summary>
+            Method to write a geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="geometry">The geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IPoint,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a point geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="point">The point geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IPoint,System.IO.TextWriter)">
+            <summary>
+            Method to write a point geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="point">The point geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiPoint,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a multipoint geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="points">The multipoint geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiPoint,System.IO.TextWriter)">
+            <summary>
+            Method to write a multipoint geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="points">The multipoint geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.ILineString,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a linestring geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="line">The linestring geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.ILineString,System.IO.TextWriter)">
+            <summary>
+            Method to write a linestring geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="line">The linestring geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiLineString,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a multi linestring geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="lines">The multi linestring geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiLineString,System.IO.TextWriter)">
+            <summary>
+            Method to write a multi linestring geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="lines">The multi linestring geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IPolygon,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a polygon geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="area">The polygon geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IPolygon,System.IO.TextWriter)">
+            <summary>
+            Method to write a polygon geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="area">The polygon geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiPolygon,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a multi polygon geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="areas">The multi polygon geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IMultiPolygon,System.IO.TextWriter)">
+            <summary>
+            Method to write a multi polygon geometry to the <paramref name="writer"/>
+            </summary>
+            <param name="areas">The multi polygon geometry</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IGeometryCollection,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a collection of geometries to the <paramref name="writer"/>
+            </summary>
+            <param name="geometries">The collection of geometries</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(GeoAPI.Geometries.IGeometryCollection,System.IO.TextWriter)">
+            <summary>
+            Method to write a collection of geometries to the <paramref name="writer"/>
+            </summary>
+            <param name="geometries">The collection of geometries</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON,Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a GeoJSON feature to the <paramref name="writer"/>
+            </summary>
+            <param name="feature">The GeoJSON feature</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON,System.IO.TextWriter)">
+            <summary>
+            Method to write a GeoJSON feature to the <paramref name="writer"/>
+            </summary>
+            <param name="feature">The GeoJSON feature</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(System.Collections.Generic.IEnumerable{iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON},Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write a series of GeoJSON features to the <paramref name="writer"/>
+            </summary>
+            <param name="features">The GeoJSON features</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(System.Collections.Generic.IEnumerable{iTelluro.Explorer.GisHelper.GeoJsons.GeoJSON},System.IO.TextWriter)">
+            <summary>
+            Method to write a series of GeoJSON features to the <paramref name="writer"/>
+            </summary>
+            <param name="features">The GeoJSON features</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(System.Collections.Generic.IDictionary{System.String,System.Object},Newtonsoft.Json.JsonTextWriter)">
+            <summary>
+            Method to write the attributes of a feature to the <paramref name="writer"/>
+            </summary>
+            <param name="attributes">The attributes of a GeoJSON feature</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.GeoJSONWriter.Write(System.Collections.Generic.IDictionary{System.String,System.Object},System.IO.TextWriter)">
+            <summary>
+            Method to write the attributes of a feature to the <paramref name="writer"/>
+            </summary>
+            <param name="attributes">The attributes of a GeoJSON feature</param>
+            <param name="writer">The JSON writer</param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Png.PngWriter">
+            <summary>
+            读取栅格数据
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="savePath">tif保存路径，即要创建的tif文件的保存路径</param>
+            <param name="width">tif宽度，单位像素</param>
+            <param name="height">tif高度，单位像素</param>
+            <param name="sixGeoParam">六参数</param>
+            <param name="prj">坐标系统wkt窜</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.ReadBytes(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            读取栅格影像的一部分，指定偏移量和大小进行读取
+            </summary>
+            <param name="xOff">x偏移量</param>
+            <param name="yOff">y偏移量</param>
+            <param name="xSize">x方向大小</param>
+            <param name="ySize">y方向大小</param>
+            <param name="xBufSize">缩放后x方向大小</param>
+            <param name="yBufSize">缩放后y方向大小</param>
+            <returns>RGBBytesObject对象</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.WriteBytes(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,iTelluro.Explorer.GisHelper.Common.RGBBytesObject)">
+            <summary>
+            写入红绿蓝三个波段到tif
+            </summary>
+            <param name="xoff">x方向偏移量</param>
+            <param name="yoff">y方向偏移量</param>
+            <param name="xSize">宽度</param>
+            <param name="ySize">高度</param>   
+            <param name="xBufSize">缩放后x方向大小</param>
+            <param name="yBufSize">缩放后y方向大小</param>
+            <param name="rgbBytes">红绿蓝波段字节数组</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.ReadImage(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            指定偏移量和大小读取栅格影像的一部分，返回32的图像
+            </summary>
+            <param name="xOff">x偏移量</param>
+            <param name="yOff">y偏移量</param>
+            <param name="xSize">x方向大小</param>
+            <param name="ySize">y方向大小</param>
+            <param name="xBufSize">缩放后x方向大小</param>
+            <param name="yBufSize">缩放后y方向大小</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.WriteImage(System.Int32,System.Int32,System.Int32,System.Int32,System.Drawing.Bitmap)">
+            <summary>
+            写入红绿蓝三个波段到tif
+            </summary>
+            <param name="xoff">x方向偏移量</param>
+            <param name="yoff">y方向偏移量</param>
+            <param name="xSize">宽度</param>
+            <param name="ySize">高度</param>   
+            <param name="rBuf">红波段字节数组</param>
+            <param name="gBuf">绿波段字节数组</param>
+            <param name="bBuf">蓝波段字节数组</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Png.PngWriter.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Png.PngWriter.TifWidth">
+            <summary>
+            栅格影像的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Png.PngWriter.TifHeight">
+            <summary>
+            栅格影像的高度
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.GeoJsons.ShpReaderFilter">
+            <summary>
+            shp文件转GeoJson
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.ShpReaderFilter.#ctor(System.String,System.Func{System.Collections.Generic.Dictionary{System.String,System.Object},System.Boolean})">
+            <summary>
+            构造函数
+            </summary>
+            <param name="shpFilePath">shp文件路径</param>
+            <param name="filter">属性过滤函数</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.GeoJsons.ShpReaderFilter.GetGeoInfos">
+            <summary>
+             shp文件转GeoJson
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.QXYJHelper">
+            <summary>
+            预警分析帮助类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.QXYJHelper.QXYJCalculate(iTelluro.Explorer.GisHelper.Common.QXYJInfo)">
+            <summary>
+            预警分析
+            </summary>
+            <param name="info">预警分析相关信息</param>
+            <returns>预警结果路径(单波段),说明：值为1：等级1，2：等级2，3：等级3，4：等级4，5：等级其他</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.QXYJHelper.FloodAnalysis(iTelluro.Explorer.GisHelper.Common.FloodInfo)">
+            <summary>
+            淹没分析
+            </summary>
+            <param name="info">淹没信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.QXYJHelper.GetGrade(System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            获取预警等级
+            </summary>
+            <param name="red">红</param>
+            <param name="green">绿</param>
+            <param name="blue">蓝</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.QXYJHelper.GetResult(iTelluro.Explorer.GisHelper.Common.Grade,System.Double,System.Double,System.Double,System.Int32[0:,0:],iTelluro.Explorer.GisHelper.Common.CriticalValueInfo)">
+            <summary>
+            矩阵计算
+            </summary>
+            <param name="mGrade">易发分区图等级</param>
+            <param name="rainFall1">实际降雨1日</param>
+            <param name="rainFall2">实际降雨量3日</param>
+            <param name="rainForecast">预报雨量</param>
+            <param name="yjMatrix">预警矩阵</param>
+            <param name="cValueObj">诱发因素分级信息</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.HDF4Info">
+            <summary>
+            HDF4文件基本信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.#ctor(System.String)">
+            <summary>
+            获取hdf4文件子数据集信息
+            </summary>
+            <exception cref="T:System.Exception">文件打开失败，或者不是hdf4文件时</exception>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetName(System.Int32)">
+            <summary>
+            获取子数据集名字
+            </summary>
+            <param name="index">子数据集索引，基于0</param>
+            <returns>返回名字</returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">索引超出子数据集数量范围</exception>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetPath(System.Int32)">
+            <summary>
+            获取子数据集的数据路径
+            </summary>
+            <param name="index">子数据集索引，基于0</param>
+            <returns>返回可直接用于Gdal.Open函数的数据路径</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetDescription(System.Int32)">
+            <summary>
+            获取子数据集的描述信息
+            </summary>
+            <param name="index">子数据集索引，基于0</param>
+            <returns>返回描述信息</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetWidth(System.Int32)">
+            <summary>
+            获取子数据集的影像宽度
+            </summary>
+            <param name="index">子数据集索引</param>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
+            <exception cref="T:System.Exception"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetHeight(System.Int32)">
+            <summary>
+            获取子数据集的影像高度
+            </summary>
+            <param name="index">子数据集索引</param>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
+            <exception cref="T:System.Exception"></exception>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetGeoTransform(System.Int32)">
+            <summary>
+            栅格影像的仿射变换参数
+            </summary>
+            <param name="index">子数据集索引</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetGCPProj(System.Int32)">
+            <summary>
+            栅格影像的控制点投影系
+            </summary>
+            <param name="index">子数据集索引</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.HDF4Info.GetSubDatasetGCPCount(System.Int32)">
+            <summary>
+            栅格影像的控制点个数
+            </summary>
+            <param name="index">子数据集索引</param>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.HDF4Info.MaxHeight">
+            <summary>
+            影像中所有子数据集的最大高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.HDF4Info.MaxWidth">
+            <summary>
+            影像中所有子数据集的最大宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.HDF4Info.FullFilename">
+            <summary>
+            hdf影像路径
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.HDF4Info.Meta">
+            <summary>
+            文件参数信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.HDF4Info.SubDatasetCount">
+            <summary>
+            子数据集个数
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.RasterInfo">
+            <summary>
+            影像基本信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.FullFilename">
+            <summary>
+            栅格文件的全路径
+            包括物理路径和文件名
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.FileName">
+            <summary>
+            栅格文件的名称
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.ColumnCount">
+            <summary>
+            栅格影像的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.RowCount">
+            <summary>
+            栅格影像的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.RasterCount">
+            <summary>
+            栅格影像波段数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.DataType">
+            <summary>
+            影像像元的数据类型
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.GeoTransform">
+            <summary>
+            栅格影像的仿射变换参数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.GeoPrj">
+            <summary>
+            栅格影像的坐标系统的WKT字符串
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.SpatialRef">
+            <summary>
+            空间参考
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.SpatialRefName">
+            <summary>
+            空间参考名称
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.IsProjected">
+            <summary>
+            是否是投影坐标系
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.IsGeographic">
+            <summary>
+            是否是地理坐标系
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.IsLocal">
+            <summary>
+            是否是未知坐标系
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.East">
+            <summary>
+            栅格影像范围 --- 东
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.North">
+            <summary>
+            栅格影像范围 --- 北
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.West">
+            <summary>
+            栅格影像范围 --- 西
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.South">
+            <summary>
+            栅格影像范围 --- 南
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.CellSizeX">
+            <summary>
+            CellSize - X
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterInfo.CellSizeY">
+            <summary>
+            CellSize - Y
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.RasterReader">
+            <summary>
+            通过GDAL读取栅格数据
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="fullFilename"></param>
+            <exception cref="T:System.Exception">各波段数据类型不一致</exception>
+            <exception cref="T:System.Exception">HDF文件路径不正常</exception>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,``0[]@)">
+            <summary>
+            读取指定数据范围的所有波段，返回一维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，第一波段在前，紧接着是第二波段，以此类推</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,``0[]@,System.Int32,System.Int32)">
+            <summary>
+            读取指定数据范围的所有波段，返回一维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，第一波段在前，紧接着是第二波段，以此类推</param>
+            <param name="scale_xSize">缩放后数据宽度</param>
+            <param name="scale_ySize">缩放后数据高度</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,``0[][]@)">
+            <summary>
+            读取指定数据范围的所有波段，返回二维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，band[0]是第一波段数据，band[1]是第二波段...</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,``0[][]@,System.Int32,System.Int32)">
+            <summary>
+            读取指定数据范围的所有波段并缩放到指定尺寸，返回二维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，band[0]是第一波段数据，band[1]是第二波段...</param>
+            <param name="scale_xSize">缩放后数据宽度</param>
+            <param name="scale_ySize">缩放后数据高度</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            读取指定数据范围的所有波段，返回一维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            读取指定数据范围的所有波段，返回一维数组
+            </summary>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="scale_xSize">缩放后数据宽度</param>
+            <param name="scale_ySize">缩放后数据高度</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[]@)">
+            <summary>
+            读取指定波段和指定数据范围的影像数据，返回一维数组
+            </summary>
+            <param name="bandNumber">读取波段序号，基于1</param>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，band[0]是第一波段数据，band[1]是第二波段...</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadBand``1(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[]@,System.Int32,System.Int32)">
+            <summary>
+            读取指定波段和指定数据范围的影像数据，返回一维数组
+            </summary>
+            <param name="bandNumber">读取波段序号，基于1</param>
+            <param name="xoff">数据范围的x偏移量</param>
+            <param name="yoff">数据范围的y偏移量</param>
+            <param name="width">数据范围的宽度</param>
+            <param name="height">数据范围的高度</param>
+            <param name="band">返回读取结果，band[0]是第一波段数据，band[1]是第二波段...</param>
+            <param name="scale_xSize">缩放后数据宽度</param>
+            <param name="scale_ySize">缩放后数据高度</param>
+            <typeparam name="T">支持int/double/float/byte/short五种</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadImage(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            指定偏移量和大小读取栅格影像的一部分，返回32的图像
+            </summary>
+            <param name="xOff">x偏移量</param>
+            <param name="yOff">y偏移量</param>
+            <param name="xSize">x方向大小</param>
+            <param name="ySize">y方向大小</param>
+            <param name="xScaleSize">缩放后x方向大小</param>
+            <param name="yScaleSize">缩放后y方向大小</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.ReadImage(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Byte)">
+            <summary>
+            指定偏移量和大小读取栅格影像的一部分，返回32的图像
+            </summary>
+            <param name="xOff">x偏移量</param>
+            <param name="yOff">y偏移量</param>
+            <param name="xSize">x方向大小</param>
+            <param name="ySize">y方向大小</param>
+            <param name="xScaleSize">缩放后x方向大小</param>
+            <param name="yScaleSize">缩放后y方向大小</param>
+            <param name="opacity">图片透明度</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterReader.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.FullFileName">
+            <summary>
+            tif文件路径
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.DataSet">
+            <summary>
+            影像数据集接口
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.ColumnCount">
+            <summary>
+            栅格影像数据的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.RowCount">
+            <summary>
+            栅格影像数据的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.RasterCount">
+            <summary>
+            影像波段数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.RasterDataType">
+            <summary>
+            影像像元数据类型
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.MapRectEast">
+            <summary>
+            栅格影像数据的地理范围 - 东
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.MapRectWest">
+            <summary>
+            栅格影像数据的地理范围 - 西
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.MapRectNorth">
+            <summary>
+            栅格影像数据的地理范围 - 北
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.MapRectSouth">
+            <summary>
+            栅格影像数据的地理范围 - 南
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.CellSizeX">
+            <summary>
+            栅格象元大小 - X方向
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.CellSizeY">
+            <summary>
+            栅格象元大小 - Y方向
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.IsGeographic">
+            <summary>
+            是否是地理坐标
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.IsProjected">
+            <summary>
+            是否是投影坐标
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.IsLocal">
+            <summary>
+            是否是未知坐标系
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.GeoPrjWkt">
+            <summary>
+            坐标系统的Wkt字符串
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterReader.SpatialRefName">
+            <summary>
+            空间参考名
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.RasterUtility">
+            <summary>
+            影像辅助类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterUtility.DelRaster(System.String)">
+            <summary>
+            删除栅格文件
+            </summary>
+            <param name="strRasterFilename"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterUtility.RenameRaster(System.String,System.String)">
+            <summary>
+            重命名栅格文件
+            </summary>
+            <param name="strOldFilename"></param>
+            <param name="strNewFilename"></param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.RasterWriter">
+            <summary>
+            影像写出类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nFileName">目标栅格影像数据的全路径</param>
+            <param name="bandCount">目标栅格影像的波段数</param>
+            <param name="width">目标栅格影像的宽度</param>
+            <param name="height">目标栅格影像的高度</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.#ctor(System.String,System.Int32,System.Int32,System.Int32,OSGeo.GDAL.DataType)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nFileName">目标栅格影像数据的全路径</param>
+            <param name="bandCount">目标栅格影像的波段数</param>
+            <param name="width">目标栅格影像的宽度</param>
+            <param name="height">目标栅格影像的高度</param>
+            <param name="datatype">数据类型</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.#ctor(System.String)">
+            <summary>
+            打开一个已存在的影像文件，在其上进行绘图操作
+            </summary>
+            <param name="tifPath">tif路径</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetProjection(System.String)">
+            <summary>
+            设置空间参考
+            </summary>
+            <param name="prj"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetPosition(System.Double[])">
+            <summary>
+            设置坐标位置
+            </summary>
+            <param name="transform">转换数组</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetNodata(System.Int32,System.Double)">
+            <summary>
+            设置Nodata值
+            </summary>
+            <param name="bandnum">波段序号，基于1</param>
+            <param name="nodata">nodata值</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetNodata(System.Double[])">
+            <summary>
+            设置Nodata值
+            </summary>
+            <param name="nodata">nodata值</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetPosition(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            设置坐标位置
+            </summary>
+            <param name="leftTopX">左上角X</param>
+            <param name="leftTopY">左上角Y</param>
+            <param name="xCellSize"></param>
+            <param name="yCellSize"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SetMetaData(System.String[])">
+            <summary>
+            设置元数据
+            </summary>
+            <param name="meta">元数据列表</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.FillDefaultNoData(OSGeo.GDAL.DataType)">
+            <summary>
+            以默认nodata值填充影像，避免黑图
+            </summary>
+            <param name="datatype"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.WriteBand``1(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[])">
+            <summary>
+            写入单波段
+            按照实际像素
+            如果超出范围则写入范围内的数据
+            </summary>
+            <param name="bandNumber">波段序号，基于1</param>
+            <param name="xoff">写出起始位置</param>
+            <param name="yoff">写出起始位置</param>
+            <param name="width">buff宽度</param>
+            <param name="height">buff高度</param>
+            <param name="buffer">待写入的数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.WriteBand``1(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,``0[],System.Int32,System.Int32)">
+            <summary>
+            写入单波段
+            写到指定位置范围
+            如果超出范围则不写入
+            </summary>
+            <param name="bandNumber">波段序号，基于1</param>
+            <param name="xoff">x方向偏移</param>
+            <param name="yoff">y方向偏移</param>
+            <param name="width">写出后的实际宽度</param>
+            <param name="height">写出后的实际高度</param>
+            <param name="bufxsize">待写数据宽度</param>
+            <param name="bufysize">待写数据高度</param>
+            <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.Save``1(System.Int32,System.Int32,System.Int32,System.Int32,``0[],``0[],``0[])">
+            <summary>
+            写入数据到tif所有波段
+            </summary>
+            <param name="xBufSize">宽度</param>
+            <param name="yBufSize">高度</param>
+            <param name="xoff">tif偏移量，x方向</param>
+            <param name="yoff">tif偏移量，y方向</param>
+            <param name="redbuffer">红波段字节数组</param>
+            <param name="greenbuffer">绿波段字节数组</param>
+            <param name="bluebuffer">蓝波段字节数组</param>
+            <typeparam name="T">像斑数据类型</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.Save``1(System.Drawing.Rectangle,System.String,System.Drawing.Rectangle)">
+            <summary>
+            从一张tif读取写入当前tif
+            </summary>
+            <param name="srcRect">源矩形</param>
+            <param name="destRect">目标矩形</param>
+            <param name="tilePath">源tif路径</param>
+            <typeparam name="T">tif中像斑数据类型</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.SaveTile``1(System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            一次写入单张瓦片，大小0-512
+            </summary>
+            <param name="xBufSize">瓦片大小，宽度</param>
+            <param name="yBufSize">瓦片大小，高度</param>
+            <param name="xoff">tif偏移量，x方向</param>
+            <param name="yoff">tif偏移量，y方向</param>
+            <param name="tilePath">瓦片路径</param>
+            <typeparam name="T">像斑数据类型</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.GetPixelsOfImg(System.Drawing.Bitmap)">
+            <summary>
+            从图片中提取像素值数组
+            </summary>
+            <param name="img">图片</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.RasterWriter.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterWriter.ColumnCount">
+            <summary>
+            栅格影像的宽度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterWriter.RowCount">
+            <summary>
+            栅格影像的高度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Raster.RasterWriter.FullFileName">
+            <summary>
+            栅格影像路径
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Common.RGBBytesObject.Opacity">
+            <summary>
+            图片的透明度
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Raster.Utility">
+            <summary>
+            工具类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetColFromLongitude(System.Double,System.Double)">
+            <summary>
+            根据经度和tileSize计算列号
+            </summary>
+            <param name="longitude">经度</param>
+            <param name="tileSize">这一级的tileSize</param>
+            <returns>列号</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetRowFromLatitude(System.Double,System.Double)">
+            <summary>
+            根据纬度和tileSize计算行号
+            </summary>
+            <param name="latitude">纬度</param>
+            <param name="tileSize">这一级的tileSize</param>
+            <returns>行号</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetLongitudeFromCol(System.Int32,System.Double)">
+            <summary>
+            根据列号和tileSize计算经度
+            </summary>
+            <param name="col">列号</param>
+            <param name="tileSize">这一级的tileSize</param>
+            <returns>经度</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetLatitudeFromRow(System.Int32,System.Double)">
+            <summary>
+            根据行号和tileSize计算纬度
+            </summary>
+            <param name="row">行号</param>
+            <param name="tileSize">这一级的tileSize</param>
+            <returns>纬度</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetFileByPos(System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            根据级数、行号、列号、路径得到相应的文件名称，默认文件后缀jpg
+            </summary>
+            <param name="level">级数</param>
+            <param name="col">列号</param>
+            <param name="row">行号</param>
+            <param name="path">存储路径</param>
+            <returns>文件的全路径</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Raster.Utility.GetFileByPos(System.Int32,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            根据级数、行号、列号、路径、文件类型得到相应的文件名称
+            </summary>
+            <param name="level">级数</param>
+            <param name="col">列号</param>
+            <param name="row">行号</param>
+            <param name="path">存储路径</param>
+            <param name="fileType">文件类型</param>
+            <returns>文件的全路径</returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpChangeInfo">
+            <summary>
+            Shp文件修改信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpChangeInfo.FeatureWKT">
+            <summary>
+            WKT
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpChangeInfo.FeatureFields">
+            <summary>
+            要修改的列
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFeatureInfo">
+            <summary>
+            Shp文件要素信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFeatureInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFeatureInfo.ShpFeatureWKT">
+            <summary>
+            要素空间信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFeatureInfo.ShpFeatureFields">
+            <summary>
+            要素属性集合
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo">
+            <summary>
+            矢量文件属性字段
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.FieldName">
+            <summary>
+            字段名称
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.FieldValue">
+            <summary>
+            字段值
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.FieldType">
+            <summary>
+            字段类型
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.FieldLenght">
+            <summary>
+            字段长度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFieldInfo.FieldPricision">
+            <summary>
+            字段精度(小数类型)
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFieldTypeEnum">
+            <summary>
+            shp文件属性字段类型
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Shp.ShpFieldTypeEnum.String">
+            <summary>
+            字符串
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Shp.ShpFieldTypeEnum.Double">
+            <summary>
+            小数
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Shp.ShpFieldTypeEnum.Int">
+            <summary>
+            整形
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFileInfo">
+            <summary>
+            shp文件信息
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileInfo.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFileInfo.ShpFilePath">
+            <summary>
+            Shp文件路径
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFileInfo.FeatureInfos">
+            <summary>
+            要素信息集合
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Shp.ShpFileInfo.ShpFileType">
+            <summary>
+            Shp文件类型
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFileReader">
+            <summary>
+            shp文件读取
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileReader.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="shpFilePath">shp文件路径</param>
+            <param name="?"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileReader.GetShpFileInfos">
+            <summary>
+            获取shp文件空间及空间属性信息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileReader.CutShpFileByWKT(System.String,System.String)">
+            <summary>
+            根据WKT剪切shp文件
+            </summary>
+            <param name="newShpFilePath">剪切后的shp文件路径</param>
+            <param name="cutWKT">剪切WKT</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileReader.ChangeShpFileInfos(System.Collections.Generic.List{iTelluro.Explorer.GisHelper.Shp.ShpChangeInfo})">
+            <summary>
+            修改shp文件信息
+            </summary>
+            <param name="infos">修改信息</param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Shp.ShpFileWriter">
+            <summary>
+            写Shp文件类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileWriter.#ctor(iTelluro.Explorer.GisHelper.Shp.ShpFileInfo)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="shpFileInfo">shp文件信息</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpFileWriter.WriteShpFile">
+            <summary>
+            写Shp文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpLineWriter.#ctor(System.String,System.String,System.Collections.Generic.List{System.String},System.Drawing.Color,System.Drawing.Color,System.Boolean)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="shpFilePath"></param>
+            <param name="points"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Shp.ShpLineWriter.CutShps">
+            <summary>
+            写Shp文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Tif.TifFileReader">
+            <summary>
+            Tif文件读取
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Tif.TifFileReader._dataSet">
+            <summary>
+            数据集
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Tif.TifFileReader._bands">
+            <summary>
+            tif通道
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Tif.TifFileReader._bandDatas">
+            <summary>
+            tif通道数据
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nFileName">文件路径</param>
+            <param name="isReadAll">读取全部数据</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.GetDataType">
+            <summary>
+            获取tif数据类型
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.SetResultInfo(System.Double[])">
+            <summary>
+            设置六参数信息
+            </summary>
+            <param name="outGeo"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.ReadData``1(System.Int32,System.Int32)">
+            <summary>
+            读取指定行里的数据(读取若干行数据)
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <param name="yoff">起始y</param>
+            <param name="buf_ysize">读取的行数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.ReadAllData``1">
+            <summary>
+            读取所有数据
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.GetValue``1(System.Int32,System.Int32)">
+            <summary>
+             获取指定位置的数据
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <param name="x"></param>
+            <param name="y"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileReader.Close">
+            <summary>
+            关闭文件,释放资源
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Tif.TifFileReader.Width">
+            <summary>
+            列数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Tif.TifFileReader.Height">
+            <summary>
+            行数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Tif.TifFileReader.NResultInfo">
+            <summary>
+            六参数信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Tif.TifFileReader.BandCount">
+            <summary>
+            波段数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Tif.TifFileReader.TifDataType">
+            <summary>
+            Tif数据类型
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Tif.TifFileWriter">
+            <summary>
+            Tif文件写类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileWriter.#ctor(System.String,System.Int32,OSGeo.GDAL.DataType,iTelluro.Explorer.GisHelper.Common.ResultInfo)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nFileName">文件路径</param>
+            <param name="bandCount">波段数</param>
+            <param name="tifDataType">数据类型</param>
+            <param name="resultInfo">空间信息类</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileWriter.SetValue``1(System.Int32,System.Int32,System.Collections.Generic.List{``0})">
+            <summary>
+            设置值
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileWriter.Save``1">
+            <summary>
+            数据保存(一般先调用SetValue赋值)
+            </summary>
+            <typeparam name="T"> 数据类型</typeparam>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Tif.TifFileWriter.Save``1(System.Int32,System.Int32,System.Collections.Generic.List{``0[]})">
+            <summary>
+            批量保存
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <param name="yoff">y偏移</param>
+            <param name="buf_ysize">保存的行数</param>
+            <param name="buffer"></param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.AttributeModel">
+            <summary>
+            属性表字段名及字段类型
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.AttributeModel.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.AttributeModel.#ctor(System.String,OSGeo.OGR.FieldType,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="attName"></param>
+            <param name="attType"></param>
+            <param name="attWidth"></param>
+            <param name="attApprox"></param>
+            <param name="attPrecision">小数位数，不是浮点型时设0</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.AttributeModel.#ctor(System.String,OSGeo.OGR.FieldType,System.Int32,System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="attName"></param>
+            <param name="attType"></param>
+            <param name="attWidth"></param>
+            <param name="attApprox"></param>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeModel.AttributeName">
+            <summary>
+            属性字段名
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeModel.AttributeType">
+            <summary>
+            属性字段类型
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeModel.AttributeWidth">
+            <summary>
+            属性字段长度,double型字段是整数部分长度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeModel.AttributePrecision">
+            <summary>
+            属性字段小数部分长度
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeModel.AttributeApproxOK">
+            <summary>
+            属性是否可以近似
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.AttributeObj">
+            <summary>
+            属性对象类
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.AttributeObj._oid">
+            <summary>
+            私有成员变量 id
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.AttributeObj._attributeValue">
+            <summary>
+            私有成员变量 属性Dic
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeObj.Oid">
+            <summary>
+            公有成员变量 id
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.AttributeObj.AttributeValue">
+            <summary>
+            公有成员变量 属性Dic
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.ShpReader">
+            <summary>
+            矢量数据读取类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#cctor">
+            <summary>
+            默认构造函数，注册GDAL
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#ctor(System.String,System.String)">
+            <summary>
+            打开源数据指定层名的Layer
+            </summary>
+            <param name="filename"></param>
+            <param name="layerName"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#ctor(System.String,System.Int32)">
+            <summary>
+            打开源数据指定层号的Layer
+            </summary>
+            <param name="filename"></param>
+            <param name="layerNum"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#ctor(System.String,System.Int32,System.String@)">
+            <summary>
+            返回指定层号的Layer名称
+            </summary>
+            <param name="filename"></param>
+            <param name="layerNum"></param>
+            <param name="name">返回图层名称</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#ctor(System.String)">
+            <summary>
+            打开源数据的第一个图层
+            </summary>
+            <param name="filename"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.#ctor(System.String,System.String@)">
+            <summary>
+            返回源数据第一图层的名称
+            </summary>
+            <param name="filename"></param>
+            <param name="name">返回图层名称</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetFeatureCount">
+            <summary>
+            返回源数据feature数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.IsValidDataSource">
+            <summary>
+            判断数据是否是有效数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetGeomType">
+            <summary>
+            返回数据的数据类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetSridWkt">
+            <summary>
+            得到数据空间参考的wkt字符串
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetDeminsion">
+            <summary>
+            得到shp文件的维度
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAttributeType">
+            <summary>
+            得到shp文件属性名和属性类型的字典表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetOneFeatureAttribute(System.Int32)">
+            <summary>
+            得到一个feature所有的属性名和属性值的字典表
+            </summary>
+            <param name="featureID">feature的ID号</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetOneFeatureAttribute(System.Int32,System.Collections.Generic.List{System.String})">
+            <summary>
+            得到一个feature选择的属性名和属性值的字典表
+            </summary>
+            <param name="featureID">feature的ID号</param>
+            <param name="selAttr">选择的属性名</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetOneFeatureGeomWkt(System.Int32)">
+            <summary>
+            得到一个feature的Geometry的wkt字符串
+            </summary>
+            <param name="featureID">feature的ID号</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllSpatialAttributeObj">
+            <summary>
+            返回所有空间属性对象
+            </summary>
+            <returns>SpatialAttributeObj对象列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllSpatialAttributeObj2(System.String)">
+            <summary>
+            返回所有要素的指定字段
+            </summary>
+            <param name="field">提取数据的字段名</param>
+            <returns>SpatialAttributeObj2对象列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllFeatures(iTelluro.Explorer.GisHelper.Vector.ShpReader.EnumFeature,System.String[])">
+            <summary>
+            循环处理图层的每条要素
+            </summary>
+            <param name="func">处理要素的回调函数</param>
+            <param name="fields">要处理的字段列表</param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentException">缺少字段</exception>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllFeatureVal(System.String,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            返回所有空间属性对象
+            </summary>
+            <param name="field">要取值的字段名</param>
+            <param name="fieldvals">返回每条要素的值，如果没有该字段，则存储null，有该字段但无值则存储string.empty</param>
+            <returns>返回FID列表，顺序和<c>fieldvals</c>一致</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllSpatialObj">
+            <summary>
+            返回所有的空间对象
+            </summary>
+            <returns>Feature对象列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllGeometry">
+            <summary>
+            返回所有的空间对象
+            </summary>
+            <returns>Feature对象列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAllAttributeObj">
+            <summary>
+            返回所有属性对象
+            </summary>
+            <returns>属性对象列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetDistincFieldValues(System.Collections.Generic.List{iTelluro.Explorer.GisHelper.Vector.AttributeObj},System.String)">
+            <summary>
+            获取某个属性字段的唯一值列表即对应的个数
+            </summary>
+            <param name="records">AttributeObj数组</param>
+            <param name="fldName">属性字段名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.GetAttributes">
+            <summary>
+            返回属性表字段
+            </summary>
+            <returns>属性表字段列表</returns>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.Dispose">
+            <summary>
+            Disposes the object
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpReader.Finalize">
+            <summary>
+            析构函数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.NumberOfLayers">
+            <summary>
+            图层个数
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.AllOfLayersName">
+            <summary>
+            图层名称列表
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.IsFeatureDataLayer">
+            <summary>
+            是否是合法的FeatureDataLayer
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.OgrGeometryTypeString">
+            <summary>
+            点文件?线文件?面文件?
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.GeoBigType">
+            <summary>
+            几何类型，点、线、面或None
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.SpatialRef">
+            <summary>
+            空间参考
+            OSGeo.OSR.SpatialReference
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.SpatailRefWkt">
+            <summary>
+            空间参考的Wkt表示串
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.SRID">
+            <summary>
+            空间参考的SRID
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.IsGeoCoordinateSystem">
+            <summary>
+            是否是地理坐标系
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.Extent">
+            <summary>
+            矢量文件的外包矩形
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.FileName">
+            <summary>
+            打开的矢量文件完整路径
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.ShpReader.ConnectionID">
+            <summary>
+            Gets the connection ID of the datasource
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.ShpReader.EnumFeature">
+            <summary>
+            处理要素的回调
+            </summary>
+            <param name="wkt">要素几何</param>
+            <param name="FID">要素id</param>
+            <param name="fieldVals">需要处理的字段值列表，顺序和GetAllFeatures里字段列表顺序相同</param>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.GeometryBigType">
+            <summary>
+            空间几何类型，点、线、面，未知
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.GeometryBigType.Point">
+            <summary>
+            点
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.GeometryBigType.Line">
+            <summary>
+            线
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.GeometryBigType.Polygon">
+            <summary>
+            面
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.GeometryBigType.None">
+            <summary>
+            未知
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.ShpWriter">
+            <summary>
+            shp文件写出类
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter.WGS84">
+            <summary>
+            WGS84地理坐标系参数
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter.BJ54">
+            <summary>
+            北京1954地理坐标系参数
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter.XIAN80">
+            <summary>
+            西安1980地理坐标系参数
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter.CGCS2000">
+            <summary>
+            国测局2000地理坐标系
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.#cctor">
+            <summary>
+            默认构造函数
+            注册GDAL
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter._poLayer">
+            <summary>
+            图层对象
+            </summary>
+        </member>
+        <member name="F:iTelluro.Explorer.GisHelper.Vector.ShpWriter._poDS">
+            <summary>
+            数据源对象
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.#ctor(System.String,OSGeo.OGR.wkbGeometryType)">
+            <summary>
+            构造函数，创建一个wgs84地理坐标系的shp文件
+            </summary>
+            <param name="nFileName"></param>
+            <param name="geometryType"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.#ctor(System.String,OSGeo.OGR.wkbGeometryType,System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="nFileName"></param>
+            <param name="geometryType"></param>
+            <param name="srsWkt">shp文件坐标系的wkt格式，可使用预定义的WGS84,BJ54,XIAN80,CGCS2000，也可使用其他坐标系</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.CreateDBF(System.Collections.Generic.List{iTelluro.Explorer.GisHelper.Vector.AttributeModel})">
+            <summary>
+            创建属性表
+            </summary>
+            <param name="lstAttribute"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.WriteFeature(iTelluro.Explorer.GisHelper.Vector.AttributeObj,System.Double,System.Double)">
+            <summary>
+            写入点Feature，shp图层的几何类型必须是wkbPoint
+            </summary>
+            <param name="attObj">要素的属性表</param>
+            <param name="x">点的x坐标</param>
+            <param name="y">点的y坐标</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.WriteFeature(iTelluro.Explorer.GisHelper.Vector.AttributeObj,System.Double,System.Double,System.Double,System.Double,System.Double[])">
+            <summary>
+            写入线Feature，shp图层的几何类型必须是wkbLineString
+            </summary>
+            <param name="attObj">要素的属性表</param>
+            <param name="x1">线的第一个点的x坐标</param>
+            <param name="y1">线的第一个点的y坐标</param>
+            <param name="x2">线的第二个点的x坐标</param>
+            <param name="y2">线的第二个点的y坐标</param>
+            <param name="othercoord">可变参数，线的后续点的x坐标和y坐标，必须成对出现，偶数个</param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.WriteFeature(iTelluro.Explorer.GisHelper.Vector.AttributeObj,System.String)">
+            <summary>
+            写入Feature
+            </summary>
+            <param name="attObj"></param>
+            <param name="geoWkt"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.WriteFeature(iTelluro.Explorer.GisHelper.Vector.AttributeObj,System.Byte[])">
+            <summary>
+            写入Feature
+            </summary>
+            <param name="attObj"></param>
+            <param name="geoWkb"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.Flush">
+            <summary>
+            将缓存写到磁盘
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.ShpWriter.Dispose">
+            <summary>
+            必须显式调用
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj">
+            <summary>
+            空间和属性对象类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj.Dispose">
+            <summary>
+            必须显示调用以释放内存
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj.Oid">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj.SpatialValue">
+            <summary>
+            空间对象
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj.AttriValue">
+            <summary>
+            属性对象
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj2">
+            <summary>
+            空间和属性对象类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj2.Dispose">
+            <summary>
+            必须显示调用以释放内存
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj2.Oid">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj2.SpatialValue">
+            <summary>
+            空间对象
+            </summary>
+        </member>
+        <member name="P:iTelluro.Explorer.GisHelper.Vector.SpatialAttributeObj2.AttriValue">
+            <summary>
+            属性对象
+            </summary>
+        </member>
+        <member name="T:iTelluro.Explorer.GisHelper.Vector.VectorUtility">
+            <summary>
+            矢量数据辅助类
+            </summary>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.VectorUtility.DelVector(System.String)">
+            <summary>
+            删除矢量文件
+            </summary>
+            <param name="strVectorFilename"></param>
+        </member>
+        <member name="M:iTelluro.Explorer.GisHelper.Vector.VectorUtility.RenameVector(System.String,System.String)">
+            <summary>
+            重命名矢量文件
+            </summary>
+            <param name="strOldFile"></param>
+            <param name="strNewFile"></param>
+        </member>
+    </members>
+</doc>

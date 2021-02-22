@@ -1,0 +1,333 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    .spansa {
+        padding: 0 20px !important;
+        width: 11%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+        white-space: nowrap;
+    }
+
+    .cleraboth {
+        width: 14% !important;
+    }
+    .spans {
+        float: left;
+        padding: 0px 20px;
+        width: 11%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+        white-space: nowrap;
+    }
+    .divselect {
+        width:21%;
+    }
+
+    .divselect {
+        width: 17%;
+    }
+
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .titlePanel {
+        height: 195px !important;
+        line-height: 0px !important;
+    }
+    body {
+        margin: 0;
+    }
+
+    .ui-select-text, .form-control {
+        border-radius: 4px;
+    }
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        /*background:#DCDCDC*/
+    }
+    .fa-folder-open {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -16px;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-folder {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px 0;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-file-o {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -32px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="height:100%">
+        <div class="west-Panel" style="margin:0px;height:100%">
+            <div class="panel-Title" style="height:40px;line-height:40px;background-color: rgba(236, 247, 255, 1);color:#000">行政区划</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;width:100%;margin-top:0px;">
+            <div id="DZHJManage" class="" style="width: 100%; height: 80px; background: #fff; padding: 0;display:none">
+                <div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+                    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                        <i class="fa fa-bars" style="margin: 0 5px;font-weight:900"></i><span>查询条件:</span>
+                    </div>
+                </div>
+                <div style="width: 100%; height: 40px; display: flex; align-items: center; justify-content: start;">
+                    <span class="spansa">联系人名称:</span><input id="CONTACTPEOPLE" type="text" class="form-control"   style="width: 17%" />
+                    <a id="btn_Search" class="btn btn-primary" style="cursor: pointer; color: white; padding: 4px 4px; margin-left: 30px"><i class="fa fa-search"></i>查询</a>
+                    <a class="btn btn-primary" id="btn_Reset" style="background: gray; border: 1px solid gray; height: 28px; padding: 4px 4px; margin: 0 30px; color: white; display: inline-block; cursor: pointer;"><i class="fa fa-refresh"></i>重置</a>
+                </div>
+            </div>
+            <div class="toolbar" style="padding-left: 15px; background: #ECF7FF; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc">
+                <span style="padding-right: 10px; font-weight: bold; font-size: 9pt; display: inline-block;">数据列表</span>
+                <div class="btn-group" style="float: right; height: 100%; display: flex; align-items: center; margin-right: 23px">
+                    <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                    <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                    <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                    <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+
+                </div>
+            </div>
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script>
+    var authToken = getAuthorizationToken();
+    var queryJson = "";
+    //加载行政区划树
+    var AreaCode = 0, PROVINCE = "", CITY = "", COUNTY = "";
+    $(function () {
+        InitialPage();
+        initControl();
+        GetTree();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        //重置
+        $("#btn_Reset").click(function () {
+            ClearEvent();
+        });
+        if (window.innerWidth) {
+            winwidth = window.innerWidth;
+            console.log(winwidth);
+            if (winwidth > 1200) {
+                $(".cleras").addClass("cleraboth");
+            }
+        }
+    });
+    //初始化控件
+    function initControl() {
+        $("#lr-add").addClass("disabled");
+    }
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            west__size: 190,
+            applyDemoStyles: true,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+            }
+        });
+        var isResize = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() -230 + 12);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+   
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMap",
+            onnodeclick: function (item) {
+               
+                AreaCode = item.id;
+                var level = item.value.split(',')[1];
+                if (level == 1) {
+                    PROVINCE = item.id;
+                    CITY = "";
+                    COUNTY = "";
+                    queryJson["PROVINCE"] = PROVINCE;
+                    queryJson["CITY"] = "";
+                    queryJson["COUNTY"] = "";
+                } else if (level == 2) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id;
+                    COUNTY = "";
+                    queryJson["PROVINCE"] = "";
+                    queryJson["CITY"] = CITY;
+                    queryJson["COUNTY"] = "";
+                } else if (level == 3) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id.substring(0, 4) + "00";
+                    COUNTY = item.id;
+                    queryJson["PROVINCE"] = "";
+                    queryJson["CITY"] = "";
+                    queryJson["COUNTY"] = COUNTY;
+                }
+                $.ajax({
+                    url: "../../api/TBL_QCQF_ADMINISTRATIVEApi/GetPageListJson",
+                    type: "GET",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    async: false,
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    success: function (data) {
+                        if (data.rows.length== 0) {
+                            $("#lr-add").removeClass("disabled");
+                        }
+                        else {
+                            $("#lr-add").addClass("disabled");
+                        }
+                    }
+                })
+                SearchEvent();
+            },
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    };
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        queryJson = $("#DZHJManage").getWebControls();
+        queryJson["PROVINCE"] = DefalutCode;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 230 + 12,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../api/TBL_QCQF_ADMINISTRATIVEApi/GetPageListJson",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                 { label: 'GUID', name: 'GUID', index: 'GUID', width: 200, align: 'left', sortable: true,hidden:true },
+                { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 200, align: 'left', sortable: true },
+                { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 200, align: 'left', sortable: true },
+                { label: '县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 200, align: 'left', sortable: true },
+                { label: '乡镇', name: 'TOWNNAME', index: 'TOWNNAME', width: 200, align: 'left', sortable: true },
+                { label: '联系人名称', name: 'CONTACTPEOPLENAME', index: 'CONTACTPEOPLEID', width: 150, align: 'left', sortable: true },
+                { label: '联系电话', name: 'Mobile', index: 'Mobile', width: 350, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function (rowId, status) {
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //查询表格函数
+    function SearchEvent() {      
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../api/TBL_QCQF_ADMINISTRATIVEApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加群测群防行政管理体系',
+            url: '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEViewForm?CITY=' + CITY + "&COUNTY=" + COUNTY,
+            width: '1000px',
+            height: '600px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑群测群防行政管理体系',
+                url: '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEViewForm?keyValue=' + keyValue,
+                width: '1000px',
+                height: '600px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var KeyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (KeyValue) {
+            //删除关联表信息
+            $.RemoveForm({
+                url: '../../api/TBL_QCQF_ADMINISTRATIVEApi/RemoveForm',
+                param: { KeyValue: KeyValue },
+                authToken: authToken,
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的群测群防行政管理体系表！', 0);
+        }
+    }
+</script>
+}

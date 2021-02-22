@@ -1,0 +1,311 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+
+    .Ndispplay {
+        display: none;
+    }
+   #mainContent {
+        background:#fff
+    }
+    .formTitle {
+        width: 110px !important;
+        background:#ebebeb;
+    }
+    /*.haszard{
+        background:#C3C3C3;
+    }*/
+
+    .form td {
+        border:1px solid #d6d6d6;
+        text-align:center !important;
+    }
+    .form td input{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form td textarea{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form-control:disabled
+    {
+        background:#fff;
+    }
+    .formValue {
+        background:#fff;
+    }
+</style>
+
+<div style="margin: 10px;">
+    <table class="form" id="FromTable">
+        <tr style="display:none;">
+            <td class="formTitle">GUID</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle haszard">灾险情名称</td>
+            <td class="formValue">
+                <input id="NAME"  type="text" class="form-control"  />
+            </td>
+            <td class="formTitle haszard">灾害点名称</td>
+            <td class="formValue">
+                <input id="DISASTERNAME" type="text" class="form-control"  readonly="readonly" placeholder="请单击选择"  style="background:#ebebeb"/>
+            </td>                    
+            <td class="formTitle haszard">灾害类型</td>
+            <td class="formValue">
+                <input id="TYPE" type="text" class="form-control"  readonly="readonly" style="background:#ebebeb"/>
+            </td>
+        </tr>
+        <tr>
+           
+            <td class="formTitle haszard">市</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONCITYNAME" type="text" class="form-control"  readonly="readonly" style="background:#ebebeb"/>
+            </td>
+            <td class="formTitle haszard">县</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONCOUNTYNAME" type="text" class="form-control"  readonly="readonly" style="background:#ebebeb"/>
+            </td>
+            <td class="formTitle haszard">乡镇</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONTOWNNAME" type="text" class="form-control"  readonly="readonly" style="background:#ebebeb"/>
+            </td>
+        </tr>
+         <tr style="display:none">
+            <td class="formTitle haszard">省编号</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONPROVINCE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle haszard">省名称</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONPROVINCENAME" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle haszard">市编号</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONCITY" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle haszard">县编号</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONCOUNTY" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle haszard">乡镇编号</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONTOWN" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+           
+            <td class="formTitle">村</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONVILLAGE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">组</td>
+            <td class="formValue">
+                <input id="GOEPOSITIONGROUP" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">详细地址</td>
+            <td class="formValue">
+                <input id="DETAILEDADDRESS" type="text" class="form-control"  />
+            </td>
+
+        </tr>
+        <tr>
+             <td class="formTitle">发生时间</td>
+            <td class="formValue">
+                <input id="OCCURRENCETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">灾害规模(m²)</td>
+            <td class="formValue">
+                <input id="DISASTERSCALE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">威胁户数(户)</td>
+            <td class="formValue">
+                <input id="DANGERTHREATFAMILY" type="text" class="form-control"  />
+            </td>
+         
+        </tr>
+        <tr>
+            <td class="formTitle">威胁人口(人)</td>
+            <td class="formValue">
+                <input id="DANGERTHREATPEOPLENUM" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">威胁财产(万元)</td>
+            <td class="formValue">
+                <input id="DANGERPOTENTIALECONOMICLOSSES" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">自然因素</td>
+            <td class="formValue">
+                <input id="TRIGGERFACTORNATURAL" type="text" class="form-control"  />
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="formTitle">人为因素</td>
+            <td class="formValue">
+                <input id="TRIGGERFACTORHUMAN" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">受灾人口(人)</td>
+            <td class="formValue">
+                <input id="DISASTERPEOPLENUM" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">死亡人数(人)</td>
+            <td class="formValue">
+                <input id="DISASTERDEATHPEOPLENUM" type="text" class="form-control"  />
+            </td>
+        </tr>
+
+        <tr>
+         <td class="formTitle">失踪人数(人)</td>
+                    <td class="formValue">
+                        <input id="DISASTERMISSINGPEOPLENUM" type="text" class="form-control"  />
+                    </td>
+                    <td class="formTitle">受伤人数(人)</td>
+                    <td class="formValue">
+                        <input id="DISASTERINJURYPEOPLENUM" type="text" class="form-control"  />
+                    </td>
+
+                    <td class="formTitle">直接经济损失(万元)</td>
+                    <td class="formValue">
+                        <input id="DISASTERDIRECTECONOMICLOSSES" type="text" class="form-control"  />
+                    </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">地质灾害简要描述</td>
+            <td class="formValue" colspan="5">
+                <textarea id="DISASTERDESCRIPTION" style="height:50px;" type="text" class="form-control"> </textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">引发原因</td>
+            <td class="formValue" colspan="5">
+                <input id="TRIGGERCAUSE" type="text" class="form-control" />
+            </td>
+
+        </tr>
+        <tr>
+            <td class="formTitle">防范建议</td>
+            <td class="formValue" colspan="5">
+                <textarea id="PRECAUTIONARYADVICE"  style="height:50px;" class="form-control" ></textarea>
+            </td>
+          
+        </tr>
+        <tr>
+            <td class="formTitle">调查人</td>
+            <td class="formValue">
+                <input id="INVESTIGATOR" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">调查时间</td>
+            <td class="formValue">
+               <input id="INVESTIGATORTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+
+        </tr>
+         <tr>
+            <td style="width: 100%; height: 350px;" colspan="6">
+                <iframe class="LRADMS_iframe" id="MultMedia" frameborder="0" src="/SystemManage/MultMedia/Index?moduleID=19d4a41f-fd38-4e73-ae29-365c2d807845" style="border: none; width: 100%; height: 100%"></iframe>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="formTitle">上报数据</td>
+            <td class="formValue" colspan="5">
+                 <a id="btn_Report" class="btn btn-primary" ><i class="fa fa-clipboard"></i>上报</a>
+            </td>
+        </tr>
+    
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+        $("#DISASTERNAME").click(function () {
+            cfBtn_select();
+        });
+        $("#btn_Report").click(function () {
+            AcceptClick();
+            ClearEvent();
+        });
+    });
+    //统一编号控件调用
+    function cfBtn_select() {
+        dialogOpen({
+            id: 'Form2',
+            title: '获取灾害信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HAZARDBASCOMMONIndex',
+            width: '970px',
+            height: '520px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var selectedRowIndex = top.frames[iframeId].$('#gridTable').getGridParam('selrow');
+                var dt = top.frames[iframeId].$('#gridTable').jqGrid("getRowData", selectedRowIndex);
+                $("#DISASTERNAME").val(dt.DISASTERNAME);
+                $("#TYPE").val(dt.DISASTERTYPE);
+                $("#GOEPOSITIONPROVINCE").val(dt.PROVINCE);
+                $("#GOEPOSITIONPROVINCENAME").val(dt.PROVINCENAME);
+                $("#GOEPOSITIONCITYNAME").val(dt.CITYNAME);
+                $("#GOEPOSITIONCITY").val(dt.CITY);
+                $("#GOEPOSITIONCOUNTYNAME").val(dt.COUNTYNAME);
+                $("#GOEPOSITIONCOUNTY").val(dt.COUNTY);
+                $("#GOEPOSITIONTOWNNAME").val(dt.TOWNNAME);
+                $("#GOEPOSITIONTOWN").val(dt.TOWN);
+
+
+
+            }
+        });
+    }
+
+
+    //重置控件赋值 
+    function ClearEvent() {
+        $("#FromTable").find("input[type='text']").val("");
+        $("#FromTable").find("textarea[type='text']").val("");
+    }
+
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "/JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/EMERGENCYSURVEYApi_GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data)
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/EMERGENCYSURVEYApi_SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

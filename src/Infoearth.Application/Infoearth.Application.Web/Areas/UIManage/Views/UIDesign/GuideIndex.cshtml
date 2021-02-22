@@ -1,0 +1,317 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 24px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+</style>
+
+
+
+
+<link href="~/Content/scripts/plugins/wizard/wizard.css" rel="stylesheet" />
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">用户向导使用方法</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+           
+                    <div class="orm_action_title">
+                        一、用户向导示例
+                    </div>
+
+               
+
+            <div style="width:100%; height: 200px;position:relative;border: 1px solid #ccc;">
+                <div class="widget-body">
+                    <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+                        <ul class="steps">
+                            <li data-target="#step-1" class="active"><span class="step">1</span>向导一<span class="chevron"></span></li>
+                            <li data-target="#step-2"><span class="step">2</span>向导二<span class="chevron"></span></li>
+                            <li data-target="#step-3"><span class="step">3</span>向导三<span class="chevron"></span></li>
+                        </ul>
+                    </div>
+                    <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+                        <div class="step-pane active" id="step-1" style="margin-left: 0px; margin-top: 15px; margin-right: 30px;">
+                            step-1
+
+                        </div>
+                        <div class="step-pane" id="step-2" style="margin: 5px;">
+                            step-2
+
+                        </div>
+                        <div class="step-pane" id="step-3" style="margin: 5px;">
+                            step-3
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-button" id="wizard-actions">
+                    <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+                    <a id="btn_next" onclick="nextClick()" class="btn btn-default btn-next">下一步</a>
+                    <a id="btn_finish" disabled onclick="AcceptClick()" class="btn btn-success">完成</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、 引入第三方样式文件及js文件
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/引入第三方.png" />
+                           
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、html
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/html.png" />
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、初始化及注册需要调用的方法
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/js.png" />
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+</div>
+
+<script src="~/Content/scripts/plugins/wizard/wizard.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        //加载导向
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                if (data.step == 2) {
+                    $finish.removeAttr('disabled');
+                    $next.attr('disabled', 'disabled');
+                } else {
+                    $finish.attr('disabled', 'disabled');
+                }
+            } else {
+                $finish.attr('disabled', 'disabled');
+                $next.removeAttr('disabled');
+            }
+        });
+    });
+    function nextClick() {
+        console.log("nextClick");
+    };
+    function AcceptClick() {
+        console.log("AcceptClick");
+    };
+
+</script>

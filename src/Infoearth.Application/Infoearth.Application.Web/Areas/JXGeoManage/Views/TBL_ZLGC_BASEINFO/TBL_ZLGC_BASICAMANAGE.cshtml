@@ -1,0 +1,329 @@
+﻿@{
+    ViewBag.Title = "治理工程嵌套管理表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    html, body, #form1 {
+        height: 100%;
+    }
+
+    .readonly {
+        background: #f5f5f5 !important
+    }
+    .chushi {
+background:#fff;
+color:#666;
+border:1px solid #d8d8d8 !important;
+    }
+</style>
+<div id="" style="width:100%;background:#fff">
+    <ul class="nav nav-tabs" style="background-color: rgba(236, 247, 255, 1);border-bottom:1px solid #ccc">
+        <li class="active" id="li_XMLX"><a href="#XMLX" data-toggle="tab" class="chushi">项目立项</a></li>
+        <li id="li_YWKC"><a href="#YWKC" data-toggle="tab" class="chushi">野外勘察</a></li>
+        <li id="li_SGSJ"><a href="#SGSJ" data-toggle="tab"  class="chushi">施工设计</a></li>
+        <li id="li_GCSG"><a href="#GCSG" data-toggle="tab" class="chushi">工程施工</a></li>
+        <li id="li_GCJL"><a href="#GCJL" data-toggle="tab" class="chushi">工程监理</a></li>
+        <li id="li_XMYS"><a href="#XMYS" data-toggle="tab" class="chushi">项目验收</a></li>
+        @*<li id="li_DMT"><a href="#DMT" data-toggle="tab" class="chushi">多媒体</a></li>*@
+        <li style="float:right;margin-right:25px;display:none;" id="li_close">
+            <a class="btn btn-default" style="background:#107fff;color:#fff; border-radius:4px;margin-top:2px;padding:6px 10px;" onclick="thisClose('ZLGCXQ')"><i class="fa fa-close"></i> 返回</a>
+        </li>
+    </ul>
+</div>
+<div id="myTabContent" class="tab-content" style="height:93%; width: 100%;background:#fff;overflow:hidden">
+    <div class="tab-pane fade in active" id="XMLX" style="width:100%;height:100%">
+        <iframe id="XMLXS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="YWKC" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="YWKCS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="SGSJ" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="SGSJS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="GCSG" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="GCSGS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="GCJL" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="GCJLS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="XMYS" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="XMYSS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+    </div>
+    <div class="tab-pane fade in" id="DMT" style="height: 100%; width: 100%;background:#fff">
+        <iframe id="DMTS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var types = request('types');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var callback = request('callback');//"返回"跳转url
+    var details = request('details');
+    var xq = request('xq');
+    var ZLGCID = "";//项目编号
+    var ZLGCNAME = "";//项目名称
+    var ysState = ""; var kcState = "";
+    var sgState = ""; var sjState = ""; var jlState = "";
+    $(function () {
+        //页面跳转
+        $('#XMLXS').attr('src', "/JXGeoManage/TBL_ZLGC_BASEINFO/TBL_ZLGC_BASEINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&details=" + details + "&xq=" + xq);    //项目立项第一个切换页打开
+        $('#YWKCS').attr('src', "/JXGeoManage/TBL_ZLGC_KCINFO/TBL_ZLGC_KCINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&xq=" + xq);        //野外勘察
+        $('#SGSJS').attr('src', "/JXGeoManage/TBL_ZLGC_SJINFO/TBL_ZLGC_SJINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&xq=" + xq);        //施工设计
+        $('#GCSGS').attr('src', "/JXGeoManage/TBL_ZLGC_SGINFO/TBL_ZLGC_SGINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&xq=" + xq+"&details=" + details);        //########工程施工#######
+        $('#GCJLS').attr('src', "/JXGeoManage/TBL_ZLGC_JLINFO/TBL_ZLGC_JLINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&xq=" + xq);        //工程监理
+        $('#XMYSS').attr('src', "/JXGeoManage/TBL_ZLGC_YSINFO/TBL_ZLGC_YSINFOForm?&keyValue=" + keyValue + "&readonly=" + readonly + "&xq=" + xq);        //项目验收
+        if (keyValue != "" && details==01) {
+            pdsta();
+        }
+        if (xq == 02) {
+            $(".layui-layer-btn0").hide();
+        }
+        assignment();
+        if (callback) {
+            $("#li_close").show();
+        }
+        
+    });
+
+    function pdsta() {
+        $.ajax({
+            url: '../../api/TBL_ZLGC/PdState1',
+            type: 'get',
+            datatype: 'json',
+            data: { id: keyValue },
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (data) {
+                console.log(data.qcqfState);
+                ysState = data.ysState; kcState = data.kcState;
+                sgState = data.sgState; sjState = data.sjState; jlState = data.jlState;
+                
+                if (kcState == "0") {
+                    $("#li_YWKC a").css("background-color", "#dedcdc");
+                    $("#li_YWKC a").css("color", "#b6b6b6");
+                    $("#li_SGSJ a").css("background-color", "#dedcdc");
+                    $("#li_SGSJ a").css("color", "#b6b6b6");
+                    $("#li_GCSG a").css("background-color", "#dedcdc");
+                    $("#li_GCSG a").css("color", "#b6b6b6");
+                    $("#li_GCJL a").css("background-color", "#dedcdc");
+                    $("#li_GCJL a").css("color", "#b6b6b6");
+                    $("#li_XMYS a").css("background-color", "#dedcdc");
+                    $("#li_XMYS a").css("color", "#b6b6b6");
+                }else if (sjState == "0") {
+                    $("#li_SGSJ a").css("background-color", "#dedcdc");
+                    $("#li_SGSJ a").css("color", "#b6b6b6");
+                    $("#li_GCSG a").css("background-color", "#dedcdc");
+                    $("#li_GCSG a").css("color", "#b6b6b6");
+                    $("#li_GCJL a").css("background-color", "#dedcdc");
+                    $("#li_GCJL a").css("color", "#b6b6b6");
+                    $("#li_XMYS a").css("background-color", "#dedcdc");
+                    $("#li_XMYS a").css("color", "#b6b6b6");
+                }
+                else if (sgState == "0") {
+                    $("#li_GCSG a").css("background-color", "#dedcdc");
+                    $("#li_GCSG a").css("color", "#b6b6b6");
+                    $("#li_GCJL a").css("background-color", "#dedcdc");
+                    $("#li_GCJL a").css("color", "#b6b6b6");
+                    $("#li_XMYS a").css("background-color", "#dedcdc");
+                    $("#li_XMYS a").css("color", "#b6b6b6");
+                }
+                else if (jlState == "0") {
+                    $("#li_GCJL a").css("background-color", "#dedcdc");
+                    $("#li_GCJL a").css("color", "#b6b6b6");
+                    $("#li_XMYS a").css("background-color", "#dedcdc");
+                    $("#li_XMYS a").css("color", "#b6b6b6");
+                }else if (ysState == "0") {
+                    $("#li_XMYS a").css("background-color", "#dedcdc");
+                    $("#li_XMYS a").css("color", "#b6b6b6");
+                }
+
+            },
+            cache: false
+
+        });
+    }
+    var aa = 0, mid = "dcd1d0aa-1d51-4142-ae82-db812158b0da";
+    //项目施工中的工程名称和编号两个基本字段的赋值
+    function assignment() {
+        var XMLXS = $($('#XMLXS')[0].contentWindow);//立项
+        var YWKCS = $($('#YWKCS')[0].contentWindow);//野外勘察
+        var SGSJS = $($('#SGSJS')[0].contentWindow);//施工设计
+        var GCSGS = $($('#GCSGS')[0].contentWindow);//工程施工
+        var GCJLS = $($('#GCJLS')[0].contentWindow);//工程监理
+        var XMYSS = $($('#XMYSS')[0].contentWindow);//项目验收
+        var XMLXSFrame = document.getElementById("XMLXS");
+        XMLXSFrame.onload = function () {
+            window.setTimeout(function () {
+                XMLXS[0].$('#QCQFLmedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details+"&belongObjectGuid=" +keyValue+ "");
+            }, 300);
+            var a = XMLXS[0].$('#ZLGCNAME').val();
+            if (a == null && a == "") {
+
+            } else
+            {
+                $("#li_YWKC").click(function () {//野外勘察点击
+                    if (kcState == "0") {
+                        event.stopPropagation();
+                    }
+                    aa = 1;
+                    var mediaguid = YWKCS[0].$("#MEDIAGUID").val();
+                    window.setTimeout(function () {
+                        YWKCS[0].$('#QCQFLmedia2').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    }, 400);
+                });
+                $("#li_SGSJ").click(function () {//施工设计点击
+                    if (sjState == "0") {
+                        event.stopPropagation();
+                    }
+                    aa = 1;
+                    var mediaguid = SGSJS[0].$("#MEDIAGUID").val();
+                    window.setTimeout(function () {
+                        SGSJS[0].$('#QCQFLmedia3').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    }, 400);
+                });
+                $("#li_GCSG").click(function () {//工程施工点击
+                    if (sgState == "0") {
+                        event.stopPropagation();
+                    }
+                    aa = 1;
+                    //var mediaguid = GCSGS[0].$("#MEDIAGUID").val();
+                    //window.setTimeout(function () {
+                    //    GCSGS[0].$('#QCQFLmedia4').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    //}, 400);
+                });
+                $("#li_GCJL").click(function () {//工程监理点击
+                    if (jlState == "0") {
+                        event.stopPropagation();
+                    }
+                    aa = 1;
+                    var mediaguid = GCJLS[0].$("#MEDIAGUID").val();
+                    window.setTimeout(function () {
+                        GCJLS[0].$('#QCQFLmedia5').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    }, 400);
+                });
+                $("#li_XMYS").click(function () {//项目验收点击
+                    if (ysState == "0") {
+                        event.stopPropagation();
+                    }
+                    aa = 1;
+                    var mediaguid = XMYSS[0].$("#MEDIAGUID").val();
+                    window.setTimeout(function () {
+                        XMYSS[0].$('#QCQFLmedia6').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    }, 400);
+                });
+            }
+
+             ZLGCID = XMLXS[0].$("#GUID").val();//项目编号
+             ZLGCNAME = XMLXS[0].$("#ZLGCNAME").val();//项目名称
+        }
+        var GCSGSFrame = document.getElementById("GCSGS");
+        GCSGSFrame.onload = function () {
+            GCSGS[0].$("#ZLGCID").val(ZLGCID);//赋值项目编号
+            GCSGS[0].$("#ZLGCNAME").val(ZLGCNAME); //赋值项目名称
+        }
+        //$("#li_DMT").click(function () {
+        //    window.setTimeout(function () {
+        //        $('#DMTS').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=d7f779aa-d2c0-41cc-8859-d42668408f42&belongObjectGuid=" + keyValue + "&XQing=" + readonly + "&details=" + details);
+        //    }, 300);
+        //})
+    }
+
+    //保存表单
+    function AcceptClick() {
+        var XMLXS = $($('#XMLXS')[0].contentWindow);
+        var YWKCS = $($('#YWKCS')[0].contentWindow);
+        var SGSJS = $($('#SGSJS')[0].contentWindow);
+        var GCSGS = $($('#GCSGS')[0].contentWindow);
+        var GCJLS = $($('#GCJLS')[0].contentWindow);
+        var XMYSS = $($('#XMYSS')[0].contentWindow);
+     
+        var entity_XMLX = XMLXS[0].$("#ZLGC_LX").GetWebControls(keyValue);
+        var entity_YWKC = YWKCS[0].$("#ZLGC_KC").GetWebControls(keyValue);
+        var entity_SGSJ = SGSJS[0].$("#ZLGC_SJ").GetWebControls(keyValue);
+        var entity_GCSG = GCSGS[0].$("#gridTables_ZLGC_SG").GetWebControls(keyValue);
+        var entity_GCJL = GCJLS[0].$("#ZLGC_JL").GetWebControls(keyValue);
+        var entity_XMYS = XMYSS[0].$("#ZLGC_YS").GetWebControls(keyValue);
+        if (entity_XMLX.ZLGCNAME == "" && aa == 1) {
+            dialogAlert('请先填写立项阶段信息');
+            return false;
+        }
+        if (!XMLXS[0].$('#ZLGC_LX').Validform()) {
+            return false;
+        }
+      
+        //生成对应资质清单列表所有信息
+        if (SGSJS[0].$("#gridTable_SJ_ZZQD").jqGrid('getRowData') != undefined)
+        {
+            var gridTable_SJ_ZZQD_totlal = SGSJS[0].$("#gridTable_SJ_ZZQD").jqGrid('getRowData');
+            entity_SGSJ.ZZQD = JSON.stringify(gridTable_SJ_ZZQD_totlal);
+        }
+        //生成对应治理区域划分所有信息
+        if (SGSJS[0].$("#gridTables_SJ_QYHF").jqGrid('getRowData') != undefined)
+        {
+            var gridTable_SJ_QYHF_totlal = SGSJS[0].$("#gridTables_SJ_QYHF").jqGrid('getRowData');
+            entity_SGSJ.ZLQY = JSON.stringify(gridTable_SJ_QYHF_totlal);
+        }
+        var entityGCJL = $("#ZLGC_JL").GetWebControls(keyValue);
+        //生成对应资质清单列表所有信息
+        if (GCJLS[0].$("#gridTable_JL_ZZQD").jqGrid('getRowData') != undefined)
+        {
+            var gridTable_JL_ZZQD_totlal = GCJLS[0].$("#gridTable_JL_ZZQD").jqGrid('getRowData');
+            entity_GCJL.ZZQD = JSON.stringify(gridTable_JL_ZZQD_totlal);
+        }
+        $.SaveForm({
+            url: "../../api/TBL_ZLGC/SaveForm_ZLGC",
+            param: {
+                keyValue: keyValue,
+                entityXMLX: entity_XMLX,//立项
+                entityGCJL: entity_GCJL,//监理
+                entityYWKC: entity_YWKC,//野外
+                entitySGSJ: entity_SGSJ, //设计
+                entityGCYS: entity_XMYS, //验收
+                entityGCSG: entity_GCSG, //施工
+            },
+            type: "post",
+            // contentType:'application/json',
+            loading: "正在保存数据...",
+            authToken: authToken,
+            success: function (data) {
+                console.log(data);
+                if (data) {
+                    if (XMLXS[0].$("#QCQFLmedia")[0].getAttribute("src") != "") {
+                        XMLXS[0].$("#QCQFLmedia")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID);
+                    }
+                    if (YWKCS[0].$("#QCQFLmedia2")[0].getAttribute("src") != "") {
+                        YWKCS[0].$("#QCQFLmedia2")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID2);
+                    }
+                    if (SGSJS[0].$("#QCQFLmedia3")[0].getAttribute("src") != "") {
+                        SGSJS[0].$("#QCQFLmedia3")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID3);
+                    }
+                    //if (GCSGS[0].$("#QCQFLmedia4")[0].getAttribute("src") != "") {
+                    //    GCSGS[0].$("#QCQFLmedia4")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID6);
+                    //}
+                    if (GCJLS[0].$("#QCQFLmedia5")[0].getAttribute("src") != "") {
+                        GCJLS[0].$("#QCQFLmedia5")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID4);
+                    }
+                    if (XMYSS[0].$("#QCQFLmedia6")[0].getAttribute("src") != "") {
+                        XMYSS[0].$("#QCQFLmedia6")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID5);
+                    }
+                }
+                //衔接多媒体暂时搁置
+                //if ($("#MultMedia").attr("src") != "") {
+                //    console.log(data.resultdata);
+                //    $("#MultMedia")[0].contentWindow.SaveFileInfo(data.resultdata);
+                //}
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                    getInfoTop().learun.currentIframe().BindMapMarker();
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

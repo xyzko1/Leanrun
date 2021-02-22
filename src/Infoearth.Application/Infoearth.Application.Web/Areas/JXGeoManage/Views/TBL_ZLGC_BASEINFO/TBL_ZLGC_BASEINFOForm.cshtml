@@ -1,0 +1,400 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    body {
+        height: auto
+    }
+
+    .form .formTitle {
+        background: #fff
+    }
+</style>
+<div style="margin:10px;" id="layout">
+    <table class="form" id="ZLGC_LX">
+        <tr>
+            <td class="formTitle">治理工程名称<span class="required" style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="ZLGCNAME" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">灾害点名称<span class="required" style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="DISASTERNAME" type="text" class="form-control readonly" readonly="readonly" placeholder="请单击选择" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">立项时间</td>
+            <td class="formValue">
+                <input id="XMJLXSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">工程地理位置</td>
+            <td class="formValue" colspan="5">
+                <input id="LOCATION" class="form-control readonly" readonly="readonly" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+
+        <tr>
+            <td class="formTitle">批复资金(万元)</td>
+            <td class="formValue">
+                <input id="XMPFZJ" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">负责单位<span class="required" style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="XMFZDW" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">批准部门</td>
+            <td class="formValue">
+                <input id="XMPZBM" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">批准文号</td>
+            <td class="formValue">
+                <input id="XMPZWH" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">建设单位</td>
+            <td class="formValue">
+                <input id="XMJSDW" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">项目任务</td>
+            <td class="formValue" colspan="5">
+                <textarea id="XMXMRW" class="form-control" style="height:100px;"></textarea>
+            </td>
+        </tr>
+
+
+        @*对应有用信息隐藏的*@
+        <tr style="display:none">
+            <td class="formTitle">工程编号</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control readonly" readonly="readonly" />
+            </td>
+            <td class="formTitle">灾害点编号</td>
+            <td class="formValue">
+                <input id="UNIFIEDCODE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">省</td>
+            <td class="formValue">
+                <input id="PROVINCENAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">省编号</td>
+            <td class="formValue">
+                <input id="PROVINCE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">市（州）</td>
+            <td class="formValue">
+                <input id="CITYNAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">市（州）编号</td>
+            <td class="formValue">
+                <input id="CITY" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">区（县）</td>
+            <td class="formValue">
+                <input id="COUNTYNAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">区（县）编号</td>
+            <td class="formValue">
+                <input id="COUNTY" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">乡镇</td>
+            <td class="formValue">
+                <input id="TOWNNAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">乡镇编号</td>
+            <td class="formValue">
+                <input id="TOWN" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">村</td>
+            <td class="formValue">
+                <input id="VILLAGE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">组</td>
+            <td class="formValue">
+                <input id="TEAM" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">灾害体类型</td>
+            <td class="formValue">
+                <input id="DISASTERTYPE" type="text" class="form-control" />
+            </td>
+
+        </tr>
+        @*先隐藏对应不出现的字段信息--无用字段*@
+        <tr style="display:none">
+            <td class="formTitle">灾害点治理期数</td>
+            <td class="formValue">
+                <input id="ZHDZLQS" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">施工图设计开始时间</td>
+            <td class="formValue">
+                <input id="DESIGNSTARTTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">施工图设计结束时间</td>
+            <td class="formValue">
+                <input id="DESIGNENDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">招标阶段开始时间</td>
+            <td class="formValue">
+                <input id="TENDERSTARTTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">招标阶段结束时间</td>
+            <td class="formValue">
+                <input id="TENDERENDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+
+            <td class="formTitle">施工阶段开始时间</td>
+            <td class="formValue">
+                <input id="CONSTRUCTIONSTARTTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">施工阶段结束时间</td>
+            <td class="formValue">
+                <input id="CONSTRUCTIONENDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">初验时间</td>
+            <td class="formValue">
+                <input id="BEGINNINGTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">终验申请时间</td>
+            <td class="formValue">
+                <input id="APPLYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">终验结束时间</td>
+            <td class="formValue">
+                <input id="ACCEPTANCETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">项目监管单位</td>
+            <td class="formValue">
+                <input id="REGULATORS" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">项目实施单位</td>
+            <td class="formValue">
+                <input id="IMPLEMENTATION" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">工程主要建设内容</td>
+            <td class="formValue">
+                <textarea id="CONSTRUCTIONCONTENT" class="form-control"></textarea>
+            </td>
+            <td class="formTitle">项目下达时间</td>
+            <td class="formValue">
+                <input id="GIVETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">项目任务下达文号</td>
+            <td class="formValue">
+                <input id="GIVENUMBER" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">施工单位</td>
+            <td class="formValue">
+                <input id="CONSTRUCTION" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">施工方现场负责人</td>
+            <td class="formValue">
+                <input id="CONSTRUCTIONPEOPLE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">监理方现场负责人</td>
+            <td class="formValue">
+                <input id="SUPERVISIONPEOPLEP" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">监理方现场负责人电话</td>
+            <td class="formValue">
+                <input id="SUPERVISIONPHONE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">预计完工时间</td>
+            <td class="formValue">
+                <input id="COMPLETIONTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">勘查单位</td>
+            <td class="formValue">
+                <input id="PROSPECTING" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">监理方现场负责人电话</td>
+            <td class="formValue">
+                <input id="CONSTRUCTIONPHONE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">预算资金（万元）</td>
+            <td class="formValue">
+                <input id="BUDGET" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">设计单位</td>
+            <td class="formValue">
+                <input id="DESIGN" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">监理单位</td>
+            <td class="formValue">
+                <input id="SUPERVISION" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">下达资金（万元）</td>
+            <td class="formValue">
+                <input id="ISSUEDCAPITAL" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">中央财政资金（万元）</td>
+            <td class="formValue">
+                <input id="CENTRALFUNDS" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">决算资金（万元）</td>
+            <td class="formValue">
+                <input id="FINALMONEY" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">备注</td>
+            <td class="formValue">
+                <textarea id="NOTE" class="form-control"></textarea>
+            </td>
+
+            <td class="formTitle">县级审核人</td>
+            <td class="formValue">
+                <input id="COUNTYPEOPLE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">县级审核时间</td>
+            <td class="formValue">
+                <input id="COUNTYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+
+            <td class="formTitle">县级审核意见</td>
+            <td class="formValue">
+                <textarea id="COUNTYOPINION" class="form-control"></textarea>
+            </td>
+            <td class="formTitle">市级审核人</td>
+            <td class="formValue">
+                <input id="CITYPEOPLE" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">市级审核时间</td>
+            <td class="formValue">
+                <input id="CITYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">市级审核意见</td>
+            <td class="formValue">
+                <textarea id="CITYOPINION" class="form-control"></textarea>
+            </td>
+
+            <td class="formTitle">备注1</td>
+            <td class="formValue">
+                <textarea id="BZ" class="form-control"></textarea>
+            </td>
+            <td class="formTitle">原编号</td>
+            <td class="formValue">
+                <input id="OLDUNIFIEDCODE" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">创建时间</td>
+            <td class="formValue">
+                <input id="CREATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">创建人</td>
+            <td class="formValue">
+                <input id="CREATEUSER" type="text" class="form-control" />
+            </td>
+
+            <td class="formTitle">修改时间</td>
+            <td class="formValue">
+                <input id="MODIFYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">修改人</td>
+            <td class="formValue">
+                <input id="MODIFYUSER" type="text" class="form-control" />
+            </td>
+        </tr>
+    </table>
+    <div  style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px"><i class="fa fa-bars"></i>附件</div>
+    <div style="height:450px; width: 100%;">
+        <iframe class="LRADMS_iframe" id="QCQFLmedia" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var xq = request('xq');
+    $(function () {
+        initControl();
+        $("#DISASTERNAME").click(function () {
+            ZLGC_Selec_Hazardbas();
+        });
+    });
+
+    //选择灾害点信息
+    function ZLGC_Selec_Hazardbas() {
+        dialogOpen({
+            id: 'SELECTHazardbas',
+            title: '获取灾害信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HAZARDBASCOMMONIndex',
+            width: '970px',
+            height: '460px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var selectedRowIndex = getInfoTop().frames[iframeId].$('#gridTable').getGridParam('selrow');
+                var dt = getInfoTop().frames[iframeId].$('#gridTable').jqGrid("getRowData", selectedRowIndex);
+                $("#UNIFIEDCODE").val(dt.UNIFIEDCODE);      //灾害点编号
+                $("#DISASTERNAME").val(dt.DISASTERNAME);    //灾害点名称
+                $("#PROVINCE").val(dt.PROVINCE);            //省编号
+                $("#PROVINCENAME").val(dt.PROVINCENAME);    //省名称
+                $("#CITY").val(dt.CITY);                    //市编号
+                $("#CITYNAME").val(dt.CITYNAME);            //市名称
+                $("#COUNTY").val(dt.COUNTY);                //县编号
+                $("#COUNTYNAME").val(dt.COUNTYNAME);        //县名称
+                $("#LOCATION").val(dt.LOCATION);            //位置（数据库:工程地理位置）
+                $("#DISASTERTYPE").val(dt.DISASTERTYPE);    //灾害类型
+                $("#LONGITUDE").val(dt.LONGITUDE);          //经度
+                $("#LATITUDE").val(dt.LATITUDE);            //纬度
+                $("#TOWN").val(dt.TOWN);                    //乡镇编号
+                $("#TOWNNAME").val(dt.TOWNNAME);            //乡镇名称
+
+            }
+        });
+    }
+
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                //url: "../../JXGeoManage/TBL_ZLGC_BASEINFO/GetFormJson",   //控制层写法
+                url: "../../api/TBL_ZLGC/GetXMLX",                          //api写法
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#ZLGC_LX").SetWebControls(data);
+            }
+        })
+        }
+        if (readonly == 01||xq==02) {
+            $("input").attr("disabled", "disabled");
+            $("textarea").attr("disabled", "disabled");
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_ZLGC_BASEINFO/SaveForm_New?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

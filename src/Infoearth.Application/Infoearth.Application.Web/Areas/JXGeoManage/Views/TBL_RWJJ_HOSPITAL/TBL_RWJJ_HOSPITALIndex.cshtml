@@ -1,0 +1,292 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+ <style>
+    .ui-layout-center {
+       overflow-x: hidden !important;
+    }
+    .ui-layout-resizer {
+        background-color:#f0f3f4 !important;
+    }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel">
+             <div class="panel-Title">行政区划信息</div>
+             <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;">
+        <div class="ui-layout" id="layout2" style="height: 100%; width: 100%;">
+           <div class="ui-layout-north" id="ui_map" style="height: 432px;">
+                  <div id="mapControl" style="height:432px;"></div>
+          </div>
+          <div class="ui-layout-center" id="ui_grid">
+                    <div class="titlePanel">
+                        <div class="title-search" id="filter-form">
+                           <table>
+                               <tr>
+                                  <td>
+                                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                                   </td>
+                                   <td style="padding-left: 5px;">
+                                       <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                                   </td>
+                               </tr>
+                           </table>
+                       </div>
+                       <div class="toolbar">
+                            <div class="btn-group">
+                                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+                                <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                                <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                                <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                            </div>
+                        <div class="btn-group">
+                            <a id="lr-colgrid" class="btn btn-default" onclick="ColDataGrid()"><i class="fa fa-chevron-down"></i>列表</a>
+                            <a id="lr-colmap" class="btn btn-default" onclick="ColMapDiv()"><i class="fa fa-chevron-up"></i>地图</a>
+                        </div>
+                      </div>
+                      <div style="clear:both;"></div>
+                  </div>
+                  <div class="gridPanel">
+                      <table id="gridTable"></table>
+                   </div>
+              </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+@section Scripts{
+<script>
+    var layout2NorthH = 1;
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetMapData();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+                applyDemoStyles: true,
+                onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+             }
+         });
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $('#layout2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                resize();
+                if (isResize > 1) {
+                resized = 1;
+                 } else {
+                    if (count == 1 || resized == 0) {
+                        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                    }
+                 }
+                  count++;
+             }
+         });
+          //resize重设布局;
+         $(window).resize(function (e) {
+              if (isResize<10) {
+                 isResize ++;
+              }
+              resize();
+              e.stopPropagation();
+         });
+         function resize() {
+              window.setTimeout(function () {
+                  if (mapCtlExt != null) {
+                        mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                  }
+                  $('.center-Panel').height($('#layout').parent().height() - 20);
+                  $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                  $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                  $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                  $('#gridTable').setGridHeight($(window).height() - $('#mapControl').height() - $('.panel-Title').height());
+                  $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 60 - 60);
+                  $('.ui-jqgrid-bdiv').height($('#layout2 .ui-layout-center').height() - 60 - 60);
+                  $('#itemTree').setTreeHeight($(window).height() - 52);
+                  $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height() - 15);
+                  $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 115);
+                  $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+              }, 200);
+           };
+           $(window).resize();
+           $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+           layout2NorthH = $("#layout2 .ui-layout-north").height();
+     }
+    //加载行政区划树
+    var AreaCode = 0;
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMap",
+            onnodeclick: function (item) {
+                AreaCode = item.id;
+                if(item.value.split(',')[1]  < 3) {
+                     //展开下级
+                     $(".bbit-tree-selected").children('.bbit-tree-ec-icon').trigger("click");
+                }
+                $('#btn_Search').trigger("click");
+            },
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    };
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData() {
+          $.ajax({
+             url: '../../Map/GetMapDatas',
+             async: false,
+             type: "GET",
+             success: function (data) {
+                       var dataSet = JSON.parse(data);
+                        mapCtlExt= $("#mapControl").mapCtl({
+                                mapwidth: 1500,
+                                isShowGisLayer:false,
+                                isFrame:true,
+                                dataset: dataSet,
+                                isCluster: true
+                             });
+                        }, error: function (e) {
+                    },
+             cache: false
+         });
+     };
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["AreaCode"] = AreaCode;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 542,
+            url: "../../JXGeoManage/TBL_RWJJ_HOSPITAL/GetListJson",
+            datatype: "json",
+            colModel: [
+            ],
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加人文经济医院信息表',
+            url: '/JXGeoManage/TBL_RWJJ_HOSPITAL/TBL_RWJJ_HOSPITALForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑人文经济医院信息表',
+                url: '/JXGeoManage/TBL_RWJJ_HOSPITAL/TBL_RWJJ_HOSPITALForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_RWJJ_HOSPITAL/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的人文经济医院信息表！', 0);
+        }
+    }
+      //查询表格函数
+      function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["AreaCode"] = AreaCode
+            $("#gridTable").jqGrid('setGridParam', {
+                 postData: { queryJson: JSON.stringify(queryJson) },
+                 url: "../../JXGeoManage/TBL_RWJJ_HOSPITAL/GetListJson"
+            }).trigger('reloadGrid');
+        }
+      function ColDataGrid() {
+        var centerHeight = $("#ui_center .ui-layout").height();
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colgrid i").hasClass("fa-chevron-down")) {
+             var northH = centerHeight - 65;
+             layout2.sizePane("north", northH);
+             $("#lr-colgrid i").removeClass("fa-chevron-down");
+             $("#lr-colgrid i").addClass("fa-chevron-up");
+             if ($("#lr-colmap i").hasClass("fa-chevron-down")) {
+                  $("#lr-colmap i").removeClass("fa-chevron-down");
+                  $("#lr-colmap i").addClass("fa-chevron-up");
+             }
+        }
+        else {
+             layout2.sizePane("north", layout2NorthH);
+             $("#lr-colgrid i").removeClass("fa-chevron-up");
+             $("#lr-colgrid i").addClass("fa-chevron-down");
+        }
+        mapCtlExt.updateSize();
+      }
+      function ColMapDiv() {
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colmap i").hasClass("fa-chevron-up")) {
+            layout2.sizePane("north", 1);
+            $("#lr-colmap i").removeClass("fa-chevron-up");
+            $("#lr-colmap i").addClass("fa-chevron-down");
+            if ($("#lr-colgrid i").hasClass("fa-chevron-up")) {
+                $("#lr-colgrid i").removeClass("fa-chevron-up");
+                $("#lr-colgrid i").addClass("fa-chevron-down");
+            }
+        }
+        else {
+            layout2.sizePane("north", layout2NorthH);
+            $("#lr-colmap i").removeClass("fa-chevron-down");
+            $("#lr-colmap i").addClass("fa-chevron-up");
+            if (mapCtlExt != null) {
+                mapCtlExt.setHeight($("#mapControl").parent().height() - 32 - 4);
+            }
+        }
+        mapCtlExt.updateSize();
+      }
+</script>
+}

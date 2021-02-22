@@ -1,0 +1,416 @@
+﻿
+@{
+    ViewBag.Title = "消息队列MQ";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 28px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+    .orm_item_title_note1 img{
+        border:1px solid #eee;
+        margin:20px;
+        border-radius:3px;
+    }
+</style>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">消息队列MQ</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、WebConfig配置
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                在Awebconfig文件中找到BusinessName,修改需要设定的系统名称
+
+
+
+
+
+                            </p>
+
+
+
+                          
+                            <p class="orm_item_title_note1">
+                                <!--消息队列配置信息-->
+                            </p>
+                            <p class="orm_item_title_note1">
+                                < add key="MQServiceIp" value="amqp://192.168.100.39:5672/" />
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <!--用户名-->
+                            </p>
+                            <p class="orm_item_title_note1">
+                                < add key="MQUserName" value="guest" />
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <!--密码-->
+                            </p>
+                            <p class="orm_item_title_note1">
+                                < add key="MQPassWord" value="guest" />
+                            </p>
+                            <p class="orm_item_title_note1">
+                                <!--虚拟主机名-->
+                            </p>
+                            <p class="orm_item_title_note1">
+                                < add key="MQVirtualHost" value="DXSTask" />
+
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                < add key="BusinessName" value="地下水" />
+                            </p>
+
+
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、操作类调用路径
+
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/MQ1.png" /></p>
+
+
+                         
+
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、调用示例
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                public void SaveTaskInfo(TaskDTO taskInfo)
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp  {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp var entity = taskInfo.MapTo< taskentity>();
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp  if (!string.IsNullOrEmpty(entity.Id))
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp  _taskRepository.Update(entity);
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp     }
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp  else
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp  {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    entity.Id = Guid.NewGuid().ToString();
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp   var query = _modelQueueRepository.GetAll();
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp   var queueInfo = query.Where(t => t.MODELID == entity.MODELID).FirstOrDefault();
+                            </p>
+                            <p class="orm_item_title_note1" style="color:green;">
+                                &nbsp&nbsp&nbsp    //消息队列发消息
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp    if (queueInfo != null)
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp   {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    MqConfigInfo config = new MqConfigInfo();
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp  config.MQExChange = queueInfo.EXCHANGENAME;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    config.MQQueueName = queueInfo.QUEUENAME;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    config.MQRoutingKey = queueInfo.ROUTINGKEY;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp   entity.STARTTIME = DateTime.Now;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp   entity.EXCHANGENAME = queueInfo.EXCHANGENAME;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    entity.QUEUENAME = queueInfo.QUEUENAME;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp  entity.ROUTINGKEY = queueInfo.ROUTINGKEY;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp  entity.TASKSTATUS = "正在排队...";
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp   taskInfo.Id = entity.Id;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp  try
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp   {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp&nbsp  MqHelper heper = new MqHelper(config);
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp&nbsp    heper.SendMsg(taskInfo);
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    }
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp    catch(Exception ex)
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp   {
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp&nbsp throw ex;
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp&nbsp  }
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp   }
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp&nbsp  _taskRepository.Insert(entity);
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp&nbsp  }
+                            </p>
+                            <p class="orm_item_title_note1">
+                                &nbsp  }
+
+
+
+
+
+
+                            </p>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    
+
+</div>

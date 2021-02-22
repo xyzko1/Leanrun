@@ -1,0 +1,118 @@
+﻿@{
+    ViewBag.Title = "获取统一编号";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+        
+<div style="margin-top: 20px; margin-right: 30px;" id="districtControl">
+    <table class="form">
+        <tr>
+            <td class="formTitle">省</td>
+            <td class="formValue">
+                <div id="PROVINCE" type="select" class="ui-select" isvalid="yes" ></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市</td>
+            <td class="formValue">
+                <div id="CITY" type="select" class="ui-select" isvalid="yes" ></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">区</td>
+            <td class="formValue">
+                <div id="COUNTY" type="select" class="ui-select" isvalid="yes"></div>
+            </td>
+        </tr>
+        <tr style=" display:none;">
+            <td class="formTitle">乡镇<font face="宋体" style="color:red">*</font></td>
+            <td class="formValue">
+                <div id="TOWN" type="selectTree" class="ui-select" isvalid="yes" ></div>
+            </td>
+        </tr>
+        <tr class="IsXZQH">
+            <td class="formTitle">编号</td>
+            <td class="formValue">
+                <input id="F_ItemCode" type="text" maxlength="4" class="form-control" placeholder="请输入编号" isvalid="yes"  />
+            </td>
+        </tr>
+    </table>
+</div>
+@section Scripts{
+<script>
+    var IsXZQH = request('IsXZQH');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        var html = $("#districtControl").html();
+        var usercode = usercodes();
+        var district = $("#districtControl").districtsCtl({
+            provinceId: usercode.provinceId,
+            html: html,
+            callBack: SetItemCode
+        });
+        function SetItemCode(value) {
+            if (!value)
+                return;
+            if ($("#COUNTY").attr('data-value') == null || $("#COUNTY").attr('data-value') == "") {
+                $("#F_ItemCode").val('');
+                return;
+            }
+            $.ajax({
+                url: '../TBL_DMCJ_BASEINFO/GetMaxCode?xzqh=' + value,
+                //param: { xzqh: value },
+                async: false,
+                type: "GET",
+                success: function (data) {
+                    $("#F_ItemCode").val(data);
+                }, error: function (e) {
+                },
+                cache: false
+            });
+        }
+
+        if (IsXZQH) {
+            $(".IsXZQH").css("display", "none");
+        }
+
+    }
+    //保存表单
+    function AcceptClick(callback) {
+        //Validform
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var data = $("#form1").getWebControls();
+        data["F_ProvinceName"] = $("#PROVINCE").text();
+        data["F_CityName"] = $("#CITY").text();
+        data["F_CountyName"] = $("#COUNTY").text();
+        data["DISTRICTCODE"] = $("#COUNTY").attr('data-value');
+        var isExist = false;
+        var value = data["COUNTY"] + data["F_ItemCode"];
+        $.ajax({
+            url: '../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetFormJson?keyValue=' + value,
+            //param: { xzqh: value },
+            async: false,
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            success: function (data) {
+                if (data == null) {
+                    isExist = true;
+                }
+            }, error: function (e) {
+            },
+            cache: false
+        });
+        if (isExist) {
+            callback(data);
+            learun.dialogClose();
+        } else {
+            alert("编号已存在！");
+        }
+    }
+</script>
+}

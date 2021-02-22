@@ -1,0 +1,297 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@{
+    ViewBag.Title = "查询页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+    .formTitle {
+        width: 110px !important;
+        background:#f6f6f6;
+    }
+    .haszard{
+        background:#C3C3C3;
+    }
+    .form td {
+        border:1px solid #d6d6d6;
+        text-align:center !important;
+    }
+    .form td input{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form td textarea{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+</style>
+<div style="padding: 10px;">
+    <table class="form" id="formqcqc_ob" style="margin-bottom:10px">
+        <tr>
+            <td class="formTitle">观测人姓名<span style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="OBSERVATIONPEOPLE" type="text" class="form-control" onclick="btn_SelectPeople();" readonly="readonly" placeholder="点击选择"  isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">观测人电话<span style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="OBSERVATIONPHONE" type="text" class="form-control"  isvalid="yes" checkexpession="MobileOrPhone" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">登录密码</td>
+            <td class="formValue">
+                <input id="LOGINPASSWORD" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">更新时间</td>
+            <td class="formValue">
+                <input id="UPDATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否限制范围</td>
+            <td class="formValue">
+                <div id="ISLIMITED" type="select" class="ui-select"></div>
+            </td>
+            <td class="formValue" colspan="2">
+                 <a id="btn_Adddis" onclick="btn_Adddis()" class="btn btn-primary" style="margin-bottom:0;margin-left:30px"><i class="fa fa-search"></i> 关联监测点</a>
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td class="formTitle">GUID</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">ID</td>
+            <td class="formValue">
+                <input id="ID" type="text" class="form-control"  />
+            </td>
+        </tr>
+    </table>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var queryJson=[];
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+    });
+    //加载表格
+    function GetGrid(data) {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        if (data != undefined && data != null && data != '') {
+            queryJson = data;
+        }
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 230,
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 150, align: 'left', sortable: true},
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 350, align: 'left', sortable: true },
+                { label: '监测部位', name: 'MONITORPOINTPOSITION', index: 'MONITORPOINTPOSITION', width: 150, align: 'left', sortable: true, hidden: true },
+                { label: '监测点编号', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 150, align: 'left', sortable: true },
+                   {
+                       label: '监测类型', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 120, align: 'left', sortable: true
+                 , formatter: function (cellvalue, options, rowObject) {
+                     switch (cellvalue.substring(0, 2)) {
+                         case "DG":
+                             return "地鼓";
+                         case "DL":
+                             return "地裂";
+                         case "QL":
+                             return "墙裂";
+                         case "JS":
+                             return "井水";
+                         case "QS":
+                             return "泉水";
+                         default:
+                             return "";
+                     }
+                 }
+                   },
+               {
+                   label: '操作', name: 'GUID', index: 'GUID', width: 80, align: 'center', sortable: true,
+                   formatter: function (cellvalue, options, rowObject) {
+                       if (cellvalue != "" || cellvalue != null) {
+                           return '<a onclick=\"DeleteInfo(\'' + rowObject.GUID + '\')\" style=\"color: #008cee;cursor: pointer;\">删除</a>';
+                       }
+                       else {
+                           return "";
+                       }
+                   }
+               },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //删除勾选
+    function DeleteInfo(guid) {
+        queryJson.splice(queryJson.indexOf(guid), 1)
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#formqcqc_ob').Validform()) {
+            return false;
+        }
+        var postData = $("#formqcqc_ob").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            authToken: authToken,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        });
+        $.ajax({
+            url: "../../JXGeoManage/TBL_QCQF_POINTOBSERVATION/SaveFormByID",
+            type: "POST",
+            async:false,
+            data: { ID: $("#ID").val(), UNIFIEDCODE: JSON.stringify(queryJson) },
+            success: function (data) {
+
+            }
+        });
+    }
+    //初始化控件
+    function initControl() {
+        $("#ISLIMITED").ComboBox({
+            id: "label",
+            text: "value",
+            description: "请选择",
+            height: "170px",
+            data: [
+                { label: "1", value: "是" },
+                { label: "0", value: "否" }
+            ]
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../api/TBL_QCQF_OBSERVATIONApi/GetFormJson",
+                param: { keyValue: keyValue },
+                authToken: authToken,
+                success: function (data) {
+                    $("#formqcqc_ob").SetWebControls(data);
+                        $("#ISLIMITED").ComboBoxSetValue(data["ISLIMITED"]);
+                }
+            })
+        }
+        //获取jqgrid数据
+        var values = [];
+        $.ajax({
+            url: "../../api/TBL_QCQF_POINTOBSERVATIONApi/GetListByID",
+            type: "GET",
+            async:false,
+            data: { ID: $("#ID").val() },
+            beforeSend: function (a) {
+                        a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (data) {
+                if (data != undefined && data != null && data != '') {
+                    for (var i = 0; i < data.length; i++) {
+                        values.push(data[i]["UNIFIEDCODE"]);
+                    }
+                }
+            }
+        })
+        GetGrid(values);
+        queryJson = values;
+    }
+    function SearchEvent(data) {
+        $("#gridTable").jqGrid('setGridParam', {
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            postData: { queryJson: JSON.stringify(data) },
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //获取观测人姓名
+    function btn_SelectPeople() {
+        dialogOpen({
+            id: 'ContactPersonForm',
+            title: '选择审核人',
+            url: '../../ContactPerson/ContactPersonForm',
+            width: '800px',
+            height: '500px',
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                $("#OBSERVATIONPEOPLE").val(data["UserName"]);
+                $("#OBSERVATIONPHONE").val(data["Mobile"]);
+                $("#ID").val(data["ContactPeopleID"]);
+            }
+        });
+    }
+    //关联监测点
+    function btn_Adddis() {
+        dialogOpen({
+            id: 'GLJCD',
+            title: '关联监测点',
+            url: '../../JXGeoManage/TBL_QCQF_OBSERVATION/GLJCD?keyValue=' + $("#ID").val(),
+            width: '1000px',
+            height: '800px',
+            isClose:true,
+            callBack: function (iframeId) {
+                 queryJson = getInfoTop().frames[iframeId].AcceptClick();
+                $("#gridTable").jqGrid('setGridParam', {
+                    postData: { queryJson: JSON.stringify(queryJson) },
+                    loadBeforeSend: function (a) {
+                        a.setRequestHeader("Authorization", authToken);
+                    },
+                    url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+                    page: 1
+                }).trigger('reloadGrid');
+            }
+        });
+    }
+</script>
+}

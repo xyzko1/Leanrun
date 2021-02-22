@@ -1,0 +1,2053 @@
+﻿@{
+    ViewBag.Title = "排查数据统计界面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    body, html {
+        background: #fff;
+        margin: 0;
+        height: 100%;
+    }
+
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .diaochabiao {
+        text-align: center;
+    }
+
+
+    .table-top, .table-main, table-bottom {
+        margin: 0 20px;
+    }
+
+        .table-main td {
+            border: 1px solid #D6D6D6;
+        }
+
+    .formValue input[type=text] {
+        border: 0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .diaochabiao .formValue textarea {
+        /*height:80px;*/
+        border: none;
+    }
+
+    .diaochabiao .formTitle {
+        text-align: center !important;
+        /*width: 135px !important;*/
+        background-color: #F5F5F5;
+        white-space: inherit;
+    }
+
+    .diaochabiao .formCategory {
+        font-size: 15px;
+        /*color: #3F549E;*/
+    }
+
+    .diaochabiao .required {
+        color: red;
+        padding-left: 5px;
+        vertical-align: middle;
+    }
+
+    .diaochabiao select {
+        border: none;
+    }
+
+    .diaochabiao label {
+        margin: 0 2px;
+    }
+
+    #TOWN {
+        display: none;
+    }
+
+    #tab_content {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+        #tab_content > div {
+            height: 100%;
+        }
+
+    #TjItem ul {
+        padding-left: 10px;
+        width: 242px;
+    }
+
+    #TjItem > ul > li {
+        float: left;
+        padding: 5px 0;
+    }
+
+        #TjItem > ul > li:first-child {
+            padding-right: 0; /*5px;*/
+        }
+
+        #TjItem > ul > li > span, #TjItem > ul > li > div, #TjItem > ul > li > input {
+            display: inline-block;
+            border-radius: 0;
+        }
+
+        #TjItem > ul > li > span {
+            width: 82px;
+        }
+
+    #TjItem .ui-select {
+        width: 145px;
+        vertical-align: middle;
+        margin-top: -3px;
+    }
+
+    #deviceTypeListA tr > td > label {
+        margin: 10px 20px 0px 5px;
+    }
+
+    label {
+        min-width: 77px;
+    }
+
+    #myModal2 .spans {
+        float: left;
+        padding: 0px 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+    }
+
+    #myModal2 .divselect {
+        width: 16%;
+    }
+
+    .ui-select-text {
+        border-radius: 4px;
+    }
+
+    #gridTableCount td, #gridTableA td {
+        border-right: 1px solid #ccc !important;
+    }
+
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        background: #DCDCDC;
+    }
+
+    .nav-tabs a:hover {
+        border-bottom: none;
+    }
+
+    .ui-widget-content span > a {
+        color: #337ab7;
+        text-decoration: underline;
+    }
+
+
+    .lea-tabs {
+        height: 38px;
+        width: 100%;
+        background: #fff;
+        border-bottom: solid #ccc 1px;
+        padding-left: 15px;
+    }
+
+        .lea-tabs .tabs-right-tool {
+            position: absolute;
+            width: 236px !important;
+            height: 37px;
+            right: 0;
+            background-color: #fff;
+        }
+
+        .lea-tabs .roll-nav {
+            float: left;
+            width: 20px;
+            height: 37px;
+            line-height: 37px;
+            text-align: center;
+            color: #878EC3;
+            z-index: 2;
+            background: #fff;
+            border: 0;
+            outline: 0;
+            cursor: pointer;
+        }
+
+            .lea-tabs .roll-nav:hover {
+                color: #4c58a4;
+            }
+
+        .lea-tabs .user-menu {
+            float: left;
+            padding-top: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+    .menuTabs {
+        width: 100000px;
+    }
+
+    .menuTab i {
+        margin-right: 4px;
+        font-size: 13px;
+    }
+
+    .page-tabs-content .tab_close {
+        width: 12px;
+        height: 13px;
+        position: absolute;
+        top: 17px;
+        right: 13px;
+        cursor: pointer;
+        display: block;
+        background: url(../../../../Content/adminDefault/img/tab_close.png) no-repeat;
+    }
+
+        .page-tabs-content .tab_close:hover {
+            background-position: 0 -12px;
+        }
+
+    .page-tabs-content {
+        overflow: hidden;
+        height: 38px;
+        float: left;
+    }
+
+        .page-tabs-content .menuTab {
+            display: block;
+            float: left;
+            text-decoration: none;
+            color: #878EC3;
+            border: 1px solid #ccc;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 8px;
+            font-size: 14px;
+            margin-right: 8px;
+            padding: 0 22px 0 10px;
+        }
+
+            .page-tabs-content .menuTab.active {
+                border-bottom: 0;
+                background: #d5edfe;
+                font-weight: 700;
+                border-top: solid #4c58a4 2px;
+                color: #4c58a4;
+            }
+</style>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin: 0;">
+            <div id="leftPanel">
+                <ul class="nav nav-tabs" style="width: 100%; background-color: rgba(236, 247, 255, 1); padding-top: 0;">
+                    <li class="active"><a href="#JCTJ" data-toggle="tab">统计分析</a></li>               
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="JCTJ">
+                        <div id="TjItem" style="overflow: auto;">
+                            <p style="font-size: 14px; font-family: 微软雅黑; color: #000; font-weight: bold; padding-left: 10px; padding-top: 8px;">行政区划:</p>
+                            <ul>
+                                <li>
+                                    <div id="districtsCtls"></div>
+                                </li>
+                                <div style="clear: both;"></div>
+                            </ul>
+                            <p style="font-size: 14px; font-family: 微软雅黑; color: #000; font-weight: bold; padding-left: 10px;">统计单位:</p>
+                            <ul>
+                                <li>
+                                    <span class="spans">单位:</span><div id="level" type="selectTree" class="ui-select"></div>
+                                </li>
+                            </ul>
+                            <div style="clear: both;"></div>
+                            <p style="font-size: 14px; font-family: 微软雅黑; color: #000; font-weight: bold; padding-left: 10px;">统计条件:</p>
+                            <ul>
+                                <li>
+                                    <span class="spans">威胁人口 ≥:</span><div id="THREATENPEOPLE" type="selectTree" class="ui-select" />
+                                </li>
+                                <li>
+                                    <span class="spans">威胁财产 ≥:</span><div id="INDIRECTLOSS" type="selectTree" class="ui-select" />
+                                </li>
+                                <li>
+                                    <span class="spans">隐患点状态:</span><div id="YHSTATE" type="selectTree" class="ui-select" />
+                                </li>                               
+                            </ul>
+
+
+                            <div style="clear: both;"></div>
+
+
+                            <p style="font-size: 14px; font-family: 微软雅黑; color: #000; font-weight: bold; padding-left: 10px; padding-top: 8px;">统计内容:</p>
+                            <ul>
+                                <li>
+                                    <div style="line-height: 28px; display: none;">
+                                        <p>
+                                            <label style="margin: 0; min-width: 0">
+                                                <input type="checkbox" id="isSelectAllDeviceType" name="allselect" checked>全选
+                                            </label>
+                                            <label style="margin: 0; min-width: 0">
+                                                <input type="checkbox" id="invertselect" name="noselect">反选
+                                            </label>
+                                        </p>
+                                        <div style="display: flex; align-items: center; flex-wrap: wrap;">
+                                            <div class="lableall" style="display: flex; align-items: center; flex-wrap: wrap;">                                              
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="yhd" checked="checked">隐患点
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="yhdzhlx" checked="checked">灾害类型
+                                                </label>                                                                                             
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="zt" checked="checked">隐患点状态
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="qzwx" checked="checked">潜在威胁
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="gmdj" checked="checked">规模等级
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="wdx" checked="checked">稳定性
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="whx" checked="checked">危害性
+                                                </label>
+                                                <label>
+                                                    <input type="checkbox" name="deviceType" id="yxc" checked="checked">已消除
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li style="float: none; width: 100%;">
+                                    <span class="spans" style="width:120px;">统计内容固定模板:</span><div id="gdmb" type="select" class="ui-select" style="width:212px;margin:5px 0px;"></div>
+                                    <a class="btn btn-primary" href="javascript:;" onclick="StatisticeContext()" id="zdy">自定义统计内容</a>                                 
+                                </li>
+                                <li>
+                                    <a id="btn_Search" class="btn btn-primary" href="javascript:;" onclick="SearchEvent()"><i class="fa fa-search"></i>统计</a>
+                                </li>
+                                <div style="clear: both;"></div>
+                            </ul>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="layout2" style="height: 100%; width: 100%;">
+        <div class="ui-layout-north" style="height: 300px;" id="ui_map">
+            <div id="mapControl" style="height: 300px;"></div>
+        </div>
+        <div class="ui-layout-center" id="ui_grid">
+            <div id="tabListContentDiv"></div>
+            <div id="tab_content" class="tab-content" style="width: 100%; margin-top: 6px;">
+                <div class="tab-pane fade in active" id="TJJG">
+                    <div class="gridPanel">
+                        <table id="gridTableCount"></table>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="TJTB" style="width: 100%; position: relative;">
+                    <div style="width: 10%; float: right;">
+                        <div id="TBtype" type="select" style="width: 140px; display: inline-block; position: absolute; z-index: 10; right: 10px;" class="ui-select"></div>
+                    </div>
+                    <div id="chartsdata" style="width: 100%;"></div>
+                </div>
+                <div class="tab-pane fade in" id="TJSJCX" style="width: 100%; position: relative;">
+                    <div class="gridPanel">
+                        <table id="gridTablePoint"></table>
+                        <div id="gridPager"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+  
+    @System.Web.Optimization.Styles.Render(
+    "~/Content/styles/report.css")
+    @System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/plugins/districts/multiDistricts.js",
+    "~/Content/scripts/plugins/echarts/echarts4.min.js",
+    "~/Content/reportForMap.js",
+    "~/Content/scripts/plugins/infoearthcustom/tabControl.js"
+    )
+    @section Scripts{
+    <script>
+        var authToken = getAuthorizationToken();
+        var groupstr = "";
+        var whereSql = "";
+        var tabCtl, excelArr;
+        var allXData = [];
+        var allYData = [];
+        var queryJson = {};
+        var queryJson2 = {};
+        var showDta = [];
+        var colmns = [];
+        var isLoad = false;
+        var XZQHJWD = {};
+        var searchtab = {};
+        var dicCol = [
+            { key: 'area', value: '行政区划' },
+            { key: 'yhd', value: '隐患点' },
+
+            //灾害类型
+            { key: 'yhdhp', value: '滑坡', parent: '灾害类型', pid: "yhdzhlx" },  
+            { key: 'yhdbt', value: '崩塌', parent: '灾害类型', pid: "yhdzhlx" },
+            { key: 'yhdxp', value: '斜坡', parent: '灾害类型', pid: "yhdzhlx" },
+            { key: 'yhdnsl', value: '泥石流', parent: '灾害类型', pid: "yhdzhlx" },
+            { key: 'yhddmcj', value: '地面沉降', parent: '灾害类型', pid: "yhdzhlx" },
+            { key: 'yhddlf', value: '地裂缝', parent: '灾害类型', pid: "yhdzhlx" },
+            { key: 'yhddmtx', value: '地面塌陷', parent: '灾害类型', pid: "yhdzhlx" },
+
+            //隐患点状态
+            { key: 'ztxy', value: '现有隐患点', parent: '隐患点状态', pid: "zt" },
+            { key: 'ztyzl', value: '已治理', parent: '隐患点状态', pid: "zt" },
+            { key: 'ztybq', value: '已搬迁', parent: '隐患点状态', pid: "zt" },
+            { key: 'ztzrxw', value: '自然消亡', parent: '隐患点状态', pid: "zt" },
+
+            //潜在威胁
+            { key: 'qzwxcc', value: '威胁财产/（万元）', parent: '潜在威胁', pid: "qzwx" },
+            { key: 'qzwxccrk', value: '威胁人口/（人）', parent: '潜在威胁', pid: "qzwx" },
+
+            //规模等级
+            { key: 'gmdjxx', value: '小型', parent: '规模等级', pid: "gmdj" },  
+            { key: 'gmdjzx', value: '中型', parent: '规模等级', pid: "gmdj" },
+            { key: 'gmdjdx', value: '大型', parent: '规模等级', pid: "gmdj" },
+            { key: 'gmdjtdx', value: '特大型', parent: '规模等级', pid: "gmdj" },
+
+            //稳定性
+            { key: 'wdxh', value: '稳定性好', parent: '稳定性', pid: "wdx" },  
+            { key: 'wdxc', value: '稳定性较差', parent: '稳定性', pid: "wdx" },
+            { key: 'wdxjc', value: '稳定性差', parent: '稳定性', pid: "wdx" },
+            // {
+            //     key: 'whx', value: '危害性', children: [
+            //         { key: 'whxd', value: '危害性大', parent: '危害性', pid: "whx" }, //目前稳定性
+            //         { key: 'whxz', value: '危害性中', parent: '危害性', pid: "whx" },
+            //         { key: 'whxx', value: '危害性小', parent: '危害性', pid: "whx" }
+            //    ]
+            //},    
+            //危害性
+            { key: 'whxd', value: '危害性大', parent: '危害性', pid: "whx" },
+            { key: 'whxz', value: '危害性中', parent: '危害性', pid: "whx" },
+            { key: 'whxx', value: '危害性小', parent: '危害性', pid: "whx" },
+
+            //已消除
+            { key: 'yxczl', value: '已治理', parent: '已消除', pid: "yxc" },
+            { key: 'yxcbq', value: '已搬迁', parent: '已消除', pid: "yxc" },
+            { key: 'yxcxw', value: '自然消亡', parent: '已消除', pid: "yxc" },
+            { key: 'yxcrk', value: '威胁人口', parent: '已消除', pid: "yxc" },
+            { key: 'yxccc', value: '威胁财产', parent: '已消除', pid: "yxc" }
+            //{
+            //    key: 'mq', value: '目前稳定程度', children: [
+            //        { key: 'mqwd', value: '稳定', parent: '目前稳定程度', pid: "mq" }, //目前稳定性
+            //        { key: 'mqqzbwd', value: '基本稳定', parent: '目前稳定程度', pid: "mq" },
+            //        { key: 'mqbwd', value: '不稳定', parent: '目前稳定程度', pid: "mq" }
+            //    ]
+            //},           
+        ];
+
+        var dicJson = [
+            { key: '灾害点名称', value: 'DISASTERNAME' },
+            { key: '灾害点编号', value: 'UNIFIEDCODE' },
+            { key: '灾害点类型', value: 'DISASTERTYPE' },
+            { key: '省', value: 'PROVINCENAME' },
+            { key: '市', value: 'CITYNAME' },
+            { key: '县', value: 'COUNTYNAME' },
+            { key: '乡镇', value: 'TOWNNAME' },
+            { key: '地理位置', value: 'LOCATION' },
+            { key: '经度', value: 'LONGITUDE' },
+            { key: '纬度', value: 'LATITUDE' },
+            { key: '野外编号', value: 'OUTDOORCODE' },
+            { key: '室内编号', value: 'INDOORCODE' },
+            { key: '灾害等级', value: 'DISASTERLEVEL' },
+            { key: '险情等级', value: 'DANGERLEVEL' },
+            { key: '地下水类型', value: 'GROUNDWATERTYPE' },
+            { key: '防治建议', value: 'TREATMENTSUGGESTION' },
+            { key: '构造部位', value: 'TECTONICREGION' },
+            { key: '监测建议', value: 'MONITORSUGGESTION' },
+            { key: '今后变化趋势', value: 'STABLETREND' },
+            { key: '目前稳定程度', value: 'CURSTABLESTATUS' },
+            { key: '威胁财产', value: 'THREATENASSETS' },
+            { key: '威胁人口', value: 'THREATENPEOPLE' },
+            { key: '隐患点', value: 'HIDDENDANGER' },
+            { key: '毁坏房屋', value: 'DESTROYEDHOME' },
+            { key: '毁路', value: 'DESTROYEDROAD' },
+            { key: '毁渠', value: 'DESTROYEDCANAL' },
+            { key: 'X', value: 'X' },
+            { key: 'Y', value: 'Y' },
+            { key: 'Z', value: 'Z' }
+        ];
+        $(function () {
+            InitializePage();
+            InitialzieCombox();
+            Initialize();
+            tabCtl = $("#tabListContentDiv").tabCtlInit({ hasReport: true, toolWidth: 270 });
+            GetMapData();
+            GetGrid_Count("gridTableCount", "chartsdata", "TBtype");
+            //全选
+            $('#isSelectAllDeviceType').click(function () {
+                var checked = $(this)[0].checked;
+                $("input[name='deviceType']").each(function () {
+                    $(this)[0].checked = checked;
+                });
+                if (checked == true) {
+                    $("#invertselect")[0].checked = false;
+                }
+            });
+
+            //反选
+            $('#invertselect').click(function () {
+                var checked = $(this)[0].checked;
+                $("input[name='deviceType']").each(function () {
+                    $(this)[0].checked = !checked;
+                });
+                if (checked == true) {
+                    $("#isSelectAllDeviceType")[0].checked = false;
+                }
+            });
+        });
+
+        function CreplaceE(UnionStatisticsSql) {
+            for (var i = 0; i < dicJson.length; i++) {
+                var reg1 = new RegExp(dicJson[i].value, "g");
+                UnionStatisticsSql = UnionStatisticsSql.replace(reg1, dicJson[i].key);
+            }
+            return UnionStatisticsSql
+        }
+
+        //初始化页面
+        function InitializePage() {
+            $('#ui_map').height($(window).height() * 0.53);
+            $('#mapControl').height($(window).height() * 0.53);
+            //layout布局
+            $('#layout').layout({
+                applyDemoStyles: true,
+                west__size: 260,
+                onresize: function () {
+                    if (isResize < 10) {
+                        isResize++;
+                    }
+                    resize();
+                }
+            });
+            var isResize = 0;
+            var count = 0;
+            var resized = 0;
+            $('#layout2').layout({
+                applyDemoStyles: true,
+                onresize: function () {
+                    resize();
+                    if (isResize > 1) {
+                        resized = 1;
+                    } else {
+                        if (count == 1 || resized == 0) {
+                            $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                        }
+                    }
+                    count++;
+                }
+            });
+            //resize重设布局;
+            $(window).resize(function (e) {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+                e.stopPropagation();
+            });
+
+            function resize() {
+                window.setTimeout(function () {
+                    if (mapCtlExt) {
+                        mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                    }
+                    $('#gridTableCount').setGridWidth($('.gridPanel').width() - 5);
+                    $('#gridTablePoint').setGridWidth($('.gridPanel:eq(1)').width() - 5);
+                    $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width());
+                    $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width());
+                    $('#gridTableCount').setGridHeight($(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - $(".ui-jqgrid-hdiv").height() - 30);
+                    $('#gridTablePoint').setGridHeight($(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - $(".ui-jqgrid-hbox").height() - 78);
+                    var H1 = $('#gridTableCount').height() ? ($(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - $(".ui-jqgrid-hdiv").height() - 30) : ($(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - $(".ui-jqgrid-hbox").height() - 78);
+                    $('.ui-jqgrid-bdiv').height(H1);
+                    $("#TjItem").height($("#layout .ui-layout-west").height() - $("#layout .nav-tabs").height() - 15);
+                    $("#YBCTJ_UI").height($("#TjItem").height());
+                    $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height());
+                    $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+                    $('#chartsdata').width($('#ui_grid').width());
+                    $('#chartsdata').height($('#ui_grid').height() - $("#tabListContentDiv").height() - 5);
+                    var myChart = echarts.init(document.getElementById("chartsdata"));
+                    myChart.resize();
+                }, 200);
+            };
+            resize();
+        }
+        //初始化下拉框
+        function InitialzieCombox() {
+            //行政区划加载
+            var html = " <table><tr><td class=\"formTitle\" style=\"\">省:</td><td> <div id=\"PROVINCE\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin: 8px; \"></div></td></tr>" +
+                "<tr><td class=\"formTitle\">市:</td><td><div id=\"CITY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin: 8px;\"></div></td></tr>" +
+                "<tr><td class=\"formTitle\">区:</td><td><div id=\"COUNTY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin: 8px;\"></div> </td></tr></table>";
+            var usercode = usercodes();
+            var district = $("#districtsCtls").mulDistrictsCtl({
+                provinceId: usercode.provinceId,
+                selectProviceId: usercode.provinceId,
+                selectCityId: usercode.selectCityId,
+                selectCounty: usercode.selectCounty,
+                type: 'B',
+                html: html
+            });
+            //行政区划改变下面选择市县的条件
+            $("#districtsCtls").change(function () {
+                if ($("#districtsCtls #PROVINCE").find(".ui-select-text").text() == "") {
+                    $("#level").ComboBoxSetValue("省");
+                } else if ($("#districtsCtls #CITY").find(".ui-select-text").text() == '选择市') {
+                    $("#level").ComboBoxSetValue("市");
+                } else {
+                    $("#level").ComboBoxSetValue("县");
+                }
+            })
+            //统计单位
+            $("#level").ComboBox({
+                id: "value",
+                text: "label",
+                height: "170px",
+                data: [
+                    { label: "省", value: "省" },
+                    { label: "市", value: "市" },
+                    { label: "县", value: "县" },
+                    //{ label: "乡镇", value: "乡镇" }
+                ],
+                Itemindex: 1
+            });
+            //威胁人口
+            $("#THREATENPEOPLE").ComboBox({
+                id: "value",
+                text: "label",
+                height: "170px",
+                data: [                
+                    { label: "100", value: "100" },
+                    { label: "1000", value: "1000" },
+                ],
+                Itemindex: 1
+            });
+            $("#THREATENPEOPLE").ComboBoxSetValue("100");
+            //威胁财产
+            $("#INDIRECTLOSS").ComboBox({
+                id: "value",
+                text: "label",
+                height: "170px",
+                data: [                   
+                    { label: "10", value: "10" },
+                    { label: "100", value: "100" },
+                    { label: "1000", value: "1000" },
+                ],
+                Itemindex: 1
+            });
+            $("#INDIRECTLOSS").ComboBoxSetValue("10");
+            var datavalue = [            
+                { label: "隐患点状态", value: "sjzt" },
+                { label: "灾害类型", value: "zhlx" },
+                { label: "潜在威胁", value: "qzwx" },
+                { label: "规模等级", value: "gmdj" },
+                { label: "稳定性", value: "wdx" },
+                { label: "危害性", value: "whx" },
+                { label: "已消除", value: "yxc" }
+            ];
+            var datavalue2 = [              
+                { label: "隐患点状态", value: "sjzt" },
+                { label: "灾害类型", value: "zhlx" },
+                { label: "潜在威胁", value: "qzwx" },
+                { label: "规模等级", value: "gmdj" },
+                { label: "稳定性", value: "wdx" },
+                { label: "危害性", value: "whx" }         
+            ];
+            initCombox(datavalue);
+            //隐患点状态
+            $("#YHSTATE").ComboBox({
+                id: "value",
+                text: "label",
+                height: "170px",
+                data: [              
+                    { label: "现有隐患点", value: "xyyhd" },
+                    { label: "自然消亡", value: "zrxh" },
+                    { label: "已治理", value: "yzl" },
+                    { label: "已搬迁", value: "ybq" },
+                ]
+            }).bind("change", function () {
+                var value = $(this).attr('data-value');                
+                if (value == "xyyhd") {
+                    datavalue = datavalue2;
+                }              
+                initCombox(datavalue);
+                });
+            $("#YHSTATE").ComboBoxSetValue("xyyhd");
+            if (!usercode.provinceId) {
+                $("#level").ComboBoxSetValue("省");
+            } else if (!usercode.selectCityId) {
+                $("#level").ComboBoxSetValue("市");
+            } else {
+                $("#level").ComboBoxSetValue("县");
+            }
+        }
+        function initCombox(datavalue) {
+            $("#gdmb").ComboBox({
+                id: "value",
+                text: "label",
+                height: "170px",
+                data: datavalue
+            }).bind("change", function () {
+                var value = $(this).attr('data-value');
+                if (value != "") {
+                    $("#zdy").attr("disabled", "disabled");
+                } else {
+                    $("#zdy").removeAttr("disabled");
+                    searchtab["tabvalue"] = "";
+                    wdqury = {}; fzjyqury = {}; zhyxqury = {}; zhlxqury = {};
+                }
+                if (value == "sjzt" || value == "zhlx" || value == "qzwx" || value == "gmdj" || value == "wdx" || value == "whx" || value == "yxc"){
+                    wdqury = {}; fzjyqury = {}; zhyxqury = {}; zhlxqury = {};
+                    zhlxqury.allzh = 0; zhlxqury.dangerousCount = 0; zhlxqury.huap = 0; zhlxqury.zhlxbengt = 0; zhlxqury.zhlxdilf = 0; zhlxqury.zhlxdimcj = 0; zhlxqury.zhlxnisl = 0; zhlxqury.zhlxtax = 0; zhlxqury.zhlxxiep = 0;
+                    wdqury.allwendbxqk = 0; wdqury.wdwendxc = 0; wdqury.wdwendxh = 0; wdqury.wdwendxjc = 0;
+                    zhyxqury.allzhyxjqzwx = 0; zhyxqury.qianzwxweixcc = 0; zhyxqury.qianzwxweixrk = 0;
+                    fzjyqury.allzxq = 0; fzjyqury.xqdx = 0; fzjyqury.xqxx = 0; fzjyqury.xqzx = 0; fzjyqury.zqdx = 0; fzjyqury.zqtdx = 0; fzjyqury.zqxx = 0; fzjyqury.zqzx = 0; 
+                }
+                if (value == "sjzt") {//隐患点状态                              
+                    searchtab["tabvalue"] = "sjzt";                   
+                } else if (value == "zhlx") {//灾害类型
+                    searchtab["tabvalue"] = "zhlx";                                    
+                } else if (value == "qzwx") {//潜在威胁
+                    searchtab["tabvalue"] = "qzwx";                 
+                } else if (value == "gmdj") {//规模等级
+                    searchtab["tabvalue"] = "gmdj";                  
+                } else if (value == "wdx") {//稳定性
+                    searchtab["tabvalue"] = "wdx";                  
+                } else if (value == "whx") {//危害性
+                    searchtab["tabvalue"] = "whx";                  
+                } else if (value == "yxc") {//以消除
+                    searchtab["tabvalue"] = "yxc";
+                }
+            });       
+        }
+        //初始化统计条件
+        function Initialize() {
+            //加载统计内容
+            for (var i = 0; i < dicCol.length; i++) {
+                if (dicCol[i] != null) {
+                    var width = 80;
+                    if (dicCol[i].key == "area") {
+                        width = 200;
+                        colmns.push({
+                            label: dicCol[i].value, name: dicCol[i].key, index: dicCol[i].key, width: width, align: 'left', sortable: false, formatter: function (cellValue, options, rowData) {
+                                //console.log(cellValue, options, rowData);
+                                var code = "";
+                                if (rowData["county"]) {
+                                    code = rowData["county"];
+                                }
+                                else if (rowData["city"]) {
+                                    code = rowData["city"];
+                                }
+                                else if (rowData["province"]) {
+                                    code = rowData["province"];
+                                }
+                                var html = '<a href="javascript:;" onclick="addOneTab(\'' + cellValue + '\',\'' + code + '\')">' + cellValue + '</a>';
+                                return html;
+                            }
+                        });
+                    }
+                    else {
+                        showDta.push(dicCol[i]);
+                        colmns.push({ label: dicCol[i].value, name: dicCol[i].key, index: dicCol[i].key, width: width, align: 'left', sortable: false });
+                    }
+                }
+            }
+            //获取统计条件
+            queryJson = $("#TjItem").getWebControls();
+        }
+
+        //获取值
+        function GetValue(v, p) {
+            for (var i = 0; i < dicCol.length; i++) {
+                var t = dicCol[i];
+                if (v == t.value) {
+                    if (p == undefined)
+                        return t.key;
+                    if (p != undefined && t.parent == p) {
+                        return t.key;
+                    }
+                }
+            }
+            return null;
+        }
+
+        //统计按钮点击
+        function SearchEvent() {
+            queryJson = $("#TjItem").getWebControls();
+
+
+            if (queryJson.level == "") {
+                queryJson.level = "市";
+            }
+            queryJson.sqlWhere = whereSql;
+            queryJson["UnionStatisticsSql"] = UnionStatisticsSql;
+            showDta = [];
+            var isZHLX = false;
+            $("input[name='deviceType']").each(function () {
+                if ($(this)[0].checked == true) {
+                    var id = $(this)[0].id;
+                    for (var i = 0; i < dicCol.length; i++) {
+                        if (dicCol[i].pid == id) {
+                            showDta.push(dicCol[i]);
+                            if (id == 'zhlx') {
+                                isZHLX = true;
+                            }
+                        }
+                        else if (dicCol[i].key == id) {
+                            showDta.push(dicCol[i]);
+                        }
+                    }
+                }
+            });
+            //隐患点灾害类型显示
+            if (isZHLX) {
+                $.each(dicCol, function (index, item) {
+                    if (item.pid == 'yhdzhlx') {
+                        showDta.push(item);
+                    }
+                })
+            }
+            changeTabs(queryJson);
+            var str = $("#tabListContentDiv .menuTab.active").text();
+            if (zhlxqury.disasterCount == "1") {
+                str = "灾害点";
+            }
+            str = str.replace(/\s+/g, "");
+            Search("gridTableCount", "chartsdata", "TBtype", str);
+        }
+
+        //统计按钮
+        function Search(a, b, c, str) {
+            var $gridTableCount = $('#' + a);
+            //查询数据
+            $gridTableCount.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+                url: "../../api/TBL_HAZARDBASICINFO_PC_GDApi/GetAnalyseList",
+                gridComplete: function () {
+                    $('#gridTableCount').setGridWidth($('.gridPanel').width() - 5);
+                    $('#gridTableCount').setGridHeight($(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - $(".ui-jqgrid-hdiv").height() - 30);
+                    if (JSON.stringify(searchtab) != "{}") {
+                        if (searchtab.tabvalue == "sjzt") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+                        } else if (searchtab.tabvalue == "zhlx"){                          
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+
+                        } else if (searchtab.tabvalue == "qzwx") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+
+                        } else if (searchtab.tabvalue == "gmdj") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+
+                        } else if (searchtab.tabvalue == "wdx") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+
+                        } else if (searchtab.tabvalue == "whx") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+
+                        } else if (searchtab.tabvalue == "yxc") {
+                            var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                            gbjiedian.trigger("click");
+                            var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                            gbjiedian2.trigger("click");
+                            var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                            gbjiedian3.trigger("click");
+                            var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                            gbjiedian4.trigger("click");
+                            var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                            gbjiedian5.trigger("click");
+                            var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                            gbjiedian6.trigger("click");
+                            var gbjiedian1 = $("#tabListContentDiv .menuTab[data-id=tab_chart]").next();
+                            gbjiedian1.trigger("click");
+                        }
+                    }    
+                    if (JSON.stringify(zhlxqury) != "{}" || JSON.stringify(wdqury) != "{}" || JSON.stringify(zhyxqury) != "{}" || JSON.stringify(fzjyqury) != "{}"){
+                        var gbjiedian = $("#tabListContentDiv .menuTab[data-id=tab_zt]").next();
+                        gbjiedian.trigger("click");
+                        var gbjiedian2 = $("#tabListContentDiv .menuTab[data-id=tab_yhd]").next();
+                        gbjiedian2.trigger("click");
+                        var gbjiedian3 = $("#tabListContentDiv .menuTab[data-id=tab_qzwx]").next();
+                        gbjiedian3.trigger("click");
+                        var gbjiedian4 = $("#tabListContentDiv .menuTab[data-id=tab_gmdj]").next();
+                        gbjiedian4.trigger("click");
+                        var gbjiedian5 = $("#tabListContentDiv .menuTab[data-id=tab_whx]").next();
+                        gbjiedian5.trigger("click");
+                        var gbjiedian6 = $("#tabListContentDiv .menuTab[data-id=tab_wdx]").next();
+                        gbjiedian6.trigger("click");
+                        var gbjiedian7 = $("#tabListContentDiv .menuTab[data-id=tab_yxc]").next();
+                        gbjiedian7.trigger("click");                      
+                    }
+                    if (JSON.stringify(zhlxqury) != "{}") {//灾害类型
+                       
+                        if (zhlxqury.huap == "1") {
+                            showColmns("","yhdhp");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhdhp");
+                        }
+                        if (zhlxqury.zhlxbengt == "1") {
+                            showColmns("", "yhdbt");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhdbt");
+                        }
+                        if (zhlxqury.zhlxdilf == "1") {
+                            showColmns("", "yhddlf");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhddlf");
+                        }
+                        if (zhlxqury.zhlxdimcj == "1") {
+                            showColmns("", "yhddmcj");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhddmcj");
+                        }
+                        if (zhlxqury.zhlxnisl == "1") {
+                            showColmns("", "yhdnsl");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhdnsl");
+                        }
+                        if (zhlxqury.zhlxtax == "1") {
+                            showColmns("", "yhddmtx");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhddmtx");
+                        }
+                        if (zhlxqury.zhlxxiep == "1") {
+                            showColmns("", "yhdxp");
+                        } else {
+                            $('#gridTableCount').jqGrid("hideCol", "yhdxp");
+                        }
+                    }
+                    if (JSON.stringify(wdqury) != "{}") {//稳定性及隐患点状态
+                        if (zhlxqury.wdwendxc == "1") {
+
+                        } else { }
+                        if (zhlxqury.wdwendxh == "1") {
+
+                        } else { }
+                        if (zhlxqury.wdwendxjc == "1") {
+
+                        } else { }                     
+                    }
+                    if (JSON.stringify(zhyxqury) != "{}") {//灾害影响及潜在威胁
+                        if (zhlxqury.qianzwxweixcc == "1") {
+
+                        } else { }
+                        if (zhlxqury.qianzwxweixrk == "1") {
+
+                        } else { }                      
+                    }
+                    if (JSON.stringify(fzjyqury) != "{}") {//灾害体规模及灾害性
+                        if (zhlxqury.xqdx == "1") {
+
+                        } else { }
+                        if (zhlxqury.xqxx == "1") {
+
+                        } else { }
+                        if (zhlxqury.xqzx == "1") {
+
+                        } else { }
+                        if (zhlxqury.zqdx == "1") {
+
+                        } else { }
+                        if (zhlxqury.zqtdx == "1") {
+
+                        } else { }
+                        if (zhlxqury.zqxx == "1") {
+
+                        } else { }
+                        if (zhlxqury.zqzx == "1") {
+
+                        } else { }
+                    }
+                },
+                loadComplete: function (jsondata) {
+                    groupstr = "";
+                    var coldata = [], teststr = "", allYData = [];
+                    for (var i = 0; i < showDta.length; i++) {
+                        if (showDta[i].key != "area") {
+                            var temp = [];
+                            //取出所有数据
+                            if (showDta[i].key == "gmdj" || showDta[i].key == "wdx" || showDta[i].key == "zt") {
+                                if (dicCol[i].key == "yhd") {//只加载灾害点和隐患点统计图表
+                                    coldata.push({ text: dicCol[i].value, 'value': dicCol[i].key });
+                                }
+                                groupstr += showDta[i].value + ",";
+                                allYData[showDta[i].key] = {};
+                                for (var k = 0; k < showDta[i].children.length; k++) {
+                                    temp = [];
+                                    if (jsondata != null && jsondata.length > 0) {
+                                        for (var j = 0; j < jsondata.length; j++) {
+                                            temp.push(jsondata[j][showDta[i].children[k].key]);
+                                        };
+                                    }
+                                    allYData[showDta[i].key][showDta[i].children[k].key] = {
+                                        name: showDta[i].children[k].value, type: "bar", data: temp,
+                                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                                    };
+                                };
+
+                            } else if (showDta[i].pid == "zq" || showDta[i].pid == "mq" || showDta[i].pid == "jh" || showDta[i].pid == "xq") {
+                                if (teststr.indexOf(showDta[i].pid) == -1) {
+                                    coldata.push({ text: showDta[i].parent, 'value': showDta[i].pid });
+                                    groupstr += showDta[i].parent + ",";
+                                    allYData[showDta[i].pid] = {};
+                                }
+                                teststr += showDta[i].pid + ","
+                                if (jsondata != null && jsondata.length > 0) {
+                                    for (var j = 0; j < jsondata.length; j++) {
+                                        temp.push(jsondata[j][showDta[i].key]);
+                                    };
+                                }
+                                allYData[showDta[i].pid][showDta[i].key] = {
+                                    name: showDta[i].value, type: "bar", data: temp,
+                                    itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                                };
+                                //console.log(allYData);
+                                //console.log(temp);
+                            } else {
+                                coldata.push({ text: showDta[i].value, 'value': showDta[i].key });
+                                if (jsondata != null && jsondata.length > 0) {
+                                    for (var j = 0; j < jsondata.length; j++) {
+                                        temp.push(jsondata[j][showDta[i].key]);
+                                    };
+                                }
+                                allYData[showDta[i].key] = {
+                                    name: showDta[i].value, type: "bar", data: temp,
+                                    itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                                };
+                            }
+                        }
+                    }
+
+                    allXData = [];
+                    for (var i = 0; i < jsondata.length; i++) {
+                        var temp = "";
+                        if (jsondata[i].townname != null)
+                            temp = jsondata[i].townname;
+                        else if (jsondata[i].countyname != null)
+                            temp = jsondata[i].countyname;
+                        else if (jsondata[i].cityname != null)
+                            temp = jsondata[i].cityname;
+                        else if (jsondata[i].provincename != null)
+                            temp = jsondata[i].provincename;
+                        allXData.push(temp);
+                    }
+
+                    //统计图表类型
+                    $("#" + c).ComboBox({
+                        data: coldata,
+                        id: "value",
+                        text: "text",
+                        height: '200px',
+                        selectOne: true,
+                        description: ""
+                    }).bind("change", function () {
+                        var value = $(this).attr('data-value');
+                        var text = $(this).attr('data-text');
+                        LoadChart([text], allYData[value], Getpix(value), b);
+                    });
+
+                    var xdata = [showDta[0].value];
+                    var ydata = allYData[showDta[0].key];
+                    LoadChart(xdata, ydata, Getpix(showDta[0].key), b);
+                }
+            }).trigger('reloadGrid');
+
+            //控制显示列
+            HideValue(a);
+            showColmns(str, a);
+            BindMapMarker_count(queryJson, str);
+        }
+
+        //获取单位
+        function Getpix(key) {
+           if (key == "wxcc")
+                return "万元";
+            else if (key == "wxrk")
+                return "人";
+            return "个";
+        }
+
+        //隐藏列
+        function HideValue(a) {
+            var colms = [];
+            for (var i = 0; i < dicCol.length; i++) {
+                colms.push(dicCol[i].key);
+            }
+            $('#' + a).jqGrid("hideCol", colms);
+        }
+
+        //显示列
+        function showColmns(str, a) {
+            var showCol = ["area"];
+            for (var i = 0; i < showDta.length; i++) {
+                if (str == "危害性" && showDta[i].value == "危害性") {
+                    for (var a = 0; a < showDta[i].children.length; a++) {
+                        showCol.push(showDta[i].children[a].key);
+                    }
+                } else if (showDta[i].parent == str || showDta[i].value == str) {
+                        showCol.push(showDta[i].key);
+                }             
+                if (str == "隐患点" && showDta[i].pid == "yhdzhlx") {
+                    showCol.push(showDta[i].key);
+                }
+            }
+            $('#' + a).jqGrid("showCol", showCol);                                      
+        }
+
+        //加载统计表格
+        function GetGrid_Count(id, chartId, typeId) {
+            var $gridTableCount = $('#' + id);
+            var selectedRowIndex = 0;
+            $gridTableCount.jqGrid({
+                autowidth: true,
+                postData: { queryJson: JSON.stringify(queryJson) },
+                //height: gridH,
+                url: "../../api/TBL_HAZARDBASICINFO_PC_GDApi/GetAnalyseList",
+                datatype: "json",
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                treeGrid: true,
+                treeGridModel: "adjacency",
+                ExpandColumn: "area",
+                colModel: colmns,
+                treeReader: { level_field: "level", parent_id_field: "parent_field", leaf_field: "isLeaf", expanded_field: "expanded" },
+                shrinkToFit: false,
+                gridview: true,
+                onSelectRow: function (rowId, status) {
+                    //selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                    console.log(rowId, status);
+                    //console.log(selectedRowIndex);
+                    var dt = $('#' + this.id).jqGrid("getRowData", rowId);
+                    var data = [];
+                    data.push({ longitude: XZQHJWD[rowId][0], latitude: XZQHJWD[rowId][1] });
+                    mapCtlExt.addLocation(data, false, 3);
+                },
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+                    $('#gridTableCount').setGridWidth(($('.gridPanel').width() - 5));
+                    //$('#gridTableA').setGridWidth(($(window).width() - 5));
+                },
+                loadComplete: function (jsondata) {
+                    groupstr = "";
+                    var coldata = [];
+                    for (var i = 0; i < dicCol.length; i++) {
+                        if (dicCol[i].key != "area") {
+                            if (dicCol[i].key == "yhd") {
+                                coldata.push({ text: dicCol[i].value, 'value': dicCol[i].key });
+                            }
+                            //取出所有数据
+                            var temp = [];
+                            if (dicCol[i].key == "gmdj" || dicCol[i].key == "wdx" || dicCol[i].key == "zt"){
+                                groupstr += dicCol[i].value + ",";
+                                allYData[dicCol[i].key] = {};
+                                for (var k = 0; k < dicCol[i].children.length; k++) {
+                                    temp = [];
+                                    if (jsondata != null && jsondata.length > 0) {
+                                        for (var j = 0; j < jsondata.length; j++) {
+                                            temp.push(jsondata[j][dicCol[i].children[k].key]);
+                                        };
+                                    }
+                                    allYData[dicCol[i].key][dicCol[i].children[k].key] = {
+                                        name: dicCol[i].children[k].value, type: "bar", data: temp,
+                                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                                    };
+                                }
+                            } else {
+                                if (jsondata != null && jsondata.length > 0) {
+                                    for (var j = 0; j < jsondata.length; j++) {
+                                        temp.push(jsondata[j][dicCol[i].key]);
+                                    };
+                                }
+                                allYData[dicCol[i].key] = {
+                                    name: dicCol[i].value, type: "bar", data: temp,
+                                    itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                                };
+                            }
+                        }
+                    }
+
+                    allXData = [];
+                    for (var i = 0; i < jsondata.length; i++) {
+                        var temp = "";
+                        if (jsondata[i].townname != null)
+                            temp = jsondata[i].townname;
+                        else if (jsondata[i].countyname != null)
+                            temp = jsondata[i].countyname;
+                        else if (jsondata[i].cityname != null)
+                            temp = jsondata[i].cityname;
+                        else if (jsondata[i].provincename != null)
+                            temp = jsondata[i].provincename;
+                        allXData.push(temp);
+                    }
+
+                    //统计图表类型
+                    $("#" + typeId).ComboBox({
+                        data: coldata,
+                        id: "value",
+                        text: "text",
+                        height: '200px',
+                        selectOne: true,
+                        description: ""
+                    }).bind("change", function () {
+                        var value = $(this).attr('data-value');
+                        var text = $(this).attr('data-text');
+                        LoadChart([text], allYData[value], Getpix(value), chartId);
+                    });
+
+                    var xdata = [showDta[0].value];
+                    var ydata = allYData.yhd;
+                    LoadChart(xdata, ydata, Getpix(showDta[0].key), chartId);
+                }
+            });
+
+            //组合列头
+            var group = [];
+            //$("input[name='deviceType']").each(function () {
+            //    var id = $(this)[0].id;
+            //    var count = 0;
+            //    var name = "";
+            //    var first = "";
+            //    for (var i = 0; i < dicCol.length; i++) {
+            //        if (dicCol[i].pid == id) {
+            //            if (count == 0) {
+            //                name = dicCol[i].parent;
+            //                first = dicCol[i].key;
+            //            }
+            //            count += 1;
+            //        }
+
+            //    }
+            //    group.push({ startColumnName: first, numberOfColumns: count, titleText: name });
+            //});
+            var flag = ""; var flagCount = 0; var falgKey = ""; var falgTitle = "";
+            $(dicCol).each(function (index, item) {
+                if (item.pid) {
+                    if (!flag) {
+                        flag = item.pid;
+                        falgKey = item.key;
+                        falgTitle = item.parent;
+                    }
+                    if (flag != item.pid) {//如果下一个和上一个不同则合并表头
+                        group.push({ startColumnName: falgKey, numberOfColumns: flagCount, titleText: falgTitle });
+                        flag = item.pid;
+                        falgKey = item.key;
+                        falgTitle = item.parent;
+                        flagCount = 1;
+                    }
+                    else if (index == dicCol.length - 1) {//最后一个
+                        group.push({ startColumnName: falgKey, numberOfColumns: flagCount + 1, titleText: falgTitle });
+                    }
+                    else {
+                        flagCount++;
+                    }
+                }
+            });
+
+
+            $gridTableCount.jqGrid("setGroupHeaders", {
+                useColSpanStyle: true,
+                groupHeaders: group
+            });
+            //控制显示列
+            HideValue(id);      
+            showColmns("灾害类型", id);
+            changeTabs(queryJson);
+            BindMapMarker_count(queryJson, "灾害类型");
+        }
+
+        //加载查询表格
+        function GetGrid_Point(obj) {
+            var gridH = $(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - 82;
+            var selectedRowIndex = 0;
+            var queryJson = {};
+            queryJson["PROVINCE"] = obj["province"];
+            queryJson["CITY"] = obj["city"];
+            queryJson["COUNTY"] = obj["county"];
+            queryJson["SelectType"] = obj["SelectType"];
+            queryJson["PROJECTTYPE"] = "调查";
+            queryJson["TYPE"] = "查询";
+            dtq["PROVINCE"] = obj["province"];
+            dtq["CITY"] = obj["city"];
+            dtq["COUNTY"] = obj["county"];
+             BindMapMarker_count(dtq, "灾害点");
+            $("#TJSJCX").empty();
+            var html = "<div class=\"gridPanel\"><table id=\"gridTablePoint\"></table><div id=\"gridPager\"></div></div>";
+            $("#TJSJCX").append(html);
+            var $gridTable = $('#gridTablePoint');
+            BindMapMarker(queryJson);
+            $gridTable.jqGrid({
+                autowidth: true,
+                height: gridH,
+                mtype: 'POST',
+                postData: { queryJson: JSON.stringify(queryJson) },
+                url: "../../api/TBL_HAZARDBASICINFOApi/PostPageListJson",
+                datatype: "json",
+                loadBeforeSend: function (a) {
+                    if (authToken != null)
+                        a.setRequestHeader("Authorization", authToken);
+                },
+                colModel: [
+                    { label: '主键', name: 'GUID', index: 'GUID', width: 250, align: 'left', sortable: true, hidden: true },
+                    { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 250, align: 'left', sortable: true },
+                    { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 300, align: 'left', sortable: true },
+                    { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 200, align: 'left', sortable: true },
+                    {
+                        label: '灾情等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 150, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            return getInfoTop().learun.data.get(["dataItem", "DISASTERLEVEL", cellvalue]);
+                        }
+                    },
+                    {
+                        label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 150, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            return getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", cellvalue]);
+                        }
+                    },
+                    { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 500, align: 'left', sortable: true },
+                    { label: '市', name: 'CITY', index: 'CITY', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '市名称', name: 'CITYNAME', index: 'CITYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '县', name: 'COUNTY', index: 'COUNTY', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '县名称', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '目前稳定程度', name: 'CURSTABLESTATUS', index: 'CURSTABLESTATUS', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '今后变化趋势', name: 'STABLETREND', index: 'STABLETREND', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '威胁人口', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '威胁财产', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '死亡人口', name: 'DEATHTOLL', index: 'DEATHTOLL', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '财产损失', name: 'ASSETSLOSE', index: 'ASSETSLOSE', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '隐患点', name: 'HIDDENDANGER', index: 'HIDDENDANGER', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '监测建议', name: 'MONITORSUGGESTION', index: 'MONITORSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '修改日期', name: 'MODIFYTIME', index: 'MODIFYTIME', width: 100, align: 'left', sortable: true, hidden: true }
+
+                ],
+                viewrecords: true,
+                rowNum: 30,
+                rowList: [30, 50, 100],
+                pager: "#gridPager",
+                sortname: 'MODIFYTIME',
+                sortorder: 'desc',
+                rownumbers: true,
+                shrinkToFit: true,
+                gridview: true,
+                onSelectRow: function (rowId, status) {
+                    selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                    var dt = $gridTable.jqGrid("getRowData", rowId);
+                    var data = [];
+                    data.push({ longitude: dt.LONGITUDE, latitude: dt.LATITUDE });
+                    mapCtlExt.addLocation(data, false);
+                },
+                gridComplete: function (data) {
+                    $('#gridTablePoint').setGridWidth($('.gridPanel:eq(1)').width() - 5);
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+
+
+
+                }
+            });
+        }
+        //加载地图marker
+        function BindMapMarker(queryJson) {
+            $.ajax({
+                url: "../../api/TBL_HAZARDBASICINFOApi/GetZYListJson",
+                data: { queryJson: JSON.stringify(queryJson) },
+                beforeSend: function (a) {
+                    if (authToken != null)
+                        a.setRequestHeader("Authorization", authToken);
+                },
+                type: "get",
+                dataType: 'json',
+                success: function (data) {
+
+                    var returnValue = [];
+                    var type = [];
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].DANGERLEVEL == null) {
+                            data[i].DANGERLEVEL = "";
+                        }
+                        if (data[i].THREATENPEOPLE == null) {
+                            data[i].THREATENPEOPLE = "";
+                        }
+                        if (data[i].THREATENASSETS == null) {
+                            data[i].THREATENASSETS = "";
+                        }
+                        //详情页面
+                        var divhtml = '<div style="font-weight: bold;"></div>';
+                        divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">灾害点名称：</span><span>' + data[i].DISASTERNAME + '</span></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害类型：</span><span>' + data[i].DISASTERTYPE + '</span></div>';
+                        divhtml += '<div><input type="hidden" id="keyID" value="' + data[i].UNIFIEDCODE + '"/></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点编号：</span><span>' + data[i].UNIFIEDCODE + '</span></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁人口(人)：</span><span>' + data[i].THREATENPEOPLE + '</span></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁财产(万元)：</span><span>' + data[i].THREATENASSETS + '</span></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">险情等级：</span><span>' + getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", data[i].DANGERLEVEL]) + '</span></div>';
+                        divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">地理位置：</span><span>' + data[i].LOCATION + '</span></div>';
+                        //divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="MapViewDetail(\'' + data[i].DISASTERTYPE + "," + data[i].UNIFIEDCODE + '\')" href="#" class="link-detail">详细信息</a></span>';
+                        var longitude = 0, latitude = 0;
+                        if (data[i].LONGITUDE) {
+                            longitude = parseFloat(data[i].LONGITUDE);
+                        }
+                        if (data[i].LATITUDE) {
+                            latitude = parseFloat(data[i].LATITUDE);
+                        }
+                        returnValue.push({ id: "all", url: "../../Content/images/" + data[i].DISASTERTYPE + "-16.png", location: [longitude, latitude], popupHtml: divhtml });
+
+                    }
+                    mapCtlExt.addMarker(returnValue);
+                }, error: function (e) {
+                },
+                cache: false
+            });
+
+        };
+
+        //地图详情
+        function MapViewDetail(type) {
+            var keyValue = type.split(",")[1];
+            var types = type.split(",")[0];
+            var title = types;
+            if (types == "滑坡") {
+                types = "001"
+            } else if (types == "崩塌") {
+                types = "002"
+            } else if (types == "泥石流") {
+                types = "003"
+            } else if (types == "地面沉降") {
+                types = "004"
+            } else if (types == "地面塌陷") {
+                types = "005"
+            } else if (types == "地裂缝") {
+                types = "006"
+            } else if (types == "斜坡") {
+                types = "007"
+            } else if (types == "滑坡隐患点") {
+                types = "008"
+            } else if (types == "崩塌隐患点") {
+                types = "009"
+            } else if (types == "遥感解译点") {
+                types = "010"
+            }
+            if (checkedRow(keyValue)) {
+                newTabs({
+                    id: "DZLSSJCX",
+                    url: "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL?keyValue=" + keyValue + "&types=" + types + "&callback=1"
+                });
+            }
+        }
+        //加载地图
+        var mapCtlExt = null;
+        function GetMapData() {
+            mapCtlExt = $("#mapControl").mapCtl(
+                cfGetMapData({
+                    isCluster: false
+                })
+            );
+            usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+            GetAreaGeometry(usercode);
+        };
+
+        //地图加载统计图
+        function BindMapMarker_count(obj, str) {
+            var tmpQueryJson = {};
+            tmpQueryJson["DISASTERTYPE"] = "";
+            tmpQueryJson["DISASTERLEVEL"] = "";
+            $.extend(tmpQueryJson, obj);
+            if (str != "隐患点状态") {
+                tmpQueryJson['zt'] = "0";
+            }
+            if (str != "灾害类型") {
+                tmpQueryJson['yhd'] = "0";
+            }
+            if (str != "潜在威胁") {
+                tmpQueryJson['qzwx'] = "0";
+            }
+            if (str != "规模等级") {
+                tmpQueryJson['gmdj'] = "0";
+            }
+            if (str != "稳定性") {
+                tmpQueryJson['wdx'] = "0";
+            }
+            if (str != "危害性") {
+                tmpQueryJson['whx'] = "0";
+            }
+            if (str != "已消除") {
+                tmpQueryJson['yxc'] = "0";
+            }          
+            $.ajax({
+                url: "../../api/TBL_HAZARDBASICINFO_PC_GDApi/GetZHDCountResult",
+                data: {
+                    queryJson: JSON.stringify(tmpQueryJson)
+                },
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                type: "GET",
+                success: function (dataList) {
+                    var markerArrs = []; var aa = "", aaa = "";
+                    if (dataList) {
+                        var data = JSON.parse(dataList);
+                        data = data.data;
+                        if (data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                aa = "";
+                                var item = data[i];
+                                var x = Number(item.LONGITUDE);
+                                var y = Number(item.LATITUDE);
+                                if (!x || !y) {
+                                    continue;
+                                }
+                                if (item.hasOwnProperty('省')) {
+                                    XZQHJWD[item['省']] = [x, y]
+                                } else if (item.hasOwnProperty('市')) {
+                                    XZQHJWD[item['市']] = [x, y]
+                                } else if (item.hasOwnProperty('县')) {
+                                    XZQHJWD[item['县']] = [x, y]
+                                }
+                                var xData = [], inflationData = [];
+                                for (var key in item) {
+                                    if (key == "省" || key == "市" || key == "县" || key == "districtName" || key == "LATITUDE" || key == "LONGITUDE") {
+                                        continue;
+                                    }
+                                    xData.push(key);
+                                    inflationData.push(item[key]);
+                                    aa += key + ":" + item[key] + "<br/>";
+                                }
+                                var level = item["县"] ? item["县"] + "</br>" : (item["市"] ? item["市"] + "</br>" : (item["省"] ? item["省"] + "</br>" : ""));
+                                var hd = aa;
+                                var option = {
+                                    tooltip: {
+                                        trigger: 'axis',
+                                        axisPointer: {
+                                            type: 'shadow'
+                                        },
+                                        formatter: level + aa,
+                                        //formatter:function (a,b,c) {
+                                        //    // return level + "{b}:{c}"
+                                        //    return level + aa;
+                                        //},
+                                        position: function (point, params, dom, rect, size) {
+                                            return [point[0], '-50%'];
+                                        }
+                                    },
+                                    grid: {
+                                        width: 30,
+                                        height: 40,
+                                        left: 0,
+                                        top: 0,
+                                        z: 100
+                                    },
+                                    xAxis: {
+                                        type: 'category',
+                                        splitLine: { show: false },
+                                        axisTick: { show: false },
+                                        axisLabel: { show: false },
+                                        axisLine: { show: false },
+                                        data: xData,
+                                        z: 100
+                                    },
+                                    yAxis: {
+                                        splitLine: { show: false },
+                                        axisTick: { show: false },
+                                        axisLabel: { show: false },
+                                        axisLine: {
+                                            show: false,
+                                            lineStyle: { color: '#1c70b6' }
+                                        },
+                                        z: 100
+                                    },
+                                    series: {
+                                        type: 'bar',
+                                        //barWidth: 7,
+                                        barGap: 1,
+                                        barMaxWidth: 10,
+                                        barCategoryGap: 0,
+                                        z: 100,
+                                        data: inflationData,
+                                        itemStyle: {
+                                            normal: {
+                                                color: function (params) {
+                                                    //柱状图每根柱子颜色
+                                                    var colorList = ['#76ee00', '#b2ca6d', '#268bf9', '#568be3', '#86b3ff', '#b0ea55', '#00d1aa', '#00b8d4', '#02c6f8', '#4b0082'];
+                                                    return colorList[params.dataIndex];
+                                                }
+                                            }
+                                        }
+                                    }
+                                };
+                                var geoCoord = [x, y];
+                                markerArrs.push({ option: option, position: geoCoord });
+                                //var parms = JSON.parse(item.districtName);
+                                //var icon = item.imgPath ? item.imgPath : '';
+                                //var marker = {
+                                //    id: "all",
+                                //    url: "../../" + icon,
+                                //    location: [x, y],
+                                //    popupHtml: parms.html
+                                //};
+
+                                //markerArrs.push(marker);
+                            }
+                            if (markerArrs.length === 0) return;
+                        }
+                    }
+                    mapCtlExt.addChart(markerArrs);
+                }, error: function (e) {
+                },
+                cache: false
+            });
+        }
+
+        function GetHtml(objArr) {
+            if (!objArr.townname) {
+                objArr.townname = "";
+            }
+            if (!objArr.wz) {
+                objArr.wz = "";
+            }
+            if (!objArr.cityname) {
+                objArr.cityname = "";
+            }
+            if (!objArr.countryname) {
+                objArr.countryname = "";
+            }
+            var divhtml = '<div style="font-weight: bold;"></div>';
+            divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">灾害点名称：</span><span>' + objArr.name + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害类型：</span><span>' + objArr.disastertype + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点编号：</span><span>' + objArr.code + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">市名称：</span><span>' + objArr.cityname + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">县名称：</span><span>' + objArr.countryname + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">乡镇名称：</span><span>' + objArr.townname + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">地理位置：</span><span>' + objArr.wz + '</span></div>';
+            divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="MapViewDetail(\'' + objArr.disastertype + "," + objArr.code + "," + objArr.guid + "," + objArr.oldcode + '\' )" href="#" class="link-detail">详细信息</a></span>';
+            return divhtml;
+        }
+
+        //地图详情
+        function MapViewDetail(type) {
+            var keyValue = type.split(",")[2];
+            var unifycode = type.split(",")[1];
+            var types = type.split(",")[0];
+            if (types == "滑坡") {
+                types = "001"
+            } else if (types == "崩塌") {
+                types = "002"
+            } else if (types == "泥石流") {
+                types = "003"
+            } else if (types == "地面沉降") {
+                types = "004"
+            } else if (types == "地面塌陷") {
+                types = "005"
+            } else if (types == "地裂缝") {
+                types = "006"
+            } else if (types == "斜坡") {
+                types = "007"
+            }
+            newTab({
+                id: "DZDCCXXQ",
+                url: "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL_DIAOCHA?keyValue=" + keyValue + "&types=" + types + "&unifycode=" + unifycode + "&callback=show"
+            });
+        }
+
+        //加载图表
+        function LoadChart(title, data, z, chartId) {
+            var myChart = echarts.init(document.getElementById(chartId));
+            var series = [], legendData = [], titlestr = "";
+            // 指定图表的配置项和数据
+            if (groupstr.indexOf(title[0]) > -1) {
+                var colors = ['#D53A35', '#334B5C', '#6AB0B8', '#E98F6F', '#9FBADF', '#7FAE90', '#DE9325'];
+                titlestr = title[0];
+                var index = 0;
+                for (var k in data) {
+                    legendData.push(data[k].name);
+                    series.push({
+                        name: data[k].name,
+                        type: data[k].type,
+                        data: data[k].data,
+                        color: colors[index],
+                        itemStyle: data[k].itemStyle
+                    });
+                    index++;
+                }
+            } else {
+                legendData = title;
+                series.push(data);
+            }
+            var option = {
+                title: {
+                    text: titlestr
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: legendData,
+                    x: 'center',
+                    y: 30,
+                    padding: [5, 35, 5, 5]
+                },
+                grid: {
+                    "borderWidth": 0,
+                    top: 60,
+                    containLabel: true
+                },
+                xAxis: {
+                    data: allXData,
+                    name: '行政区划',
+                    axisLabel: {
+                        interval: 0,
+                        rotate: -30
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: z
+                },
+                series: series
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option, true);
+        }
+
+        //显示隐藏结果列表tab
+        function changeTabs(queryJson) {
+            var removeId = [];
+            if (queryJson.zt == "1") {
+                //$(".grid_part:eq(0)").show().removeClass("active");
+                bindDataGridList({ value: "tab_zt", title: "隐患点状态", aClick: "changeToGrid(1)" });
+            }
+            else {
+                //$(".grid_part:eq(0)").hide();
+                removeId.push("zt");
+            }
+            if (queryJson.yhd == "1") {
+                //$(".grid_part:eq(1)").show().removeClass("active");
+                bindDataGridList({ value: "tab_yhd", title: "灾害类型", aClick: "changeToGrid(2)" });
+            }
+            else {
+                //$(".grid_part:eq(1)").hide();
+                removeId.push("yhd");
+            }
+            if (queryJson.qzwx == "1") {
+                //$(".grid_part:eq(2)").show().removeClass("active");
+                bindDataGridList({ value: "tab_qzwx", title: "潜在威胁", aClick: "changeToGrid(3)" });
+            }
+            else {
+                //$(".grid_part:eq(2)").hide();
+                removeId.push("qzwx");
+            }
+            if (queryJson.gmdj == "1") {
+                //$(".grid_part:eq(3)").show().removeClass("active");
+                bindDataGridList({ value: "tab_gmdj", title: "规模等级", aClick: "changeToGrid(4)" });
+            }
+            else {
+                //$(".grid_part:eq(3)").hide();
+                removeId.push("gmdj");
+            }
+            if (queryJson.wdx == "1") {
+                //$(".grid_part:eq(4)").show().removeClass("active");
+                bindDataGridList({ value: "tab_wdx", title: "稳定性", aClick: "changeToGrid(5)" });
+            }
+            else {
+                //$(".grid_part:eq(4)").hide();
+                removeId.push("wdx");
+            }
+            if (queryJson.whx == "1") {
+                //$(".grid_part:eq(5)").show().removeClass("active");
+                bindDataGridList({ value: "tab_whx", title: "危害性", aClick: "changeToGrid(6)" });
+            }
+            else {
+                //$(".grid_part:eq(5)").hide();
+                removeId.push("whx");
+            }
+            if (queryJson.yxc == "1") {
+                //$(".grid_part:eq(6)").show().removeClass("active");
+                bindDataGridList({ value: "tab_yxc", title: "已消除", aClick: "changeToGrid(7)" });
+            }
+            else {
+                //$(".grid_part:eq(6)").hide();
+                removeId.push("yxc");
+            }         
+            bindDataGridList({ value: "tab_chart", title: "统计图表", aClick: "changeToChart()" });
+            //关闭没有数据的tab页
+            for (var i = 0; i < removeId.length; i++) {
+                var dom = $("#tabListContentDiv .menuTab[data-id=tab_" + removeId[i] + "]").children(":last");
+                dom.trigger("click");
+            }
+            $("#tabListContentDiv .menuTab:first").trigger("click");
+            //$(".grid_part:visible:first").addClass("active");
+        }
+        var str = ""; var dtq = {};
+        //tab标签表格切换
+        function changeToGrid(num, type) {
+            if (!num) { return; }
+            var $gridTableCount = $("#gridTableCount");
+            window.setTimeout(function () {
+                HideValue("gridTableCount");
+                switch (num) {
+                    case 1:
+                        str = "隐患点状态";
+                        break;
+                    case 2:
+                        str = "灾害类型";
+                        break;
+                    case 3:
+                        str = "潜在威胁";
+                        break;
+                    case 4:
+                        str = "规模等级";
+                        break;
+                    case 5:
+                        str = "稳定性";
+                        break;
+                    case 6:
+                        str = "危害性";
+                        break;
+                    case 7:
+                        str = "已消除";
+                        break;                 
+                    default: str = "";
+                }
+                $("#TJTB").hide();
+                var gridH = $(window).height() - $('#mapControl').height() - $('#tabListContentDiv').height() - 82;
+                var $gridTable = null;
+                if (str) {
+                    $gridTable = $("#gridTableCount");
+                    showColmns(str, "gridTableCount");
+                    $("#TJSJCX").hide();
+                    $("#TJJG").show();
+                    mapCtlExt.addMarker();
+                    queryJson = $("#TjItem").getWebControls();
+                    if (queryJson.level == "") {
+                        queryJson.level = "市";
+                    }
+                    queryJson.sqlWhere = whereSql;
+                    queryJson["UnionStatisticsSql"] = UnionStatisticsSql;
+                   BindMapMarker_count(queryJson, str);
+                    $gridTable.setGridWidth($(".gridPanel").width() - 5);
+                }
+                else {
+                    mapCtlExt.removeChartLayer();
+                    var num1 = num.substring(0, 2);
+                    var num2 = num.substring(2, 4);
+                    var num3 = num.substring(4, 6);
+                    var obj = {};
+                    if (!Number(num1)) { return; }
+                    else if (num2 == "00") {
+                        obj["province"] = num;
+                        obj["city"] = "";
+                        obj["county"] = "";
+                    }
+                    else if (num3 == "00") {
+                        obj["province"] = num1 + "0000";
+                        obj["city"] = num;
+                        obj["county"] = "";
+                    }
+                    else {
+                        obj["province"] = num1 + "0000";
+                        obj["city"] = num1 + num2 + "00";
+                        obj["county"] = num;
+                    }
+                    obj["SelectType"] = type;//查询类型
+                    $gridTable = $("#gridTablePoint");
+                    $("#TJSJCX").show();
+                    $("#TJJG").hide();
+                    dtq = queryJson;
+                    GetGrid_Point(obj);
+                    $gridTable.setGridWidth($(".gridPanel:eq(1)").width() - 5);
+                }
+                $gridTable.setGridHeight(gridH);
+            }, 200);
+        }
+
+        //tab标签切换到统计图
+        function changeToChart() {
+            var myChart = echarts.init(document.getElementById("chartsdata"));
+            $("#TJJG").hide();
+            $("#TJSJCX").hide();
+            $("#TJTB").show();
+            window.setTimeout(function () {
+                myChart.resize();
+            }, 200);
+        }
+
+        //添加tab页
+        function bindDataGridList(item) {
+            var exists = tabCtl.newTab({ id: item.value, title: item.title, closed: true, icon: '', url: item.value, isTab: true, noNextTab: true, aClick: item.aClick, newUnActive: true });
+        }
+
+        function addOneTab(name, code) {
+            var doms = $("#tabListContentDiv .menuTab");
+            for (var i = 0; i < doms.length; i++) {
+                var domI = $("#tabListContentDiv .menuTab:eq(" + i + ")");
+                if (domI.text().indexOf("统计内容") > -1) {
+                    domI.next().trigger("click");
+                }
+            }
+            var title = $('.menuTab.active')[0].innerText;
+            if (name) {
+                bindDataGridList({ value: "tab_" + code, title: "统计内容-" + name, aClick: "changeToGrid('" + code + "','" + title + "')", newUnActive: true });
+                $("#tabListContentDiv .menuTab:last").trigger("click");
+            }
+        }
+   
+        //对应导出
+        function btn_export() {
+            //queryJson = $("#TjItem").getWebControls();
+            //queryJson.sqlWhere = whereSql;
+            var arr = [];
+            for (var i = 0; i < showDta.length; i++) {
+                arr.push(showDta[i].key);
+            }
+            var strcol = arr.join(",");
+            location.href = "../../JXGeoManage/TBL_HAZARDBASICINFO/GetHazardbasiciStaticsExcelDown?queryJson=" + JSON.stringify(queryJson) + "&colum=" + JSON.stringify(strcol);
+        }
+
+        //存入报表库点击事件
+        function setReportName() {
+            //if (reportTitle == "" || reportTitle == undefined) {
+            var time = new Date();
+            var month = time.getMonth() + 1;
+            if (month < 10)
+                month = '0' + month;
+            var day = time.getDate();
+            if (day < 10)
+                day = '0' + day;
+            $("#tablename").val("灾害情况统计" + time.getFullYear() + "年" + month + "月" + day + "日");
+            //console.log($("#tablename").val())
+            //}
+            //else {
+            //    $("#tablename")[0].value = reportTitle;
+            //}
+            $("#myModal").modal("show");
+        }
+        var zhlxqury = {}; var wdqury = {}; var zhyxqury = {}; var zxqqury = {}; var fzjyqury = {};
+        //统计内容
+        function StatisticeContext() {
+            dialogOpen({
+                id: 'Form',
+                title: '统计内容',
+                url: '../../../../JXGeoManage/TBL_HAZARDBASICINFO_PC_GD/StatisticeContext',
+                width: '950px',
+                height: '550px',
+                callBack: function (iframeId) {
+                    //queryJson2 = getInfoTop().frames[iframeId].$("#Tj").getWebControls();
+                    //$("#yhd").attr("checked", queryJson2['yhd'] == 0 ? false : true);
+                    //$("#zhd").attr("checked", queryJson2['zhd'] == 0 ? false : true);
+                    //$("#jh").attr("checked", queryJson2['jh'] == 0 ? false : true);
+                    //$("#mq").attr("checked", queryJson2['mq'] == 0 ? false : true);
+                    //$("#wh").attr("checked", queryJson2['wh'] == 0 ? false : true);
+                    //$("#wx").attr("checked", queryJson2['wx'] == 0 ? false : true);
+                    //$("#xq").attr("checked", queryJson2['xq'] == 0 ? false : true);
+                    //$("#zhlx").attr("checked", queryJson2['zhlx'] == 0 ? false : true);
+                    //$("#zq").attr("checked", queryJson2['zq'] == 0 ? false : true);
+                    zhlxqury = getInfoTop().frames[iframeId].$("#tj1").getWebControls();//灾害类型               
+                    wdqury = getInfoTop().frames[iframeId].$("#tj2").getWebControls();//稳定性及隐患点状态
+                    zhyxqury = getInfoTop().frames[iframeId].$("#tj3").getWebControls();//灾害影响及潜在威胁
+                    fzjyqury = getInfoTop().frames[iframeId].$("#tj4").getWebControls();//灾害体规模及危害性
+                    console.log(zhlxqury); console.log(wdqury); console.log(zhyxqury); console.log(fzjyqury);
+                    getInfoTop().$(".layui-layer-btn1").click();
+                }
+            });
+        }
+        var UnionStatisticsSql = "";      
+    </script>
+    }

@@ -1,0 +1,100 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="titlePanel">
+    <div class="title-search" id="filter-form">
+        <table>
+            <tr>
+                <td>
+                    <input id="StartTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                </td>
+                <td>
+                    <input id="EndTime" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["keyValue"] = keyValue;
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../JXGeoManage/TBL_LANDSLIP_HISTORY/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                           { label: '统一编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left', sortable: true },
+                           { label: 'CGH系统灾害点编码', name: 'CGHUNIFIEDCODE', index: 'CGHUNIFIEDCODE', width: 100, align: 'left', sortable: true },
+                           { label: '灾害点名称', name: 'DISASTERUNITNAME', index: 'DISASTERUNITNAME', width: 100, align: 'left', sortable: true },
+                           { label: '野外编号', name: 'OUTDOORCODE', index: 'OUTDOORCODE', width: 100, align: 'left', sortable: true },
+                           { label: '室内编号', name: 'INDOORCODE', index: 'INDOORCODE', width: 100, align: 'left', sortable: true },
+                           { label: '省', name: 'PROVINCE', index: 'PROVINCE', width: 100, align: 'left', sortable: true },
+                           { label: '市（县）', name: 'CITY', index: 'CITY', width: 100, align: 'left', sortable: true },
+                           { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left', sortable: true },
+                           { label: '地理位置（村）', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true }
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["keyValue"] = keyValue;
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../JXGeoManage/TBL_LANDSLIP_HISTORY/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+</script>
+}

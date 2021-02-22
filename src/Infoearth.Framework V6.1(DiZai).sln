@@ -1,0 +1,123 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Framework 基础设施层", "01 Framework 基础设施层", "{C6B09613-CC72-4D16-8056-1FD68ED86BF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 Application 业务逻辑层", "04 Application 业务逻辑层", "{656B47C1-3922-4F0B-820E-00BA9BDB33B1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 Application 界面应用层", "05 Application 界面应用层", "{29DFF52B-8455-4EA1-8798-3AEE210D9372}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 Models 实体层", "02 Models 实体层", "{1B8156EC-FC04-48C0-9904-8782705A2175}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 Cache 应用缓存", "01 Cache 应用缓存", "{7A9CC7E1-9219-4F06-86E8-8A1942D9BB56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{26CFF3C8-4B33-4588-8787-D631124FD63E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 WF流程模块", "04 WF流程模块", "{E6590F5B-1C99-4C85-9090-3A1D84227991}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.WorkFlow", "Infoearth.WorkFlow\Infoearth.WorkFlow.csproj", "{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Cache", "Infoearth.Application\Infoearth.Application.Cache\Infoearth.Application.Cache.csproj", "{73A55239-A22D-4AC9-B412-64EA83035A18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Entity", "Infoearth.Application\Infoearth.Application.Entity\Infoearth.Application.Entity.csproj", "{C10920FE-8C74-4993-A7F4-1DA189DA842C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Mapping", "Infoearth.Application\Infoearth.Application.Mapping\Infoearth.Application.Mapping.csproj", "{42234E7A-B484-479D-B1C1-08A08A59C935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Busines", "Infoearth.Application\Infoearth.Application.Busines\Infoearth.Application.Busines.csproj", "{21566527-8F54-4A8D-AA68-7662C2C31FB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.IService", "Infoearth.Application\Infoearth.Application.IService\Infoearth.Application.IService.csproj", "{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Service", "Infoearth.Application\Infoearth.Application.Service\Infoearth.Application.Service.csproj", "{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05 拐点坐标转换", "05 拐点坐标转换", "{1FF71F45-BF28-4524-BE7C-BB5E1D9DC065}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Common", "Infoearth.Application\Infoearth.Application.Common\Infoearth.Application.Common.csproj", "{48DAE1DB-2282-4262-BDA5-9F5924D12EB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infoearth.Application.Web", "Infoearth.Application\Infoearth.Application.Web\Infoearth.Application.Web.csproj", "{65824806-FDED-427E-B70C-C1F83B66B40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTelluro.Busness.WebApi", "iTelluro.Business.WebApi\iTelluro.Busness.WebApi.csproj", "{F6EE9605-8FB0-4D87-87AA-807706FC3DFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iTelluro.Busness.WebApiProxy", "iTelluro.Busness.WebApiProxy\iTelluro.Busness.WebApiProxy.csproj", "{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73A55239-A22D-4AC9-B412-64EA83035A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73A55239-A22D-4AC9-B412-64EA83035A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73A55239-A22D-4AC9-B412-64EA83035A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73A55239-A22D-4AC9-B412-64EA83035A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C10920FE-8C74-4993-A7F4-1DA189DA842C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C10920FE-8C74-4993-A7F4-1DA189DA842C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C10920FE-8C74-4993-A7F4-1DA189DA842C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C10920FE-8C74-4993-A7F4-1DA189DA842C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42234E7A-B484-479D-B1C1-08A08A59C935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42234E7A-B484-479D-B1C1-08A08A59C935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42234E7A-B484-479D-B1C1-08A08A59C935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42234E7A-B484-479D-B1C1-08A08A59C935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21566527-8F54-4A8D-AA68-7662C2C31FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21566527-8F54-4A8D-AA68-7662C2C31FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21566527-8F54-4A8D-AA68-7662C2C31FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21566527-8F54-4A8D-AA68-7662C2C31FB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48DAE1DB-2282-4262-BDA5-9F5924D12EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48DAE1DB-2282-4262-BDA5-9F5924D12EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48DAE1DB-2282-4262-BDA5-9F5924D12EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48DAE1DB-2282-4262-BDA5-9F5924D12EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65824806-FDED-427E-B70C-C1F83B66B40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65824806-FDED-427E-B70C-C1F83B66B40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65824806-FDED-427E-B70C-C1F83B66B40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65824806-FDED-427E-B70C-C1F83B66B40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6EE9605-8FB0-4D87-87AA-807706FC3DFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6EE9605-8FB0-4D87-87AA-807706FC3DFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6EE9605-8FB0-4D87-87AA-807706FC3DFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6EE9605-8FB0-4D87-87AA-807706FC3DFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B8156EC-FC04-48C0-9904-8782705A2175} = {656B47C1-3922-4F0B-820E-00BA9BDB33B1}
+		{7A9CC7E1-9219-4F06-86E8-8A1942D9BB56} = {656B47C1-3922-4F0B-820E-00BA9BDB33B1}
+		{E6590F5B-1C99-4C85-9090-3A1D84227991} = {C6B09613-CC72-4D16-8056-1FD68ED86BF3}
+		{2DB6492A-3CDA-40CB-9BAB-51F00510B0C2} = {E6590F5B-1C99-4C85-9090-3A1D84227991}
+		{73A55239-A22D-4AC9-B412-64EA83035A18} = {7A9CC7E1-9219-4F06-86E8-8A1942D9BB56}
+		{C10920FE-8C74-4993-A7F4-1DA189DA842C} = {1B8156EC-FC04-48C0-9904-8782705A2175}
+		{42234E7A-B484-479D-B1C1-08A08A59C935} = {1B8156EC-FC04-48C0-9904-8782705A2175}
+		{21566527-8F54-4A8D-AA68-7662C2C31FB9} = {656B47C1-3922-4F0B-820E-00BA9BDB33B1}
+		{6CE11FF9-1CB7-494E-89C7-5F06BEA94211} = {656B47C1-3922-4F0B-820E-00BA9BDB33B1}
+		{D6B8ABEA-C923-4605-99A9-B7ACA5DE4D8A} = {656B47C1-3922-4F0B-820E-00BA9BDB33B1}
+		{1FF71F45-BF28-4524-BE7C-BB5E1D9DC065} = {C6B09613-CC72-4D16-8056-1FD68ED86BF3}
+		{48DAE1DB-2282-4262-BDA5-9F5924D12EB1} = {1FF71F45-BF28-4524-BE7C-BB5E1D9DC065}
+		{65824806-FDED-427E-B70C-C1F83B66B40F} = {29DFF52B-8455-4EA1-8798-3AEE210D9372}
+		{F6EE9605-8FB0-4D87-87AA-807706FC3DFC} = {29DFF52B-8455-4EA1-8798-3AEE210D9372}
+		{CAD2570F-E7BA-4E70-81A8-3DD72DCCBFF7} = {29DFF52B-8455-4EA1-8798-3AEE210D9372}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
+	EndGlobalSection
+EndGlobal

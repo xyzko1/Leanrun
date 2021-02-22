@@ -1,0 +1,161 @@
+﻿@{
+    ViewBag.Title = "导入Excel模板";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    label {
+        margin-left:10px;
+        margin-top:10px;
+        position: relative;
+        /*display: inline-block;*/
+        background: #D0EEFF;
+        border: 1px solid #99D3F5;
+        border-radius: 4px;
+        padding: 4px 12px;
+        overflow: hidden;
+        color: #1E88C7;
+        text-decoration: none;
+        text-indent: 0;
+        line-height: 20px;
+        cursor: pointer;
+    }
+    /*隐藏默认样式*/
+    input[id=file] {
+        margin-left: -2000px;
+        height: 0;
+    }
+</style>
+<div style="border-bottom:dashed #808080 1px;">
+    <div style="display:inline-block;vertical-align:super;font-size:medium;height:50px;margin-left:10px;">
+        <span style="display:inherit;margin-top:10px;font-size:large">导入文件名称：</span>
+        <span id="fileName" style="width:300px;text-align:center;font-size:large"></span>
+    </div>
+    <label for="file" id="upFile" style="float:right;">选择文件</label>
+    <input type="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="file">
+
+</div>
+<div id="gridContent" style="width:100%;border-bottom:dashed #808080 1px;">
+    <ul id="myTab" class="nav nav-tabs">
+    </ul>
+    <div id="myTabContent" class="tab-content" style="overflow-x:auto">
+    </div>
+</div>
+<h4 style="color:red;margin:5px;">注：预览显示sheet前100条数据（导入全部）,通过切换tab选取导入的sheet表单</h4>
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 style="color:white;">数据正在导入中...</h5>
+    </div>
+</div>
+@section Scripts{
+    <script>        
+        var authToken = getAuthorizationToken();
+        var apiurl = request('apiurl');
+        $('#gridContent').height($(window).height() - 80);
+        $(function () {
+            $("#file").on("change", function () {
+                //截取路径，获取上传文件名
+                var urlArr = this.value.split("\\");
+                if (this && this.files && this.files[0]) {
+                    document.getElementById("fileName").innerHTML = urlArr[urlArr.length - 1];
+                    var formData = new FormData();
+                    formData.append('file', $('#file')[0].files[0]);
+                    $.ajax({
+                        type: "POST",
+                        data: formData,
+                        url: "../../api/TBL_HAZARDBASICINFOApi/ViewExcelData",
+                        beforeSend: function (request) {
+                            request.setRequestHeader("Authorization", authToken);
+                        },
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            var tab = "";
+                            var content = "";
+                            var index = 0;
+                            for (var item in data) {
+                                tab += '<li' + ((index == 0) ? ' class="active"' : '') + '><a href="#id' + index + '" data-toggle="tab">' + item.slice(0, item.length - 1) + '</a></li>';
+                                content += '<div class="gridPanel tab-pane fade' + ((index == 0) ? ' in active' : '') + ' " id="id' + index + '">' + '<table id="gridTable' + index + '" style="width:100%;height:100%"></table>' + '</div>'
+                                index++;
+                            }
+                            $('#myTab').html(tab);
+                            $('#myTabContent').html(content);
+
+                            //初始化表格
+                            var tableindex = 0;
+                            for (var item in data) {
+                                var json = data[item];
+                                //设置列头名称
+                                var colModel = [];
+                                for (var row in json[0]) {
+                                    colModel.push({ label: row, name: row, index: row, width: 80, align: 'left' });
+                                }             
+                               
+                                $('#gridTable' + tableindex).jqGrid({
+                                   
+                                    autowidth:true,
+                                    rownumbers: true,
+                                    rowNum: -1,
+                                    colModel: colModel,
+                                    datatype: "local",
+                                    shrinkToFit: false,
+                                    viewrecords:false
+                                });
+                                $('.ui-jqgrid-bdiv').height($(window).height() - 175);
+                  
+                                //赋值数据
+                                for (var i = 0; i < json.length; i++) {
+                                    $('#gridTable' + tableindex).jqGrid('addRowData', i + 1, json[i]);
+                                }
+                                tableindex++;
+                            }
+                        },
+                        error: function (data) {
+
+                        }
+                    });
+
+                } else {
+                    //兼容IE9以下
+                    document.getElementById("fileName").innerHTML = urlArr[urlArr.length - 1];
+                }
+            });
+        });
+
+        function AcceptClick() {
+            var formData = new FormData();
+            formData.append('file', $('#file')[0].files[0]);
+            $("#loadingModal").modal('show');
+            if (apiurl == "yhddr") {
+                apiurl = "../../api/TBL_HAZARDBASICINFOApi/ImportExcelData?SheetName=" + $('#myTab .active a').text();
+            } else if (apiurl == "zdyhddr") {
+                apiurl = "../../api/TBL_HAZARDBASICINFOApi/ImportExcelZDData?SheetName=" + $('#myTab .active a').text();
+            }
+            $.SaveForm({
+                url: apiurl,
+                //url: "../../api/TBL_HAZARDBASICINFOApi/ImportExcelData?SheetName=" + $('#myTab .active a').text(),
+                param: formData,
+                authToken: authToken,
+                contentType: false,
+                processData: false,
+                loading: "正在批量导入数据...",
+                success: function (data) {
+                    console.log(data.message);
+                    alert(data.message);
+                    $("#loadingModal").modal('hide');
+                    try {
+                        getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                    } catch (e) {
+                        window.parent.$('#gridTable').trigger('reloadGrid');
+                    }
+                }, error: function (e) {
+                    alert(e);
+                    $("#loadingModal").modal('hide');
+                }
+            })          
+        }
+    </script>
+}

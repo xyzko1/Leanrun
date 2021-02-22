@@ -1,0 +1,1364 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">统一编号</td>
+            <td class="formValue">
+                <input id="UNIFIEDCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">CGH系统灾害点编码</td>
+            <td class="formValue">
+                <input id="CGHUNIFIEDCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">名称</td>
+            <td class="formValue">
+                <input id="DISASTERUNITNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">野外编号</td>
+            <td class="formValue">
+                <input id="OUTDOORCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">室内编号</td>
+            <td class="formValue">
+                <input id="INDOORCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">省</td>
+            <td class="formValue">
+                <input id="PROVINCE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市（县）</td>
+            <td class="formValue">
+                <input id="CITY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">乡镇</td>
+            <td class="formValue">
+                <input id="TOWN" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地理位置</td>
+            <td class="formValue">
+                <textarea id="LOCATION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">X坐标</td>
+            <td class="formValue">
+                <input id="X" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">Y坐标</td>
+            <td class="formValue">
+                <input id="Y" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">Z坐标</td>
+            <td class="formValue">
+                <input id="Z" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡顶标高</td>
+            <td class="formValue">
+                <input id="ALTTOP" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡脚标高</td>
+            <td class="formValue">
+                <input id="ALTBOTOM" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌类型</td>
+            <td class="formValue">
+                <input id="AVALANCHETYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地层时代</td>
+            <td class="formValue">
+                <input id="STRATIGRAPHICTIME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地层岩性</td>
+            <td class="formValue">
+                <input id="LITHOLOGY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">构造部位</td>
+            <td class="formValue">
+                <input id="TECTONICREGION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地震烈度</td>
+            <td class="formValue">
+                <input id="EARTHQUAKEINTENSITY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地层倾向</td>
+            <td class="formValue">
+                <input id="STRATUMDIRECTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地层倾角</td>
+            <td class="formValue">
+                <input id="STRATUMANGLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">微地貌</td>
+            <td class="formValue">
+                <input id="MICROTOPOGRAPHY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地下水类型</td>
+            <td class="formValue">
+                <input id="GROUNDWATERTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">年均降雨量</td>
+            <td class="formValue">
+                <input id="AVERAGEYEARRAINFALL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">日最大降雨</td>
+            <td class="formValue">
+                <input id="MAXDAYRAINFALL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">时最大降雨</td>
+            <td class="formValue">
+                <input id="MAXHOURRAINFALL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">洪水位</td>
+            <td class="formValue">
+                <input id="MAXWATERLEVEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">枯水位</td>
+            <td class="formValue">
+                <input id="MINWATERLEVEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">相对河流位置</td>
+            <td class="formValue">
+                <input id="POSITIONTORIVER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">土地利用</td>
+            <td class="formValue">
+                <input id="LANDUSAGE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡高</td>
+            <td class="formValue">
+                <input id="SLOPEHEIGHT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡长</td>
+            <td class="formValue">
+                <input id="SLOPELENGTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡宽</td>
+            <td class="formValue">
+                <input id="SLOPEWIDTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">体积（立方米）</td>
+            <td class="formValue">
+                <input id="SCALE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">规模等级</td>
+            <td class="formValue">
+                <input id="SCALELEVEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡度</td>
+            <td class="formValue">
+                <input id="SLOPEANGLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡向</td>
+            <td class="formValue">
+                <input id="SLOPEDIRECTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体结构类型</td>
+            <td class="formValue">
+                <input id="ROCKARCHTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体厚度</td>
+            <td class="formValue">
+                <input id="ROCKDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体裂隙组数</td>
+            <td class="formValue">
+                <input id="FRACTUREGROUPNUM" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体块长</td>
+            <td class="formValue">
+                <input id="ROCKLENGTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体块宽</td>
+            <td class="formValue">
+                <input id="ROCKWIDTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">岩体块高</td>
+            <td class="formValue">
+                <input id="ROCKHEIGHT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">斜坡结构类型</td>
+            <td class="formValue">
+                <input id="SLOPEARCHTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">斜坡结构类型</td>
+            <td class="formValue">
+                <input id="SLOPEASPECTARCHTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面类型1</td>
+            <td class="formValue">
+                <input id="CTRLSURFTYPE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾向1</td>
+            <td class="formValue">
+                <input id="CTRLSURFDIRECTION1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾角1</td>
+            <td class="formValue">
+                <input id="CTRLSURFANGLE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面长度1</td>
+            <td class="formValue">
+                <input id="CTRLSURFLENGTH1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面间距1</td>
+            <td class="formValue">
+                <input id="CTRLSURFSPACE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面类型2</td>
+            <td class="formValue">
+                <input id="CTRLSURFTYPE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾向2</td>
+            <td class="formValue">
+                <input id="CTRLSURFDIRECTION2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾角2</td>
+            <td class="formValue">
+                <input id="CTRLSURFANGLE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面长度2</td>
+            <td class="formValue">
+                <input id="COCTRLSURFLENGTH2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面间距2</td>
+            <td class="formValue">
+                <input id="CTRLSURFSPACE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面类型3</td>
+            <td class="formValue">
+                <input id="CTRLSURFTYPE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾向3</td>
+            <td class="formValue">
+                <input id="CTRLSURFDIRECTION3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面倾角3</td>
+            <td class="formValue">
+                <input id="CTRLSURFANGLE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面长度3</td>
+            <td class="formValue">
+                <input id="CTRLSURFLENGTH3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">控制结构面间距3</td>
+            <td class="formValue">
+                <input id="CTRLSURFSPACE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">全风化带深度(M)</td>
+            <td class="formValue">
+                <input id="WEATHEREDZONEDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">卸荷裂缝深度(M)</td>
+            <td class="formValue">
+                <input id="UNLOADCRACKDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">土体名称</td>
+            <td class="formValue">
+                <input id="SOILTEXTURENAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">土地密实度</td>
+            <td class="formValue">
+                <input id="SOILDENSITYDEGREE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">土地稠度</td>
+            <td class="formValue">
+                <input id="SOILCONSISTENCY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">下伏基岩时代</td>
+            <td class="formValue">
+                <input id="BEDROCKTIME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">下伏基岩岩性</td>
+            <td class="formValue">
+                <input id="BEDROCKLITHOLOGY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">下伏基岩倾角</td>
+            <td class="formValue">
+                <input id="BEDROCKANGLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">下伏基岩倾向</td>
+            <td class="formValue">
+                <input id="BEDROCKDIRECTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">下伏基岩埋深(M)</td>
+            <td class="formValue">
+                <input id="BEDROCKDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称1</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位1</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征1</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER1" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间1</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称2</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位2</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征2</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER2" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间2</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称3</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位3</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征3</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER3" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间3</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称4</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN4" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位4</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE4" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征4</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER4" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间4</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE4" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称5</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN5" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位5</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE5" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征5</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER5" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间5</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE5" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称6</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN6" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位6</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE6" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征6</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER6" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间6</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE6" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称7</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN7" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位7</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE7" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征7</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER7" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间7</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE7" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象名称8</td>
+            <td class="formValue">
+                <input id="DISTORTIONSIGN8" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象部位8</td>
+            <td class="formValue">
+                <input id="DISTORTIONPLACE8" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象特征8</td>
+            <td class="formValue">
+                <textarea id="DISTORTIONCHARACTER8" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形迹象初现时间8</td>
+            <td class="formValue">
+                <input id="DISTORTIONINITDATE8" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">危岩体可能失稳因素</td>
+            <td class="formValue">
+                <input id="DANGERROCKASTABLEFACTOR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">危岩体目前稳定程度</td>
+            <td class="formValue">
+                <input id="DANGERROCKSTABLESTATUS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">危岩体今后变化趋势</td>
+            <td class="formValue">
+                <input id="DANGERROCKSTABLETREND" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地下水埋深(M)</td>
+            <td class="formValue">
+                <input id="GROUNDWATERDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地下水露头</td>
+            <td class="formValue">
+                <input id="GROUNDWATEROUTCROP" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地下水补给类型</td>
+            <td class="formValue">
+                <input id="GROUNDWATERSUPPLYTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体长度</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYLENGTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体宽度</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYWIDTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体厚度</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYDEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体体积</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYVOLUME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体坡度</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYANGLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体坡向</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYDIRECTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体坡面形态</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYFLATSHAPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体稳定性</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYSTABILITY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体可能失稳因素</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYASTABLEFACTOR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体目前稳定状态</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYSTABLESTATUS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">堆积体今后变化趋势</td>
+            <td class="formValue">
+                <input id="ACCUMULATIONBODYSTABLETREND" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">隐患点</td>
+            <td class="formValue">
+                <input id="HIDDENDANGER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防灾预案</td>
+            <td class="formValue">
+                <input id="PREVENTIONPLAN" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">死亡人口</td>
+            <td class="formValue">
+                <input id="DEATHSPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁坏房屋</td>
+            <td class="formValue">
+                <input id="DESTROYEDHOME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁路</td>
+            <td class="formValue">
+                <input id="DESTROYEDROAD" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁渠</td>
+            <td class="formValue">
+                <input id="DESTROYEDCHANNEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">其它危害</td>
+            <td class="formValue">
+                <input id="DESTROYEDOTHERS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">直接损失</td>
+            <td class="formValue">
+                <input id="DIRECTLOSS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾情等级</td>
+            <td class="formValue">
+                <input id="DISASTERLEVEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">威胁人口</td>
+            <td class="formValue">
+                <input id="THREATENPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">威胁财产</td>
+            <td class="formValue">
+                <input id="THREATENASSETS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">险情等级</td>
+            <td class="formValue">
+                <input id="DANGERLEVEL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测建议</td>
+            <td class="formValue">
+                <input id="MONITORSUGGESTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治建议</td>
+            <td class="formValue">
+                <input id="TREATMENTSUGGESTION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">群测人员</td>
+            <td class="formValue">
+                <input id="MONITORMASS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">村长</td>
+            <td class="formValue">
+                <input id="VILLAGEHEADER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">电话</td>
+            <td class="formValue">
+                <input id="PHONE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查负责人</td>
+            <td class="formValue">
+                <input id="SURVEYHEADER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表人</td>
+            <td class="formValue">
+                <input id="FILLTABLEPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审核人</td>
+            <td class="formValue">
+                <input id="VERIFYPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查单位</td>
+            <td class="formValue">
+                <input id="SURVEYDEPT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表日期</td>
+            <td class="formValue">
+                <input id="FILLTABLEDATE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发生时间</td>
+            <td class="formValue">
+                <input id="HAPPENSTIME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">更新时间</td>
+            <td class="formValue">
+                <input id="UPDATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">记录状态</td>
+            <td class="formValue">
+                <input id="RECORDSTATUS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">导出状态</td>
+            <td class="formValue">
+                <input id="EXPSTATUS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防灾情况</td>
+            <td class="formValue">
+                <input id="CONTROLSTATE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">创建者ID</td>
+            <td class="formValue">
+                <input id="CREATORUSERID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">创建时间</td>
+            <td class="formValue">
+                <input id="CREATORTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">更新者ID</td>
+            <td class="formValue">
+                <input id="UPDATEUSERID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">更新次数</td>
+            <td class="formValue">
+                <input id="UPDATETIMES" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌情况</td>
+            <td class="formValue">
+                <textarea id="AVALANCHEDESC" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">项目编号</td>
+            <td class="formValue">
+                <input id="PROJECTID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">图幅编号</td>
+            <td class="formValue">
+                <input id="MAPID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">图幅名称</td>
+            <td class="formValue">
+                <input id="MAPNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">县市编号</td>
+            <td class="formValue">
+                <input id="COUNTYCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">分布高程（米）</td>
+            <td class="formValue">
+                <input id="DISTRIBUTEALTITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">厚度(米)</td>
+            <td class="formValue">
+                <input id="DEPTH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形发育史形成时间</td>
+            <td class="formValue">
+                <input id="DISTORTIONFORMDATE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发生崩塌次数</td>
+            <td class="formValue">
+                <input id="AVALANCHETIMES" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形发育史序号1</td>
+            <td class="formValue">
+                <input id="AVALANCHENO1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发生时间1</td>
+            <td class="formValue">
+                <input id="OCCURREDTIME1" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌规模1（立方米）</td>
+            <td class="formValue">
+                <input id="OCCURREDVOLUME1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌诱发因素1</td>
+            <td class="formValue">
+                <input id="INDUCEDFACTOR1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">死亡人数1</td>
+            <td class="formValue">
+                <input id="DEATHPEOPLE1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌直接经济损失1</td>
+            <td class="formValue">
+                <input id="DIRECTLOSS1" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形发育史序号2</td>
+            <td class="formValue">
+                <input id="AVALANCHENO2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发生时间2</td>
+            <td class="formValue">
+                <input id="OCCURREDTIME2" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌规模2（立方米）</td>
+            <td class="formValue">
+                <input id="OCCURREDVOLUME2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌诱发因素2</td>
+            <td class="formValue">
+                <input id="INDUCEDFACTOR2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">死亡人数2</td>
+            <td class="formValue">
+                <input id="DEATHPEOPLE2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌直接经济损失2</td>
+            <td class="formValue">
+                <input id="DIRECTLOSS2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">变形发育史序号3</td>
+            <td class="formValue">
+                <input id="AVALANCHENO3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发生时间3</td>
+            <td class="formValue">
+                <input id="OCCURREDTIME3" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌规模3（立方米）</td>
+            <td class="formValue">
+                <input id="OCCURREDVOLUME3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌诱发因素3</td>
+            <td class="formValue">
+                <input id="INDUCEDFACTOR3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">死亡人数3</td>
+            <td class="formValue">
+                <input id="DEATHPEOPLE3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">崩塌直接经济损失3</td>
+            <td class="formValue">
+                <input id="DIRECTLOSS3" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">损坏房屋（间）</td>
+            <td class="formValue">
+                <input id="DESTROYEDHOUSE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">威胁房屋（户）</td>
+            <td class="formValue">
+                <input id="THREATENHOME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">间接损失（万元）</td>
+            <td class="formValue">
+                <input id="INDIRECTLOSS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">危害对象</td>
+            <td class="formValue">
+                <input id="DESTROYEDOBJECT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">诱发灾害类型</td>
+            <td class="formValue">
+                <textarea id="INDUCEDDAMAGETYPE" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">诱发灾害波及范围</td>
+            <td class="formValue">
+                <textarea id="INDUCEDDAMAGERANGE" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">诱发灾害造成损失</td>
+            <td class="formValue">
+                <textarea id="INDUCEDDAMAGELOSS" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">潜在危害威胁对象</td>
+            <td class="formValue">
+                <textarea id="THREATENOBJECT" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">遥感解译点（0：否；1：是）</td>
+            <td class="formValue">
+                <input id="ISRSPNT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">勘查点（0：否；1：是）</td>
+            <td class="formValue">
+                <input id="ISSURVEYPNT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">测绘点（0：否；1：是）</td>
+            <td class="formValue">
+                <input id="ISMEASURINGPNT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">野外记录信息</td>
+            <td class="formValue">
+                <textarea id="OUTDOORRECORD" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">村</td>
+            <td class="formValue">
+                <input id="VILLAGE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">组</td>
+            <td class="formValue">
+                <input id="TEAM" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">群策群芳</td>
+            <td class="formValue">
+                <input id="MASSMONITORING" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">搬迁避让</td>
+            <td class="formValue">
+                <input id="RELOCATION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">专业监测</td>
+            <td class="formValue">
+                <input id="PROFESSIONMONITORING" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">工程治理</td>
+            <td class="formValue">
+                <input id="ENGINEERINGMANAGEMENT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">斜坡类型</td>
+            <td class="formValue">
+                <input id="SLOPETYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">主键</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改类型（I：批量导入；A：新增记录；U：修改记录；D：删除记录）</td>
+            <td class="formValue">
+                <input id="MODIFYTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改日期</td>
+            <td class="formValue">
+                <input id="MODIFIEDDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改人，对应用户表的LOGINNAME属性</td>
+            <td class="formValue">
+                <input id="EDITOR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审计状态（0：待审计；1：审计通过；2：审计不通过）</td>
+            <td class="formValue">
+                <input id="AUDITSTATUS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审阅人，对应用户表的LOGINNAME属性</td>
+            <td class="formValue">
+                <input id="AUDITOR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审阅日期</td>
+            <td class="formValue">
+                <input id="AUDITEDDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">流域</td>
+            <td class="formValue">
+                <input id="RIVERBASIN" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">失踪人数</td>
+            <td class="formValue">
+                <input id="MISSINGPERSON" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">受伤人数</td>
+            <td class="formValue">
+                <input id="INJUREDPERSON" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否治理工程</td>
+            <td class="formValue">
+                <input id="ISZLGCPNT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否有监测点</td>
+            <td class="formValue">
+                <input id="ISMONITORPNT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">遥感解译</td>
+            <td class="formValue">
+                <input id="DISASTERSID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">更新人(最近)</td>
+            <td class="formValue">
+                <input id="UPDATEUSER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查负责人ID</td>
+            <td class="formValue">
+                <input id="SURVEYHEADERID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表人ID</td>
+            <td class="formValue">
+                <input id="FILLTABLEPEOPLEID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审核人ID</td>
+            <td class="formValue">
+                <input id="VERIFYPEOPLEID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">群测人员ID</td>
+            <td class="formValue">
+                <input id="MONITORMASSID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">村长ID</td>
+            <td class="formValue">
+                <input id="VILLAGEHEADERID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查单位ID</td>
+            <td class="formValue">
+                <input id="SURVEYDEPTID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">CTRLSURFLENGTH2</td>
+            <td class="formValue">
+                <input id="CTRLSURFLENGTH2" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_AVALANCHE_HISTORY/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+            })
+        }
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_AVALANCHE_HISTORY/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

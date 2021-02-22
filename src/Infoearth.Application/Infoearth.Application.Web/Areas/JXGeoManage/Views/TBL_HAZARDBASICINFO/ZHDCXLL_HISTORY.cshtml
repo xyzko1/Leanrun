@@ -1,0 +1,408 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    .spansa {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px;
+    }
+
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+    .ui-select-text, .form-control {
+        border-radius: 4px;
+    }
+    .fa-folder-open {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -16px;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-folder {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px 0;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-file-o {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -32px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+    /*.ui-layout-pane-west {
+        overflow:initial!important;
+    }*/
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="height:100%;overflow:auto;">
+        <div class="west-Panel" style="margin:0px;height:100%">
+            <div class="panel-Title" style="height:40px;line-height:40px;background-color: rgba(236, 247, 255, 1);color:#000">行政区划</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;width:100%;margin-top:0px;">
+            <div id="" style="width:100%;height:38px;background:#fff">
+                <div id="GJCXH" style="position:absolute;top:-120px;z-index:3;width:99%;transition:all 0.6s">
+                    <div id="" style="width: 100%; height: 40px;background-color: rgba(255, 255, 255, 0.8);color:#000; display: flex; align-items: center; position: relative;">
+                        <span class="spans">灾害点名称:</span><input id="DISASTERNAME" type="text" class="form-control" style="width: 16%" />
+                        <span class="spans">灾害点编号:</span><input id="UNIFIEDCODE" type="text" class="form-control" style="width: 16%" />
+                        <span class="spans">灾害点类型:</span><div id="DISASTERTYPE" type="select" class="ui-select" style="width: 16%"></div>
+                        <span class="spans">项目名称:</span><div id="PROJECTNAME" type="selectTree" class="ui-select" style="width: 16%" />
+                    </div>
+                    </div>
+                    <div id="" style="width: 100%; height: 40px;background-color: rgba(255, 255, 255, 0.8);color:#000; display: flex; align-items: center; position: relative;">
+                        <span class="spans">操作类型:</span><div id="MODIFYTYPE" type="select" class="ui-select" style="width: 16%"></div>
+                        <span class="spans">是否已核销:</span><div id="shifouhexiao" type="select" class="ui-select" style="width: 16%"></div>
+                        <span class="spans">是否已治理:</span><div id="ISZLGCPNT" type="select" class="ui-select" style="width: 16%"></div>
+                        <span class="spans">是否搬迁:</span><div id="RELOCATION" type="select" class="ui-select" style="width: 16%"></div>
+                    </div>
+                    <div id="" style="width: 100%; height: 40px;background-color: rgba(255, 255, 255, 0.8);color:#000; display: flex; align-items: center; position: relative;">
+                        <span class="spans" style="display:none;">开始时间:</span><input id="BeginTime" type="text" class="form-control input-wdatepicker" style="width: 16%; display: none;" onfocus="WdatePicker({ dateFmt: 'yyyy-MM-dd 00:00:00' })" />
+                        <span class="spans">年度:</span><input id="EndTime" type="text" class="form-control input-wdatepicker" style="width: 16%" onfocus="WdatePicker({ dateFmt: 'yyyy' })" />
+                        <div id="" style="width: 75%; height: 40px;background-color: rgba(255, 255, 255, 0.8);color:#000; display: flex;justify-content: flex-end; align-items: center; position: relative;">
+                            <a id="btn_Search_higher_history" class="btn btn-primary" style="cursor: pointer; color: white;padding:4px 4px;margin-left:30px"><i class="fa fa-search"></i>查询</a>
+                            <a class="btn btn-primary" id="btn_Reset_history" style="background:gray;border:1px solid gray;height:28px;padding:4px 12px;margin:0 30px; color: white; display:inline-block; cursor: pointer;">重置</a>
+                            <a class="btn btn-primary" id="btn_ResetTree" style="display:none;">重新加载行政区划树</a>
+                        </div>
+                    </div>
+                </div>
+                
+                @*<ul class="nav nav-tabs" style="background-color: rgba(236, 247, 255, 1);height:38px;padding-top:4px;position:relative;z-index:999;">
+                    <li id="li_ZXSJCX" style="display:none;" ><a href="#ZXSJCX" data-toggle="tab" style="padding:8px 15px">最新数据查询</a></li>
+                    <li id="li_LSSJCX" ><a href="#LSSJCX" data-toggle="tab" style="padding:8px 15px">历史数据查询</a></li>
+                    <li style="float: right;">
+                        <span id="serch-btn" style="font-size: 15px; float: right; padding: 10px;cursor:pointer"><i id="fontfamily" class="fa fa-caret-right" style="padding-right: 3px;"></i>高级查询</span>
+                    </li>
+                </ul>*@
+                <div id="DZHJManage" class="" style="width:100%;height:40px;background: rgba(236, 247, 255, 1);display:flex;align-items: center;position:relative;z-index:23;justify-content: start;">
+                    @*<div style="width: 10%; font-weight: 900; min-width: 80px; white-space: nowrap;">
+                        <i class="fa fa-bars" style="margin:0 5px;font-weight:700;"></i><span>历史数据查询</span>
+                    </div>*@
+                    <div style="float:left;">
+                        <div class="title-search">
+                            <table>
+                                <tr>
+                                    <td style="font-size: 14px; color: #000; padding: 0px 6px 10px 0px; font-weight: bold !important;">
+                                        <div style="width: 10%; font-weight: 900; min-width: 80px; white-space: nowrap;">
+                                            <i class="fa fa-bars" style="margin:0 5px;font-weight:700;"></i><span>查询条件:</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input id="txt_Key" type="text" class="form-control" placeholder="请输入灾害名称或编号" style="width: 200px; height:28px; outline:none; margin:-7px 10px 0px 20px;" />
+                                    </td>
+                                    <td style="padding:0 0 8px 3px;">
+                                        <a id="btn_Search" style="font-size:16px; cursor:pointer;"><i class="fa fa-search" style="margin: -9px 10px 0px 0px"></i></a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="width: 90%;align-items: center;flex-wrap: nowrap;">
+                        <span id="serch-btn" style="font-size:13px;float:right;maring-right:10px;position:absolute;top:10px; right:10px;cursor:pointer">
+                            <i id="fontfamily" class="fa fa-caret-right"></i>
+                            高级查询
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div id="myTabContent" class="tab-content" style="height: calc(100% - 38px); width: 100%;background:#fff">
+                @*<div id="ZXSJCX" class="tab-pane fade in active" style="width:100%;height:100%">
+                    <iframe id="ZXSJCXA" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+                </div>*@
+                <div id="LSSJCX" class="tab-pane fade in active" style="height: 100%; width: 100%;background:#fff">
+                    <iframe id="LSSJCXA1" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+@section Scripts{
+<script>
+    $(function () {
+        var AreaCode = 0, AreaVale = "", flag = true, tabname = "GJCXH";
+        initControl();
+        InitialPage();
+        $('.ui-layout-center').css('overflow', 'hidden');
+        GetTree();
+        $("#serch-btn").click(function () {
+            if (flag) {
+                if (tabname == "ZXSJCX") {
+                    $("#GJCX").css("top", 40)
+                } else {
+                    $("#GJCXH").css("top", 40)
+                }
+                
+                $("#fontfamily").removeClass();
+                $("#fontfamily").addClass("fa fa-caret-down")
+                flag = false
+            } else {
+                if (tabname == "ZXSJCX") {
+                    $("#GJCX").css("top", -120)
+                } else {
+                    $("#GJCXH").css("top", -120)
+                }
+                $("#fontfamily").removeClass();
+                $("#fontfamily").addClass("fa fa-caret-right")
+                flag = true
+            }
+        })
+        $('#LSSJCXA1').attr('src', "/JXGeoManage/TBL_HAZARDBASICINFO/TBL_HAZARDBASICINFOQueryBhistory?AreaVale=" + AreaVale);
+        //高级查询点击事件
+        $("#btn_Search_higher").click(function () {
+            if ($('#ZXSJCXA').attr('src') != "" && $('#ZXSJCXA').attr('src') != undefined) {
+                var queryJson = $.extend(queryJson, $("#GJCX").getWebControls(), {});
+                queryJson["PROVINCE"] = PROVINCE;
+                queryJson["CITY"] = CITY;
+                queryJson["COUNTY"] = COUNTY;
+                $('#ZXSJCXA')[0].contentWindow.SearchEvent(queryJson);
+            }
+        })
+        //高级查询点击事件
+        $("#btn_Search_higher_history").click(function () {
+            if ($('#LSSJCXA1').attr('src') != "" && $('#LSSJCXA1').attr('src') != undefined) {
+                var queryJson = $.extend(queryJson, $("#GJCXH").getWebControls(), {});
+                queryJson["txt_Key"] = $("#txt_Key").val();
+                queryJson["PROVINCE"] = PROVINCE;
+                queryJson["CITY"] = CITY;
+                queryJson["COUNTY"] = COUNTY;
+                $('#LSSJCXA1')[0].contentWindow.SearchEvent(queryJson);
+            }
+        })
+        //高级查询点击事件
+        $("#btn_Search").click(function () {
+            if ($('#LSSJCXA1').attr('src') != "" && $('#LSSJCXA1').attr('src') != undefined) {
+                var queryJson = $.extend(queryJson, $("#GJCXH").getWebControls(), {});
+                queryJson["txt_Key"] = $("#txt_Key").val();
+                queryJson["PROVINCE"] = PROVINCE;
+                queryJson["CITY"] = CITY;
+                queryJson["COUNTY"] = COUNTY;
+                $('#LSSJCXA1')[0].contentWindow.SearchEvent(queryJson);
+            }
+        })
+        //重置
+        $("#btn_Reset_history").click(function () {
+            $("#DISASTERNAME").val("");
+            $("#UNIFIEDCODE").val("");
+            $("#DISASTERTYPE").val("");
+            $("#DISASTERTYPE").attr("data-value", "").attr("data-text", "");
+            $("#DISASTERTYPE .ui-select-text").text(" ");
+
+            $("#PROJECTNAME").val("");
+            $("#PROJECTNAME").attr("data-value", "").attr("data-text", "");
+            $("#PROJECTNAME .ui-select-text").text(" ");
+
+            $("#MODIFYTYPE").val("");
+            $("#MODIFYTYPE").attr("data-value", "").attr("data-text", "");
+            $("#MODIFYTYPE .ui-select-text").text(" ");
+
+            $("#shifouhexiao").val("");
+            $("#shifouhexiao").attr("data-value", "").attr("data-text", "");
+            $("#shifouhexiao .ui-select-text").text(" ");
+
+            $("#ISZLGCPNT").val("");
+            $("#ISZLGCPNT").attr("data-value", "").attr("data-text", "");
+            $("#ISZLGCPNT .ui-select-text").text(" ");
+
+            $("#RELOCATION").val("");
+            $("#RELOCATION").attr("data-value", "").attr("data-text", "");
+            $("#RELOCATION .ui-select-text").text(" ");
+            $("#BeginTime").val("");
+            $("#EndTime").val("");
+
+        });
+        //重新加载行政区划树
+        $("#btn_ResetTree").click(function () {
+            GetTree();
+        });
+        //初始化页面
+        function InitialPage() {
+            var isResize = 0;
+            //layout布局
+            $('#layout').layout({
+                west__size: 190,
+                applyDemoStyles: true,
+                onresize: function () {
+                    if (isResize < 10) {
+                        isResize++;
+                    }
+                    resize();
+                }
+            });
+            //layout.sizePane("")
+            //resize重设布局;
+            $(window).resize(function (e) {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+                e.stopPropagation();
+            });
+            function resize() {
+                window.setTimeout(function () {
+                    $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+                   
+                }, 200);
+                $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+                $("#itemTree").height($('.ui-layout-west').height() - 45);
+            };
+        }
+        //加载行政区划树
+        var AreaCode = 0, PROVINCE = "", CITY = "", COUNTY = "";
+        function GetTree() {
+            var item = {
+                height: $(window).height() - 52,
+                isAllExpand: false,
+                url: "../../Map/GetTreeJsonForMap",
+                onnodeclick: function (item) {
+                    AreaCode = item.id;
+                    AreaVale = item.value;
+                    var level = item.value.split(',')[1];
+                    if (level == 1) {
+                        PROVINCE = item.id;
+                        CITY = "";
+                        COUNTY = "";
+                    } else if (level == 2) {
+                        PROVINCE = item.id.substring(0, 2) + "0000";
+                        CITY = item.id;
+                        COUNTY = "";
+                    } else if (level == 3) {
+                        PROVINCE = item.id.substring(0, 2) + "0000";
+                        CITY = item.id.substring(0, 4) + "00";
+                        COUNTY = item.id;
+                    } else if (level == -1) {
+                        PROVINCE = "";
+                        CITY = "";
+                        COUNTY = "";
+                    }
+                    
+                    if ($('#LSSJCXA1').attr('src') != "" && $('#LSSJCXA1').attr('src') != undefined) {
+                        var queryJson = $.extend(queryJson, $("#GJCXH").getWebControls(), {});
+                        queryJson["AreaCode"] = AreaCode;
+                        queryJson["PROVINCE"] = PROVINCE;
+                        queryJson["CITY"] = CITY;
+                        queryJson["COUNTY"] = COUNTY;
+                        $('#LSSJCXA1')[0].contentWindow.SearchEvent(queryJson);
+                        var data = [{
+                            latitude: item.value.split(',')[3],
+                            longitude: item.value.split(',')[2],
+                            popupHtml: ""
+                        }]
+                        $('#LSSJCXA1')[0].contentWindow.mapCtlExt.addLocation(data,false,level);
+                    }
+                },
+            };
+            //初始化
+            $("#itemTree").treeview(item);
+        };
+        //初始化控件
+        function initControl() {
+            WriteAndDrop();
+            //是否治理
+            $("#ISZLGCPNT").ComboBox({
+                data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+                id: "value",
+                text: "text",
+                height: '200px'
+            });
+
+            //是否搬迁
+            $("#RELOCATION").ComboBox({
+                data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+                id: "value",
+                text: "text",
+                height: '200px'
+            });
+
+            //是否核销
+            $("#shifouhexiao").ComboBox({
+                data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+                id: "value",
+                text: "text",
+                height: '200px'
+            });
+
+            //操作类型
+            $("#MODIFYTYPE").ComboBox({
+                data: [{ 'text': '批量导入', 'value': 'I' }, { 'text': '新增记录', 'value': 'A' }, { 'text': '修改记录', 'value': 'U' }, { 'text': '销号记录', 'value': 'D' }, { 'text': '删除记录', 'value': 'R' }],
+                id: "value",
+                text: "text",
+                height: '200px'
+            });
+            //项目类型
+            //$("#PROJECTID").ComboBox({
+            //    data: [{ 'text': '调查', 'value': "" }, { 'text': '排查', 'value': 0 }],
+            //    id: "value",
+            //    text: "text",
+            //    height: '200px'
+            //});
+            //灾害类型
+            $("#DISASTERTYPE").ComboBox({
+                url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+                param: { EnCode: "HazardType" },
+                id: "text",
+                text: "text",
+                multiple: true,
+                height: '210px',
+                description: "==请选择=="
+            });
+        }
+
+        //输入框+按钮下拉框初始化
+        function WriteAndDrop() {
+            var authToken = getAuthorizationToken();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                dataType: "json",
+                url: "../../api/JYGC_PROJECTBASEINFOApi/GetListJson?queryJson=" + JSON.stringify({}),
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                error: function () {
+                    alert("请求失败");
+                },
+                success: function (data) {
+                    if (data.length > 0) {
+                        var comboData = '[';
+                        for (var i = 0; i < data.length; i++) {
+                            if (i != data.length - 1) {
+                                comboData += '{ label:"' + data[i].PROJECTNAME + '",value:"' + data[i].PROJECTGUID + '"},';
+                            } else {
+                                comboData += '{ label:"' + data[i].PROJECTNAME + '",value:"' + data[i].PROJECTGUID + '"}]';
+                            }
+                        }
+                        var comboData2 = eval('(' + comboData + ')');
+                        $("#PROJECTNAME").ComboBox({
+                            id: "value",
+                            text: "label",
+                            description: "==请选择==",
+                            height: "200px",
+                            data: comboData2
+                        });
+                    }
+
+                }
+            });
+        }
+    });
+</script>
+}

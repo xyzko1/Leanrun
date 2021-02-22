@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndexMD.cshtml";
+}
+    <div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+        <div class="ui-layout-west">
+            <div class="west-Panel">
+                <div class="panel-Title">多媒体列表</div>
+                    <div class="btn-group">
+                        <a id="fileaddlocal" class="btn btn-default" onclick="btn_addLocal()" style="height:34px;"><i class="fa fa-upload"></i>&nbsp;本地上传</a>
+                        <a id="fileadd" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;数据库添加</a>
+                        <a id="filedelete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+                    </div>
+                <div style="overflow:auto;">
+                    <div id="docmentTree" class="ztree" style="overflow-x:hidden;"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="ui-layout-center">
+            <div class="center-Panel">
+                <div class="panel-Title">多媒体文档</div>
+                <div class="titlePanel">
+                    <div class="btn-group">
+                        <a id="filedownload" class="btn btn-default" onclick="btn_download()" style="border-radius:4px;"><i class="fa fa-download"></i>&nbsp;下载</a>
+                        @*<a id="lr-edit" class="btn btn-default" onclick="SaveFileInfo()"><i class="fa fa-search"></i>&nbsp;保存</a>*@
+                        <a class="btn btn-default upload-wrap" id="upload-list">
+                            <div class="upload-info" style="padding: 0px 20px;">
+                                上传列表
+                            </div>
+                            <div class="upload-history" style="width: 380px;height:280px;padding:10px;">
+
+                            </div>
+                        </a>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div class="docPanel" id="docPanel">
+                    <div id="documentViewer"> <iframe id='mediaBrowserLook' frameborder='0' src='' style="width:100%;height:445px;"></iframe></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<style>
+    #upload-list{display:none;}
+    .upload-wrap {
+        cursor: pointer;
+        outline: 0;
+        width: auto;
+        height: 34px;
+        line-height: 32px;
+        position: relative;
+        padding:0;
+    }
+    .upload-wrap .upload-info {
+        border-radius: 4px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -khtml-user-select: none;
+        user-select: none;
+        /*border: 1px solid #ccc;*/
+        padding-left: 5px;
+        height: 32px;
+        line-height: 32px;
+        position: relative;
+        z-index: 100;
+        background: #fff url(../../../../Content/images/a2.png) no-repeat right center;
+    }
+    .upload-wrap .upload-info.active {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+    .upload-wrap .upload-history {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        overflow: hidden;
+        padding: 20px;
+        padding-top: 15px;
+        padding-bottom: 10px;
+        width: 100%;
+        display: none;
+        left: -1px;
+        top: 31px;
+        background-color: #fff;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        position: absolute;
+        z-index: 99;
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        font-size: 12px;
+    }
+    .webuploader-pick{background:transparent;border:none;}
+    .upload-info-box{
+        width:100%;
+        height:30px;
+        line-height:30px;
+        padding-left:10px;
+        position:relative;
+        overflow: hidden;
+        margin-bottom: 2px;
+    }
+    .upload-info-box span {
+        margin-left:5px;
+        float:left;
+    }
+    .upload-info-box .file-name {
+        width: 130px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .upload-info-box .file-size {
+        width: 76px;
+    }
+    .upload-info-box .tip-box{
+        display:none;
+        position:absolute;
+        top:0;
+        left:0;
+    }
+</style>
+@section Scripts{
+@System.Web.Optimization.Styles.Render("~/Content/scripts/plugins/webuploader/css")
+    @System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/webuploader/js")
+    <script>
+        $(function () {
+            $("#fileaddlocal").click(function () {
+                $("#upload-list").show();
+                $("#filedownload").css("border-radius", "4px 0 0 4px");
+            });
+            $("#fileadd").click(function () {
+                $("#upload-list").hide();
+                $("#filedownload").css("border-radius", "4px");
+            });
+            $(".upload-info").click(function () {
+                if ($(this).next('.upload-history').is(":hidden")) {
+                    $(this).css('border-bottom-color', '#fff');
+                    $(this).next(".upload-history").slideDown(10);
+                    $(this).addClass("active") 
+                } else {
+                    $(this).css('border-bottom-color', '#ccc');
+                    $(this).next(".upload-history").slideUp(10);
+                    $(this).removeClass("active");
+                }
+            });
+        });
+        var details = request('details');
+        if (details == "01") {
+            $("#fileadd").hide();
+            $("#filedelete").hide();
+            $("#fileaddlocal").hide();
+        }
+    </script>
+}

@@ -1,0 +1,438 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        height: auto
+    }
+
+    .form .formTitle {
+        background: #fff
+    }
+
+    body {
+        margin: 0;
+    }
+</style>
+<div style="margin: 10px;">
+    <div style="width:100%;height:28px;background:rgba(233,240,253,1);color:#006D97;line-height:28px;padding-left:15px">基本信息</div>
+    <table class="form" id="ZLGC_SJ">
+        <tr>
+            <td class="formTitle">设计单位<span class="required" style="color:red">*</span></td>
+            <td class="formValue">
+                <input id="DESIGNDEPT" type="text" class="form-control" />
+                <input id="MEDIAGUID" type="text" class="form-control" style="display:none;"/>
+            </td>
+            <td class="formTitle">采购方式</td>
+            <td class="formValue">
+                <input id="PROCUREMENT" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">设计费用</td>
+            <td class="formValue">
+                <input id="DESIGNCOST" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">合同签订时间</td>
+            <td class="formValue">
+                <input id="QDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">设计审查时间</td>
+            <td class="formValue">
+                <input id="SCTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">审查专家</td>
+            <td class="formValue">
+                <input id="SCZJ" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">联系人</td>
+            <td class="formValue">
+                <input id="CONTACTPERSON" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">联系电话</td>
+            <td class="formValue">
+                <input id="CONTACTTEL" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">合同签订地点</td>
+            <td class="formValue">
+                <input id="QDPLACE" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">设计审查地点</td>
+            <td class="formValue">
+                <input id="SCPLACE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">批准部门</td>
+            <td class="formValue">
+                <input id="PZDEPT" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">批准文号</td>
+            <td class="formValue">
+                <input id="PZWH" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">招标时间</td>
+            <td class="formValue">
+                <input id="ZBTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">招标地点</td>
+            <td class="formValue">
+                <input id="ZBPLACE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">中标时间</td>
+            <td class="formValue">
+                <input id="GETTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+
+        @*暂时隐藏字段*@
+        <tr style="display:none">
+            <td class="formTitle">治理工程编号</td>
+            <td class="formValue">
+                <input id="ZLGCID" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">治理工程名称</td>
+            <td class="formValue">
+                <input id="ZLGCNAME" type="text" class="form-control" />
+            </td>
+
+
+
+
+            @*
+            <td class="formTitle">资质清单json(资质名称、资质等级、备注)</td>
+            <td class="formValue">
+                <textarea id="ZZQD" class="form-control"></textarea>
+            </td>
+            <td class="formTitle">治理区域json(治理区域名称、精度、纬度、治理面积)</td>
+            <td class="formValue">
+                <textarea id="ZLQY" class="form-control"></textarea>
+            </td>*@
+        </tr>
+
+
+    </table>
+    <div style="width:100%;height:28px;background:rgba(233,240,253,1);color:#006D97;line-height:28px;padding-left:15px">资质清单</div>
+    <div class="titlePanel" style="height:40px;line-height:40px">
+        <div class="toolbar" style="height:40px;display:flex;align-items: center;">
+            <div class="btn-group">
+                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i> 刷新</a>
+                <a id="lr-add" class="btn btn-default" onclick="ZZQD_btn_add()"><i class="fa fa-plus"></i> 新增</a>
+                <a id="lr-edit" class="btn btn-default" onclick="ZZQD_btn_edit()"><i class="fa fa-pencil-square-o"></i> 编辑</a>
+                <a id="lr-delete" class="btn btn-default" onclick="ZZQD_btn_delete()"><i class="fa fa-trash-o"></i> 删除</a>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="gridPanel" id="ZZQDTable">
+        <table id="gridTable_SJ_ZZQD"></table>
+        @*<div id="gridPager_SJ_ZZQD"></div>*@
+    </div>
+
+
+
+    <div style="width:100%;height:28px;background:rgba(233,240,253,1);color:#006D97;line-height:28px;padding-left:15px">治理区域划分</div>
+    <div class="titlePanel" style="height:40px;line-height:40px">
+        <div class="" style="height:40px;display:flex;align-items: center;justify-content: flex-end;">
+            <div class="btn-group" style="margin-right:15px">
+                <a id="lr-replaces" class="btn btn-default" onclick=""><i class="fa fa-refresh"></i> 刷新</a>
+                <a id="lr-adds" class="btn btn-default" onclick="QYHF_btn_add()"><i class="fa fa-plus"></i> 新增</a>
+                <a id="lr-edits" class="btn btn-default" onclick="QYHF_btn_edit()"><i class="fa fa-pencil-square-o"></i> 编辑</a>
+                <a id="lr-deletes" class="btn btn-default" onclick=""><i class="fa fa-trash-o"></i> 删除</a>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+    <div class="gridPanel" id="QYHFTable">
+        <table id="gridTables_SJ_QYHF"></table>
+        @*<div id="gridPagers_SJ_QYHF"></div>*@
+    </div>
+    <div style="height: 300px; width: 100%;">
+        <iframe class="LRADMS_iframe" id="QCQFLmedia3" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var xq = request('xq');
+    $(function () {
+        initControl();
+        GetGrid_SJ_ZZQD();
+        GetGrid_SJ_QQHF();
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable_SJ_ZZQD').setGridWidth(($(window).width()));
+                $('#gridTable_SJ_ZZQD').setGridHeight(($(window).height() - 356) / 2);
+                $('#gridTables_SJ_QYHF').setGridWidth(($(window).width()));
+                $('#gridTables_SJ_QYHF').setGridHeight(($(window).height() - 356) / 2);
+            }, 200);
+            e.stopPropagation();
+        });
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                //url: "../../JXGeoManage/TBL_ZLGC_SJINFO/GetFormJson",//控制器写法
+                url: "../../api/TBL_ZLGC/GetSGSJ",
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#ZLGC_SJ").SetWebControls(data);
+            }
+        })
+        }
+        if (readonly == 01||xq==02) {
+            $("input").attr("disabled", "disabled");
+            $(".titlePanel").css("display", "none");
+
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_ZLGC_SJINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+    //《施工设计》--- 资质清单:新增
+    function ZZQD_btn_add() {
+        //获取对应对应资质清单列表存在数据的总数
+        var total = $("#gridTable_SJ_ZZQD").jqGrid('getGridParam', 'records');
+        var NEW_KeyValue = total + 1;
+        dialogOpen({
+            id: 'FormZZQD_ADD',
+            title: '治理工程施工设计资质清单',
+            url: '/JXGeoManage/TBL_ZLGC_SJINFO/TBL_ZLGC_SJZZQDList?NewkeyValue=' + NEW_KeyValue,
+            width: '600px',
+            height: '400px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    $("#ZZQDTable .unwritten").hide();
+                    $("#ZZQDTable .unwritten").css('display', 'none');
+                    data = JSON.parse(data);
+                    $("#gridTable_SJ_ZZQD").jqGrid('addRowData', NEW_KeyValue, data);
+                });
+            }
+        });
+    }
+    //《施工设计》--- 资质清单:编辑
+    function ZZQD_btn_edit() {
+        var keyValueZZQD = $("#gridTable_SJ_ZZQD").jqGridRowValue('ZZQDID');
+        var keyValueZZQD_name = $("#gridTable_SJ_ZZQD").jqGridRowValue('NAME');
+        var keyValueZZQD_leve = $("#gridTable_SJ_ZZQD").jqGridRowValue('ZZLEVE');
+        var keyValueZZQD_mark = $("#gridTable_SJ_ZZQD").jqGridRowValue('BZ');
+        var ZZQD_info = keyValueZZQD + "," + keyValueZZQD_name + "," + keyValueZZQD_leve + "," + keyValueZZQD_mark;
+        if (checkedRow(keyValueZZQD)) {
+            dialogOpen({
+                id: 'FormZZQD_EDIT',
+                title: '治理工程施工设计资质清单',
+                url: '/JXGeoManage/TBL_ZLGC_SJINFO/TBL_ZLGC_SJZZQDList?&keyValue=' + keyValueZZQD + '&ZLGCID=' + keyValue + '&info=' + ZZQD_info,
+                width: '600px',
+                height: '400px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                        $("#gridTable_SJ_ZZQD").jqGrid().delRowData($('#gridTable_SJ_ZZQD .ui-state-highlight').attr('id'));
+                        data = JSON.parse(data);
+                        var newRow = data.ZZQDID;
+                        $("#gridTable_SJ_ZZQD").jqGrid('addRowData', newRow, data);
+                    });
+                }
+            })
+        }
+    }
+    //《施工设计》--- 资质清单:删除
+    function ZZQD_btn_delete() {
+        var keyValueZZQD = $("#gridTable_SJ_ZZQD").jqGridRowValue('ZZQDID');
+        if (keyValueZZQD) {
+            $("#gridTable_SJ_ZZQD").jqGrid().delRowData($('#gridTable_SJ_ZZQD .ui-state-highlight').attr('id'));
+            var resultDel = $("#gridTable_SJ_ZZQD").jqGrid('getRowData');
+            var newResult = [];
+            for (var i = 0; i < resultDel.length; i++) {
+                if (resultDel[i].ZZQDID < keyValueZZQD) {
+                    newResult[i] = { ZZQDID: resultDel[i].ZZQDID, NAME: resultDel[i].NAME, ZZLEVE: resultDel[i].ZZLEVE, BZ: resultDel[i].BZ }
+                }
+                if (resultDel[i].JLZZQDID > keyValueZZQD) {
+                    newResult[i] = { ZZQDID: resultDel[i].ZZQDID - 1, NAME: resultDel[i].NAME, ZZLEVE: resultDel[i].ZZLEVE, BZ: resultDel[i].BZ }
+                }
+            }
+            $('#gridTable_SJ_ZZQD').jqGrid("clearGridData");
+            $('#gridTable_SJ_ZZQD').jqGrid('setGridParam', {
+                datatype: 'local',
+                data: newResult,
+
+            }).trigger("reloadGrid");
+        } else {
+            dialogMsg('请选择需要删除的资质清单信息！', 0);
+        }
+    }
+
+    //对应施工设计汇总的资质清单
+    function GetGrid_SJ_ZZQD() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable_SJ_ZZQD');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: ($(window).height() - 356) / 2,
+            url: "../../api/TBL_ZLGC/SGSJ_GetZZQDList",
+            postData: { keyValue: keyValue },
+            datatype: "json",
+            colModel: [
+                { label: '资质清单ID', name: 'ZZQDID', index: 'ZZQDID', width: 300, align: 'left', sortable: true, hidden: true },
+                { label: '资质名称', name: 'NAME', index: 'NAME', width: 300, align: 'left', sortable: true },
+                { label: '资质等级', name: 'ZZLEVE', index: 'ZZLEVE', width: 200, align: 'left', sortable: true },
+                { label: '备注', name: 'BZ', index: 'BZ', width: 680, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            sortname: 'zzqdid',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+
+    //《施工设计》--- 区域划分:新增
+    function QYHF_btn_add() {
+        var total = $("#gridTables_SJ_QYHF").jqGrid('getGridParam', 'records');
+        var NEW_KeyValue = total + 1;
+        dialogOpen({
+            id: 'FormQYHF_ADD',
+            title: '治理工程施工设计区域划分',
+            url: '/JXGeoManage/TBL_ZLGC_SJINFO/TBL_ZLGC_SJZLQHList?NewkeyValue=' + NEW_KeyValue,
+            width: '600px',
+            height: '400px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    $("#QYHFTable .unwritten").hide();
+                    $("#QYHFTable .unwritten").css('display', 'none');
+                    data = JSON.parse(data);
+                    $("#gridTables_SJ_QYHF").jqGrid('addRowData', NEW_KeyValue, data);
+                });
+            }
+        });
+    }
+    //《施工设计》--- 区域划分:编辑
+    function QYHF_btn_edit() {
+        var keyValueQYHFID = $("#gridTables_SJ_QYHF").jqGridRowValue('QYHFID');
+        var keyValueZZQD_QYHFNAME = $("#gridTables_SJ_QYHF").jqGridRowValue('QYHFNAME');
+        var keyValueZZQD_QYHFLONGITUDE = $("#gridTables_SJ_QYHF").jqGridRowValue('LONGITUDE');
+        var keyValueZZQD_QYHFLATITUDE = $("#gridTables_SJ_QYHF").jqGridRowValue('LATITUDE');
+        var keyValueZZQD_ZLAREA = $("#gridTables_SJ_QYHF").jqGridRowValue('ZLAREA');
+        var QYHF_info = keyValueQYHFID + "," + keyValueZZQD_QYHFNAME + "," + keyValueZZQD_QYHFLONGITUDE + "," + keyValueZZQD_QYHFLATITUDE + "," + keyValueZZQD_ZLAREA;
+        if (checkedRow(keyValueQYHFID)) {
+            dialogOpen({
+                id: 'FormQYHF_EDIT',
+                title: '治理工程施工设计区域划分',
+                url: '/JXGeoManage/TBL_ZLGC_SJINFO/TBL_ZLGC_SJZLQHList?&keyValue=' + keyValueQYHFID + '&ZLGCID=' + keyValue + '&info=' + QYHF_info,
+                width: '600px',
+                height: '400px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                        $("#gridTables_SJ_QYHF").jqGrid().delRowData($('#gridTables_SJ_QYHF .ui-state-highlight').attr('id'));
+                        data = JSON.parse(data);
+                        var newRow = data.QYHFID;
+                        $("#gridTables_SJ_QYHF").jqGrid('addRowData', newRow, data);
+                    });
+                }
+            })
+        }
+    }
+    //《施工设计》--- 区域划分:删除
+    function QYHF_btn_delete() {
+        var keyValueZZQD = $("#gridTables_SJ_QYHF").jqGridRowValue('QYHFID');
+        if (keyValueZZQD) {
+            $("#gridTables_SJ_QYHF").jqGrid().delRowData($('#gridTables_SJ_QYHF .ui-state-highlight').attr('id'));
+
+            var resultDel = $("#gridTables_SJ_QYHF").jqGrid('getRowData');
+            var newResult = [];
+            for (var i = 0; i < resultDel.length; i++) {
+                if (resultDel[i].QYHFID < keyValueZZQD) {
+                    newResult[i] = { QYHFID: resultDel[i].QYHFID, QYHFNAME: resultDel[i].QYHFNAME, LONGITUDE: resultDel[i].LONGITUDE, LATITUDE: resultDel[i].LATITUDE, ZLAREA: resultDel[i].ZLAREA }
+                }
+                if (resultDel[i].QYHFID > keyValueZZQD) {
+                    newResult[i] = { QYHFID: resultDel[i].QYHFID - 1, QYHFNAME: resultDel[i].QYHFNAME, LONGITUDE: resultDel[i].LONGITUDE, LATITUDE: resultDel[i].LATITUDE, ZLAREA: resultDel[i].ZLAREA }
+                }
+            }
+            $('#gridTables_SJ_QYHF').jqGrid("clearGridData");
+            $('#gridTables_SJ_QYHF').jqGrid('setGridParam', {
+                datatype: 'local',
+                data: newResult,
+            }).trigger("reloadGrid");
+
+        } else {
+            dialogMsg('请选择需要删除的区域划分信息！', 0);
+        }
+    }
+
+    //对应施工设计中治理区域划分
+    function GetGrid_SJ_QQHF() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTables_SJ_QYHF');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: ($(window).height() - 356) / 2,
+            url: "../../api/TBL_ZLGC/SGSJ_GetQQHFList",
+            postData: { keyValue: keyValue },
+            datatype: "json",
+            colModel: [
+                { label: '治理区域ID', name: 'QYHFID', index: 'QYHFID', width: 300, align: 'left', sortable: true, hidden: true },
+                { label: '治理区域名称', name: 'QYHFNAME', index: 'QYHFNAME', width: 300, align: 'left', sortable: true },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 200, align: 'left', sortable: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 200, align: 'left', sortable: true },
+                { label: '治理面积', name: 'ZLAREA', index: 'ZLAREA', width: 480, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            sortname: 'QQHFID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+</script>
+}

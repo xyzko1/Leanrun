@@ -1,0 +1,188 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="height:100%;width:100%">
+    <trldiv style="height: 40px; width: 100%">
+        <ul class="nav nav-tabs" style="height:40px;padding-top: 3px;">
+            <li class="active" id="li_XMJBXX"><a href="#XMJBXX" data-toggle="tab" style="padding:9px 15px">防灾预案表</a></li>
+            <li id="li_SJFAXX"><a href="#SJFAXX" data-toggle="tab" style="padding:9px 15px">工作明白卡</a></li>
+            <li id="li_DMT"><a href="#DMT" data-toggle="tab" style="padding:9px 15px">避灾明白卡</a></li>
+            <li id="li_DMTPHONT" onclick="media()" style="display:none;"><a href="#DMTPHONT" data-toggle="tab" style="padding:9px 15px">多媒体</a></li>
+            <li style="float:right;margin-right:25px;" id="li_close">
+                <a class="btn btn-default" style="border:1px solid #ccc;border-radius:4px;margin-top:5px;padding:5px 10px;" onclick="thisClose('DZQCQFXQ')"><i class="fa fa-close"></i> 关闭</a>
+            </li>
+        </ul>
+    </trldiv>
+    <div class="ui-layout" id="layout2" style="height: calc(100% - 40px); width: 100%;">
+        <div id="myTabContent" class="tab-content" style="height: 100%; width: 100%;">
+            <div class="tab-pane fade in active" id="XMJBXX" style="height: 100%; width: 100%;">
+                <iframe id="XMJBXXS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+            </div>
+            <div class="tab-pane fade" id="SJFAXX" style="height: 100%; width: 100%;">
+                <iframe id="SJFAXXS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+            </div>
+            <div class="tab-pane fade" id="DMT" style="height: 100%; width: 100%;">
+                <iframe id="DMTS" width="100%" src="" onscroll="no" style="border:none;height:100%;display:block;"></iframe>
+            </div>
+            <div class="tab-pane fade in" style="height: 100%; width: 100%;background:#fff" id="DMTPHONT">
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script>
+    var belongGuid = request('keyValue') == "" ? null : request('keyValue');
+    //var keyValue = request('keyValue');
+    var UNIFIEDCODE = request('UNIFIEDCODE');
+    var keyValue = request('keyValue');
+    var callback = request('callback');//"返回"跳转url
+    var authToken = getAuthorizationToken();
+    var NewIfrem = request('NewIfrem');
+    var read = request('read');
+    var XQing = request('XQing');
+    var details = request('details'); 
+    $(function () {
+        if (NewIfrem == "Idetnew") {
+
+            //UNIFIEDCODE = keyValue;
+            $('#XMJBXXS').attr('src', "/JXGeoManage/TBL_QCQF_DISASTERPREVENTION/TBL_QCQF_DISASTERPREVENTIONForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&details=01&keyValue=" + keyValue);//防灾预案表
+            $('#SJFAXXS').attr('src', "/JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/TBL_QCQF_WORKUNDERSTANDCARDForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&&details=" + details + "keyValue=" + keyValue);//工作明白卡
+            $('#DMTS').attr('src', "/JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/TBL_QCQF_ESCUNDERSTANDCARDForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&details=" + details + "&keyValue=" + keyValue);//避灾明白卡
+        } else {
+
+            //UNIFIEDCODE = keyValue;
+
+            $('#XMJBXXS').attr('src', "/JXGeoManage/TBL_QCQF_DISASTERPREVENTION/TBL_QCQF_DISASTERPREVENTIONForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&details="+details+"&keyValue=" + keyValue);//防灾预案表
+            $('#SJFAXXS').attr('src', "/JXGeoManage/TBL_QCQF_WORKUNDERSTANDCARD/TBL_QCQF_WORKUNDERSTANDCARDForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&details=" + details + "&keyValue=" + keyValue);//工作明白卡
+            $('#DMTS').attr('src', "/JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/TBL_QCQF_ESCUNDERSTANDCARDForm?UNIFIEDCODE=" + UNIFIEDCODE + "&NewIfrem=" + NewIfrem + "&details=" + details + "&keyValue=" + keyValue);//避灾明白卡
+        }
+        assignment();
+        $("#li_close").hide();
+        if (callback) {
+            $("#li_close").show();
+        }
+        if (read == "01") {
+            $(".form-control").attr("disabled", "disabled");
+        }
+    });
+    function assignment() {
+        var XMJBXXS = $($('#XMJBXXS')[0].contentWindow);
+        var SJFAXXS = $($('#SJFAXXS')[0].contentWindow);
+        var DMT = $($('#DMTS')[0].contentWindow);
+        var XMJBXXSFrame = document.getElementById("XMJBXXS");
+        XMJBXXSFrame.onload = function () {
+            $("#li_SJFAXX").click(function () {
+                var mediaguid = SJFAXXS[0].$("#GUID").val();
+                window.setTimeout(function () {
+                    if (SJFAXXS[0].$('#QCQFLmedia2').attr('src') == "") {
+                        SJFAXXS[0].$('#QCQFLmedia2').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6&details=" + details + "&belongObjectGuid=" + mediaguid);
+                    }
+                        // setTimeout(function () { cfInitMultiMedias("QCQFLmedia2", "D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6", mediaguid, details); }, 400);
+                }, 400);
+                var QZWH = XMJBXXS[0].$("#POTENTIALHAZARDS").val();//潜在危害
+                var YFYS = XMJBXXS[0].$("#TRIGGERFACTORS").val();//引发因素
+                var LZYC = XMJBXXS[0].$("#STATEPREDICTION").val();//临灾状态防侧
+                var JCZRR = XMJBXXS[0].$("#MONITORRESPONSIBLE").val();  //监测责任人
+                var BJR = XMJBXXS[0].$("#ALARMPEOPLE").val();//报警人
+                var ALARMTEL = XMJBXXS[0].$("#ALARMTEL").val();//报警人电话
+                var YDBZDD = XMJBXXS[0].$("#BOOKESCAPINGLOCATION").val();//预定避灾地点
+                var RYCLLX = XMJBXXS[0].$("#EVACUATIONROUTES").val();//人员撤离路线
+                var ALARMSIGNAL = XMJBXXS[0].$("#ALARMSIGNAL").val();//报警信号
+                var UNIFIEDCODE = XMJBXXS[0].$("#UNIFIEDCODE").val();//统一编号
+                //点击工作明白卡tab时获取防灾预案表信息
+                SJFAXXS[0].$("#POTENTIALHAZARDS").val(QZWH);//威胁对象
+                SJFAXXS[0].$("#TRIGGERFACTORS").val(YFYS); //诱发因素
+                SJFAXXS[0].$("#STATEPREDICTION").val(LZYC);//临灾预报的判据
+                SJFAXXS[0].$("#BOOKESCAPINGLOCATION").val(YDBZDD);//预定避灾地点
+                SJFAXXS[0].$("#EVACUATIONROUTES").val(RYCLLX);//预定避灾地点
+                SJFAXXS[0].$("#ALARMSIGNAL").val(RYCLLX);//预定报警信号
+                SJFAXXS[0].$("#UNIFIEDCODE").val(UNIFIEDCODE);//灾害点编号
+            });
+            //点击避灾明白卡tab时获取防灾预案表和工作明白卡信息
+            $("#li_DMT").click(function () {
+                var mediaguid = DMT[0].$("#GUID").val();
+                window.setTimeout(function () {
+                    DMT[0].$('#QCQFLmedia3').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6&details=" + details + "&belongObjectGuid=" + mediaguid);
+                }, 400);
+                var YFYS = XMJBXXS[0].$("#TRIGGERFACTORS").val();//引发因素
+                var YDBZDD = XMJBXXS[0].$("#BOOKESCAPINGLOCATION").val();//预定避灾地点
+                var ALARMSIGNAL = XMJBXXS[0].$("#ALARMSIGNAL").val();//报警信号
+                var JCZRR = XMJBXXS[0].$("#MONITORRESPONSIBLE").val();  //监测责任人
+                var MONITORRESPONSIBLETEL = XMJBXXS[0].$("#MONITORRESPONSIBLETEL").val();//监测责任人电话
+                var BJR = XMJBXXS[0].$("#ALARMPEOPLE").val();//报警人
+                var ALARMTEL = XMJBXXS[0].$("#ALARMTEL").val();//报警人电话
+                var AZDWperson = SJFAXXS[0].$("#RISKUNITANDHEADER").val();//抢排险负责人
+                var AZDWphone = SJFAXXS[0].$("#RISKDUTYPHONE").val();//抢排险电话
+                var JHDW = SJFAXXS[0].$("#MEDICALCAREUNIT").val();//救护单位
+                var JHDWperson = SJFAXXS[0].$("#MEDICALCAREUNITHEADER").val();//救护单位负责人
+                var JHDWphone = SJFAXXS[0].$("#MEDICALCAREDUTYPHONE").val();//救护单位负责人电话
+                var OUTDOORCODE = SJFAXXS[0].$("#OUTDOORCODE").val();//野外编号
+                var DISASTERNAME = XMJBXXS[0].$("#DISASTERNAME").val();//引发因素
+                var UNIFIEDCODE = XMJBXXS[0].$("#UNIFIEDCODE").val();//统一编号
+                var PROVINCE = SJFAXXS[0].$("#PROVINCE").val();//省编号
+                var DISASTERTYPE = XMJBXXS[0].$("#DISASTERTYPE").val();//灾害类型
+                DMT[0].$("#TRIGGERFACTORS").val(YFYS); //诱发因素
+                DMT[0].$("#EVACUATIONROUTES").val(YDBZDD);//安置单位地点
+                DMT[0].$("#EVACUATIONROUTES").val(YDBZDD);//安置单位地点
+                DMT[0].$("#ALARMSIGNAL").val(ALARMSIGNAL);//预警信号
+                DMT[0].$("#MONITORRESPONSIBLE").val(JCZRR);//监测人
+                DMT[0].$("#MONITORRESPONSIBLETEL").val(MONITORRESPONSIBLETEL);//监测人联系电话
+                DMT[0].$("#ALARMPEOPLE").val(BJR); //预警信号发布人
+                DMT[0].$("#ALARMTEL").val(ALARMTEL);//发布人联系电话
+                DMT[0].$("#RISKUNITANDHEADER").val(AZDWperson);//安置单位负责人
+                DMT[0].$("#RISKDUTYPHONE").val(AZDWphone);//安置单位联系电话
+                DMT[0].$("#MEDICALCAREUNIT").val(JHDW);//救护单位
+                DMT[0].$("#MEDICALCAREUNITHEADER").val(JHDWperson);//救护单位负责人
+                DMT[0].$("#MEDICALCAREDUTYPHONE").val(JHDWphone);//救护单位联系电话
+                DMT[0].$("#OUTDOORCODE").val(OUTDOORCODE);//野外编号
+                DMT[0].$("#DISASTERNAME").val(DISASTERNAME);//灾害点名称
+                DMT[0].$("#PROVINCE").val(PROVINCE);//省编号
+                DMT[0].$("#DISASTERTYPE").val(DISASTERTYPE);//灾害类型
+            });
+        }
+    }
+    var flag = true;
+    function media() {
+        if (flag) {
+            setTimeout(function () { cfInitMultiMedias("DMTPHONT", modeId_Dzqunce, belongGuid, details); }, 200);
+            flag = false;
+        }
+    }
+    //保存表单
+    function AcceptClick() {
+        var XMJBXXS = $($('#XMJBXXS')[0].contentWindow);
+        var SJFAXXS = $($('#SJFAXXS')[0].contentWindow);
+        var entity = XMJBXXS[0].$("#DISASTERPREVENTION").GetWebControls();
+        var entity2 = SJFAXXS[0].$("#Worktable").GetWebControls();
+        $.SaveForm({
+            url: "../../api/TBL_HAZARDBASICINFOApi/QCQFSaveForm",
+            param: {
+                keyValue: keyValue,
+                entity: entity,
+                entity2: entity2
+            },
+            type: "post",
+            loading: "正在保存数据...",
+            authToken: authToken,
+            success: function (data) {
+                $($($('#XMJBXXS')[0].contentWindow)[0].$("#QCQFLmedia")[0]).children()[0].contentWindow.SaveFileInfo(data.resultdata.a);
+                //$($($('#SJFAXXS')[0].contentWindow)[0].$("#QCQFLmedia2")[0]).children()[0].contentWindow.SaveFileInfo(data.resultdata.a);
+                if ($($($('#SJFAXXS')[0].contentWindow)[0].$("#QCQFLmedia2")[0]).attr("src") != "") {
+                    $($('#SJFAXXS')[0].contentWindow)[0].$("#QCQFLmedia2")[0].contentWindow.SaveFileInfo(data.resultdata.b);
+                }
+                //$($($('#SJFAXXS')[0].contentWindow)[0].$("#QCQFLmedia2")[0])[0].contentWindow.SaveFileInfo(data.resultdata.b);
+                getInfoTop().$("#gridTable").trigger("reloadGrid");
+                window.parent.$('#gridTable').trigger('reloadGrid');
+            }
+        });
+    }
+    function qcqf_fz(dt) {
+        var SJFAXXS = $($('#SJFAXXS')[0].contentWindow);
+        var DMT = $($('#DMTS')[0].contentWindow);
+        SJFAXXS[0].initControl(dt.UNIFIEDCODE);
+        DMT[0].searchESCUNDERSTANDCARD(dt.UNIFIEDCODE);
+    }
+</script>
+}

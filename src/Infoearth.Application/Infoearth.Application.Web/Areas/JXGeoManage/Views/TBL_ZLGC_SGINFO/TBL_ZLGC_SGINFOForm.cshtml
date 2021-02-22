@@ -1,0 +1,306 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        height: auto;
+        margin: 0;
+    }
+
+    td {
+        border-top: none !important;
+    }
+</style>
+<div>
+    <div style="margin-top: 10px;">
+        <div style="width: 100%; height: 35px; background-color: rgb(199, 228, 249); line-height: 35px; border-radius: 5px">
+            <span>&nbsp;&nbsp;&nbsp;&nbsp;工程施工</span>
+            <a id="lr-add" style="float: right; margin-right: 30px; margin-top: 1.5px" class="btn btn-default" onclick="btn_GCSG_save()"><i class="fa fa-plus"></i>保存</a>
+            <a id="lr-delete" style="float: right; margin-right: 30px; margin-top: 1.5px" class="btn btn-default" onclick="btn_GCSG_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            @*<a id="lr-delete" style="float: right; margin-right: 30px; margin-top: 1.5px" class="btn btn-default" onclick="btn_GCSG_edit()"><i class="fa fa-trash-o"></i>编辑</a>*@
+            <a id="lr-delete1" style="float: right; margin-right: 30px; margin-top: 1.5px" class="btn btn-default" onclick="btn_GCSG_add()"><i class="fa fa-plus"></i>新增</a>
+        </div>
+        <table class="table form" id="gridTables_ZLGC_SG">
+            <tr>
+                <td class="formTitle" style="display: none;">guid</td>
+                <td class="formValue" style="display: none;">
+                    <input id="GUID" type="text" class="form-control" />
+                </td>
+                <td class="formTitle" style="display: none;">治理工程编号</td>
+                <td class="formValue" style="display: none;">
+                    <input id="ZLGCID" type="text" class="form-control readonly" readonly="readonly" />
+                </td>
+                <td class="formTitle">治理工程名称</td>
+                <td class="formValue">
+                    <input id="ZLGCNAME" type="text" class="form-control readonly" readonly="readonly" />
+                </td>
+                <td class="formTitle">施工单位<span class="required" style="color: red">*</span></td>
+                <td class="formValue">
+                    <input id="SGDEPT" class="form-control cs" isvalid="yes" checkexpession="NotNull" />
+                    <input id="MEDIAGUID" type="text" class="form-control" style="display: none;" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">联系人</td>
+                <td class="formValue">
+                    <input id="CONTACTPERSON" type="text" class="form-control cs" />
+                </td>
+                <td class="formTitle">联系电话</td>
+                <td class="formValue">
+                    <input id="CONTACTTEL" type="text" class="form-control cs" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">发包形式</td>
+                <td class="formValue">
+                    <input id="FBTYPE" type="text" class="form-control cs" />
+                </td>
+                <td class="formTitle">发包金额(万元)</td>
+                <td class="formValue">
+                    <input id="FBJE" type="text" class="form-control cs" />
+                </td>
+                <td class="formTitle">开工日期</td>
+                <td class="formValue">
+                    <input id="STARTTIME" type="text" class="form-control input-wdatepicker cs" onfocus="WdatePicker()" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">竣工日期</td>
+                <td class="formValue">
+                    <input id="ENDTIME" type="text" class="form-control input-wdatepicker cs" onfocus="WdatePicker()" />
+                </td>
+                <td class="formTitle">施工标段</td>
+                <td class="formValue">
+                    <input id="SGBD" type="text" class="form-control cs" />
+                </td>
+                <td class="formTitle">合同签订日期</td>
+                <td class="formValue">
+                    <input id="QDTIME" type="text" class="form-control input-wdatepicker cs" onfocus="WdatePicker()" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">招标时间</td>
+                <td class="formValue">
+                    <input id="ZBTIME" type="text" class="form-control input-wdatepicker cs" onfocus="WdatePicker()" />
+                </td>
+                <td class="formTitle">招标地点</td>
+                <td class="formValue">
+                    <input id="ZBPLACE" type="text" class="form-control cs" />
+                </td>
+                <td class="formTitle">中标时间</td>
+                <td class="formValue">
+                    <input id="GETTIME" type="text" class="form-control input-wdatepicker cs" onfocus="WdatePicker()" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">合同地点</td>
+                <td class="formValue" colspan="5">
+                    <input id="QDPLACE" type="text" class="form-control cs" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">工程内容</td>
+                <td class="formValue" colspan="5">
+                    <textarea id="GCCONTENT" class="form-control cs"></textarea>
+                </td>
+            </tr>
+        </table>
+        <div class="gridPanel" style="margin-top: 15px">
+            <table id="gridTable_ZLGC_GCSG"></table>
+            <div id="gridPager_ZLGC_GCSG"></div>
+        </div>
+        <div style="height: 300px; width: 100%;">
+            <iframe class="LRADMS_iframe" id="QCQFLmedia4" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var xq = request('xq');
+    var details = request('details');
+    var mid = "dcd1d0aa-1d51-4142-ae82-db812158b0da";
+    $(function () {
+        initControl();
+        GetGrid_GCSG();
+        if (keyValue == "") {
+            $("#lr-add").attr("disabled", "true");
+            $("#lr-delete1").attr("disabled", "true");
+            $("#lr-delete").attr("disabled", "true");
+        }
+        if (readonly == 01 || xq == 02) {
+            $("input").attr("disabled", "disabled");
+            $("textarea").attr("disabled", "disabled");
+            $("#lr-add").attr("disabled", "true");
+            $("#lr-delete1").attr("disabled", "true");
+            $("#lr-delete").attr("disabled", "true");
+            $(".titlePanel").css("display", "none");
+        }
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable_ZLGC_GCSG').setGridWidth(($(window).width()));
+                $('#gridTable_ZLGC_GCSG').setGridHeight($(window).height() - 407);
+            }, 200);
+            e.stopPropagation();
+        });
+    });
+    //初始化控件
+    function initControl() {
+        var queryJson = eval("({'ZLGCID':'" + keyValue + "'})");
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../api/TBL_ZLGC/GetGCSGPageListJson",
+                param: { queryJson: JSON.stringify(queryJson) },
+                authToken: authToken,
+                success: function (data) {
+                    var mediaguid = "";
+                    if (data.rows > 0) {
+                        $("#form1").SetWebControls(data.rows[0]);
+                        mediaguid = data.rows[0].MEDIAGUID;
+                    }
+                    $('#QCQFLmedia4').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+                }
+            });
+        }
+    }
+
+    //治理工程-工程施工删除
+    function btn_GCSG_delete() {
+        var keyValue = $("#gridTable_ZLGC_GCSG").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../api/TBL_ZLGC/GCSG_RemoveForm',
+                type: "post",
+                authToken: authToken,
+                param: { "": keyValue },
+                success: function (data) {
+                    $('#gridTable_ZLGC_GCSG').trigger('reloadGrid');
+                }
+            });
+        } else {
+            dialogMsg('请选择需要删除的治理工程-工程施工表！', 0);
+        }
+    }
+    var addBS = false;
+    function btn_GCSG_add() {
+        addBS = true;
+        $(".cs").val("");
+        $("#GUID").val("");
+        $('#QCQFLmedia4').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=");
+
+    }
+    //治理工程-工程施工新增
+    function btn_GCSG_save() {
+        var entityGCSG = $("#gridTables_ZLGC_SG").GetWebControls();
+
+        $.SaveForm({
+            url: "../../api/TBL_ZLGC/GCSG_SaveForm",
+            type: "post",
+            param: {
+                "keyValue": "",
+                "entityGCSG": entityGCSG
+            },
+            loading: "正在保存数据...",
+            close: false,
+            authToken: authToken,
+            success: function (data) {
+                console.log(data);
+                if ($("#QCQFLmedia4")[0].getAttribute("src") != "") {
+                    $("#QCQFLmedia4")[0].contentWindow.SaveFileInfo(data.resultdata.MEDIAGUID);
+                }
+                $("#gridTable_ZLGC_GCSG").jqGrid('GridUnload');
+                GetGrid_GCSG();
+            }
+        })
+    }
+    //加载工程施工列表信息
+    function GetGrid_GCSG() {
+        var queryJson = eval("({'ZLGCID':'" + keyValue + "'})");
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable_ZLGC_GCSG');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 407,
+            url: "../../api/TBL_ZLGC/GetGCSGPageListJson",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            datatype: "json",
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', hidden: true },
+                { label: '施工单位', name: 'SGDEPT', index: 'SGDEPT', width: 350, align: 'left', sortable: true },
+                { label: '联系人', name: 'CONTACTPERSON', index: 'CONTACTPERSON', width: 300, align: 'left', sortable: true },
+                { label: '联系电话', name: 'CONTACTTEL', index: 'CONTACTTEL', width: 300, align: 'left', sortable: true },
+                { label: '发包形式', name: 'FBTYPE', index: 'FBTYPE', width: 250, align: 'left', sortable: true }
+            ],
+            viewrecords: true,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: "#gridPager_ZLGC_GCSG",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var GUID_S = $('#' + this.id).getRowData(selectedRowIndex).GUID;
+                if (!!GUID_S) {
+                    $.SetForm({
+                        url: "../../api/TBL_ZLGC/GetGCSG",
+                        authToken: authToken,
+                        param: { keyValue: GUID_S },
+                        success: function (data) {
+                            $("#gridTables_ZLGC_SG").SetWebControls(data);
+                        }
+
+                    })
+                }
+                var mediaguid = $("#MEDIAGUID").val(); 
+                $('#QCQFLmedia4').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&details=" + details + "&belongObjectGuid=" + mediaguid);
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+                //var ids = new Array();
+                ////getDataIDs()返回当前grid里所有数据的id
+                //ids = $("#" + this.id).getDataIDs();
+                ////选择或反选指定行。如果onselectrow为ture则会触发事件onSelectRow，onselectrow默认为ture
+                //$("#" + this.id).setSelection(ids[0], true);
+
+            }
+        });
+    }
+
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_ZLGC_SGINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

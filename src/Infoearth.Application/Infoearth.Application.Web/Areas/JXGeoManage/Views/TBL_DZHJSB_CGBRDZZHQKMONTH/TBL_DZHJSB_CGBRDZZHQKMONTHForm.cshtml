@@ -1,0 +1,527 @@
+@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+   // var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        //if (!!keyValue) {
+        //    $.SetForm({
+        //        url: "../../JXGeoManage/TBL_DZHJSB_CGBRDZZHQKMONTH/GetFormJson",
+        //        param: { keyValue: keyValue },
+        //        success: function (data) {
+        //            $("#form1").SetWebControls(data);
+        //        }
+        //    })
+        //}
+        
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_DZHJSB_CGBRDZZHQKMONTH/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+
+    //var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+    });
+
+    function initControl() {
+        $('#gridContent').height($(window).height() - 120);
+    }
+    //读取
+    function getAuthorizationToken() {
+        var strCookie = document.cookie;
+        var cookieArray = strCookie.split('; ');
+        for (var i = 0; i < cookieArray.length; i++) {
+            var key = cookieArray[i].split('=')[0];
+            var value = cookieArray[i].split('=')[1];
+            if (key == 'Token') {
+                value = unescape(value);
+                //去掉逗号、用户名
+                value = value.split(',')[0];
+                //md5加密、转大写
+                value = $.md5(value).toUpperCase();
+                return value;
+            }
+        }
+        return null;
+    }
+
+    //选择文件
+    function inputFile() {
+        if ($('select[name=sel]').val() == 0) {
+            learun.dialogMsg({ msg: '请选择需要导入文件的类型！', type: 0 });
+            return
+        } else if ($("#YEAR").val() == "") {
+            learun.dialogMsg({ msg: '请选择年份！', type: 0 });
+            return
+        } else if ($("#MONTH").val() == "") {
+            learun.dialogMsg({ msg: '请选择月份！', type: 0 });
+            return
+        }
+        $("#file").click();
+    }
+    function fileImport() {
+        //var urlArr = "";
+        //$("#file").on("change", function () {
+        //     urlArr = this.value;
+        //    console.log(urlArr);
+        //})
+        //var selectedFile = document.getElementById('file').files[0];
+             //var name = selectedFile.name;//读取选中文件的文件名
+            //var formData = new FormData();
+            //formData.append('file', $('#file')[0].files[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+        formData.append('year', $("#YEAR").val());
+        formData.append('month', $("#MONTH").val());
+        formData.append('bbtype', $('select[name=sel]').val());
+        setGrid();
+        function setGrid() {
+            var $gridTable = $('#gridTable');
+            var $gridTables = $('#gridTables');
+            //var queryJson = { DISASTERYEAR: $("#YEAR").val() };
+            //var url = "";
+            if ($('select[name=sel]').val() == 1) {
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    url: "/JXGeoManage/TBL_DZHJSB_CGBRDZZHQKMONTH/ImportExcelData",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (typeof data == "string") {
+                            learun.dialogMsg({ msg: data, type: 0 });
+                            return
+                        }
+                        $("#grid2").hide();
+                        $("#grid1").show();
+                        //$gridTable.GridUnload();
+                        $gridTable.jqGrid({
+                            datatype: 'local',
+                            data: data,
+                            shrinkToFit: false,
+                            colModel :[
+                                { label: '灾险情唯一编号', name: 'GUID', index: 'GUID', width: 80, align: 'left', hidden: true, sortable: true },
+                                //{ label: '定位', name: 'DANGECASETITLE', index: 'DANGECASETITLE', width: 60, align: 'left', sortable: true },
+                                {
+                                    label: '发生日期', name: 'HAPPENDATE', index: 'HAPPENDATE', width: 60, align: 'left', sortable: true,
+                                    formatter: function (cellvalue, options, rowObject) {
+                                        if (!cellvalue) return '';
+                                        return cellvalue.substr(0, 10);
+                                    }
+                                },
+                                { label: '发生时间', name: 'OCCURRENCETIME', index: 'OCCURRENCETIME', width: 80, align: 'left', sortable: true },
+                                { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 80, align: 'left', sortable: true, },
+                                { label: '区、县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 80, align: 'left', sortable: true },
+                                { label: '乡镇、村组及具体地点', name: 'TOWNNAME', index: 'TOWNNAME', width: 80, align: 'left', sortable: true },
+                                //{ label: '村组及具体地点', name: 'ALARMPERSON', index: 'ALARMPERSON', width: 80, align: 'left', sortable: true },
+                                { label: '经度坐标', name: 'LON', index: 'LON', width: 80, align: 'left', sortable: true },
+                                { label: '纬度坐标', name: 'LAT', index: 'LAT', width: 80, align: 'left', sortable: true, },
+                                { label: '引发因素', name: 'COURSE', index: 'COURSE', width: 80, align: 'left', sortable: true, },
+                                { label: '具体原因', name: 'JTYY', index: 'JTYY', width: 80, align: 'left', sortable: true, },
+                                { label: '灾害类型', name: 'ZHLX', index: 'ZHLX', width: 80, align: 'left', sortable: true, },
+                                { label: '灾害等级', name: 'ZHDJ', index: 'ZHDJ', width: 80, align: 'left', sortable: true },
+                                { label: '受灾对象', name: 'SZDX', index: 'SZDX', width: 80, align: 'left', sortable: true },
+                                { label: '灾害规模', name: 'ZHGM', index: 'ZHGM', width: 80, align: 'left', sortable: true },
+                                { label: '受灾人口(人)', name: 'SZRK', index: 'SZRK', width: 80, align: 'left', sortable: true },
+                                { label: '直接经济损失(万元)', name: 'ZJJJSS', index: 'ZJJJSS', width: 80, align: 'left', sortable: true },
+                                { label: '受伤(人)', name: 'SS', index: 'SS', width: 80, align: 'left', sortable: true },
+                                { label: '失踪(人)', name: 'SZ', index: 'SZ', width: 80, align: 'left', sortable: true },
+                                { label: '死亡(人)', name: 'SW', index: 'SW', width: 80, align: 'left', sortable: true },
+                                { label: '有无应急调查报告', name: 'YWYJDCBG', index: 'YWYJDCBG', width: 80, align: 'left', sortable: true },
+                            ],
+                            //rownumbers: true,
+                            // pager: "#gridPager",
+                            rowNum: 9999,
+                            viewrecords: true,
+                            height: $(window).height() - 140,
+                            altRows: false,//启用隔行换色
+                            onSelectRow: function (i) {
+                            }
+                        });
+                        $gridTable.jqGrid('setGridParam', {  // 重新加载数据
+                            data: data,
+                            datatype: 'local',
+                        }).trigger("reloadGrid");
+                    }
+                })
+
+
+
+
+            } else if ($('select[name=sel]').val() == 2) {
+                $.ajax({
+                    type: "POST",
+                    data: formData,
+                    url: "/JXGeoManage/TBL_DZHJSB_CGBRDZZHQKMONTH/ImportExcelData",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    dataType: "json",
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data == 1) {
+                            learun.dialogMsg({ msg: '所选报表类型和导入报表类型不同！', type: 0 });
+                            return
+                        }
+                        $("#grid2").show();
+                        $("#grid1").hide();
+                        //$gridTable.GridUnload();
+                        $gridTables.jqGrid({
+                            datatype: 'local',
+                            data: data,
+                            shrinkToFit: false,
+                            colModel :[
+                                { label: '灾险情唯一编号', hidden: true, name: 'GUID', index: 'GUID', width: 80, align: 'left', sortable: true },
+                                //{ label: '定位', name: 'DANGECASETITLE', index: 'DANGECASETITLE', width: 60, align: 'left', sortable: true },
+                                { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 60, align: 'left', sortable: true },
+                                { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 60, align: 'left', sortable: true },
+                                { label: '县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 80, align: 'left', sortable: true },
+                                { label: '乡镇、村组及具体地点', name: 'TOWNNAME', index: 'TOWNNAME', width: 80, align: 'left', sortable: true },
+                                //{ label: '村组及具体地点', name: 'SPECIFICLOCATION', index: 'SPECIFICLOCATION', width: 80, align: 'left', sortable: true, },
+                                { label: '经度坐标', name: 'LON', index: 'LON', width: 80, align: 'left', sortable: true },
+                                { label: '纬度坐标', name: 'LAT', index: 'LAT', width: 80, align: 'left', sortable: true, },
+                                { label: '灾害类型', name: 'ZHLX', index: 'ZHLX', width: 80, align: 'left', sortable: true, },
+                                { label: '灾害规模', name: 'ZHGM', index: 'ZHGM', width: 80, align: 'left', sortable: true },
+                                {
+                                    label: '发出预报日期', name: 'SENDDATE', index: 'SENDDATE', width: 80, align: 'left', sortable: true,
+                                    formatter: function (cellvalue, options, rowObject) {
+                                        if (!cellvalue) return '';
+                                        return cellvalue.substr(0, 10);
+                                    }
+                                },
+                                { label: '预报时间', name: 'YBTIME', index: 'YBTIME', width: 80, align: 'left', sortable: true },
+                                {
+                                    label: '灾害发生日期', name: 'HAPPENDATE', index: 'HAPPENDATE', width: 80, align: 'left', sortable: true,
+                                    formatter: function (cellvalue, options, rowObject) {
+                                        if (!cellvalue) return '';
+                                        return cellvalue.substr(0, 10);
+                                    }
+                                },
+                                { label: '灾害发生时间', name: 'HAPPENTIME', index: 'HAPPENTIME', width: 80, align: 'left', sortable: true, },
+                                { label: '预报方法和避灾措施', name: 'YBFFHBZCS', index: 'YBFFHBZCS', width: 80, align: 'left', sortable: true, },
+                                { label: '预报人(或单位)', name: 'FORECASTUNIT', index: 'FORECASTUNIT', width: 80, align: 'left', sortable: true, },
+                                { label: '紧急转移人口(人)', name: 'JJZYRK', index: 'JJZYRK', width: 80, align: 'left', sortable: true, },
+                                { label: '避免经济损失(万元)', name: 'BMJJSS', index: 'BMJJSS', width: 80, align: 'left', sortable: true },
+                                { label: '避免伤亡人口(人)', name: 'BMSWRK', index: 'BMSWRK', width: 80, align: 'left', sortable: true },
+                            ],
+                            //rownumbers: true,
+                            // pager: "#gridPager",
+                            rowNum: 9999,
+                            viewrecords: true,
+                            height: $(window).height() - 140,
+                            altRows: false,//启用隔行换色
+                            onSelectRow: function (i) {
+                            }
+                        });
+                        $gridTables.jqGrid('setGridParam', {  // 重新加载数据
+                            data: data,
+                            datatype: 'local',
+                        }).trigger("reloadGrid");
+                    }
+                })
+            }
+            
+           
+        }
+
+    };
+    //下载模板
+    function DownloadModel() {
+        if ($('select[name=sel]').val() == 0) {
+            alert("请选择需要下载模板的类型");
+            return
+        }
+        if ($('select[name=sel]').val() == 1) {
+            window.location.href = "../../Template/地质灾害统计月报表.xls"
+            return
+        } else if ($('select[name=sel]').val() == 2) {
+            window.location.href = "../../Template/成功避让地质灾害情况月报表.xls"
+            return
+        }
+
+    }
+
+    ////表格表头
+    //var colModel = [];
+    //function baobiao(value) {
+    //    var type = value;
+    //    if (type == 1) {
+    //        colModel = [];
+    //        colModel = [
+    //                { label: '灾险情唯一编号', name: 'GUID', index: 'GUID', width: 80, align: 'left', hidden: true, sortable: true },
+    //                //{ label: '定位', name: 'DANGECASETITLE', index: 'DANGECASETITLE', width: 60, align: 'left', sortable: true },
+    //                {
+    //                    label: '发生日期', name: 'HAPPENDATE', index: 'HAPPENDATE', width: 60, align: 'left', sortable: true,
+    //                    formatter: function (cellvalue, options, rowObject) {
+    //                        if (!cellvalue) return '';
+    //                        return cellvalue.substr(0, 10);
+    //                    }
+    //                },
+    //                { label: '发生时间', name: 'OCCURRENCETIME', index: 'OCCURRENCETIME', width: 80, align: 'left', sortable: true },
+    //                { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 80, align: 'left', sortable: true, },
+    //                { label: '区、县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 80, align: 'left', sortable: true },
+    //            { label: '乡镇、村组及具体地点', name: 'TOWNNAME', index: 'TOWNNAME', width: 80, align: 'left', sortable: true },
+    //                //{ label: '村组及具体地点', name: 'ALARMPERSON', index: 'ALARMPERSON', width: 80, align: 'left', sortable: true },
+    //                { label: '经度坐标', name: 'LON', index: 'LON', width: 80, align: 'left', sortable: true },
+    //                { label: '纬度坐标', name: 'LAT', index: 'LAT', width: 80, align: 'left', sortable: true, },
+    //                { label: '引发因素', name: 'COURSE', index: 'COURSE', width: 80, align: 'left', sortable: true, },
+    //                { label: '具体原因', name: 'JTYY', index: 'JTYY', width: 80, align: 'left', sortable: true, },
+    //                { label: '灾害类型', name: 'ZHLX', index: 'ZHLX', width: 80, align: 'left', sortable: true, },
+    //                { label: '灾害等级', name: 'ZHDJ', index: 'ZHDJ', width: 80, align: 'left', sortable: true },
+    //                { label: '受灾对象', name: 'SZDX', index: 'SZDX', width: 80, align: 'left', sortable: true },
+    //                { label: '灾害规模', name: 'ZHGM', index: 'ZHGM', width: 80, align: 'left', sortable: true },
+    //                { label: '受灾人口(人)', name: 'SZRK', index: 'SZRK', width: 80, align: 'left', sortable: true },
+    //                { label: '直接经济损失(万元)', name: 'ZJJJSS', index: 'ZJJJSS', width: 80, align: 'left', sortable: true },
+    //                { label: '受伤(人)', name: 'SS', index: 'SS', width: 80, align: 'left', sortable: true },
+    //                { label: '失踪(人)', name: 'SZ', index: 'SZ', width: 80, align: 'left', sortable: true },
+    //                { label: '死亡(人)', name: 'SW', index: 'SW', width: 80, align: 'left', sortable: true },
+    //                { label: '有无应急调查报告', name: 'YWYJDCBG', index: 'YWYJDCBG', width: 80, align: 'left', sortable: true },
+    //        ];
+    //    } else if (type == 2) {
+    //        colModel = [];
+    //        colModel = [
+    //              { label: '灾险情唯一编号', hidden: true, name: 'GUID', index: 'GUID', width: 80, align: 'left', sortable: true },
+    //              //{ label: '定位', name: 'DANGECASETITLE', index: 'DANGECASETITLE', width: 60, align: 'left', sortable: true },
+    //              { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 60, align: 'left', sortable: true },
+    //              { label: '市', name: 'CITYNAME', index: 'CITYNAME', width: 60, align: 'left', sortable: true },
+    //              { label: '县', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 80, align: 'left', sortable: true },
+    //            { label: '乡镇、村组及具体地点', name: 'TOWNNAME', index: 'TOWNNAME', width: 80, align: 'left', sortable: true },
+    //              //{ label: '村组及具体地点', name: 'SPECIFICLOCATION', index: 'SPECIFICLOCATION', width: 80, align: 'left', sortable: true, },
+    //              { label: '经度坐标', name: 'LON', index: 'LON', width: 80, align: 'left', sortable: true },
+    //              { label: '纬度坐标', name: 'LAT', index: 'LAT', width: 80, align: 'left', sortable: true, },
+    //              { label: '灾害类型', name: 'ZHLX', index: 'ZHLX', width: 80, align: 'left', sortable: true, },
+    //              { label: '灾害规模', name: 'ZHGM', index: 'ZHGM', width: 80, align: 'left', sortable: true },
+    //              {
+    //                  label: '发出预报日期', name: 'SENDDATE', index: 'SENDDATE', width: 80, align: 'left', sortable: true,
+    //                  formatter: function (cellvalue, options, rowObject) {
+    //                      if (!cellvalue) return '';
+    //                      return cellvalue.substr(0, 10);
+    //                  }
+    //              },
+    //              { label: '预报时间', name: 'YBTIME', index: 'YBTIME', width: 80, align: 'left', sortable: true },
+    //              {
+    //                  label: '灾害发生日期', name: 'HAPPENDATE', index: 'HAPPENDATE', width: 80, align: 'left', sortable: true,
+    //                  formatter: function (cellvalue, options, rowObject) {
+    //                      if (!cellvalue) return '';
+    //                      return cellvalue.substr(0, 10);
+    //                  }
+    //              },
+    //              { label: '灾害发生时间', name: 'HAPPENTIME', index: 'HAPPENTIME', width: 80, align: 'left', sortable: true, },
+    //              { label: '预报方法和避灾措施', name: 'YBFFHBZCS', index: 'YBFFHBZCS', width: 80, align: 'left', sortable: true, },
+    //              { label: '预报人(或单位)', name: 'FORECASTUNIT', index: 'FORECASTUNIT', width: 80, align: 'left', sortable: true, },
+    //              { label: '紧急转移人口(人)', name: 'JJZYRK', index: 'JJZYRK', width: 80, align: 'left', sortable: true, },
+    //              { label: '避免经济损失(万元)', name: 'BMJJSS', index: 'BMJJSS', width: 80, align: 'left', sortable: true },
+    //              { label: '避免伤亡人口(人)', name: 'BMSWRK', index: 'BMSWRK', width: 80, align: 'left', sortable: true },
+    //        ];
+    //    }
+    //}
+    //确认按钮
+    function AcceptClick() {
+        //var formData = new FormData();
+        //formData.append('file', $('#file')[0].files[0]);
+        var formData = new FormData();
+        formData.append('file', $('#file')[0].files[0]);
+        formData.append('year', $("#YEAR").val());
+        formData.append('month', $("#MONTH").val());
+        formData.append('bbtype', $('select[name=sel]').val());
+        $("#loadingModal").modal('show');
+        $.SaveForm({
+            url: "/JXGeoManage/TBL_DZHJSB_CGBRDZZHQKMONTH/ImportExcelDataSave",
+            param: formData,
+            authToken: authToken,
+            contentType: false,
+            processData: false,
+            loading: "正在导入数据...",
+            success: function (data) {
+                $("#loadingModal").modal('hide');
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }, error: function (e) {
+                alert(e);
+                $("#loadingModal").modal('hide');
+            }
+        })
+    };
+
+
+
+
+
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <div style="border-bottom:dashed #808080 1px;">
+        <div style="display:inline-block;vertical-align:super;height:50px;margin-left:10px;">
+            @*<span style="display:inherit;margin-top:10px;font-size:large">导入文件名称：</span>
+                <span id="fileName" style="width:300px;text-align:center;font-size:large"></span>*@
+            <span class="spans">报表类型：</span>
+            <select placeholder="-请选择-" name="sel" @*onchange="baobiao(this.options[this.options.selectedIndex].value)"*@ id="BBTYPE" class="leixing select">
+                <option value="0">-请选择-</option>
+                <option value="1">地质灾害情况月报表</option>
+                <option value="2">成功避让地质灾害情况月报表</option>
+            </select>
+            <div class="title-search" style="display:inline-block;margin-left:10px">
+                <span class="spans">选择年份：</span><input id="YEAR" type="text" class="nianfen select" onfocus="WdatePicker({dateFmt:'yyyy'})" />年
+                <input id="MONTH" type="text" class="nianfen select" onfocus="WdatePicker({dateFmt:'MM'})" />月
+            </div>
+            <div class="uploadbtn"><span class="upchar" onclick="inputFile()">选择文件</span></div>
+            <input type="file" accept="application/vnd.ms-excel" id="file" style="display: none" onchange="fileImport(this)" />
+            @*<label for="file" id="upFile" style="float:right;">选择文件</label>*@
+            <div class="uploadbtn"><span class="upchar" onclick="DownloadModel()">下载模板</span></div>
+            @*<input class="uploadbtn" value="下载模板" onclick="excelModel()" />*@
+        </div>
+
+
+
+
+
+        @*<input type="file" accept="application/vnd.ms-excel" style="margin-left:-2000px" id="file">*@
+
+    </div>
+    <div id="gridContent" style="width:100%;border-bottom:dashed #808080 1px;">
+        @*<ul id="myTab" class="nav nav-tabs"></ul>
+        <div id="myTabContent" class="tab-content" style="overflow-x:auto">
+        </div>*@
+        <div class="gridPanel" id="grid1" style="background-color:#fcf7f7;overflow:auto">
+            <table id="gridTable"></table>
+        </div>
+        <div class="gridPanel" id="grid2" style="background-color:#fcf7f7;overflow:auto">
+            <table id="gridTables"></table>
+        </div>
+    </div>
+    @*<h4 style="color:red;margin:5px;">注：预览显示sheet前100条数据（导入全部）,通过切换tab选取导入的sheet表单</h4>*@
+    <div class="modal fade" id="loadingModal">
+        <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+            <div class="progress progress-striped active" style="margin-bottom: 0;">
+                <div class="progress-bar" style="width: 100%;"></div>
+            </div>
+            <h5 style="color:white;">数据正在导入中...</h5>
+        </div>
+    </div>
+</div>
+<style>
+    .uploadbtn {
+        display: inline-block;
+        padding: 3px;
+        border-radius: 5px;
+        height: 30px;
+        border: 1px solid #169BD5;
+        width: 80px;
+        margin-left: 10px;
+        margin-top: 10px;
+        background-color: #169BD5;
+        color: white;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .upchar {
+        font-size: 14px;
+        color: #fff;
+        display: block;
+        text-align: center;
+    }
+
+    #LAST table {
+        margin-top: 5px;
+    }
+
+    .select {
+        width: 100px ;
+        height: 28px;
+        margin-left: 10px;
+        margin-top: 10px;
+        /*border-color:rgb(169,169,169);*/
+    }
+    .nianfen {
+        width: 80px;
+        margin-right: 5px;
+    }
+    .leixing {
+        width: 180px !important;
+    }
+
+    .form .formTitle {
+        white-space: pre-wrap !important;
+        background: #F2F2F2;
+    }
+
+    .title .formTitle {
+        background: #fff;
+    }
+
+    .form-control[disabled], fieldset[disabled] .form-control {
+        background: #dedcdc !important;
+    }
+
+    .form-control {
+        border-radius: 4px;
+    }
+
+    .ui-select-text {
+        border-radius: 4px;
+    }
+
+    label {
+        margin-left: 10px;
+        margin-top: 10px;
+        position: relative;
+        /* display: inline-block; */
+        background: #D0EEFF;
+        border: 1px solid #99D3F5;
+        border-radius: 4px;
+        padding: 4px 12px;
+        overflow: hidden;
+        color: #1E88C7;
+        text-decoration: none;
+        text-indent: 0;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    .nav-tabs {
+        padding-top: 0 !important;
+    }
+
+    html, body, #form1 {
+        height: 100%;
+        overflow: hidden !important;
+    }
+
+    .required {
+        color: red;
+        /*padding-left: 5px;*/
+        vertical-align: middle;
+    }
+</style>

@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+</style>
+<div class="titlePanel" style="height:10px !important;">
+    <div class="title-search" id="filter-form">
+        @*<table>
+            <tr>
+                <td>
+                    <div id="queryCondition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown" aria-expanded="false">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-value="UserName">名称</a></li>
+                            <li><a data-value="Account">登陆名</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <input id="UserName" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>*@
+    </div>
+    <div style="clear:both"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>
+    var GUID = [];
+    var selectFileData = [];
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        if (request('name')) {
+            GUID = unescape(request('name')).split(',');
+        }
+        //查询条件
+        //$("#queryCondition .dropdown-menu li").click(function () {
+        //    var text = $(this).find('a').html();
+        //    var value = $(this).find('a').attr('data-value');
+        //    $("#queryCondition .dropdown-text").html(text).attr('data-value', value)
+        //});
+        GetGrid();
+        //查询点击事件
+        //$("#btn_Search").click(function () {
+        //    SearchEvent();
+        //});
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height());
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 80,
+            url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetPageListJson",
+            loadBeforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            datatype: "json",
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 230, align: 'left', sortable: true, hidden: true },
+                { label: '地面沉降名称', name: 'DMCJMC', index: 'DMCJMC', width: 250, align: 'left', sortable: true },
+                { label: '地面沉降编号', name: 'DMCJBH', index: 'DMCJBH', width: 250, align: 'left', sortable: true },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '调查人', name: 'DCR', index: 'DCR', width: 100, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '填表日期', name: 'TBSJ', index: 'TBSJ', width: 200, align: 'left', sortable: true,hidden: true,
+                    formatter: function (cellvalue) {
+                        if (cellvalue) { return learun.formatDate(cellvalue, 'yyyy-MM-dd'); } else { return '' }
+                    }
+                },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true, hidden: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'DMCJBH',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            altRows: true,
+            onSelectRow: function (rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var dt = $gridTable.jqGrid("getRowData", rowId);
+                var objArr = { guid: dt.GUID, name: dt.DMCJMC, code: dt.DMCJBH, jd: dt.LONGITUDE, wd: dt.LATITUDE, };
+                //var html = GetHtml(objArr);
+                var data = [];
+                data.push({ longitude: dt.LONGITUDE, latitude: dt.LATITUDE,  });
+                //map.getView().setZoom(8);
+                //if (isMarkerClick) {
+                //    isMarkerClick = false;
+                //    //cfShowGDZBArea(dt.KQGD, mapCtlExt);
+                //    return;
+                //}
+                //else if (dt.LONGITUDE && dt.LATITUDE) {
+                //    mapCtlExt.addLocation(data);
+                //    //cfShowGDZBArea(dt.KQGD, mapCtlExt);
+                //}
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    var selectData = [];
+
+    //保存表单;
+    function AcceptClick(callback) {
+        var name = $("#gridTable").jqGridRowValue('DMCJMC');
+        var DeptCode = $("#gridTable").jqGridRowValue('DMCJBH');
+        //var parkName = $("#gridTable").jqGridRowValue('PARKNAME');
+        var data = { name: name, DeptCode: DeptCode };
+        callback(data);
+        learun.dialogClose();
+    }
+    function addSelectFileData(dt) {
+        var flag = false;
+        for (var i = 0; i < selectFileData.length; i++) {
+            if (selectFileData[i].GUID == dt.GUID) {
+                flag = true;
+            }
+        }
+        if (!flag) {
+            selectFileData.push({ GUID: dt.GUID, NAME: dt.NAME });
+        }
+    }
+    function deleteSelectFileData(GUID) {
+        for (var i = 0; i < selectFileData.length; i++) {
+            if (selectFileData[i].GUID == GUID) {
+                selectFileData.splice(i, 1);
+            }
+        }
+    }
+    function getAuthorizationToken() {
+        var strCookie = document.cookie;
+        var cookieArray = strCookie.split('; ');
+        for (var i = 0; i < cookieArray.length; i++) {
+            var key = cookieArray[i].split('=')[0];
+            var value = cookieArray[i].split('=')[1];
+            if (key == 'Token') {
+                value = unescape(value);
+                //去掉逗号、用户名
+                value = value.split(',')[0];
+                //md5加密、转大写
+                value = $.md5(value).toUpperCase();
+                return value;
+            }
+        }
+        return null;
+    }
+
+</script>
+}

@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@section Scripts{
+    <script>
+        //初始化控件
+        function AcceptClick() {
+            if (!$('#form1').Validform()) {
+                return false;
+            }
+            learun.dialogClose();
+            return selectData = {
+                UserName: $('#UserName').val(),
+                Mobile: $('#Mobile').val(),
+                Email: $('#Email').val() 
+            };
+        }
+    </script>
+}
+<style>
+    .center_div {
+        line-height: 40px;
+        text-align: left;
+    }
+
+    .spans { 
+        display: inline-block;
+        padding-right: 20px;
+        width: 100px;
+        text-align: right;
+        line-height: 40px;
+        white-space: nowrap;
+    }
+
+    .center_div input {
+        width: 200px !important;
+        display: inline-block;
+    }
+</style>
+<div id="form1">
+    <div style="width: 100%;background: #fff; padding: 20px 0 0 20px">
+        <ul class="center_div">
+            <li><span class="spans">姓名:</span><input id="UserName" type="text" class="form-control" /></li>
+            <li><span class="spans">手机:<font style="color:#f00">*</font></span><input id="Mobile" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" /></li>
+            <li><span class="spans">邮箱:</span><input id="Email" type="text" class="form-control" /></li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,312 @@
+@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div style="height:100px;width:100%">
+        <div class="title-search" style="width:30%;height:100px;padding:20px 30px;float:left">
+
+            <span class="spans">报表类型：</span>
+            <select placeholder="-请选择-" name="sel" @*onchange="baobiao(this.options[this.options.selectedIndex].value)"*@ id="BBTYPE" class="select">
+                <option value="0">-请选择-</option>
+                <option value="1">地质灾害灾情年报表</option>
+                <option value="2">地质灾害防治年报表</option>
+            </select>
+
+        </div>
+        <div class="title-search" style="width:30%;height:100px;padding:20px 10px;float:left">
+            <span class="spans">选择年份：</span><input id="YEAR" type="text" class="select" onfocus="WdatePicker({dateFmt:'yyyy'})" />
+        </div>
+
+        @*<div style="width:40%;height:100px;padding:20px 30px;float:left">
+            <span class="spans" style="float:left;width:60px">文件路径：</span>
+            <textarea id="WJLJ" type="text" class="form-control" style="height:70px;width:calc(100% - 60px);" isvalid="yes"></textarea>
+        </div>*@
+        <div class="uploadbtn"><span class="search" onclick="inputFile()">查询</span></div>
+        <input class="uploadbtn" type="button" onclick="btn_add()" value="导入" />
+        @*<input class="uploadbtn" type="button" value="导出" />*@
+    </div>
+    <div class="gridPanel" style="background-color:#fcf7f7;overflow:auto">
+        <table id="gridTable"></table>
+    </div>
+</div>
+<style>
+    .select {
+        width: 170px !important;
+        height: 28px;
+        /*border-color:rgb(169,169,169);*/
+    }
+
+    #YEAR {
+        margin-left: 3px;
+    }
+
+    .uploadbtn {
+        float: left;
+        padding: 3px;
+        border-radius: 5px;
+        height: 30px;
+        border: 1px solid #169BD5;
+        width: 80px;
+        margin-right: 20px;
+        margin-top: 20px;
+        background-color: #169BD5;
+        color: white;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+    .search {
+        font-size: 14px;
+        color: #fff;
+        display: block;
+        text-align: center;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
+</style>
+
+@section Scripts{
+    <script>
+        //resize重设布局;
+        $(window).resize(function () {
+            $('#gridTable').setGridWidth(($('.gridPanel').width()-2));
+            $('#gridTable').setGridHeight($(window).height() - 140);
+        });
+       // $(window).resize();
+        var w = 0;
+        //点击选择按钮按钮,使file触发点击事件,然后完成读取文件的操作
+        function inputFile() {
+            if ($('select[name=sel]').val() == 0) {
+                learun.dialogMsg({ msg: '请选择需要查询文件的类型！', type: 0 });
+                return
+            } else if ($("#YEAR").val() == "") {
+                learun.dialogMsg({ msg: '请选择年份！', type: 0 });
+                return
+            }
+            setGrid();
+            w += 1;
+            if (w != 1) {
+                setGrid();
+            }
+        }
+        //读取
+        function getAuthorizationToken() {
+            var strCookie = document.cookie;
+            var cookieArray = strCookie.split('; ');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var key = cookieArray[i].split('=')[0];
+                var value = cookieArray[i].split('=')[1];
+                if (key == 'Token') {
+                    value = unescape(value);
+                    //去掉逗号、用户名
+                    value = value.split(',')[0];
+                    //md5加密、转大写
+                    value = $.md5(value).toUpperCase();
+                    return value;
+                }
+            }
+        }
+        var authToken = getAuthorizationToken();
+        //设置表格
+        
+        function setGrid() {
+
+            var total = {};
+            var $gridTable = $('#gridTable');
+            var queryJson = { DISASTERYEAR: $("#YEAR").val() };
+            if ($('select[name=sel]').val() == 1) {
+                $.ajax({
+                    type: "get",
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    url: "/JXGeoManage/TBL_DZHJSB_DZZHZQYEAR/GetListJson",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    dataType: "json",
+                    async: false,
+                    //contentType: false,
+                    //processData: false,
+                    success: function (data) {
+                        total.PROVINCENAME = '广东省 总计';
+                        total.DISASTERAMOUNT = 0;
+                        total.NATURALELENT = 0;
+                        total.HUMANFACTORS = 0;
+                        total.QUANTITY = 0;
+                        total.COLLAPSE = 0;
+                        total.COAST = 0;
+                        total.DEBRISFLOW = 0;
+                        total.SURFACECOLLAPSE = 0;
+                        total.SURFACEFRACTURE = 0;
+                        total.SURFACEFALL = 0;
+                        total.CAUSEDEATHTOLL = 0;
+                        total.DEADAMOUNT = 0;
+                        total.LOSTAMOUNT = 0;
+                        total.HURTAMOUNT = 0;
+                        total.DIRECTECONOMICLOSS = 0;
+                        for (i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            total.DISASTERAMOUNT += item.DISASTERAMOUNT;
+                            total.NATURALELENT += item.NATURALELENT;
+                            total.HUMANFACTORS += item.HUMANFACTORS;
+                            total.QUANTITY += item.QUANTITY;
+                            total.COLLAPSE += item.COLLAPSE;
+                            total.COAST += item.COAST;
+                            total.DEBRISFLOW += item.DEBRISFLOW;
+                            total.SURFACECOLLAPSE += item.SURFACECOLLAPSE;
+                            total.SURFACEFRACTURE += item.SURFACEFRACTURE;
+                            total.SURFACEFALL += item.SURFACEFALL;
+                            total.CAUSEDEATHTOLL += item.CAUSEDEATHTOLL;
+                            total.DEADAMOUNT += item.DEADAMOUNT;
+                            total.LOSTAMOUNT += item.LOSTAMOUNT;
+                            total.HURTAMOUNT += item.HURTAMOUNT;
+                            total.DIRECTECONOMICLOSS += item.DIRECTECONOMICLOSS;
+                        }
+                        if (data.length !=0) {
+                            data.push(total);
+                        }
+                        //console.log(total);
+                        $gridTable.GridUnload();
+                        $gridTable.jqGrid({
+                            data: data,
+                            datatype: "local",
+                            colModel: [
+                    { label: '灾险情唯一编号', name: 'GUID', index: 'GUID', width: 80, align: 'left', hidden: true, sortable: true },
+                    { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 80, align: 'left', sortable: true },
+                    { label: '市名', name: 'CITYNAME', index: 'CITYNAME', width: 60, align: 'left', sortable: true },
+                    { label: '01地质灾害数量', name: 'DISASTERAMOUNT', index: 'DISASTERAMOUNT', width: 120, align: 'left', sortable: true },
+                    { label: '02自然因素', name: 'NATURALELENT', index: 'NATURALELENT', width: 80, align: 'left', sortable: true, },
+                    { label: '03人为因素', name: 'HUMANFACTORS', index: 'HUMANFACTORS', width: 80, align: 'left', sortable: true },
+                    { label: '04地质灾害数量', name: 'QUANTITY', index: 'QUANTITY', width: 120, align: 'left', sortable: true },
+                    { label: '05崩塌', name: 'COLLAPSE', index: 'COLLAPSE', width: 80, align: 'left', sortable: true },
+                    { label: '06滑坡', name: 'COAST', index: 'COAST', width: 80, align: 'left', sortable: true, },
+                    { label: '07泥石流', name: 'DEBRISFLOW', index: 'DEBRISFLOW', width: 80, align: 'left', sortable: true, },
+                    { label: '08地面塌陷', name: 'SURFACECOLLAPSE', index: 'SURFACECOLLAPSE', width: 80, align: 'left', sortable: true, },
+                    { label: '09地裂缝', name: 'SURFACEFRACTURE', index: 'SURFACEFRACTURE', width: 80, align: 'left', sortable: true, },
+                    { label: '10地面沉降', name: 'SURFACEFALL', index: 'SURFACEFALL', width: 80, align: 'left', sortable: true },
+                    { label: '11造成伤亡人数', name: 'CAUSEDEATHTOLL', index: 'CAUSEDEATHTOLL', width: 120, align: 'left', sortable: true },
+                    { label: '12死亡人数', name: 'DEADAMOUNT', index: 'DEADAMOUNT', width: 80, align: 'left', sortable: true },
+                    { label: '13失踪人数', name: 'LOSTAMOUNT', index: 'LOSTAMOUNT', width: 80, align: 'left', sortable: true },
+                    { label: '14受伤人数', name: 'HURTAMOUNT', index: 'HURTAMOUNT', width: 80, align: 'left', sortable: true },
+                    { label: '15直接经济损失', name: 'DIRECTECONOMICLOSS', index: 'DIRECTECONOMICLOSS', width: 120, align: 'left', sortable: true },
+                            ],
+                            shrinkToFit: false,
+                            rowNum: 9999,
+                            viewrecords: true,
+                            height: $(window).height() - 140,
+                            altRows: false,//启用隔行换色
+                            onSelectRow: function (i) {
+                            }
+                        });
+                        $(window).resize();
+                    }
+                })
+            } else if ($('select[name=sel]').val() == 2) {
+                $.ajax({
+                    type: "get",
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    url: "/JXGeoManage/TBL_DZHJSB_DZZHFZYEAR/GetListJson",
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    async: false,
+                    dataType: "json",
+                    //contentType: false,
+                    //processData: false,
+                    success: function (data) {
+                        total.PROVINCENAME = '广东省 总计';
+                        total.AVOIDDISAATER = 0;
+                        total.AVOIDHURTHUMAN = 0;
+                        total.DIRECTECONOMICLOSS = 0;
+                        total.CDYJCZXZ = 0;
+                        total.CYYJCLDZZH = 0;
+                        total.DZZHFZXM = 0;
+                        total.GOVERNPROJECT = 0;
+                        total.JCYJXM = 0;
+                        total.TRFZZJ = 0;
+                        total.REMOVALAMOUNT = 0;
+                        total.WCDZZHWXXPGXM = 0;
+                        total.HIDDENAMOUNTITOTALLY = 0;
+                        total.ADDAMOUNT = 0;
+                        total.CLEARAMOUNT = 0;
+                        total.BIGLARGE = 0;
+                        total.LARGE = 0;
+                        for (i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            total.DZZHFZXM += item.DZZHFZXM;
+                            total.AVOIDDISAATER += item.AVOIDDISAATER;
+                            total.AVOIDHURTHUMAN += item.AVOIDHURTHUMAN;
+                            total.DIRECTECONOMICLOSS += item.DIRECTECONOMICLOSS;
+                            total.CDYJCZXZ += item.CDYJCZXZ;
+                            total.CYYJCLDZZH += item.CYYJCLDZZH;
+                            total.GOVERNPROJECT += item.GOVERNPROJECT;
+                            total.JCYJXM += item.JCYJXM;
+                            total.TRFZZJ += item.TRFZZJ;
+                            total.REMOVALAMOUNT += item.REMOVALAMOUNT;
+                            total.WCDZZHWXXPGXM += item.WCDZZHWXXPGXM;
+                            total.HIDDENAMOUNTITOTALLY += item.HIDDENAMOUNTITOTALLY;
+                            total.ADDAMOUNT += item.ADDAMOUNT;
+                            total.CLEARAMOUNT += item.CLEARAMOUNT;
+                            total.BIGLARGE += item.BIGLARGE;
+                            total.LARGE += item.LARGE;
+                        }
+                        if (data.length != 0) {
+                            data.push(total);
+                        }
+                        $gridTable.GridUnload();
+                        $gridTable.jqGrid({
+                            data: data,
+                            datatype: "local",
+                            colModel: [
+                    { label: '灾险情唯一编号', hidden: true, name: 'GUID', index: 'GUID', width: 80, align: 'left', sortable: true },
+                    { label: '省', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 80, align: 'left', sortable: true },
+                    { label: '市名', name: 'CITYNAME', index: 'CITYNAME', width: 60, align: 'left', sortable: true },
+                    { label: '01_成功避让地质灾害', name: 'AVOIDDISAATER', index: 'AVOIDDISAATER', width: 140, align: 'left', sortable: true },
+                    { label: '02_避免伤亡人员', name: 'AVOIDHURTHUMAN', index: 'AVOIDHURTHUMAN', width: 120, align: 'left', sortable: true, },
+                    { label: '03_避免直接经济损失', name: 'DIRECTECONOMICLOSS', index: 'DIRECTECONOMICLOSS', width: 140, align: 'left', sortable: true },
+                    { label: '04_出动应急处置小组', name: 'CDYJCZXZ', index: 'CDYJCZXZ', width: 160, align: 'left', sortable: true },
+                    { label: '05_参与应急处置地质灾害', name: 'CYYJCLDZZH', index: 'CYYJCLDZZH', width: 160, align: 'left', sortable: true },
+                    { label: '06_地质灾害防治项目', name: 'DZZHFZXM', index: 'DZZHFZXM', width: 140, align: 'left', sortable: true, },
+                    { label: '07_治理项目', name: 'GOVERNPROJECT', index: 'GOVERNPROJECT', width: 120, align: 'left', sortable: true, },
+                    { label: '08_监测预警项目', name: 'JCYJXM', index: 'JCYJXM', width: 120, align: 'left', sortable: true, },
+                    { label: '09_投入防治资金', name: 'TRFZZJ', index: 'TRFZZJ', width: 120, align: 'left', sortable: true, },
+                    { label: '10_搬迁人数', name: 'REMOVALAMOUNT', index: 'REMOVALAMOUNT', width: 120, align: 'left', sortable: true },
+                    { label: '11_完成地质灾害危险性评估项目', name: 'WCDZZHWXXPGXM', index: 'WCDZZHWXXPGXM', width: 220, align: 'left', sortable: true },
+                    { label: '12_地质灾害隐患点总数', name: 'HIDDENAMOUNTITOTALLY', index: 'HIDDENAMOUNTITOTALLY', width: 180, align: 'left', sortable: true },
+                    { label: '13_新增数量', name: 'ADDAMOUNT', index: 'ADDAMOUNT', width: 100, align: 'left', sortable: true },
+                    { label: '14_消除数量', name: 'CLEARAMOUNT', index: 'CLEARAMOUNT', width: 100, align: 'left', sortable: true },
+                    { label: '15_特大型', name: 'BIGLARGE', index: 'BIGLARGE', width: 100, align: 'left', sortable: true },
+                    { label: '16_大型', name: 'LARGE', index: 'LARGE', width: 100, align: 'left', sortable: true },
+                            ],
+                            shrinkToFit: false,
+                            rowNum: 9999,
+                            viewrecords: true,
+                            height: $(window).height() - 180,
+                            altRows: false,//启用隔行换色
+                            onSelectRow: function (i) {
+                            }
+                        });
+                        $(window).resize();
+                    }
+                })
+            };
+        }
+       
+        //导入
+        function btn_add() {
+            dialogOpen({
+                id: 'Form',
+                title: '导入地质灾害年报表',
+                url: '/JXGeoManage/TBL_DZHJSB_DZZHZQYEAR/TBL_DZHJSB_DZZHZQYEARForm',
+                width: '800px',
+                height: '',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            });
+        }
+    </script>
+
+}

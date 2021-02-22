@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">地面沉降编号</td>
+            <td class="formValue">
+                <input id="DMCJBH" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">项目名称</td>
+            <td class="formValue">
+                <input id="XMMC" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查单位</td>
+            <td class="formValue">
+                <input id="DCDW" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地面沉降名称</td>
+            <td class="formValue">
+                <input id="DMCJMC" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">室内编号</td>
+            <td class="formValue">
+                <input id="INDOORCODE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">室外编号</td>
+            <td class="formValue">
+                <input id="OUTDOORCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地理位置</td>
+            <td class="formValue">
+                <input id="LOCATION" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地理位置-省市县编号</td>
+            <td class="formValue">
+                <input id="AREACODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">X</td>
+            <td class="formValue">
+                <input id="X" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">Y</td>
+            <td class="formValue">
+                <input id="Y" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">标高</td>
+            <td class="formValue">
+                <input id="ALTITUDE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地质环境条件-沉降历史及变化规律</td>
+            <td class="formValue">
+                <input id="DZHJTJCJLS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地质环境条件-地形地貌</td>
+            <td class="formValue">
+                <input id="DZHJTJDXDM" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地质环境条件-地质构造及活动情况</td>
+            <td class="formValue">
+                <input id="DZHJTJDZGZ" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地质环境条件-第四纪沉积环境和沉积物工程地质特征</td>
+            <td class="formValue">
+                <input id="DZHJTJCJHJ" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地质环境条件-水文地质特征</td>
+            <td class="formValue">
+                <input id="DZHJTJSWDZ" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地面沉降现象1(建筑物破坏、地面开裂、井口抬升)</td>
+            <td class="formValue">
+                <input id="DMCJXX1" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地面沉降现象2(桥洞净空减少、市政设施破坏、港口码头或堤岸失效)</td>
+            <td class="formValue">
+                <input id="DMCJXX2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地面沉降现象3(海水倒灌、洪涝灾害、其他)</td>
+            <td class="formValue">
+                <input id="DMCJXX3" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">地面沉降现象-灾害现象描述</td>
+            <td class="formValue">
+                <div id="DMCJXXMS" type="select" class="ui-select" ></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采层位</td>
+            <td class="formValue">
+                <input id="CJQDXSKCCW" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采时间</td>
+            <td class="formValue">
+                <input id="CJQDXSKCSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采井数量(眼)</td>
+            <td class="formValue">
+                <input id="CJQDXSKCJSL" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采井深度(m)</td>
+            <td class="formValue">
+                <input id="CJQDXSKCJSD" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采量(m3/a)</td>
+            <td class="formValue">
+                <input id="CJQDXSKCL1" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水开采-开采量(m3/d)</td>
+            <td class="formValue">
+                <input id="CJQDXSKCL2" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水位-开采前水位(头)高程(m)</td>
+            <td class="formValue">
+                <input id="CJQDXSKCQSW" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水位-漏斗中心水位(头)高程(m)</td>
+            <td class="formValue">
+                <input id="CJQDXSLDZXSW" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水位回灌-回灌层位</td>
+            <td class="formValue">
+                <input id="CJQDXSHGCW" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水位回灌-回灌时间</td>
+            <td class="formValue">
+                <input id="CJQDXSHGSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区地下水开采概况-地下水位回灌-回灌井数量(眼)</td>
+            <td class="formValue">
+                <input id="CJQDXSHGJSL" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降区地下水开采概况-地下水位回灌-回灌井深度(m)</td>
+            <td class="formValue">
+                <input id="CJQDXSHGJSD" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">沉降区人类活动特征</td>
+            <td class="formValue">
+                <input id="CJQRLHDTZ" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">沉降原因</td>
+            <td class="formValue">
+                <input id="CJYY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">发展趋势</td>
+            <td class="formValue">
+                <input id="FZQS" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">灾害现状及预测</td>
+            <td class="formValue">
+                <input id="ZAXZJYC" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治现状及建议-已采取的防治措施及效果</td>
+            <td class="formValue">
+                <input id="YCQFZCS" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">防治现状及建议-今后防治建议</td>
+            <td class="formValue">
+                <input id="JHFZCS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">现场图像-平(剖)面图</td>
+            <td class="formValue">
+                <input id="PMT" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">现场图像-图片及编号</td>
+            <td class="formValue">
+                <input id="TPBH" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">现场图像-影像及编号</td>
+            <td class="formValue">
+                <input id="YXBH" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">调查人</td>
+            <td class="formValue">
+                <input id="DCR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">记录人</td>
+            <td class="formValue">
+                <input id="JLR" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">审核人</td>
+            <td class="formValue">
+                <input id="SHR" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表日期</td>
+            <td class="formValue">
+                <input id="TBSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        $("#DMCJXXMS").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=DMCJXX",
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../DMCJManage/TBL_DMCJ_BASEINFO/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../DMCJManage/TBL_DMCJ_BASEINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

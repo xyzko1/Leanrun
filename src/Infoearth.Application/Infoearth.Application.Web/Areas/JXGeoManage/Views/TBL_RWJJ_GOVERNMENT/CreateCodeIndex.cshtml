@@ -1,0 +1,305 @@
+﻿@{
+    ViewBag.Title = "获取统一编号";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    body {
+        overflow-y:hidden;
+    }
+    td {
+    border:none !important;
+    vertical-align: baseline !important;
+    }
+    .formTitle {
+text-align:center;
+width: 180px !important;
+    }
+    body {
+height:auto;
+    }
+</style>
+<div style="margin:10px" id="districtControl">
+<div id="districtControl" style="width:100%">
+    <table style="width:100%" class="table">
+        <tr style="width:100%">
+            <td class="formTitle">省<font face="宋体" style="color:red">*</font></td>
+            <td class="formValue">
+                <div id="PROVINCE" type="selectTree" class="ui-select" isvalid="yes"checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市<font face="宋体" style="color:red">*</font></td>
+            <td class="formValue">
+                <div id="CITY" type="selectTree" class="ui-select" isvalid="yes"checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">县<font face="宋体" style="color:red">*</font></td>
+            <td class="formValue">
+                <div id="COUNTY" type="selectTree" class="ui-select" isvalid="yes"checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">乡镇<font face="宋体" style="color:red">*</font></td>
+            <td class="formValue">
+                <div id="TOWN" type="selectTree" class="ui-select" isvalid="yes"checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2" style="color:red;"><span style="display:inline-block;float:left;margin-left:39px">人文经济顺序编号四位数,不满四位者,前面加0</span></td>
+        </tr>
+        <tr>
+            <td class="formTitle">人文经济顺序编号<font face="宋体" style="color:red">*</font>：</td>
+            <td class="formValue">
+                <input id="ZHDCODE" type="text" class="form-control" maxlength="5" isvalid="yes" checkexpession="NotNull" onkeyup="this.value=this.value.replace(/[^\d]/g,'') " onafterpaste="this.value=this.value.replace(/[^\d]/g,'') " />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" style="color:red;">人文经济编号规则：</td>
+            <td class="formValue" style="display:flex;">
+                 <a style="float:none;width:30%;margin-right:5px" id="btn_genercode" onclick="genercode()" class="btn btn-primary" style="float:right"><i class="fa fa-save"></i>&nbsp;生成编码</a>
+                 <input id="typecode" class="form-control" style="width:70%;display:inline-block;border-radius:3px" disabled="disabled"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">
+                 <textarea id="" class="form-control" rows="4" style="color:red">由16位ASCII码构成（图），分为4级，行政区划国标代码共9位（含省市、地区、县区、乡镇4级）；前两位固定为RW；随机编号在行政区划代码后面，编号递增增长；最后一位为固定字母（K-企业，G-学校，F-医院，H-政府，R-居民住宅）</textarea>
+            </td>
+        </tr>
+    </table>
+</div>
+</div>
+
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/districts.js"></script>
+<script>
+    var tabhtml = request('tabhtml');
+    var code = GetConfig("DefalutCode");
+    var authToken = getAuthorizationToken();
+    //  alert(tabhtml)
+    $(function () {
+        initControl();
+        if ($("#ZHDCODE").val) {
+
+        }
+        $("#ZHDCODE").blur(function () {
+        })
+    })
+    //初始化控件
+    function initControl() {
+        //默认选择"陕西省"
+        var html = $("#districtControl").html();
+        var district = $("#districtControl").districtsCtl({
+            provinceId: code,
+            selectProviceId: code,
+            selectCityId: "",
+            selectCounty: "",
+            html: html
+        });
+        var _provinceCommbox = $("#PROVINCE");
+        var _cityCommbox = $("#CITY");
+        var _countyCommbox = $("#COUNTY");
+        var _townCommbox = $("#TOWN")
+        //省份
+        _provinceCommbox.ComboBox({
+            url: "../../SystemManage/Area/GetProvinceListJson",
+            param: { parentId: "0", provinceIds: code },
+            id: "F_AreaCode",
+            text: "F_AreaName",
+            description: "选择省",
+            height: "170px"
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            _cityCommbox[0].innerHTML = "选择市";
+            _cityCommbox.attr('data-value', '');
+            _countyCommbox[0].innerHTML = "选择县/区";
+            _countyCommbox.attr('data-value', '');
+            _townCommbox[0].innerHTML = "选择乡/镇";
+            _townCommbox.attr('data-value', '');
+            if (!value) {
+                value = "abcdef";
+            }
+            _cityCommbox.ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择市",
+                height: "170px"
+            });
+            _countyCommbox.ComboBox({
+                //url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择县/区",
+                height: "170px"
+            });
+            _townCommbox.ComboBox({
+                //url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择乡/镇",
+                height: "170px"
+            });
+        });
+        //城市
+        _cityCommbox.ComboBox({
+            description: "选择市",
+            height: "170px"
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            _countyCommbox[0].innerHTML = "选择县/区";
+            _countyCommbox.attr('data-value', '');
+            _townCommbox[0].innerHTML = "选择乡/镇";
+            _townCommbox.attr('data-value', '');
+            if (!value) {
+                value = "abcdef";
+            }
+            //if (value) {
+            _countyCommbox.ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择县/区",
+                height: "170px"
+            });
+            _townCommbox.ComboBox({
+                //url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择乡/镇",
+                height: "170px"
+            });
+
+        });
+        //县/区
+        _countyCommbox.ComboBox({
+            description: "选择县/区",
+            height: "170px"
+        }).bind("change", function () {
+            var value = $(this).attr('data-value');
+            _townCommbox[0].innerHTML = "选择乡/镇";
+            _townCommbox.attr('data-value', '');
+            if (!value) {
+                value = "abcdef";
+            }
+            //if (value) {
+            _townCommbox.ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: value },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择乡/镇",
+                height: "170px"
+            });
+
+        });
+    }
+
+    function getDistrictValue() {
+        var _provinceCommbox = $("#PROVINCE");
+        var _cityCommbox = $("#CITY");
+        var _countyCommbox = $("#COUNTY");
+        var _townCommbox = $("#TOWN")
+        var districtInfo = {
+            provinceId: "",
+            provinceName: "",
+            cityId: "",
+            cityName: "",
+            countyId: "",
+            countyName: "",
+            townId: "",
+            townName: ""
+        };
+        districtInfo.provinceId = _provinceCommbox[0].dataset.value;
+        districtInfo.provinceName = _provinceCommbox[0].innerText;
+        districtInfo.cityId = _cityCommbox[0].dataset.value;
+        districtInfo.cityName = _cityCommbox[0].innerText;
+        districtInfo.countyId = _countyCommbox[0].dataset.value;
+        districtInfo.countyName = _countyCommbox[0].innerText;
+        districtInfo.townId = _townCommbox[0].dataset.value;
+        districtInfo.townName = _townCommbox[0].innerText;
+        return districtInfo;
+    }
+
+
+
+    //保存表单
+    function AcceptClick(callback) {
+        var data = getDistrictValue();
+        data["UNIFIEDCODE"] = genercode();
+        learun.dialogClose();
+        return data;
+    }
+    //获取请求地址
+    function GetRequestUrl(v) {
+        var url = null;
+        switch (v) {
+            case "H":
+                url = "../../JXGeoManage/TBL_RWJJ_GOVERNMENT/GetFormJson";
+                break;
+            case "K":
+                url = "../../JXGeoManage/TBL_RWJJ_GOVERNMENT/GetFormJson";
+                break;
+            case "F":
+                url = "../../JXGeoManage/TBL_RWJJ_GOVERNMENT/GetFormJson";
+                break;
+            case "G":
+                url = "../../JXGeoManage/TBL_RWJJ_GOVERNMENT/GetFormJson";
+                break;
+            case "R":
+                url = "../../JXGeoManage/TBL_RWJJ_GOVERNMENT/GetFormJson";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+    function genercode() {
+        var NEWZHDCODE = null;
+        var ZHDCODE = $("#ZHDCODE").val();//顺序编号
+        if (ZHDCODE.length == 1) {         //灾害点编号判断
+            NEWZHDCODE = "000" + ZHDCODE
+        } else if (ZHDCODE.length == 2) {
+            NEWZHDCODE = "00" + ZHDCODE
+        } else if (ZHDCODE.length == 3) {
+            NEWZHDCODE = "0" + ZHDCODE
+        } else if (ZHDCODE.length == 4) {
+            NEWZHDCODE =ZHDCODE
+        }
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var TOWN = $("#TOWN").attr('data-value');
+        var value = "RW" + TOWN + NEWZHDCODE + tabhtml;
+        $("#typecode").val(value);
+        //校验编号是否已存在
+        $.ajax({
+            url: GetRequestUrl(tabhtml),
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            data: { keyValue: value },
+            async: false,
+            success: function (data) {
+                if (data == null || data == '' || data == 'null') {
+                    $("#typecode").val(value);
+                }
+                else {
+                    value = '';
+                    $("#ZHDCODE").val("");
+                    $("#typecode").val("");
+                    learun.dialogMsg({ msg: '该统一编号已存在！', type: 0 });
+                }
+            }
+        });
+        return value;
+    }
+</script>
+}

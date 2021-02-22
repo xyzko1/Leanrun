@@ -1,0 +1,137 @@
+﻿h2,strong{
+    height:30px;
+    line-height:30px;
+    font-size:14px;    
+}
+.div-main {
+    min-width:1280px;
+    height:100%;
+}
+.zxq-ul li{
+    border-bottom:1px solid #fff;
+}
+.div {
+    display:inline-block;
+    vertical-align:top;
+}
+.div-left{    
+    width:22%;
+    padding:0 0.5%;
+    min-width:280px;
+    background:#EDEDED;
+}
+.div-right {    
+    width:20%;
+    min-width:256px;
+}
+.div-center {    
+    width:56%;
+    min-width:690px;
+}
+.head-tit{
+    cursor:pointer;
+}
+.icon-flag {
+    float:right;
+    margin-top:8px;
+    display:inline-block; 
+    font-size:14px;   
+}
+.gridPanel {
+    display:none;    
+}
+.tit-top{
+     animation:mymove-top 0.5s!important;
+    -webkit-animation:mymove-top 0.5s!important;
+    animation-fill-mode: forwards!important;
+}
+@keyframes mymove-top
+{
+    0% {transform:rotate(0deg);}
+    100% {transform:rotate(90deg);}
+}
+@-webkit-keyframes mymove-top /*Safari and Chrome*/
+{
+    0% {transform:rotate(0deg);}
+    100% {transform:rotate(90deg);}
+}
+.tit-left{
+    animation:mymove-left 0.5s;
+    -webkit-animation:mymove-left 0.5s; /* Safari 和 Chrome */
+    animation-fill-mode: forwards;
+}
+@keyframes mymove-left
+{
+    0%  {transform:rotate(90deg);}
+    100%  {transform:rotate(0deg);}
+}
+@-webkit-keyframes mymove-left /*Safari and Chrome*/
+{
+    0%  {transform:rotate(90deg);}
+    100%  {transform:rotate(0deg);}
+}
+.center-tit {
+    width:100%;
+    text-align:center;
+    margin-top:10px;
+}
+.center-tit > a {
+    margin:0 6px;
+}
+/*center*/
+.div-time {
+    width:100%;
+    position:relative;
+    padding-top:10px;
+}
+.xian {
+    width:100%;
+    border-bottom:1px solid #49d6fa;
+    position:absolute;
+    top:20px;z-index:-1;
+}
+.div-time >div{
+    display:inline-block;
+}
+.btn-date {
+    width:calc(25% - 14.5px);
+    text-align:center;
+    vertical-align:top;
+    margin-top:2px;
+}
+.icon-left, .icon-right {
+    border:1px solid #02C6F8;
+    width:20px;
+    height:20px;
+    line-height:18px;
+    text-align:center;
+    border-radius:50%;
+    vertical-align:top;
+    background:#fff;
+    cursor:pointer;
+}
+.icon-left i, .icon-right i {
+    font-size:14px;
+}
+.icon-btn {
+    display:inline-block;
+    width:16px;height:16px;
+    border:1px solid #02C6F8;
+    border-radius:50%;
+    background:#fff;
+    cursor:pointer;
+}
+.thisDate {
+    background:#008CEE;
+}
+.center-tit .btn {
+    border:1px solid #ddd;
+}
+.zhType {
+    border:1px solid #02C6F8!important;
+    background:#008CEE;
+    color:#fff;
+}
+.center-tit .zhType:hover {
+    color:#fff!important;
+}

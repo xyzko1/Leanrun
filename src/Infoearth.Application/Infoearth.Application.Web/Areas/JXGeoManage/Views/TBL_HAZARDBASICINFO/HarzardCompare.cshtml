@@ -1,0 +1,344 @@
+﻿@{
+    ViewBag.Title = "灾害信息页面对比";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');  //历史记录GUID
+    var dmt = request('dmt');
+    var type = request('type');
+    var flag = request('flag');
+    var authToken = getAuthorizationToken();
+    var leftLoad = false;
+    var rightLoad = false;
+    $(function () {
+        InitialPage();
+        InitialData();
+    });
+
+    ////初始化数据
+    //function InitialData() {
+
+    //    if (!!type && !!keyValue) {
+    //        //获取当前数据
+    //        $('#left').attr('src', GetViewUrl(type) + "?guid=" + keyValue + "&details=01");
+    //        //获取历史最新数据
+    //        $.SetForm({
+    //            url: GetRequestUrl(type),
+    //            param: { keyValue: keyValue },
+    //            authToken: authToken,
+    //            success: function (data) {
+    //                if (data) {
+    //                    var code = data.GUID;
+    //                    $('#right').attr('src', GetViewUrl(type) + "?guid=" + code + "&details=01");
+    //                    InializeScroll();
+    //                }
+    //                else {
+    //                    dialogMsg("历史版本信息未找到！", 0);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+    //初始化数据
+    function InitialData() {
+        if (type && keyValue) {
+            //获取当前数据
+            $('#left').attr('src', GetViewUrl(type) + "?guid=" + keyValue + "&details=01&dmt=" + dmt + "&flag=false" + "&callback=true");
+
+            //获取历史最新数据
+            if (flag == "true") {
+                $.SetForm({
+                    url: GetRequestUrl(type),
+                    param: { keyValue: keyValue },
+                    authToken: authToken,
+                    success: function (data) {
+                        if (data) {
+                            var code = data.GUID;
+                            $('#right').attr('src', GetViewUrl(type) + "?guid=" + code + "&dmt=" + dmt + "&details=01&flag=false");
+                          //  console.log(GetViewUrl(type) + "?guid=" + code + "&details=01")
+                            InializeScroll();
+                            //$($('#right')[0].contentWindow)[0].window.$("#li_DMT").trigger("click");
+                        }
+                        else {
+                            dialogMsg("历史版本信息未找到！", 0);
+                        }
+                    }
+                });
+            } else {
+                $('#compare').hide();
+                $('#read').css('width', '100%');
+                $('#left').css('width', '1362px');
+            }
+        }
+    }
+    //初始化滚动条事件
+    function InializeScroll() {
+        var left = $($('#left')[0].contentWindow);
+        var right = $($('#right')[0].contentWindow)
+
+        var leftFrame = document.getElementById("left");
+        var rigthFrame = document.getElementById("right");
+
+        if (leftFrame.attachEvent) {
+            leftFrame.attachEvent("onload", function () {
+                //添加滚动条事件
+                left[0].window.$(".nav-tabs").parent().scroll(function () {
+                    right[0].window.$(".nav-tabs").parent().scrollTop($(this).scrollTop());
+                });
+                //添加按钮切换事件
+                left[0].window.$(".nav-tabs li").click(function (e) {
+                    var id = $(this).attr('id').replace("li_", "");
+                    right[0].window.$("#li_DMT").trigger("click");
+                    if (e.target.innerText == "多媒体") {
+                        right[0].window.$('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + right[0].window.mid + "&belongObjectGuid=" + right[0].window.keyValue + "&details=" + right[0].window.details);
+                    }
+                    right[0].window.$(".nav-tabs li a[href='#" + id + "']").tab('show');
+                });
+
+                window.setTimeout(function () {
+                    //比较元素差异
+                    left[0].$(':input').each(function () {
+                        var value = $(this).val();
+                        var rightValue = right[0].$('#' + this.id).val();
+                        if (this.id == "" || this.id == undefined) {
+                            rightValue = right[0].$('[name="' + $(this).attr('name') + '"][value="' + $(this).attr('value') + '"]').val();
+                        }
+
+                        if (value != rightValue) {
+                            $(this).parent().css('background', 'red');
+                            $(this).parent().css('color', 'white');
+                        }
+                        //判断checkbox和radio(name,value)
+                        else {
+                            value = $(this)[0].checked;
+
+                            if (this.id == "" || this.id == undefined) {
+                                rightValue = right[0].$('[name="' + $(this).attr('name') + '"][value="' + $(this).attr('value') + '"]')[0].checked;
+                            }
+                            else {
+                                rightValue = right[0].$('#' + this.id)[0].checked;
+                            }
+
+                            if (value != rightValue) {
+                                $(this).parent().css('background', 'red');
+                                $(this).parent().css('color', 'white');
+                            }
+                        }
+                    });
+                    left[0].$('.ui-select-text').each(function () {
+                        var value = $(this).find("span").html();
+                        var rightValue = right[0].$('#' + $(this).parent().attr("id")).find("span").html();
+                        if (value != rightValue) {
+                            $(this).parent().css('background', 'red');
+                            $(this).parent().css('color', 'white');
+                        }
+ 
+                    });
+                }, 300);
+
+            });
+        }
+        else {
+            leftFrame.onload = function () {
+                //添加滚动条事件
+                left[0].window.$(".nav-tabs").parent().scroll(function (n, e) {
+                    right[0].window.$(".nav-tabs").parent().scrollTop($(this).scrollTop());
+                });
+                //添加按钮切换事件
+                left[0].window.$(".nav-tabs li").click(function (e) {
+                    if (e.target.innerText == "多媒体") {
+                        right[0].window.$('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + right[0].window.mid + "&belongObjectGuid=" + right[0].window.keyValue + "&details=" + right[0].window.details);
+                    }
+                    var id = $(this).attr('id').replace("li_", "");
+                    right[0].window.$(".nav-tabs li a[href='#" + id + "']").tab('show');
+                });
+
+                window.setTimeout(function () {
+                    //比较元素差异
+                    left[0].$(':input').each(function () {
+                        var value = $(this).val();
+                        var rightValue = right[0].$('#' + this.id).val();
+                        if (this.id == "" || this.id == undefined) {
+                            rightValue = right[0].$('[name="' + $(this).attr('name') + '"][value="' + $(this).attr('value') + '"]').val();
+                        }
+
+                        if (value != rightValue) {
+                            $(this).parent().css('background', 'red');
+                            $(this).parent().css('color', 'white');
+                        }
+                        //判断checkbox和radio(name,value)
+                        else {
+                            value = $(this)[0].checked;
+
+                            if (this.id == "" || this.id == undefined) {
+                                rightValue = right[0].$('[name="' + $(this).attr('name') + '"][value="' + $(this).attr('value') + '"]')[0].checked;
+                            }
+                            else {
+                                rightValue = right[0].$('#' + this.id)[0].checked;
+                            }
+
+                            if (value != rightValue) {
+                                $(this).parent().css('background', 'red');
+                                $(this).parent().css('color', 'white');
+                            }
+                        }
+                    });
+                    left[0].$('.ui-select-text').each(function () {
+                        var value = $(this).find("span").html();
+                        var rightValue = right[0].$('#' + $(this).parent().attr("id")).find("span").html();
+                        if (value != rightValue) {
+                            $(this).parent().css('background', 'red');
+                            $(this).parent().css('color', 'white');
+                        }
+
+                    });
+                }, 300);
+            }
+        }
+
+        if (rigthFrame.attachEvent) {
+            rigthFrame.attachEvent("onload", function () {
+                //添加滚动条事件
+                right[0].window.$(".nav-tabs").parent().scroll(function () {
+                    left[0].window.$(".nav-tabs").parent().scrollTop($(this).scrollTop());
+                });
+                //添加按钮切换事件
+                right[0].window.$(".nav-tabs li").click(function () {
+                    left[0].window.$('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + left[0].window.mid + "&belongObjectGuid=" + left[0].window.keyValue + "&details=" + left[0].window.details);
+                    var id = $(this).attr('id').replace("li_", "");
+                    left[0].window.$(".nav-tabs li a[href='#" + id + "']").tab('show');
+                });
+            });
+        }
+        else {
+            rigthFrame.onload = function () {
+                //添加滚动条事件
+                right[0].window.$(".nav-tabs").parent().scroll(function (n, e) {
+                    left[0].window.$(".nav-tabs").parent().scrollTop($(this).scrollTop());
+                });
+                //添加按钮切换事件
+                right[0].window.$(".nav-tabs li").click(function () {
+                    left[0].window.$('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + left[0].window.mid + "&belongObjectGuid=" + left[0].window.keyValue + "&details=" + left[0].window.details);
+                    var id = $(this).attr('id').replace("li_", "");
+                    left[0].window.$(".nav-tabs li a[href='#" + id + "']").tab('show');
+                });
+            }
+        }
+
+
+        //处理横行滚动条
+        var leftX = $('#dvLeft');
+        var rightX = $('#dvRight');
+        leftX.scroll(function () {
+            rightX.scrollLeft($(this).scrollLeft());
+        });
+        rightX.scroll(function () {
+            leftX.scrollLeft($(this).scrollLeft());
+        });
+    }
+
+    //获取请求地址
+    function GetRequestUrl(v) {
+        var url = null;
+        switch (v) {
+            case "01":
+                url = "../../api/TBL_LANDSLIP_HISTORYApi/GetAuditFormJson";
+                break;
+            case "02":
+                url = "../../api/TBL_AVALANCHE_HISTORYApi/GetAuditFormJson";
+                break;
+            case "03":
+                url = "../../api/TBL_DEBRISFLOW_HISTORYApi/GetAuditFormJson";
+                break;
+            case "04":
+                url = "../../api/TBL_LANDSETTLEMENT_HISTORYApi/GetAuditFormJson";
+                break;
+            case "05":
+                url = "../../api/TBL_COLLAPSE_HISTORYApi/GetAuditFormJson";
+                break;
+            case "06":
+                url = "../../api/TBL_LANDCRACK_HISTORYApi/GetAuditFormJson";
+                break;
+            case "07":
+                url = "../../api/TBL_SLOPE_HISTORYApi/GetAuditFormJson";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+
+    //获取详情地址
+    function GetViewUrl(v) {
+        var url = null;
+        switch (v) {
+            case "01":
+                url = "/JXGeoManage/TBL_LANDSLIP/TBL_LANDSLIPForm";
+                break;
+            case "02":
+                url = "/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm";
+                break;
+            case "03":
+                url = "/JXGeoManage/TBL_DEBRISFLOW/TBL_DEBRISFLOWForm";
+                break;
+            case "04":
+                url = "/JXGeoManage/TBL_LANDSETTLEMENT/TBL_LANDSETTLEMENTForm";
+                break;
+            case "05":
+                url = "/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm";
+                break;
+            case "06":
+                url = "/JXGeoManage/TBL_LANDCRACK/TBL_LANDCRACKForm";
+                break;
+            case "07":
+                url = "/JXGeoManage/TBL_SLOPE/TBL_SLOPEForm";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+
+    //初始化页面
+    function InitialPage() {
+        var layout = $('#layout').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+            }
+        });
+
+        layout.sizePane('west', $(window).width() / 2);
+        $(window).resize(function (e) {
+            $('#left').height($(window).height() - 65);
+            $('#right').height($(window).height() - 65);
+        });
+
+        $('#left').height($(window).height() - 65);
+        $('#right').height($(window).height() - 65);
+    }
+
+</script>
+}
+<div class="ui-layout" id="layout" style="width:100%;height:100%">
+    <div class="ui-layout-west" style="height:100%;width:50%" id="read">
+        <div class="titlePanel" style="height:40px;line-height:40px;background:rgba(236, 247, 255, 1)">
+            <div class="title-search"><span>当前数据信息</span></div>
+        </div>
+        <div id="dvLeft" style="overflow-x:scroll;clear:both">
+            <iframe id="left" style="width:1400px;" frameborder="0" src=""></iframe>
+        </div>
+
+    </div>
+    <div class="ui-layout-center" style="height:100%;width:50%;border:solid 1px #ffd800" id="compare">
+        <div class="titlePanel" style="height:40px;line-height:40px;background:rgba(236, 247, 255, 1)">
+            <div class="title-search"><span>上版本数据信息</span></div>
+        </div>
+        <div id="dvRight" style="overflow-x:scroll;clear:both">
+            <iframe id="right" style="width:1400px;" frameborder="0" src=""></iframe>
+        </div>
+
+    </div>
+</div>
+
+

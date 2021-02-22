@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .readonly {
+        background: #f1efef !important;
+    }
+</style>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form"> 
+        <tr>
+            <td class="formTitle">监测点编号<span class="required">*</span></td>
+            <td class="formValue">  
+                <input id="AREACODE" type="text" class="form-control" style="display:none;"/>     
+                <input class="form-control" type="text" id="MONITORPOINTID" style="cursor:pointer;" isvalid="yes" checkexpession="NotNull" readonly="readonly" placeholder="单击生成编号" onclick="btn_Create('../../MONITORPOINT/TBL_DMCJ_MONITORPOINT/CreateCodeWaterIndex', '#MONITORPOINTID', '', '#LOCATION')"/>
+            </td>
+            <td class="formTitle">监测点名称<span class="required">*</span></td>
+            <td class="formValue">
+                <input id="MONITORPOINTNAME" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td> 
+        </tr>
+        <tr>
+            <td class="formTitle">地面沉降编号<span class="required">*</span></td>
+            <td class="formValue">         
+             <input class="form-control" type="text" id="DMCJBH"  style="cursor:pointer;"  isvalid="yes" checkexpession="NotNull" readonly="readonly" placeholder="单击选择地面沉降编号" />
+            </td>
+            <td class="formTitle">地面沉降名称<span class="required">*</span></td>
+            <td class="formValue">
+                <input id="DMCJNAME" type="text" class="form-control readonly" isvalid="yes" checkexpession="NotNull" readonly="readonly" />
+            </td> 
+        </tr>
+        <tr>
+            <td class="formTitle">监测点类别</td>
+            <td class="formValue">
+                <input id="MONITORPOINTTYPE" type="text" class="form-control"  />
+            </td> 
+            <td class="formTitle">监测点等级</td>
+            <td class="formValue">
+                <div id="MONITORPOINTLEVEL" type="select" class="ui-select"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">建设单位</td>
+            <td class="formValue">
+                <input id="BUILDDEPT" type="text" class="form-control"  />
+            </td>  
+            <td class="formTitle">建设时间</td>
+            <td class="formValue">
+                <input id="BUILDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr> 
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control"  />
+            </td> 
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测点位置</td>
+            <td class="formValue" colspan="3">
+                <input id="LOCATION" type="text" class="form-control"  />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var formType = request('formType');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+        $("#DMCJBH").click(function () {
+            userInfo_select();
+        });
+        if (formType == "Detail") {
+            $("textarea").attr("disabled", "disabled");
+            $("input").attr("disabled", "disabled");
+            $(".ui-select").attr("readonly", "readonly");
+            $('.tab2 .titlePanel').css("display", "none");
+        }
+    });
+    //初始化控件
+    function initControl() {
+        $("#MONITORPOINTLEVEL").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=MONITORPOINTLEVEL",
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //获取表单
+        if (!!keyValue) {
+            $('#MONITORPOINTID').attr('disabled', true);
+            $('#DMCJBH').attr('disabled', true);
+            $.SetForm({
+                url: "../../api/MONITORPOINT/TBL_DMCJ_MONITORPOINT/GetFormJson",
+                param: { keyValue: keyValue },
+                authToken: authToken,
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../api/MONITORPOINT/TBL_DMCJ_MONITORPOINT/SaveForm?keyValue=" + keyValue,
+            authToken: authToken,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+    //单击生成编码
+    function btn_Create() {
+        if (formType == 'Edit' || formType == 'Detail') {
+            return;
+        }
+        learun.dialogOpen({
+            id: 'Form2',
+            title: '获取统一编号',
+            url: '/MONITORPOINT/TBL_DMCJ_MONITORPOINT/CreateCodeWaterIndex',
+            width: '400px',
+            height: '400px',
+            //isClose: true,
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    //buttonJson.push(data);
+                    //ButtonListToListTreeJson(buttonJson);
+                    //var fileKSXZ = data["KSXZ"];
+                    var fileXZQHCode = data["DISTRICTCODE"];
+                    var fileCode = data["F_ItemCode"];
+                    $("#MONITORPOINTID").val(fileXZQHCode + fileCode);
+                    $("#AREACODE").val(fileXZQHCode);
+                    //$("#PROVINCENAME").val(data["F_ProvinceName"]);
+                    //$("#CITYNAME").val(data["F_CityName"]);
+                    //$("#COUNTYNAME").val(data["F_CountyName"]);
+
+                    //$("#PROVINCECODE").val(data["PROVINCE"]);
+                    //$("#CITYCODE").val(data["CITY"]);
+                    //$("#COUNTYCODE").val(data["COUNTY"]);
+
+
+                });
+            }
+        });
+    }
+    //function btn_Create1() {
+    //    if (formType == 'Edit' || formType == 'Detail') {
+    //        return;
+    //    }
+    //    learun.dialogOpen({
+    //        id: 'Form2',
+    //        title: '获取统一编号',
+    //        url: '/DMCJManage/TBL_DMCJ_BASEINFO/CreateCodeWaterIndex',
+    //        width: '400px',
+    //        height: '400px',
+    //        //isClose: true,
+    //        callBack: function (iframeId) {
+    //            getInfoTop().frames[iframeId].AcceptClick(function (data) {
+    //                //buttonJson.push(data);
+    //                //ButtonListToListTreeJson(buttonJson);
+    //                //var fileKSXZ = data["KSXZ"];
+    //                var fileXZQHCode = data["DISTRICTCODE"];
+    //                var fileCode = data["F_ItemCode"];
+    //                $("#DMCJBH").val(fileXZQHCode + fileCode);
+    //                $("#AREACODE").val(fileXZQHCode);
+    //                //$("#PROVINCENAME").val(data["F_ProvinceName"]);
+    //                //$("#CITYNAME").val(data["F_CityName"]);
+    //                //$("#COUNTYNAME").val(data["F_CountyName"]);
+
+    //                //$("#PROVINCECODE").val(data["PROVINCE"]);
+    //                //$("#CITYCODE").val(data["CITY"]);
+    //                //$("#COUNTYCODE").val(data["COUNTY"]);
+
+
+    //            });
+    //        }
+    //    });
+    //}
+    //获取地面沉降编号
+    function userInfo_select() {
+        GUID = $('#DMCJBH').val();
+        dialogOpen({
+            id: 'TBL_YJZH_USERSelect',
+            title: '获取地面沉降信息',
+            url: '/MONITORPOINT/TBL_DMCJ_MONITORPOINT/TBL_DMCJ_Select?status=true&name=' + escape(GUID) + '&keyValue=' + keyValue,
+            width: '900px',
+            height: '400px',
+            isClose: true,
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    $("#DMCJNAME").val(data.name);
+                    $("#DMCJBH").val(data.DeptCode);
+                });
+            }
+        });
+    }
+</script>
+}

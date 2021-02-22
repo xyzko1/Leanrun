@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        InitialPage();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 108.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 138.5,
+            url: "../../Dept/GetAllDept",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            colModel: [
+                { label: 'DeptNo', name: 'DeptNo', index: 'DeptNo', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '部门名称', name: 'DeptName', index: 'DeptName', width: 100, align: 'left', sortable: true },
+                 { label: '部门电话', name: 'DeptPhone', index: 'DeptPhone', width: 100, align: 'left', sortable: true },
+                { label: '部门邮箱', name: 'DeptEmail', index: 'DeptEmail', width: 100, align: 'left', sortable: true },             
+                { label: '部门地址', name: 'Address', index: 'Address', width: 100, align: 'left', sortable: true }        
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'DeptNo',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function (rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                selectData = $gridTable.jqGrid("getRowData", rowId);
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    var selectData = {};
+
+    //保存表单;
+    function AcceptClick() {
+        learun.dialogClose();
+        return selectData;
+    }
+
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../Dept/GetAllDept",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+</script>
+<div class="titlePanel">
+    <div class="title-search" id="filter-form">
+        <table>
+            <tr>
+                <td>
+                    <input id="DeptName" type="text" class="form-control" placeholder="请输入要查询部门" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div style="clear:both"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>

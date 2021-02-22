@@ -1,0 +1,399 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        margin:0;
+    }
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+</style>
+<div class="titlePanel">
+    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1);color:#000;height:35px"><i class="fa fa-bars"></i>查询条件</div>
+    <div class="title-search" style="width: 100%; height: 40px;color:#000;display: flex; align-items: center;flex-wrap:wrap;padding:0">
+        <span class="spans">观测人姓名:</span><input id="OBSERVATIONPEOPLE" type="text" class="form-control" placeholder="请输入观测人姓名" style="width: 16%" />
+        <span class="spans">观测人电话:</span><input id="OBSERVATIONPHONE" type="text" class="form-control" placeholder="请输入观测人电话" style="width: 16%" />
+        <a id="btn_Search" class="btn btn-primary" style="margin-bottom:0;margin-left:30px"><i class="fa fa-search"></i> 查询</a>
+       <a id="btn_Reset" class="btn btn-primary" style="margin-bottom:0;margin-left:30px;background:gray;border-color:gray;cursor: pointer;"><i class="fa fa-search"></i> 重置</a>&nbsp;  
+    </div>
+    <div style="background-color: rgba(236, 247, 255, 1);width:100%;height:35px;color:#000;display:flex;align-items: center;">
+        <span style="flex:1;font-weight:700;padding-left:9px;height:35px;line-height:35px">观测人列表</span>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<div style="background-color: rgba(236, 247, 255, 1);width:100%;height:35px;color:#000;display:flex;align-items: center;">
+    <span style="flex:1;font-weight:700;padding-left:9px;height:35px;line-height:35px">已关联观测人</span>
+</div>
+<div class="gridPanel">
+    <table id="gridTables"></table>
+</div>
+
+@section Scripts{
+<script>
+    var authToken = getAuthorizationToken();
+    var checkeddatas = [];
+    var keyValue = request('keyValue');
+    $(function () {
+        InitialPage();
+        initControl();
+        GetGrid();
+        GetGrids()
+    });
+    //初始化控件
+    function initControl() {
+        $.ajax({
+            url: "../../api/TBL_QCQF_POINTOBSERVATIONApi/GetListByUNIFIEDCODE",
+            type: "GET",
+            async: false,
+            data: { UNIFIEDCODE: keyValue },
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (data) {
+                if (data != undefined && data != null && data != '') {
+                    for (var i = 0; i < data.length; i++) {
+                        checkeddatas.push(data[i]["ID"]);
+                    }
+                }
+            }
+        })
+        $("#btn_Search").click(SearchEvent);
+        $("#btn_Reset").click(ClearEvent);
+    }
+    function SearchEvent() {
+        var queryJson = $(".title-search").getWebControls();
+        queryJson["ISGCR"] = "1";
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    function ClearEvent() {
+        $(".title-search").find("input[type='text']").val("");
+    }
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5 - 34);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+    var dataArr = []; var uuid = [], dataArrNew = [];
+   
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $(".title-search").getWebControls();
+        queryJson["ISGCR"] = "1";
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 436.5 - 34,
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '观测人姓名', name: 'OBSERVATIONPEOPLE', index: 'OBSERVATIONPEOPLE', width: 200, align: 'center', sortable: true },
+                { label: '观测人电话', name: 'OBSERVATIONPHONE', index: 'OBSERVATIONPHONE', width: 200, align: 'center', sortable: true },
+                { label: '观测人行政区划', name: 'COUNTRYNAME', index: 'COUNTRYNAME', width: 200, align: 'center', sortable: true },
+                {
+                    label: '操作', name: 'Action', index: 'Action', width: 80, align: 'center', sortable: true,hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a onclick=\"EditInfo(\'' + rowObject.GUID + '\')\" style=\"color: #008cee;cursor: pointer;margin-right:15px;\">编辑</a>' + '<a onclick=\"RealDeleteInfo(\'' + rowObject.GUID + '\',\'' + rowObject.ID + '\')\" style=\"color: #008cee;cursor: pointer;margin-right:15px;\">删除</a>';
+                    }
+                },
+            ],
+            viewrecords: true,
+            multiselect:true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectAll: function (rowids, statue) {
+                dataArr = [];
+                $("#gridTables").jqGrid("clearGridData");
+                var ids = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+                for (var i = 0; i < ids.length; i++) {
+                    var rowData = $('#gridTable').jqGrid('getRowData', ids[i]);
+                    dataArr.push(rowData);
+                }
+                $("#gridTables").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: dataArr,
+                    page: 1
+                }).trigger("reloadGrid");
+            },
+            onSelectRow: function (rowId,state,a) {
+                //var rowData = $("#gridTable").getRowData(rowId);
+                //if (!IsInArr(rowData.ID, checkeddatas)) {
+                //    checkeddatas.push(rowData.ID);
+                //    $("#" + rowId).find(":checkbox").prop('checked', true);
+                //}
+                //else {
+                //    checkeddatas.splice(checkeddatas.indexOf(rowData.ID), 1)
+                //    $("#" + rowId).find(":checkbox").prop('checked', false);
+                //}
+                //$("#gridTables").jqGrid('setGridParam', {
+                //    postData: { queryJson: JSON.stringify(checkeddatas) },
+                //    loadBeforeSend: function (a) {
+                //        a.setRequestHeader("Authorization", authToken);
+                //    },
+                //    url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+                //    page: 1
+                //}).trigger('reloadGrid');
+               
+                uuid = []; dataArr = []; checkeddatas = [];
+                if (dataArrNew != []) {
+                   if (state=true) {
+                    for (var a = 0; a < dataArrNew.length; a++) {
+                        dataArr.push(dataArrNew[a]);
+                    }
+                   }
+                   // dataArrNew = [];
+                }
+                $("#gridTables").jqGrid("clearGridData");
+          
+                    var ids = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+                    for (var i = 0; i < ids.length; i++) {
+                        var rowData = $('#gridTable').jqGrid('getRowData', ids[i]);
+                        dataArr.push(rowData);
+                    }
+             
+                $("#gridTables").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: dataArr,
+                    page: 1
+                }).trigger("reloadGrid");
+            },
+            gridComplete: function () {
+                //var rowIds = $("#gridTable").jqGrid("getDataIDs");
+                //for (var i = 0; i < checkeddatas.length; i++) {
+                //    for (var j = 1; j < rowIds.length+1; j++) {
+
+                //        if (checkeddatas[i] == $("#gridTable").getRowData(j).GUID) {
+                //            var curChk = $("#" + j).find(":checkbox");
+                //            curChk.attr('checked', 'true');
+                //            var rowData = $('#gridTable').jqGrid('getRowData', j);
+                //            dataArrNew.push(rowData);
+                //        }
+                //    }
+                //    if (dataArrNew != []) {
+                //        $("#gridTables").jqGrid('setGridParam', {
+                //            datatype: 'local',
+                //            data: dataArrNew,
+                //            page: 1
+                //        }).trigger("reloadGrid");
+                //    }
+                //}
+            }
+        });
+    }
+    function IsInArr(a, arr) {
+        var flag = false;
+        for (var i = 0; i < arr.length; i++) {
+            if (a == arr[i]) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    //加载表格
+    function GetGrids() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTables');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 486.5 - 28,
+            datatype: 'local',
+            data: dataArr,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '观测人姓名', name: 'OBSERVATIONPEOPLE', index: 'OBSERVATIONPEOPLE', width: 150, align: 'left', sortable: true },
+                { label: '观测人电话', name: 'OBSERVATIONPHONE', index: 'OBSERVATIONPHONE', width: 150, align: 'left', sortable: true },
+                {
+                    label: '操作', name: 'Action', index: 'Action', width: 80, align: 'center', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a onclick=\"DeleteInfo(\'' + options.rowId + '\')\" style=\"color: #008cee;cursor: pointer;\">删除</a>';
+                    }
+                },
+            ],
+            rowNum: 30,
+            viewrecords: true,
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //删除勾选
+    function DeleteInfo(guid) {
+        $("#gridTables").jqGrid("delRowData", guid);
+        var a = guid - 1;
+        $($("#gridTable").find(":checkbox:checked")[a]).prop('checked', false);
+    }
+    //加载表格
+    function GetGridsS() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTables');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 486.5 - 28,
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(checkeddatas) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'ID', name: 'ID', index: 'ID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '观测人姓名', name: 'OBSERVATIONPEOPLE', index: 'OBSERVATIONPEOPLE', width: 150, align: 'left', sortable: true },
+                { label: '观测人电话', name: 'OBSERVATIONPHONE', index: 'OBSERVATIONPHONE', width: 150, align: 'left', sortable: true },
+                {
+                    label: '操作', name: 'Action', index: 'Action', width: 80, align: 'center', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                            return '<a onclick=\"DeleteInfo(\'' + rowObject.GUID + '\')\" style=\"color: #008cee;cursor: pointer;\">删除</a>';
+                    }
+                },
+            ],
+            viewrecords: true,
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //删除勾选
+    function DeleteInfo1(guid) {
+        checkeddatas.splice(checkeddatas.indexOf(guid), 1)
+        $("#gridTable").jqGrid('setGridParam', {
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+        $("#gridTables").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(checkeddatas) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //编辑观察人
+    function EditInfo(guid) {
+            dialogOpen({
+                id: 'OBForm',
+                title: '编辑群测群防观测人信息表',
+                url: '/JXGeoManage/TBL_QCQF_OBSERVATION/TBL_QCQF_OBForm?keyValue=' + guid,
+                width: '1000px',
+                height: '600px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+    }
+    //删除观察人
+    function RealDeleteInfo(guid,id) {
+        if (confirm("删除该观测人将一并删除监测点下的观测人信息，确定删除该条记录？")) {
+            //删除关联表信息
+            $.ajax({
+                url: '../../api/TBL_QCQF_POINTOBSERVATIONApi/RemoveFormByID',
+                type: "POST",
+                async: false,
+                data: { KeyValue: id },
+                beforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                success: function (data) {
+                    $.ajax({
+                        url: '../../api/TBL_QCQF_OBSERVATIONApi/RemoveForm',
+                        type: "POST",
+                        async: false,
+                        data: { KeyValue: guid },
+                        beforeSend: function (a) {
+                            a.setRequestHeader("Authorization", authToken);
+                        },
+                        success: function (data) {
+                            dialogMsg('删除成功！', 1);
+                            $('#gridTable').trigger('reloadGrid');
+                        }
+                    });
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick1() {
+        return checkeddatas;
+    }
+    //保存表单;
+    function AcceptClick() {
+        var rows = $("#gridTables").jqGrid('getRowData');
+        var aa = {}; aa.checkeddatas = []; aa.uuid = [];
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                aa.checkeddatas.push(rows[i].GUID);
+                aa.uuid.push(keyValue);
+            }
+        }
+        aa.dataArr = rows; //aa.checkeddatas = checkeddatas; aa.uuid = uuid;
+        return aa;
+        //return checkeddatas;
+    }
+</script>
+}

@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+ Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+@section Scripts{
+<script>
+    var types = request("types");
+    var keyValue = request("keyValue");
+    console.log(types);
+    console.log(keyValue);
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+            }
+        });
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $('#layout2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                resize();
+                if (isResize > 1) {
+                    resized = 1;
+                } else {
+                    if (count == 1 || resized == 0) {
+                        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                    }
+                }
+                count++;
+            }
+        });
+        //resize重设布局;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            resize();
+            e.stopPropagation();
+        });
+        function resize() {
+            window.setTimeout(function () {
+                //if (mapCtlExt != null) {
+                //    mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                //}
+                $('.center-Panel').height($('#layout').parent().height() - 20);
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                $('#gridTable').setGridHeight($(window).height() - $('#mapControl').height() - $('.panel-Title').height());
+                $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 60 - 60);
+                $('.ui-jqgrid-bdiv').height($('#layout2 .ui-layout-center').height() - 60 - 60);
+                $('#itemTree').setTreeHeight($(window).height() - 52);
+                $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height() - 15);
+                $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 115);
+                $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+            }, 200);
+        };
+        $(window).resize();
+        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+        layout2NorthH = $("#layout2 .ui-layout-north").height();
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = {};
+        queryJson['UNIFIEDCODE'] = keyValue;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 520,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../api/TBL_HAZARDBASICINFOApi/GetSingleFillListJson",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 250, align: 'left', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 300, align: 'left', sortable: true },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 200, align: 'left', sortable: true},
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 500, align: 'left', sortable: true },
+                { label: '修改日期', name: 'MODIFYTIME', index: 'MODIFYTIME', width: 100, align: 'left', sortable: true, hidden: true }
+
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function (rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var dt = $gridTable.jqGrid("getRowData", rowId);
+                var data = [];
+                data.push({ longitude: dt.LONGITUDE, latitude: dt.LATITUDE });
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    //获取各表单地址
+    function GetUrl_Form(v) {
+        var url = null;
+        switch (v) {
+            case "001":
+                url = "/JXGeoManage/TBL_LANDSLIP/TBL_LANDSLIPForm";
+                break;
+            case "002":
+                url = "/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm";
+                break;
+            case "003":
+                url = "/JXGeoManage/TBL_DEBRISFLOW/TBL_DEBRISFLOWForm";
+                break;
+            case "004":
+                url = "/JXGeoManage/TBL_LANDSETTLEMENT/TBL_LANDSETTLEMENTForm";
+                break;
+            case "005":
+                url = "/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm";
+                break;
+            case "006":
+                url = "/JXGeoManage/TBL_LANDCRACK/TBL_LANDCRACKForm";
+                break;
+            case "007":
+                url = "/JXGeoManage/TBL_SLOPE/TBL_SLOPEForm";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+
+    ////查询表格函数
+    //function SearchEvent() {
+    //    var queryJson = $("#filter-form").getWebControls();
+    //    queryJson["JCDBH"] = JCDBH;
+    //    $("#gridTable").jqGrid('setGridParam', {
+    //        postData: { queryJson: JSON.stringify(queryJson) },
+    //        url: "../../MonitorManage/TBL_JC_MINESOIL/GetPageListJson",
+    //        page: 1
+    //    }).trigger('reloadGrid');
+    //}
+
+    //编辑
+    function btn_edit() {
+        //var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        var UNIFIEDCODE = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        //var type = $("#gridTable").jqGridRowValue('DISASTERTYPE');
+        if (checkedRow(UNIFIEDCODE)) {
+            dialogOpen({
+                id: 'AddForm',
+                title: '查看' + '表',
+                url: GetUrl_Form(types) + "?keyValue=" + UNIFIEDCODE + "&details=01&flag=false",
+                width: '1300px',
+                height: "",
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+
+</script>
+}
+<style>
+  .ui-layout-center {
+       overflow-x: hidden !important;
+    }
+    .ui-layout-resizer {
+        background-color:#f0f3f4 !important;
+    }
+    .ui-jqgrid .ui-jqgrid-htable th {
+        line-height:20px;
+        padding:5px 0;
+    }
+    .titlePanel {
+    height:60px;
+    }
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+    #gridTable tr:nth-child(odd) {
+        /*background: #DCDCDC;*/
+    }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+     @*<div class="ui-layout-west" >
+        <div class="west-Panel" style="height:100%;overflow:hidden">
+             <div class="panel-Title">行政区划信息</div>
+             <div id="itemTree" class="ztree"></div>
+        </div>
+    </div>*@
+    <div class="ui-layout-center">
+        <div class="center-Panel" style="height: 100%;">
+        <div class="ui-layout" id="layout2" style="height: 100%; width: 100%;">
+          
+          <div class="ui-layout-center">
+                    <div class="titlePanel">
+                    @*   <div class="title-search" id="filter-form">
+                           <table>
+                               <tr>
+                                   <td>
+                                      <input id="JCDBH" type="text" class="form-control" placeholder="请输入监测点编号"  style="width: 200px;border-radius:4px;"/>                           
+                                   </td>
+                                   <td style="padding-left: 5px;">
+                                       <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                                   </td>
+                               </tr>
+                           </table>
+                       </div>*@
+                       <div class="toolbar2" style="float:right;margin-right:30px;height:40px;line-height:40px;display:flex;align-items: center;">
+                                <div class="btn-group">
+                       @*             <a id="lr-export" class="btn btn-default" onclick="ExpExl()"><i class="fa fa-sign-in"></i>&nbsp;导出</a>*@
+                                    <a id="lr_detail" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>详情</a>
+                                  @*  <a id="lr-replace" class="btn btn-default" onclick="shuaxin()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>*@
+                                  @*  <a id="lr-colgrid" class="btn btn-default" onclick="ColDataGrid()"><i class="fa fa-chevron-down"></i>列表</a>
+                                    <a id="lr-colmap" class="btn btn-default" onclick="ColMapDiv()"><i class="fa fa-chevron-up"></i>地图</a>*@
+                                </div>
+                        </div>
+                  </div>
+                  <div class="gridPanel">
+                      <table id="gridTable"></table>
+                    <div id="gridPager"></div>
+                   </div>
+              </div>
+          </div>
+       </div>
+    </div>
+ </div>

@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">主键ID</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">报表名称</td>
+            <td class="formValue">
+                <input id="REPORTNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">创建时间</td>
+            <td class="formValue">
+                <input id="CREATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">创建人</td>
+            <td class="formValue">
+                <input id="CREATEPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">统计条件（后台）</td>
+            <td class="formValue">
+                <textarea id="QUERYSTRING" class="form-control" ></textarea>
+            </td>
+            <td class="formTitle">显示条件（前端）</td>
+            <td class="formValue">
+                <textarea id="CONDITION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">报表模块</td>
+            <td class="formValue">
+                <input id="MODULE" type="text" class="form-control"  />
+            
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_REPORT/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+            })
+        }
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_REPORT/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

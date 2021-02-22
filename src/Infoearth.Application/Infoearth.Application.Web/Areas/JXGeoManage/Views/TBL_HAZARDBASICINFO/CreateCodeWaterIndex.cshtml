@@ -1,0 +1,244 @@
+﻿@{
+    ViewBag.Title = "获取统一编号";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    td {
+    border:none !important;
+    vertical-align: baseline !important;
+    }
+    .formTitle {
+text-align:center;
+width: 180px !important;
+    }
+    body {
+height:auto;
+    }
+</style>
+<div style="margin:10px" id="districtControl">
+    <div id="districtControl" style="width:100%">
+        <table style="width:100%" class="form">
+            <tr style="width:100%">
+                <td class="formTitle">省<font face="宋体" style="color:red">*</font></td>
+                <td class="formValue">
+                    <div id="PROVINCE" type="selectTree" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">市<font face="宋体" style="color:red">*</font></td>
+                <td class="formValue">
+                    <div id="CITY" type="selectTree" class="ui-select" isvalid="yes"  checkexpession="NotNull"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">县<font face="宋体" style="color:red">*</font></td>
+                <td class="formValue">
+                    <div id="COUNTY" type="selectTree" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+                </td>
+            </tr>
+            <tr>
+                @*<td class="formTitle" colspan="2" style="color:red;"><span style="display:inline-block;float:left;margin-left:39px;text-align: left">灾害类型编码：00-斜坡，01-滑坡，02-崩塌，03-泥石流，04-地面沉降，05-地面塌陷，06-地裂缝，07-滑坡隐患点，08-崩塌隐患点，09-遥感解译点</span></td>*@
+                <td class="formTitle" colspan="2" style="color:red;"><span style="display:inline-block;float:left;margin-left:39px;text-align: left">灾害类型编码：00-斜坡，01-滑坡，02-崩塌，03-泥石流，04-地面沉降，05-地面塌陷，06-地裂缝</span></td>
+            </tr>
+            <tr>
+                <td class="formTitle">灾害点类型<font face="宋体" style="color:red">*</font>：</td>
+                <td class="formValue">
+                    <div id="ZHTtype" type="selectTree" class="ui-select" disabled="disabled"></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle" colspan="2" style="color:red;"><span style="display:inline-block;float:left;margin-left:39px">顺序号为4位数,不满4位者,前面加0</span></td>
+            </tr>
+            <tr>
+                <td class="formTitle">顺序号<font face="宋体" style="color:red">*</font>：</td>
+                <td class="formValue">
+                    <input id="ZHDCODE" type="text" maxlength="4" class="form-control" placeholder="请输入顺序号" isvalid="yes" checkexpession="NotNull" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle" style="color:red;">灾害点统一编号预览：</td>
+                <td class="formValue" style="display:flex;">
+                    <a style="float:none;width:30%;margin-right:5px" id="btn_genercode" onclick="genercode()" class="btn btn-primary" style="float:right"><i class="fa fa-save"></i>&nbsp;预&emsp;览</a>
+                    <input id="typecode" class="form-control" style="width:70%;display:inline-block;border-radius:3px" disabled="disabled" />
+                </td>
+            </tr>
+            @*<tr>
+                    <td class="formTitle" colspan="2">
+                        <textarea id="" class="form-control" rows="7" style="color:red">由12位ASCII码构成（图），分为3级，行政区划国标代码共6位（含省市、地区、县区3级）；灾害点类型2位，由00，01...；灾害点顺序编号4位，以县为单位顺序编，不满4位者，前面加0；</textarea>
+                    </td>
+                </tr>*@
+        </table>
+    </div>
+</div>
+@section Scripts{
+<script>
+    var tabhtml = request('tabhtml');
+    var PROVINCE1 = request('PROVINCE1');
+    var CITY1 = request('CITY1');
+    var COUNTRY1 = request('COUNTRY1');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+        $("#ZHTtype").ComboBox({
+            id: "value",
+            text: "label",
+            height: "170px",
+            data: [
+                { label: "滑坡", value: "01" },
+                { label: "崩塌", value: "02" },
+                { label: "泥石流", value: "03" },
+                { label: "地面沉降", value: "04" },
+                { label: "地面塌陷", value: "05" },
+                { label: "地裂缝", value: "06" },
+                { label: "滑坡隐患点", value: "07" },
+                { label: "崩塌隐患点", value: "08" },
+                { label: "遥感解译点", value: "09" },
+                { label: "斜坡", value: "00" },
+            ]
+        });
+        $('#ZHTtype').comboBoxSetValue(tabhtml);
+        $("#ZHDCODE").blur(function () {
+        })
+    });
+    var olddata = {};
+    //初始化控件
+    function initControl() {
+        var html = $("#districtControl").html();
+        var usercode = usercodes();
+        var district = $("#districtControl").districtsCtl({
+            provinceId: usercode.provinceId,
+            html: html,
+            callBack: SetItemCode
+        });
+        if (PROVINCE1) {
+            $("#PROVINCE").comboBoxSetValue(PROVINCE1);
+        }
+        if (CITY1) {
+            $("#CITY").comboBoxSetValue(CITY1);
+        }
+        if (COUNTRY1) {
+            $("#COUNTY").comboBoxSetValue(COUNTRY1);
+        }
+       
+    }
+    function SetItemCode() {
+        var tabhtml2 = "";
+        //if (tabhtml == '07') {
+        //    tabhtml2 = '01';
+        //} else if (tabhtml == '08') {
+        //    tabhtml2 = '02'
+        //} else {
+        //    tabhtml2 = tabhtml;
+        //}
+        tabhtml2 = tabhtml;
+        var xzqh = $("#COUNTY").attr('data-value') + tabhtml2;
+        $.ajax({
+            url: '../../api/TBL_HAZARDBASICINFOApi/GetMaxCode',
+            data: { xzqh: xzqh },
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: 'GET',
+            dataType: "json",
+            success: function (data) {
+                $("#ZHDCODE").val(data);
+            }, error: function (e) {
+            },
+            cache: false
+        });
+    }
+    function getDistrictValue() {
+        var _provinceCommbox = $("#PROVINCE");
+        var _cityCommbox = $("#CITY");
+        var _countyCommbox = $("#COUNTY");
+        var _townCommbox = $("#TOWN")
+        var districtInfo = {
+            provinceId: "",
+            provinceName: "",
+            cityId: "",
+            cityName: "",
+            countyId: "",
+            countyName: "",
+            townId: "",
+            townName: ""
+        };
+        districtInfo.provinceId = _provinceCommbox[0].dataset.value;
+        districtInfo.provinceName = _provinceCommbox[0].innerText;
+        districtInfo.cityId = _cityCommbox[0].dataset.value;
+        districtInfo.cityName = _cityCommbox[0].innerText;
+        districtInfo.countyId = _countyCommbox[0].dataset.value;
+        districtInfo.countyName = _countyCommbox[0].innerText;
+        //districtInfo.townId = _townCommbox[0].dataset.value;
+        //districtInfo.townName = _townCommbox[0].innerText;
+        return districtInfo;
+    }
+    //保存表单
+    function AcceptClick(callback) {
+        var data = getDistrictValue();
+        olddata = data;
+        data["UNIFIEDCODE"] = genercode();
+        learun.dialogClose();
+        return data;
+    }
+    //获取请求地址
+    function GetRequestUrl(v) {
+        var url = null;
+        switch (v) {
+            case "01":
+                url = "../../api/TBL_LANDSLIP_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "02":
+                url = "../../api/TBL_AVALANCHE_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "03":
+                url = "../../api/TBL_DEBRISFLOW_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "04":
+                url = "../../api/TBL_LANDSETTLEMENT_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "05":
+                url = "../../api/TBL_COLLAPSE_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "06":
+                url = "../../api/TBL_LANDCRACK_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "07":
+                url = "../../api/TBL_LANDSLIP_HIDDEN_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "08":
+                url = "../../api/TBL_AVALANCHE_HIDDEN_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            case "00":
+                url = "../../api/TBL_SLOPE_HISTORYApi/GetEntityByUNIFIEDCODE";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+    function genercode() {
+        var ZHTtypeCode = null;
+        var NEWZHDCODE = $("#ZHDCODE").val();
+        var data2 = $("#form1").getWebControls();
+        var COUNTY = $("#COUNTY").attr('data-value');
+        var zhlx = $('#ZHTtype')[0].dataset.value;
+        var zhlxCode = "";
+        //if (zhlx == '07') {
+        //    zhlxCode = '01';
+        //} else if (zhlx == '08') {
+        //    zhlxCode = '02'
+        //} else {
+        //    zhlxCode = zhlx;
+        //}
+        zhlxCode = zhlx;
+        if (!COUNTY) {
+            COUNTY = "";
+            dialogAlert('请选择省市县！', 2);
+            return;
+        }
+        var value = COUNTY + zhlxCode + NEWZHDCODE;
+        $("#typecode").val(value);
+        return value;
+    }
+</script>
+}

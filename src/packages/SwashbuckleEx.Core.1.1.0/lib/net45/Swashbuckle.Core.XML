@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Swashbuckle.Core</name>
+    </assembly>
+    <members>
+        <member name="F:Swashbuckle.Swagger.SwaggerDocument.muiltVersion">
+            <summary>
+            多版本
+            </summary>
+        </member>
+        <member name="F:Swashbuckle.Swagger.Info.docPath">
+            <summary>
+            文档路径
+            </summary>
+        </member>
+        <member name="M:Swashbuckle.Swagger.SwaggerGenerator.SetTags(Swashbuckle.Swagger.SwaggerDocument,System.Collections.Generic.IEnumerable{Swashbuckle.Swagger.IModelFilter},System.Collections.Generic.List{System.String})">
+            <summary>
+            设置标签
+            </summary>
+            <param name="swaggerDoc"></param>
+            <param name="modelFilters"></param>
+            <param name="keys"></param>
+        </member>
+        <member name="M:Swashbuckle.Swagger.XmlComments.XmlTextHelper.NormalizeIndentation(System.String)">
+            <summary>
+            Messages text from an XML node produced by Visual Studio into a plainer plain text (leading whitespace normalized)
+            </summary>
+            <param name="xmlText">The content of an XML node - could contain other XML elements within the string</param>
+            <returns></returns>
+        </member>
+        <member name="M:Swashbuckle.Swagger.XmlComments.XmlTextHelper.GetCommonLeadingWhitespace(System.String[])">
+            <summary>
+            Finds the common padding prefix used on all non-empty lines.
+            </summary>
+            <param name="lines"></param>
+            <returns>The common padding found on all non-blank lines - returns null when no common prefix is found</returns>
+        </member>
+    </members>
+</doc>

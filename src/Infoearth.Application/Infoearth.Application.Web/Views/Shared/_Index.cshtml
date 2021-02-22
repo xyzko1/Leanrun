@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+
+    <script type='text/javascript'>window.BWEUM || (BWEUM = {}); BWEUM.info = { "stand": true, "agentType": "browser", "agent": "browsercollector.oneapm.com/static/js/bw-send-416.7.31.js", "beaconUrl": "browsercollector.oneapm.com/beacon", "licenseKey": "Jrq2e~u3MQZ6IuMV", "applicationID": 9991162 };</script>
+    <script type="text/javascript" src="//browsercollector.oneapm.com/static/js/bw-loader-416.7.31.js"></script>
+    <!--兼容IE10及以下-->
+    <!--[if lte IE 10]>
+        <style>
+            .mic-col-ipt{
+                padding-top:8px !important;
+            }
+        </style>
+    <![endif]-->
+</head>
+<body>
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; ">
+        <img src="~/Content/images/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div id="loading_background" class="loading_background" style="display: none;"></div>
+    <div id="loading_manage">
+        正在拼了命为您加载…
+    </div>
+    @System.Web.Optimization.Styles.Render("~/Content/styles/base.css")
+    @System.Web.Optimization.Scripts.Render("~/Content/scripts/base.js")
+    @RenderBody()
+    @System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/datepicker/WdatePicker.js")
+    
+    <style>
+        body {
+            margin: 10px;
+            margin-bottom: 0px;
+            overflow: hidden;
+            overflow-y: auto;
+        }
+    </style>
+</body>
+</html>
+@System.Web.Optimization.Styles.Render(
+    "~/Content/scripts/plugins/jqgrid/css",
+    "~/Content/scripts/plugins/tree/css",
+    "~/Content/scripts/plugins/datetime/css",
+    "~/Content/styles/learun.css")
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/utils/learun.js",
+    "~/Content/scripts/utils/learunEx.js",
+    "~/Content/scripts/utils/clientdata",
+    "~/Content/scripts/plugins/tree/js",
+    "~/Content/scripts/plugins/validator/js",
+    "~/Content/scripts/plugins/wizard/js",
+    "~/Content/scripts/plugins/jqgrid/js",
+            "~/Content/scripts/plugins/dialog/js"
+    )
+<script>
+    var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+    var Account = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().Account';
+    var XZQHCode = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode';
+    (function ($, learun) {
+        $(function () {
+            learun.childInit();
+        })
+    })(window.jQuery, window.learun)
+</script>
+@System.Web.Optimization.Scripts.Render("~/Content/business/comForm.js")
+@RenderSection("scripts", false)

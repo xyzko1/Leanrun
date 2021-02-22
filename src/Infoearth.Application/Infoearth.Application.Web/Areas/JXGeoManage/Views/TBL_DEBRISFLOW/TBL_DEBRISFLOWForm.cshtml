@@ -1,0 +1,1860 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    input {
+        border-left: none !important;
+        border-top: none !important;
+        border-right: none !important;
+    }
+
+    .title .formValue input {
+        border-left: none !important;
+        border-top: none !important;
+        border-right: none !important;
+    }
+
+    td {
+        border: 1px solid #ccc;
+        text-align: center !important;
+    }
+
+    .title td {
+        border: none;
+    }
+
+    .formValue {
+        background: #fff;
+    }
+
+    .formTitle {
+        height: 30px;
+        white-space: inherit !important;
+        width: auto !important;
+        padding-right: 0 !important;
+    }
+
+    label {
+        margin: 5px;
+    }
+
+    #xgjl {
+        position: relative;
+    }
+
+    .timeflag {
+        width: 100px;
+        display: inline-block;
+        position: absolute;
+        top: -10px;
+    }
+
+    .actives {
+        background: #ccc!important;
+    }
+
+    .radio {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid #5a5a5a;
+        cursor: pointer;
+        background: #fff;
+    }
+
+    #TREATMENTSUGGESTION label {
+        margin: 8px 5px !important;
+    }
+
+    #ISWARNING label input, #YJPW label input {
+        display: none;
+    }
+
+    #MASSMONITORING, #PROFESSIONMONITORING, #RELOCATION, #ENGINEERINGMANAGEMENT {
+        height: 19px;
+    }
+</style>
+<div style="height: 100%; overflow-x: hidden;">
+    <div id="xgjl" style="text-align: center; width: 80%; border-bottom: 1px solid #ddd; margin: 40px auto; display: none;"></div>
+    <ul class="nav nav-tabs">
+        <li class="active" id="li_FIRST"><a href="#FIRST" data-toggle="tab">第一页</a></li>
+        <li id="li_LAST"><a href="#LAST" data-toggle="tab">第二页</a></li>
+        <li id="li_DMT"><a href="#DMT" data-toggle="tab">多媒体</a></li>
+        <li style="float: right; margin-right: 25px; display: none;" id="li_close">
+            <a class="btn btn-default" style="border: 1px solid #ccc; border-radius: 4px; margin-top: 5px; padding: 5px 10px;" onclick="thisClose('DZLSSJCX')"><i class="fa fa-close"></i>关闭</a>
+        </li>
+    </ul>
+    <div id="myTabContent" class="tab-content" style="height: calc(100% - 45px);">
+        <div class="tab-pane fade in active" id="FIRST" style="height: 100%; width: 100%;">
+            <table class="form">
+                <tr class="title">
+                    <td class="formTitle">项目名称</td>
+                    <td class="formValue" colspan="5" style="background: transparent">
+                        <input id="PROJECTNAME" type="text" class="form-control" placeholder="单击选择项目" onclick="SelectPrj()" />
+                    </td>
+                    <td class="formValue" style="background: transparent; display: none">
+                        <input id="PROJECTID" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">图幅名称</td>
+                    <td class="formValue" colspan="5" style="background: transparent">
+                        <input type="text" id="MAPNAME" class="form-control" />
+                    </td>
+                    <td class="formTitle">图幅编号</td>
+                    <td class="formValue" colspan="5" style="background: transparent">
+                        <input type="text" id="MAPID" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle"><font>*</font>沟名</td>
+                    <td class="formValue" colspan="4">
+                        <input type="text" id="DISASTERUNITNAME" class="form-control" isvalid="yes" checkexpession="NotNull" />
+                    </td>
+                    <td class="formTitle">室内编号</td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="INDOORCODE" class="form-control" />
+                    </td>
+                    <td class="formTitle">野外编号</td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="OUTDOORCODE" class="form-control" />
+                    </td>
+                    <td class="formTitle"><font>*</font>统一编号:</td>
+                    <td class="formValue" colspan="4">
+                        <input id="UNIFIEDCODE" type="text" onclick="btn_Create()" placeholder="点击获取统一编号" class="form-control" isvalid="yes" checkexpession="NotNull" style="width: 172px!important; display: inline-block" readonly="readonly" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="3">沟口地理位置（村）</td>
+                    <td class="formTitle">水系名称</td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="WATERNAME" class="form-control" />
+                    </td>
+                    <td class="formValue" style="display: none">
+                        <input id="PROVINCE" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="PROVINCENAME" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">省</td>
+                    <td class="formValue" style="display: none">
+                        <input id="CITY" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="CITYNAME" type="text" class="form-control" />
+                    </td>
+                    </td>
+                    <td class="formValue" style="display: none">
+                        <input id="COUNTY" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" style="display: none">
+                        <input id="COUNTYNAME" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">市（县）</td>
+                    <td class="formValue" id="districtControl" colspan="2">
+                        <div id="TOWN" type="select" class="ui-select" style="float: left;">
+                    </td>
+                    <td class="formValue" style="display: none">
+                        <input id="" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2" style="display: none">
+                        <input id="TOWNNAME" type="text" class="form-control">
+                    </td>
+                    <td class="formTitle">乡镇</td>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="VILLAGE" class="form-control" />
+                    </td>
+                    <td class="formTitle">村</td>
+                    <td class="formValue">
+                        <input type="text" id="TEAM" class="form-control" />
+                    </td>
+                    <td class="formTitle">组</td>
+                </tr>
+                <tr>
+                    <td class="formTitle">经度</td>
+                    <td class="formValue" colspan="3">
+                        <input id="LONGITUDE" type="text" class="form-control" onblur="isJD(this)" placeholder="双击获取经纬度" ondblclick="position_select()" />
+                    </td>
+                    <td class="formTitle" rowspan="1">分带</td>
+                    <td class="formValue" colspan="2">
+                        <div id="FD" type="select" class="ui-select"></div>
+                    </td>
+                    <td class="formTitle" colspan="2">
+                        <div onclick="xyChange();" style="background: #ccc; cursor: pointer; border-radius: 4px; margin-left: 7%;">XY->BL</div>
+                    </td>
+                    <td class="formTitle" colspan="2">X</td>
+                    <td class="formValue" colspan="2">
+                        <input id="X" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">地理位置</td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="LOCATION" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">纬度</td>
+                    <td class="formValue" colspan="3">
+                        <input id="LATITUDE" type="text" class="form-control" onblur="isJD(this)" placeholder="双击获取经纬度" ondblclick="position_select()" />
+                    </td>
+                    <td class="formTitle" rowspan="1">坐标系</td>
+                    <td class="formValue" colspan="2">
+                        <div id="ZBX" type="select" class="ui-select"></div>
+                    </td>
+                    <td class="formTitle" colspan="2">
+                        <div onclick="lonChange();" style="background: #ccc; cursor: pointer; border-radius: 4px; margin-left: 7%;">BL->XY</div>
+                    </td>
+                    <td class="formTitle" colspan="2">Y</td>
+                    <td class="formValue" colspan="2">
+                        <input id="Y" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">Z</td>
+                    <td class="formValue" colspan="3">
+                        <input id="Z" type="text" class="form-control" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="formTitle" rowspan="2">泥石流沟与主河关系</td>
+                    <td class="formTitle" colspan="5">主河名称</td>
+                    <td class="formTitle" colspan="4">泥石流沟位于主河道</td>
+                    <td class="formTitle" colspan="4">沟口至主河道距离/m</td>
+                    <td class="formTitle" colspan="4">流动方向</td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="5">
+                        <input type="text" id="MRIVERNAME" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="4">
+                        <div id="MRIVERLOCATION"></div>
+                    </td>
+                    <td class="formValue" colspan="4">
+                        <input id="MIZDISTOMRIVER" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="4">
+                        <input type="text" id="FLOWDIRECTION" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="18">泥石流沟主要参数、现状及灾害史调查</td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="2">水动力类型</td>
+                    <td class="formValue" rowspan="2" colspan="6">
+                        <div id="HYDRODYNAMICTYPE"></div>
+                    </td>
+                    <td class="formTitle" rowspan="2" colspan="2">沟口巨石大小/m</td>
+                    <td class="formTitle" colspan="3">沟口巨石A</td>
+                    <td class="formTitle" colspan="3">沟口巨石B</td>
+                    <td class="formTitle" colspan="3">沟口巨石C</td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="MIZOGUCHIROCKA" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="MIZOGUCHIROCKB" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="MIZOGUCHIROCKC" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">泥砂补给途径</td>
+                    <td class="formValue" colspan="8">
+                        <div id="SEDIMENTSUPPLYROUTE"></div>
+                    </td>
+                    <td class="formTitle">补给区位置</td>
+                    <td class="formValue" colspan="8">
+                        <div id="RECHARGEZONE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="1" rowspan="2">降雨特征值/mm</td>
+                    <td class="formTitle" colspan="2">年最大降雨</td>
+                    <td class="formTitle" colspan="2">年平均降雨</td>
+                    <td class="formTitle" colspan="2">日最大降雨</td>
+                    <td class="formTitle" colspan="2">日平均降雨</td>
+                    <td class="formTitle" colspan="2">时最大降雨</td>
+                    <td class="formTitle" colspan="2">时平均降雨</td>
+                    <td class="formTitle" colspan="2">十分钟最大降雨</td>
+                    <td class="formTitle" colspan="3">十分钟平均降雨</td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input id="YEARMAXIMUMRAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="YEARAVERAGERAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DAYMAXIMUMRAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DAYAVERAGERAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="HOURMAXIMUMRAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="HOURAVERAGERAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="MINUTES10MAXIMUMRAINFALL" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="3">
+                        <input id="MINUTES10AVERAGERAINFALL" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="3">沟口扇形地特征</td>
+                    <td class="formTitle" colspan="2">沟口扇形地完整性/%</td>
+                    <td class="formValue" colspan="3">
+                        <input id="MIZSECTORLANDINTEGRITY" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle" colspan="2">扇面冲淤变幅</td>
+                    <td class="formValue" colspan="4">±<input id="MIZSECTORLANDAMPLITUDE" type="text" class="form-control" style="display: inline-block; width: 90%" />
+                    </td>
+                    <td class="formTitle" colspan="2">发展趋势</td>
+                    <td class="formValue" colspan="4">
+                        <div id="MIZSECTORLANDTRENDS"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="2">沟口扇形地扇长/m</td>
+                    <td class="formValue" colspan="3">
+                        <input id="MIZSECTORLANDFANLONG" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle" colspan="2">沟口扇形地扇宽/m</td>
+                    <td class="formValue" colspan="4">
+                        <input id="MIZSECTORLANDFANKUAN" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle" colspan="2">沟口扇形地扩散角/°</td>
+                    <td class="formValue" colspan="4">
+                        <input id="MIZSECTORLANDSPREADANGLE" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">挤压大河</td>
+                    <td class="formValue" colspan="12">
+                        <div id="MIZSECTORLANDEXTRUSIONRIVER"></div>
+                    </td>
+                    <td class="formTitle">流域</td>
+                    <td class="formValue" colspan="3">
+                        <input type="text" id="RIVERBASIN" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">地质构造</td>
+                    <td class="formValue" colspan="8">
+                        <div id="GEOLOGICALSTRUCTURE"></div>
+                    </td>
+                    <td class="formTitle">地震烈度</td>
+                    <td class="formValue" colspan="8">
+                        <div id="EARTHQUAKEINTENSITY" class="ui-select" type="select"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="3">不良地质情况</td>
+                    <td class="formTitle">滑坡</td>
+                    <td class="formTitle">活动程度</td>
+                    <td class="formValue" colspan="7">
+                        <div id="SCALEACTIVITYDEGREE"></div>
+                    </td>
+                    <td class="formTitle">滑坡规模</td>
+                    <td class="formValue" colspan="7">
+                        <div id="SCALEIANDSLIDE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">人工弃体</td>
+                    <td class="formTitle">活动程度</td>
+                    <td class="formValue" colspan="7">
+                        <div id="ARTIFICIALABDBODYACTDEGREE"></div>
+                    </td>
+                    <td class="formTitle">弃体规模</td>
+                    <td class="formValue" colspan="7">
+                        <div id="ARTIFICIALABDBODYSCALE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">自然堆</td>
+                    <td class="formTitle">活动程度</td>
+                    <td class="formValue" colspan="7">
+                        <div id="NATURALACCACTDEGREE"></div>
+                    </td>
+                    <td class="formTitle">堆积规模</td>
+                    <td class="formValue" colspan="7">
+                        <div id="NATURALACCSCALE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="2">土地利用(%)</td>
+                    <td class="formTitle" colspan="2">森林</td>
+                    <td class="formTitle" colspan="2">灌丛</td>
+                    <td class="formTitle" colspan="2">草地</td>
+                    <td class="formTitle" colspan="2">缓坡耕地</td>
+                    <td class="formTitle" colspan="2">荒地</td>
+                    <td class="formTitle" colspan="2">陡坡耕地</td>
+                    <td class="formTitle" colspan="2">建筑用地</td>
+                    <td class="formTitle" colspan="3">其它用地</td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input id="FOREST" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="SHRUB" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="LAWN" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="GENTSLOPEARALAND" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="WASTELAND" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="STEEPLAND" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="BUILDINGLAND" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="3">
+                        <input id="OTHERSITES" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">防治措施现状</td>
+                    <td class="formValue" colspan="3">
+                        <div id="CONTROLMEASTATUSQ"></div>
+                    </td>
+                    <td class="formValue" colspan="14">
+                        <div id="CONTROMEASURETYPE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">监测建议</td>
+                    <td class="formValue" colspan="3">
+                        <div id="MONITORMEASURE"></div>
+                    </td>
+                    <td class="formValue" colspan="14">
+                        <div id="MONITORMEASURETYPE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="2">威胁危害对象</td>
+                    <td class="formValue" colspan="17">
+                        <div id="THREATENHARMOBJ"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">威胁户数</td>
+                    <td class="formValue" colspan="4">
+                        <input id="THREATENHOME" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">威胁人口/人</td>
+                    <td class="formValue" colspan="5">
+                        <input id="THREATENPEOPLE" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">威胁财产/(万元)</td>
+                    <td class="formValue" colspan="5">
+                        <input id="THREATENASSETS" type="text" class="form-control" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade in" id="LAST" style="height: 100%; width: 100%;">
+            <table class="form">
+                <tr>
+                    <td class="formTitle" rowspan="7">灾害史</td>
+                    <td class="formTitle" colspan="2" rowspan="2">发生时间/年/月/日</td>
+                    <td class="formTitle" colspan="1" rowspan="2">死亡/人</td>
+                    <td class="formTitle" colspan="1" rowspan="2">大牲畜损失/头</td>
+                    <td class="formTitle" colspan="4">房屋/间</td>
+                    <td class="formTitle" colspan="4">农田/亩</td>
+                    <td class="formTitle" colspan="4">公共设施</td>
+                    <td class="formTitle" colspan="1" rowspan="2">直接经济损失/(万元)</td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="2">全毁</td>
+                    <td class="formTitle" colspan="2">半毁</td>
+                    <td class="formTitle" colspan="2">全毁</td>
+                    <td class="formTitle" colspan="2">半毁</td>
+                    <td class="formTitle" colspan="2">道路/km</td>
+                    <td class="formTitle" colspan="2">桥梁/座</td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="DISHISTORYOCCURT1" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYDEATHS1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYLOSSLIVESTOCK1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESHOUSES1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESHOUSES1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESFARMLAND1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESFARMLAND1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESROAD1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESBRIDGE1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="1">
+                        <input id="DISHISTORYDIRECTLOSS1" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="DISHISTORYOCCURT2" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYDEATHS2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYLOSSLIVESTOCK2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESHOUSES2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESHOUSES2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESFARMLAND2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESFARMLAND2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESROAD2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESBRIDGE2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="1">
+                        <input id="DISHISTORYDIRECTLOSS2" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="DISHISTORYOCCURT3" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYDEATHS3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYLOSSLIVESTOCK3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESHOUSES3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESHOUSES3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESFARMLAND3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESFARMLAND3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESROAD3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESBRIDGE3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="1">
+                        <input id="DISHISTORYDIRECTLOSS3" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="DISHISTORYOCCURT4" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYDEATHS4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYLOSSLIVESTOCK4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESHOUSES4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESHOUSES4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESFARMLAND4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESFARMLAND4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESROAD4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESBRIDGE4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="1">
+                        <input id="DISHISTORYDIRECTLOSS4" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="2">
+                        <input type="text" id="DISHISTORYOCCURT5" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYDEATHS5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="DISHISTORYLOSSLIVESTOCK5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESHOUSES5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESHOUSES5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYCOMPDESFARMLAND5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYSDESFARMLAND5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESROAD5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="2">
+                        <input id="DISHISTORYDESBRIDGE5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue" colspan="1">
+                        <input id="DISHISTORYDIRECTLOSS5" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">泥石流特征</td>
+                    <td class="formTitle">容量(t/m³)</td>
+                    <td class="formValue" colspan="2">
+                        <input id="DEBRISFLOWCAPACITY" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">流量(m³/s)</td>
+                    <td class="formValue" colspan="2">
+                        <input id="DEBRISFLOWDISCHARGE" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">泥位/m</td>
+                    <td class="formValue" colspan="2">
+                        <input id="DEBRISFLOWMUDPOSITION" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle" colspan="2">泥石流冲出方量</td>
+                    <td class="formValue" colspan="2">
+                        <input id="DEBRISFLOWOUTSQUCAP" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle" colspan="2">暴发频率（次/年）</td>
+                    <td class="formValue" colspan="2">
+                        <input id="OCCURREDFREQUENCY" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="18">泥石流综合评判</td>
+                </tr>
+                <tr>
+                    <td class="formTitle">1.不良地质现象</td>
+                    <td class="formValue" colspan="5">
+                        <div id="BADGEOLOGICALPHENOMENA"></div>
+                    </td>
+                    <td class="formTitle">2.补给段长度比(％)</td>
+                    <td class="formValue" colspan="1">
+                        <input type="text" id="SUPPLYLENGTHRATIO" class="form-control" onblur="testRegx(this)" />
+                    </td>
+                    <td class="formTitle" colspan="2">3.沟口扇形地</td>
+                    <td class="formValue" colspan="5">
+                        <div id="MIZOGUCHIFAN"></div>
+                    </td>
+                    <td class="formTitle" colspan="2">4.主沟纵坡(‰)</td>
+                    <td class="formValue" colspan="1">
+                        <input type="text" id="MCHANNELLSLOPE" class="form-control" onblur="testRegxZG(this)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">5.新沟造影响</td>
+                    <td class="formValue" colspan="5">
+                        <div id="NEWCONSTRUCTIONAFFECT"></div>
+                    </td>
+                    <td class="formTitle">6.植被覆盖率(％)</td>
+                    <td class="formValue" colspan="1">
+                        <input type="text" id="VEGETATIONCOVERAGE" class="form-control" onblur="testReZBFG(this)" />
+                    </td>
+                    <td class="formTitle" colspan="2">7.冲淤变幅（m）</td>
+                    <td class="formValue" colspan="5">
+                        ±<input type="number" max="2" id="EROSIONAMPLITUDE" class="form-control" onblur="testReCYBF(this)" style="display: inline-block; width: 90%" />
+                    </td>
+                    <td class="formTitle" colspan="2">8.松散物储量(万m³/km²）</td>
+                    <td class="formValue" colspan="1">
+                        <input type="text" id="LOOSEMATRESERVES" class="form-control" onblur="testReSSW(this)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="1">9.岩性因素</td>
+                    <td class="formValue" colspan="7">
+                        <div id="ROCKFACTOR"></div>
+                    </td>
+                    <td class="formTitle" colspan="2">10.山坡坡度(°)</td>
+                    <td class="formValue" colspan="8">
+                        <input type="text" id="MOUNTAINSLOPE" class="form-control" onblur="ReCYBFSPPD(this)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">11.沟槽横断面</td>
+                    <td class="formValue" colspan="17">
+                        <div id="TRENCHCCROSSSECTIONAL"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">12.松散物平均厚（m）</td>
+                    <td class="formValue" colspan="9">
+                        <input type="text" id="LOOSEMATAVERAGETHICK" class="form-control" onblur="ReCYBFSSPJH(this)" />
+                    </td>
+                    <td class="formTitle">13.流域面积（km²）</td>
+                    <td class="formValue" colspan="7">
+                        <input type="text" id="DRAINAGESIZE" class="form-control" onblur="ReCYBFSLYMJ(this)" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" colspan="1">14.相对高差（m）</td>
+                    <td class="formValue" colspan="9">
+                        <input type="text" id="RELATIVEHEIGHT" class="form-control" onblur="ReCYBFSXDGC(this)" />
+                    </td>
+                    <td class="formTitle" colspan="1">15.堵塞程度</td>
+                    <td class="formValue" colspan="7">
+                        <div id="BLOCKDEGREE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle" rowspan="2">评分</td>
+                    <td class="formTitle">1</td>
+                    <td class="formTitle">2</td>
+                    <td class="formTitle">3</td>
+                    <td class="formTitle">4</td>
+                    <td class="formTitle">5</td>
+                    <td class="formTitle">6</td>
+                    <td class="formTitle">7</td>
+                    <td class="formTitle">8</td>
+                    <td class="formTitle">9</td>
+                    <td class="formTitle">10</td>
+                    <td class="formTitle">11</td>
+                    <td class="formTitle">12</td>
+                    <td class="formTitle">13</td>
+                    <td class="formTitle">14</td>
+                    <td class="formTitle">15</td>
+                    <td class="formTitle" rowspan="2">总分</td>
+                    <td class="formValue" rowspan="2">
+                        <input type="text" id="TOTAL" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue">
+                        <input id="SCORE1" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE2" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE3" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE4" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE5" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE6" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE7" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE8" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE9" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE10" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE11" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE12" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE13" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE14" type="text" class="form-control" />
+                    </td>
+                    <td class="formValue">
+                        <input id="SCORE15" type="text" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">易发程度</td>
+                    <td class="formValue" colspan="8">
+                        <div id="PRONEDEGREE"></div>
+                    </td>
+                    <td class="formTitle">泥石流类型</td>
+                    <td class="formValue" colspan="8">
+                        <div id="DEBRISFLOWTYPE"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">灾情等级</td>
+                    <td class="formValue" colspan="4">
+                        <div id="DISASTERLEVEL"></div>
+                    </td>
+                    <td class="formTitle">险情等级</td>
+                    <td class="formValue" colspan="4">
+                        <div id="DANGERLEVEL"></div>
+                    </td>
+                    <td class="formTitle">隐患点</td>
+                    <td class="formValue" colspan="3">
+                        <div id="HIDDENPOINT"></div>
+                    </td>
+                    <td class="formTitle">重大隐患点</td>
+                    <td class="formValue" colspan="3">
+                        <div id="ISZDYHD"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">发展阶段</td>
+                    <td class="formValue" colspan="17">
+                        <div id="DEVELOPINGSTAGE"></div>
+                    </td>
+                </tr>
+                @*<tr>
+            <td class="formTitle">防治建议</td>
+            <td class="formValue" colspan="17">
+                <div id="TREATMENTSUGGESTION"></div>
+            </td>
+        </tr>
+                *@
+                <tr>
+                    <td class="formTitle" rowspan="6">防治建议</td>
+                    <td class="formValue" colspan="2" rowspan="6">
+                        <div id="TREATMENTSUGGESTION"></div>
+                    </td>
+                    <td class="formValue" colspan="15">
+                        <div id="MASSMONITORING"></div>
+                    </td>
+                </tr>
+                <tr>
+
+                    <td class="formValue" colspan="15">
+                        <div id="PROFESSIONMONITORING"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="15">
+                        <div id="RELOCATION"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="15">
+                        <div id="ENGINEERINGMANAGEMENT"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="15">
+                        <div id="YJPW"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formValue" colspan="15">
+                        <div id="ISWARNING"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="formTitle">野外记录信息</td>
+                    <td class="formValue" colspan="17">
+                        <textarea id="OUTDOORRECORD" class="form-control"></textarea>
+                    </td>
+                </tr>
+                <tr class="title">
+                    <td class="formTitle">填表人:</td>
+                    <td class="formValue" colspan="5" style="background: transparent">
+                        <input id="FILLTABLEPEOPLE" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">审核人：</td>
+                    <td class="formValue" colspan="4" style="background: transparent">
+                        <input id="VERIFYPEOPLE" type="text" class="form-control" />
+                    </td>
+                    <td class="formTitle">调查日期:</td>
+                    <td class="formValue" colspan="5" style="background: transparent">
+                        <input id="FILLTABLEDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    </td>
+                </tr>
+                <tr style="display:none;">
+                    <td class="formTitle">数据来源</td>
+                    <td class="formValue" colspan="2">
+                        <input id="DATASOURCE" type="text" class="form-control" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="DMT" style="height: 100%; width: 100%;">
+            <iframe class="LRADMS_iframe" id="MultMedia" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/infoearthcustom/dictionaryControl.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var details = request('details');
+    var guid = request('guid');  //历史数据的GUID 
+    var TYBH = request('TYBH');  //编号
+    var authToken = getAuthorizationToken();
+    var callback = request('callback');//"返回"跳转url
+    var showNew = request('showNew');//"返回"跳转url
+    var dmt = request('dmt');
+    var DATASOURCE = request('DATASOURCE');
+    var localname = "";
+    var townnames = "";
+    var villagenames = "";
+    var teamnames = "";
+    $(function () {
+        initSelect();
+        $("#ISWARNING label").text("");
+        $("#YJPW label").text("");
+        if (callback) {
+            if (showNew) {
+                $("#li_close").show();
+            }
+            $("#xgjl").show();
+            var flag = request('flag');
+            if (flag.indexOf("false") != -1) {
+                $("#xgjl").hide();
+            }
+            if (TYBH) {
+                var queryJson = { 'UnifyCode': TYBH }
+                $.ajax({
+                    url: "../../api/TBL_HAZARDBASICINFOApi/GetSingleFillListJson?queryJson=" + JSON.stringify(queryJson),
+                    beforeSend: function (a) {
+                        a.setRequestHeader("Authorization", authToken);
+                    },
+                    type: 'GET',
+                    dataType: "json",
+                    success: function (data) {
+                        if (data) {
+                            var str = "", clas = '';
+                            if (data.length > 0) {
+                                var mag = ($('#xgjl').width() - 100 * data.length) / (data.length + 1)
+                                for (var i = 0; i < data.length; i++) {
+                                    clas = i == data.length - 1 ? 'actives' : '';
+                                    if (data[i].MODIFYTIME != null) {
+                                        data[i].MODIFYTIME = data[i].MODIFYTIME.slice(0, 10);
+                                    } else {
+                                        data[i].MODIFYTIME = "";
+                                    }
+                                    str += '<div class="timeflag" style="left:' + mag * (i + 1) + 'px"><div class="radio ' + clas + '" onclick="radioGUID(\'' + data[i].GUID + ',' + i + '\')"></div><p>' + data[i].MODIFYTIME + '</p></div>'
+                                }
+                                $('#xgjl').html(str);
+                            }
+                        }
+                    },
+                    cache: false
+
+                })
+            }
+        }
+        initControl();
+        $("#VILLAGE").attr("disabled", "disabled");
+        $("#TEAM").attr("disabled", "disabled");
+        $("#TOWNNAME").blur(function () {
+            if ($("#TOWNNAME").val() == "") {
+                dialogMsg('请先填写乡镇！', 0);
+                $("#VILLAGE").attr("disabled", "disabled")
+                $("#VILLAGE").val("")
+            } else {
+                $("#VILLAGE").prop("disabled", "");
+            }
+        })
+        $("#VILLAGE").blur(function () {
+            if ($("#VILLAGE").val() == "") {
+                dialogMsg('请先填写村！', 0);
+                $("#TEAM").attr("disabled", "disabled")
+                $("#TEAM").val("")
+            } else {
+                $("#TEAM").prop("disabled", "")
+            }
+            $("#LOCATION").val(dlwz + jcdname + $("#VILLAGE").val());
+        });
+        $("#TEAM").blur(function () {
+            $("#LOCATION").val(dlwz + jcdname + $("#VILLAGE").val() + $("#TEAM").val());
+        });
+        if (details == "01") {
+            $("input").attr("disabled", "disabled")
+        }
+        $(".nav-tabs li").click(function () {
+            var id = $(this).attr('id').replace("li_", "");
+            switch (id) {
+                case "DMT":
+                    window.setTimeout(function () {
+                        mid = "dcd1d0aa-1d51-4142-ae82-db812158b0da";
+                        if (dmt) {
+                            keyValue = dmt;
+                        }
+                        $('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=" + mid + "&belongObjectGuid=" + keyValue + "&details=" + details);
+                    }, 300);
+
+                    break;
+                default:
+            }
+        });
+        $("input[name='CONTROMEASURETYPE']").attr("disabled", "disabled")
+        $("#CONTROMEASURETYPE").css("color", "#ccc")
+        $("input[name='MONITORMEASURETYPE']").attr("disabled", "disabled")
+        $("#MONITORMEASURETYPE").css("color", "#ccc")
+        $("input[name='CONTROLMEASTATUSQ']").each(function () {
+            console.log($(this).is(":checked"))
+            $(this).click(function () {
+                if ($(this).val() == "A") {
+                    $("input[name='CONTROMEASURETYPE']").removeAttr("disabled")
+                    $("#CONTROMEASURETYPE").css("color", "#000")
+                } else {
+                    $("input[name='CONTROMEASURETYPE']").attr("disabled", "disabled")
+                    $("#CONTROMEASURETYPE").css("color", "#ccc")
+                }
+            })
+        })
+        $("input[name='MONITORMEASURE']").each(function () {
+            console.log($(this).is(":checked"))
+            $(this).click(function () {
+                if ($(this).val() == "A") {
+                    $("input[name='MONITORMEASURETYPE']").removeAttr("disabled")
+                    $("#MONITORMEASURETYPE").css("color", "#000")
+                } else {
+                    $("input[name='MONITORMEASURETYPE']").attr("disabled", "disabled")
+                    $("#MONITORMEASURETYPE").css("color", "#ccc")
+                }
+            })
+        })
+        $("input[name='CONTROLMEASTATUSQ']:checked").each(function () {
+            if ($(this).val() == "A") {
+                $("input[name='MONITORMEASURETYPE']").removeAttr("disabled")
+                $("#MONITORMEASURETYPE").css("color", "#000")
+            } else {
+                $("input[name='MONITORMEASURETYPE']").attr("disabled", "disabled")
+                $("#MONITORMEASURETYPE").css("color", "#ccc")
+            }
+        })
+        $("input[name='MONITORMEASURE']:checked").each(function () {
+            if ($(this).val() == "A") {
+                $("input[name='CONTROMEASURETYPE']").removeAttr("disabled")
+                $("#CONTROMEASURETYPE").css("color", "#000")
+            } else {
+                $("input[name='CONTROMEASURETYPE']").attr("disabled", "disabled")
+                $("#CONTROMEASURETYPE").css("color", "#ccc")
+            }
+        })
+        //if ($("input[name='CONTROLMEASTATUSQ']").is(":checked")) {
+        //    console.log($(this).val())
+        //}
+        grade();
+        GRADEGKSXD();
+        GRADEXG();
+        GRADEYXYS();
+        GRADEGCHDM();
+        GRADEGDSCD();
+    });
+    //function townname(value) {
+    //    townnames = value;
+    //    var a = localname + townnames + villagenames + teamnames;
+    //    $("#LOCATION").val(a);
+
+    //}
+    //function villagename(value) {
+    //    villagenames = value;
+    //    var a = localname + townnames + villagenames + teamnames;
+    //    $("#LOCATION").val(a);
+    //}
+    //function teamname(value) {
+    //    teamnames = value;
+    //    var a = localname + townnames + villagenames + teamnames;
+    //    $("#LOCATION").val(a);
+    //}
+    function radioGUID(GUID) {
+        var GUID1 = GUID.split(",")[0];
+        var a = GUID.split(",")[1];
+        $(".timeflag div").removeClass("actives");
+        $($(".timeflag")[a].children[0]).attr("class", "radio actives");
+        $("#form1 input").val("");
+        $("#form1 span").text("");
+        $("#form1 input").attr("checked", false);
+        initSelect();
+        $.SetForm({
+            url: "../../api/TBL_DEBRISFLOW_HISTORYApi/GetFormJson",
+            param: { keyValue: GUID1 },
+            authToken: authToken,
+            success: function (data) {
+                SetControl(data);
+            }
+        });
+    }
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_DEBRISFLOW/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#UNIFIEDCODE").attr("disabled", "disabled");
+                    SetControl(data);
+                }
+            })
+        }
+        else if (!!guid) {
+            $.SetForm({
+                url: "../../api/TBL_DEBRISFLOW_HISTORYApi/GetFormJson",
+                param: { keyValue: guid },
+                authToken: authToken,
+                success: function (data) {
+                    SetControl(data);
+                }
+            });
+
+            $("input").attr("disabled", "disabled")
+        } else if (TYBH) {
+            var queryJson = { 'UNIFIEDCODE': TYBH }
+            $.SetForm({
+                //url: "../../api/TBL_HAZARDBASICINFOApi/GetSingleFillListJson?queryJson=" + JSON.stringify(queryJson),
+                url: "../../JXGeoManage/TBL_DEBRISFLOW/GetFormJson",
+                param: { keyValue: TYBH },
+                authToken: authToken,
+                success: function (data) {
+                    if (data) {
+                        //$("#DISASTERUNITNAME").val(data[0].DISASTERNAME);
+                        SetControl(data);
+                        $("#UNIFIEDCODE").attr("disabled", "disabled");
+                    }
+                }
+            });
+            $("input").attr("disabled", "disabled")
+        }
+    }
+
+    function SetControl(data) {
+
+        $("#form1").SetWebControls(data);
+        if (data.COUNTYCODE) {
+            $("#TOWN").ComboBox({
+                url: "../../SystemManage/Area/GetAreaListJson",
+                param: { parentId: data.COUNTYCODE },
+                id: "F_AreaCode",
+                text: "F_AreaName",
+                description: "选择乡/镇",
+                height: "170px"
+            }).bind("change", function () {
+                $("#VILLAGE").prop("disabled", "");
+            });
+            $("#TOWN").css("width", "100%");
+            $("#TOWN").comboBoxSetValue(data.TOWN);
+        }
+        //$("#PROVINCENAME").val(data.LOCATION.split(",")[0]);
+        //$("#TOWNNAME").val(data.LOCATION.split(",")[3]);
+        //$("#CITYNAME").val(data.LOCATION.split(",")[1] + "," + data.LOCATION.split(",")[2]);
+        //获取项目信息
+        if (data && data.PROJECTID) {
+            $.ajax({
+                url: "../../api/JYGC_PROJECTBASEINFOApi/GetFormJson",
+                data: { keyValue: data.PROJECTID },
+                type: 'GET',
+                dataType: "json",
+                beforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                success: function (prj) {
+                    if (prj) {
+                        var webData = {};
+                        webData["PROJECTNAME"] = prj.PROJECTNAME;
+                        $("#form1").SetWebControls(webData);
+                    }
+                },
+                cache: false
+
+            })
+        }
+    }
+
+    //保存表单;
+    function AcceptClick() {
+        if (keyValue) {
+            var queryJson = { 'unifycode': keyValue, "type": "03" }
+            $.ajax({
+                url: "../../api/TBL_AUDITINFOApi/GetPageNoAuditListJson",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                data: { queryJson: JSON.stringify(queryJson) },
+                type: "get",
+                dataType: "json",
+                async: false,
+                success: function (res) {
+                    if (res.rows.length > 0) {
+                        dialogMsg('该点存在未审核数据，请审核后再执行此操作！', 0);
+                        return;
+                    } else {
+                        SaveInfo();
+                    }
+                },
+            });
+        } else {
+            SaveInfo();
+        }
+
+    }
+    function SaveInfo() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        postData.DATASOURCE = DATASOURCE;
+        if ($("#TOWN").attr("data-text") != undefined) {
+            postData.TOWNNAME = $("#TOWN").text();
+        }
+        //if ($("#VILLAGE").val() == "") {
+        //    postData.LOCATION = postData.PROVINCENAME + "," + postData.CITYNAME + "," + postData.TOWNNAME;
+        //} else if ($("#TEAM").val() == "") {
+        //    postData.LOCATION = postData.PROVINCENAME + "," + postData.CITYNAME + "," + postData.TOWNNAME + "," + postData.VILLAGE;
+        //} else {
+        //    postData.LOCATION = postData.PROVINCENAME + "," + postData.CITYNAME + "," + postData.TOWNNAME + "," + postData.VILLAGE + "," + postData.TEAM;
+        //}
+        if (postData.TOWN == "") {
+            //var Validatemsg = "乡镇不能为空！\n";
+            //ValidationMessage($("#TOWN"), Validatemsg); return false;
+            dialogAlert('乡镇不能为空', 0);
+            return false;
+        }
+        var dmtKey = postData.UNIFIEDCODE;
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_DEBRISFLOW/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function (data) {
+                if ($("#MultMedia").attr("src") != "") {
+                    $("#MultMedia")[0].contentWindow.SaveFileInfo(dmtKey);
+                }
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+    var PROVINCE1 = ""; var jcdname = "", dlwz = "";
+    //生成统一编号
+    function btn_Create() {
+        learun.dialogOpen({
+            id: 'Form2',
+            title: '获取统一编号',
+            url: '../../JXGeoManage/TBL_HAZARDBASICINFO/CreateCodeWaterIndex?PROVINCE1=' + $("#PROVINCE").val() + '&CITY1=' + $("#CITY").val() + '&COUNTRY1=' + $("#COUNTY").val() + '&tabhtml=03',
+            width: '500px',
+            height: '450px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                $("#PROVINCE").val(data["provinceId"]);
+                $("#CITY").val(data["cityId"]);
+                $("#COUNTY").val(data["countyId"]);
+                $("#TOWN").val(data["townId"]);
+                $("#UNIFIEDCODE").val(data["UNIFIEDCODE"]);
+                //省市县名称
+                $("#PROVINCENAME").val(data.provinceName);
+                $("#CITYNAME").val(data.cityName + "," + data.countyName);
+                $("#COUNTYNAME").val(data.countyName);
+                //localname = data.provinceName + data.cityName + data.countyName;
+                $("#LOCATION").val(data.provinceName + data.cityName + data.countyName);
+                dlwz = data.provinceName + data.cityName + data.countyName;
+                $("#TOWN").css("width", "100%");
+                $("#TOWN").ComboBox({
+                    url: "../../SystemManage/Area/GetAreaListJson",
+                    param: { parentId: data["countyId"] },
+                    id: "F_AreaCode",
+                    text: "F_AreaName",
+                    description: "选择乡/镇",
+                    height: "170px"
+                }).bind("change", function (ret) {
+                    $("#VILLAGE").prop("disabled", "");
+                    $("#LOCATION").val("");
+                    jcdname = ret.target.getAttribute("data-text");
+                    $("#TOWNNAME").val(jcdname);
+                    $("#LOCATION").val(dlwz + jcdname);
+
+                });
+            }
+        });
+    }
+    //加载项目
+    function SelectPrj() {
+        dialogOpen({
+            id: 'ProjectForm',
+            title: '选择项目',
+            url: '../../JXGeoManage/JYGC_PROJECTBASEINFO/JYGC_PROJECTBASEINFOIndex',
+            width: '800px',
+            height: '500px',
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                if (data) {
+                    var webData = {};
+                    webData["PROJECTID"] = data["PROJECTGUID"];
+                    webData["PROJECTNAME"] = data["PROJECTNAME"];
+                    $("#form1").SetWebControls(webData);
+                }
+            }
+        });
+    }
+    //checkbox
+    function initSelect() {
+        $("#MRIVERLOCATION").dictionaryControl({ dicCode: "MRIVERLOCATIONNS", type: "radio" });
+        $("#HYDRODYNAMICTYPE").dictionaryControl({ dicCode: "HYDRODYNAMICTYPENS", type: "checkbox" });
+        $("#SEDIMENTSUPPLYROUTE").dictionaryControl({ dicCode: "SEDIMENTSUPPLYROUTENS", type: "checkbox" });
+        $("#RECHARGEZONE").dictionaryControl({ dicCode: "RECHARGEZONENS", type: "checkbox" });
+        $("#MIZSECTORLANDTRENDS").dictionaryControl({ dicCode: "MIZSECTORLANDTRENDSNS", type: "radio" });
+        $("#SCALEACTIVITYDEGREE").dictionaryControl({ dicCode: "SCALEACTIVITYDEGREENS", type: "radio" });
+        $("#SCALEIANDSLIDE").dictionaryControl({ dicCode: "SCALEIANDSLIDENS", type: "radio" });
+        $("#ARTIFICIALABDBODYACTDEGREE").dictionaryControl({ dicCode: "ARTIFICIALABDBODYACTDEGREENS", type: "radio" });
+        $("#ARTIFICIALABDBODYSCALE").dictionaryControl({ dicCode: "ARTIFICIALABDBODYSCALENS", type: "radio" });
+        $("#NATURALACCACTDEGREE").dictionaryControl({ dicCode: "NATURALACCACTDEGREENS", type: "radio" });
+        $("#NATURALACCSCALE").dictionaryControl({ dicCode: "NATURALACCSCALENS", type: "radio" });
+        $("#MIZSECTORLANDEXTRUSIONRIVER").dictionaryControl({ dicCode: "MIZSECTORLANDEXTRUSIONRIVERNS", type: "checkbox" });
+        $("#GEOLOGICALSTRUCTURE").dictionaryControl({ dicCode: "GEOLOGICALSTRUCTURENS", type: "checkbox" });
+        $("#THREATENHARMOBJ").dictionaryControl({ dicCode: "THREATENHARMOBJNS", type: "checkbox" });
+        $("#BLOCKDEGREE").dictionaryControl({ dicCode: "BLOCKDEGREENS", type: "radio" });
+        $("#MIZOGUCHIFAN").dictionaryControl({ dicCode: "MIZOGUCHIFANNS", type: "radio" });
+        $("#BADGEOLOGICALPHENOMENA").dictionaryControl({ dicCode: "BADGEOLOGICALPHENOMENANS", type: "radio" });
+        $("#NEWCONSTRUCTIONAFFECT").dictionaryControl({ dicCode: "NEWCONSTRUCTIONAFFECTNS", type: "radio" });
+        $("#ROCKFACTOR").dictionaryControl({ dicCode: "ROCKFACTORNS", type: "radio" });
+        $("#TRENCHCCROSSSECTIONAL").dictionaryControl({ dicCode: "TRENCHCCROSSSECTIONALNS", type: "radio" });
+
+        $("#PRONEDEGREE").dictionaryControl({ dicCode: "PRONEDEGREENS", type: "radio" });
+        $("#DEBRISFLOWTYPE").dictionaryControl({ dicCode: "DEBRISFLOWTYPE", type: "radio" });
+        $("#DEVELOPINGSTAGE").dictionaryControl({ dicCode: "DEVELOPINGSTAGENS", type: "radio" });
+
+        $("#DISASTERLEVEL").dictionaryControl({ dicCode: "DISASTERLEVEL", type: "radio" });
+        $("#DANGERLEVEL").dictionaryControl({ dicCode: "DANGERLEVEL", type: "radio" });
+        $("#TREATMENTSUGGESTION").dictionaryControl({ dicCode: "TREATMENTSUGGESTION", type: "checkbox" });
+
+        $("#MASSMONITORING").dictionaryControl({ dicCode: "MASSMONITORING", type: "checkbox" });
+        $("#PROFESSIONMONITORING").dictionaryControl({ dicCode: "PROFESSIONMONITORING", type: "checkbox" });
+        $("#RELOCATION").dictionaryControl({ dicCode: "RELOCATION", type: "checkbox" });
+        $("#ENGINEERINGMANAGEMENT").dictionaryControl({ dicCode: "ENGINEERINGMANAGEMENT", type: "checkbox" });
+        $("#ISWARNING").dictionaryControl({ dicCode: "ISQCQF", type: "radio" });
+        $("#YJPW").dictionaryControl({ dicCode: "ISQCQF", type: "radio" });
+        $("#EARTHQUAKEINTENSITY").comboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "DIZHENLIEDU" },
+            id: "value",
+            text: "text",
+            height: "130px"
+        });
+        $("#FD").comboBox({
+            data: [{ "id": 1, "text": "6度分带" }, { "id": 0, "text": "3度分带" }],
+            id: "id",
+            text: "text",
+            height: "50px"
+        });
+        $("#ZBX").comboBox({
+            data: [{ "id": 1, "text": "西安80坐标系" }, { "id": 0, "text": "北京54坐标系" }],
+            id: "id",
+            text: "text",
+            height: "50px"
+        });
+        $("#MONITORMEASURE").dictionaryControl({ dicCode: "MONITORMEASURE", type: "radio" });
+        $("#MONITORMEASURETYPE").dictionaryControl({ dicCode: "MONITORMEASURENS", type: "checkbox" });
+        $("#CONTROLMEASTATUSQ").dictionaryControl({ dicCode: "MONITORMEASURE", type: "radio" });
+        $("#CONTROMEASURETYPE").dictionaryControl({ dicCode: "CONTROLMEASTATUSQNS", type: "checkbox" }); 
+        $("#HIDDENPOINT").dictionaryControl({ dicCode: "HIDDENDANGER", type: "radio" });
+        $("#ISZDYHD").dictionaryControl({ dicCode: "HIDDENDANGER", type: "radio" });
+    }
+
+    //不良地质现象评分
+    function grade() {
+        $("#BADGEOLOGICALPHENOMENA label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE1").val("3.339")
+            } else if ($(this).val() == "B") {
+                $("#SCORE1").val("2.544")
+            } else if ($(this).val() == "C") {
+                $("#SCORE1").val("1.908")
+            } else if ($(this).val() == "D") {
+                $("#SCORE1").val("0.159")
+            }
+            total();
+        })
+    }
+    //补给段长度比评分
+    function testRegx(thisObj) {
+        var _this = thisObj;
+        var k = /^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            //if (k.test(thisValue)) {
+            var numbers = Number(thisValue.replace("%", "")) / 100;
+            if (numbers >= 0.6) {
+                $("#SCORE2").val("1.888")
+            } else if (numbers >= 0.3 && numbers < 0.6) {
+                $("#SCORE2").val("1.416")
+            } else if (numbers >= 0.1 && numbers < 0.3) {
+                $("#SCORE2").val("0.944")
+            } else if (numbers < 0.1 && numbers > 0) {
+                $("#SCORE2").val("0.118")
+            } else {
+                $("#SCORE2").val("0")
+            }
+            total();
+            //} else {
+            //    dialogMsg('请输入百分比！', 0);
+            //    $(_this).val("");
+            //    $("#SCORE2").val("");
+            //}
+        }
+    }
+    //沟口扇形地评分
+    function GRADEGKSXD() {
+        $("#MIZOGUCHIFAN label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE3").val("1.512")
+            } else if ($(this).val() == "B") {
+                $("#SCORE3").val("1.188")
+            } else if ($(this).val() == "C") {
+                $("#SCORE3").val("0.756")
+            } else if ($(this).val() == "D") {
+                $("#SCORE3").val("0.108")
+            }
+            total();
+        })
+    }
+    //主沟纵坡比评分
+    function testRegxZG(thisObj) {
+        var _this = thisObj;
+        var k = /^(300|[1-2]?[1-9]?\d(\.\d\d?\d?)?)%$|([1-2][0]\d(\.\d\d?\d?)?)%$|0$/;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            //if (k.test(thisValue)) {
+            var numbers = Number(thisValue.replace("‰", "")) / 100;
+            if (numbers >= 2.13) {
+                $("#SCORE4").val("1.08")
+            } else if (numbers >= 1.05 && numbers < 2.13) {
+                $("#SCORE4").val("0.81")
+            } else if (numbers >= 0.52 && numbers < 1.05) {
+                $("#SCORE4").val("0.54")
+            } else if (numbers < 0.52) {
+                $("#SCORE4").val("0.09")
+            } else {
+                $("#SCORE4").val("0")
+            }
+            total();
+            //} else {
+            //    dialogMsg('请输入300以内的百分比！', 0);
+            //    $(_this).val("");
+            //    $("#SCORE4").val("");
+            //}
+        }
+    }
+    //新沟造影响评分
+    function GRADEXG() {
+        $("#NEWCONSTRUCTIONAFFECT label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE5").val("0.675")
+            } else if ($(this).val() == "B") {
+                $("#SCORE5").val("0.525")
+            } else if ($(this).val() == "C") {
+                $("#SCORE5").val("0.375")
+            } else if ($(this).val() == "D") {
+                $("#SCORE5").val("0.075")
+            }
+            total();
+        })
+    }
+    //植被覆盖率评分
+    function testReZBFG(thisObj) {
+        var _this = thisObj;
+        var k = /^(100|[1-9]?\d(\.\d\d?\d?)?)%$|0$/;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            //if (k.test(thisValue)) {
+            var numbers = Number(thisValue.replace("%", "")) / 100;
+            if (numbers >= 0.6) {
+                $("#SCORE6").val("0.067")
+            } else if (numbers >= 0.3 && numbers < 0.6) {
+                $("#SCORE6").val("0.335")
+            } else if (numbers >= 0.1 && numbers < 0.3) {
+                $("#SCORE6").val("0.469")
+            } else if (numbers < 0.1 && numbers > 0) {
+                $("#SCORE6").val("0.603")
+            } else {
+                $("#SCORE6").val("0")
+            }
+            total();
+            //} else {
+            //    dialogMsg('请输入百分比！', 0);
+            //    $(_this).val("");
+            //    $("#SCORE6").val("");
+            //}
+        }
+    }
+    //冲淤变幅评分
+    function testReCYBF(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE7").val("");
+            } else {
+                if (thisValue >= 2) {
+                    $("#SCORE7").val("0.496")
+                } else if (thisValue >= 1 && thisValue < 2) {
+                    $("#SCORE7").val("0.372")
+                } else if (thisValue >= 0.2 && thisValue < 1) {
+                    $("#SCORE7").val("0.248")
+                } else if (thisValue < 0.2) {
+                    $("#SCORE7").val("0.062")
+                } else {
+                    $("#SCORE7").val("0")
+                }
+                total();
+            }
+        }
+    }
+    //松散物储量评分
+    function testReSSW(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE8").val("");
+            } else {
+                thisValue = thisValue * 10000;
+                if (thisValue >= 100000) {
+                    $("#SCORE8").val("0.324")
+                } else if (thisValue >= 50000 && thisValue < 100000) {
+                    $("#SCORE8").val("0.27")
+                } else if (thisValue >= 10000 && thisValue < 50000) {
+                    $("#SCORE8").val("0.216")
+                } else if (thisValue < 10000) {
+                    $("#SCORE8").val("0.054")
+                } else {
+                    $("#SCORE8").val("0")
+                }
+                total();
+            }
+        }
+    }
+    //岩性因素评分
+    function GRADEYXYS() {
+        $("#ROCKFACTOR label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE9").val("0.324")
+            } else if ($(this).val() == "B") {
+                $("#SCORE9").val("0.27")
+            } else if ($(this).val() == "C") {
+                $("#SCORE9").val("0.216")
+            } else if ($(this).val() == "D") {
+                $("#SCORE9").val("0.054")
+            }
+            total();
+        })
+    }
+    //山坡坡度评分
+    function ReCYBFSPPD(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE10").val("");
+            } else {
+                if (thisValue >= 32) {
+                    $("#SCORE10").val("0.27")
+                } else if (thisValue >= 25 && thisValue < 32) {
+                    $("#SCORE10").val("0.225")
+                } else if (thisValue >= 15 && thisValue < 25) {
+                    $("#SCORE10").val("0.18")
+                } else if (thisValue < 15) {
+                    $("#SCORE10").val("0.045")
+                } else {
+                    $("#SCORE10").val("0")
+                }
+                total();
+            }
+        }
+    }
+    //沟槽横断面评分
+    function GRADEGCHDM() {
+        $("#TRENCHCCROSSSECTIONAL label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE11").val("0.18")
+            } else if ($(this).val() == "B") {
+                $("#SCORE11").val("0.144")
+            } else if ($(this).val() == "C") {
+                $("#SCORE11").val("0.108")
+            } else if ($(this).val() == "D") {
+                $("#SCORE11").val("0.036")
+            }
+            total();
+        })
+    }
+    //松散物平均厚评分
+    function ReCYBFSSPJH(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE12").val("");
+            } else {
+                if (thisValue >= 10) {
+                    $("#SCORE12").val("0.180")
+                } else if (thisValue >= 5 && thisValue < 10) {
+                    $("#SCORE12").val("0.144")
+                } else if (thisValue >= 1 && thisValue < 5) {
+                    $("#SCORE12").val("0.108")
+                } else if (thisValue < 1) {
+                    $("#SCORE12").val("0.036")
+                } else {
+                    $("#SCORE12").val("0")
+                }
+                total();
+            }
+        }
+    }
+    //流域面积评分
+    function ReCYBFSLYMJ(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE13").val("");
+            } else {
+                if (thisValue >= 100) {
+                    $("#SCORE13").val("0.036")
+                } else if (thisValue >= 10 && thisValue < 100) {
+                    $("#SCORE13").val("0.108")
+                } else if (thisValue >= 5 && thisValue < 10) {
+                    $("#SCORE13").val("0.144")
+                } else if (thisValue >= 0.2 && thisValue < 5) {
+                    $("#SCORE13").val("0.18")
+                } else {
+                    $("#SCORE13").val("0.108")
+                }
+                total();
+            }
+        }
+    }
+    //相对高差评分
+    function ReCYBFSXDGC(thisObj) {
+        var _this = thisObj;
+        var thisValue = $(_this).val();
+        if (thisValue != "") {
+            if (isNaN(thisValue)) {
+                dialogMsg('请输入数字！', 0);
+                $(_this).val("");
+                $("#SCORE14").val("");
+            } else {
+                if (thisValue >= 500) {
+                    $("#SCORE14").val("0.12")
+                } else if (thisValue >= 300 && thisValue < 500) {
+                    $("#SCORE14").val("0.09")
+                } else if (thisValue >= 100 && thisValue < 300) {
+                    $("#SCORE14").val("0.06")
+                } else if (thisValue < 100) {
+                    $("#SCORE14").val("0.03")
+                } else {
+                    $("#SCORE14").val("0")
+                }
+                total();
+            }
+        }
+    }
+    //堵塞程度评分
+    function GRADEGDSCD() {
+        $("#BLOCKDEGREE label input").click(function () {
+            if ($(this).val() == "A") {
+                $("#SCORE15").val("0.12")
+            } else if ($(this).val() == "B") {
+                $("#SCORE15").val("0.09")
+            } else if ($(this).val() == "C") {
+                $("#SCORE15").val("0.06")
+            } else if ($(this).val() == "D") {
+                $("#SCORE15").val("0.03")
+            }
+            total();
+        })
+    }
+    //总分
+    function total() {
+        var SCORE1 = Number($("#SCORE1").val());
+        var SCORE2 = Number($("#SCORE2").val());
+        var SCORE3 = Number($("#SCORE3").val());
+        var SCORE4 = Number($("#SCORE4").val());
+        var SCORE5 = Number($("#SCORE5").val());
+        var SCORE6 = Number($("#SCORE6").val());
+        var SCORE7 = Number($("#SCORE7").val());
+        var SCORE8 = Number($("#SCORE8").val());
+        var SCORE9 = Number($("#SCORE9").val());
+        var SCORE10 = Number($("#SCORE10").val());
+        var SCORE11 = Number($("#SCORE11").val());
+        var SCORE12 = Number($("#SCORE12").val());
+        var SCORE13 = Number($("#SCORE13").val());
+        var SCORE14 = Number($("#SCORE14").val());
+        var SCORE15 = Number($("#SCORE15").val());
+        var TOTAL = SCORE1 + SCORE2 + SCORE3 + SCORE4 + SCORE5 + SCORE6 + SCORE7 + SCORE8 + SCORE9 + SCORE10 + SCORE11 + SCORE12 + SCORE13 + SCORE14 + SCORE15;
+        $("#TOTAL").val(TOTAL.toFixed(3))
+    }
+    //获取经纬度
+    function position_select() {
+        var lon = $('#LONGITUDE').val();
+        var lat = $('#LATITUDE').val();
+        if (!lon && !lat) {
+            var UNIFIEDCODE = $('#UNIFIEDCODE').val();
+            if (UNIFIEDCODE) {
+                $.ajax({
+                    url: SSOURL + "/api/AdministrativeApi/GetDistrctByCodes/" + UNIFIEDCODE.slice(0, 6),
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    async: false,
+                    data: { keyValue: UNIFIEDCODE },
+                    type: "GET",
+                    success: function (res) {
+                        res = res.Result[0];
+                        lon = res.F_LONGITUDE;
+                        lat = res.F_LATITUDE;
+                    },
+                });
+            }
+        }
+        dialogOpen({
+            id: 'TBL_YJBZ_POSITIONSelect',
+            title: '获取经纬度信息',
+            url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_YJBZ_POSITIONSelect?lon=' + lon + '&lat=' + lat,
+            width: '970px',
+            height: "450px",
+            isClose: true,
+            callBack: function (iframeId) {
+                var dt1 = getInfoTop().frames[iframeId].$('#LONGITUDE').val();
+                var dt2 = getInfoTop().frames[iframeId].$('#LATITUDE').val();
+                $('#LONGITUDE').val(dt1);
+                $('#LATITUDE').val(dt2);
+                $("#X").val("");
+                $("#Y").val("");
+                $("#FD").comboBoxSetValue("");
+                $("#ZBX").comboBoxSetValue("");
+            }
+        });
+    }
+    function xyChange() {
+        var x = "", y = "", csStr = "", numberNameStr = "";
+        x = $("#X").val(); y = $("#Y").val(); csStr = $($("#ZBX")[0]).attr("data-text"); numberNameStr = $($("#FD")[0]).attr("data-text");
+        if (!x && !y) {
+            dialogAlert('请输入x,y的值！');
+            return;
+        } else if (!x) {
+            dialogAlert('请输入x的值！');
+            return;
+        } else if (!y) {
+            dialogAlert('请输入y的值！');
+            return;
+        }
+        if (!numberNameStr && !csStr && csStr != "==请选择==" && numberNameStr != "==请选择==") {
+            dialogAlert('请选择分带和坐标系！');
+            return;
+        } else if (!numberNameStr && csStr != "==请选择==") {
+            dialogAlert('请选择分带！');
+            return;
+        } else if (!csStr && csStr != "==请选择==") {
+            dialogAlert('请选择坐标系！');
+            return;
+        }
+        $.ajax({
+            url: "../../JXGeoManage/TBL_HAZARDBASICINFO/btnXYtoBL",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            async: false,
+            data: { _x: x, _y: y, csStr: csStr, numberNameStr: numberNameStr },
+            type: "GET",
+            success: function (res) {
+                var data = JSON.parse(res);
+                if (data.lon != "") {
+                    $("#LONGITUDE").val(data.lon)
+                }
+                if (data.lat != "") {
+                    $("#LATITUDE").val(data.lat)
+                }
+            },
+        });
+    }
+    function lonChange() {
+        var lon = "", lat = "", csStr = "", numberNameStr = "";
+        lon = $("#LONGITUDE").val(); lat = $("#LATITUDE").val(); csStr = $($("#ZBX")[0]).attr("data-text"); numberNameStr = $($("#FD")[0]).attr("data-text");
+        if (!lon && !lat) {
+            dialogAlert('请先选择经纬度！');
+            return;
+        }
+        if (!numberNameStr && !csStr && csStr == "==请选择==" && numberNameStr == "==请选择==") {
+            dialogAlert('请选择分带和坐标系！');
+            return;
+        } else if (!numberNameStr && numberNameStr == "==请选择==") {
+            dialogAlert('请选择分带！');
+            return;
+        } else if (!csStr && csStr == "==请选择==") {
+            dialogAlert('请选择坐标系！');
+            return;
+        }
+        $.ajax({
+            url: "../../JXGeoManage/TBL_HAZARDBASICINFO/btnBLtoXY",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            async: false,
+            data: { _lat: lat, _lon: lon, csStr: csStr, numberNameStr: numberNameStr },
+            type: "GET",
+            success: function (res) {
+                var data = JSON.parse(res);
+                if (data.x != "") {
+                    $("#X").val(data.x)
+                }
+                if (data.y != "") {
+                    $("#Y").val(data.y)
+                }
+            },
+        });
+    }
+</script>
+}

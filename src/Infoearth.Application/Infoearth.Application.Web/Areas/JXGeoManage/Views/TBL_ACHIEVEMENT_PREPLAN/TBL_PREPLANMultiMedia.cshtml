@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "防治规划表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    #mainContent {
+        background:#fff
+    }
+    .formTitle {
+        width: 110px !important;
+        background: transparent;
+    }
+    .form td {
+        border:1px solid #d6d6d6;
+        text-align:center !important;
+    }
+    .form td input{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form td textarea{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form-control:disabled
+    {
+        background:#fff;
+    }
+</style>
+
+<div style="margin:20px 30px 0 30px;background:#fff">
+    <table class="form">
+        <tr>
+            <td style="width: 100%; height: 600px;" colspan="6">
+                <iframe class="LRADMS_iframe" id="MultMedia" frameborder="0" src="" style="border: none; width: 100%; height: 100%"></iframe>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/infoearthcustom/dictionaryControl.js"></script>
+<script src="~/Content/scripts/plugins/Kneecoordinate/Kneecoordinate.js"></script>
+<script src="~/Content/scripts/comForm.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var belongGuid = keyValue == "" ? null : keyValue;
+    var authToken = getAuthorizationToken();
+    $(function () {
+        //initControl();
+        //治理工程的moduleID--modeId_ZLGCInfo
+        $('#MultMedia').attr('src', "/SystemManage/MultMedia/Index?moduleID=5f8a0a55-9a83-4e12-bd23-a8b1c2be7974&belongObjectGuid=" + keyValue + "&details=01");
+    });
+    //初始化控件
+    //function initControl() {
+
+
+
+
+    //}
+
+</script>
+}

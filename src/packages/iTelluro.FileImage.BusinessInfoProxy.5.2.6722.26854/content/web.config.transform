@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <system.serviceModel>
+    <bindings>
+      <basicHttpBinding>
+        <binding name="BasicHttpBinding_IBusinessInfoService" />
+      </basicHttpBinding>
+    </bindings>
+    <client>
+      <endpoint address="http://192.168.100.57:8000/MultimediaWebsite/Service/BusinessInfoService.svc"
+          binding="basicHttpBinding" bindingConfiguration="BasicHttpBinding_IBusinessInfoService"
+          contract="BusinessInfoService.IBusinessInfoService" name="BasicHttpBinding_IBusinessInfoService" />
+    </client>
+  </system.serviceModel>
+</configuration>

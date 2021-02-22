@@ -1,0 +1,288 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .ui-jqgrid {
+        width: 100% !important;
+    }
+    .formTitle{
+        display:inline-block;
+        width:104px;
+        padding-left:5px;
+    }
+    #XZQHCODE .formTitle{
+        display:inline-block;
+        width:100px;
+        padding:5px;
+        margin-right:8px;
+    }
+    #filter-form tr{
+        height:36px;
+    }
+    .ui-select{
+        width:160px;
+    }
+    .form-control{
+        display:inline-block;
+    }
+    div#filter-form{
+        border:none;
+    }
+</style>
+
+
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin:0px" id="filter-form">
+            <div class="panel-Title">
+                <span>制图条件</span>
+            </div>
+            <div class="title-search">
+                <div class="single_cell" style="">
+                   @* <span class="formTitle">行政区划</span>*@
+                    <div id="XZQHCODE" style="margin: 0;"></div>
+                </div>
+                <div class="single_cell" style="height:32px;line-height:32px;margin-top:3px;">
+                    <span class="formTitle" style="float:left;margin-right:3px;">区域:</span>
+                    <div id="QY" type="select" class="ui-select" style="float:left;"></div>
+                </div>
+                <div class="single_cell">
+                    <span class="formTitle" style="">等值线间距(mm):</span>
+                    <input id="IntervalValue" type="text" value="2" class="form-control" style="width: 160px;" isvalid="yes" checkexpession="Num" />
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+            <div class="title-search">
+                <div class="title-search" style="transition:all 0.6s">
+                    <div class="single_cell" style="height:32px;line-height:32px;margin-top:3px;">
+                        <span class="formTitle">监测开始时间:</span>
+                        <input id="STARTYEAR" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull" datefmt="yyyy" onfocus="WdatePicker({ dateFmt: 'yyyy' })" style="width:160px;" />@*,  maxDate: '#F{$dp.$D(\'ENDTIME\')}'*@
+                    </div>
+                    <div class="single_cell" style="height:64px;line-height:32px;margin-top:3px;">
+                        <span class="formTitle">监测结束时间:</span>
+                        <input id="ENDYEAR" type="text" class="form-control input-wdatepicker" isvalid="yes" checkexpession="NotNull" datefmt="yyyy" onfocus="WdatePicker({ dateFmt: 'yyyy'})" style="width:160px;" /> @*,minDate: '#F{$dp.$D(\'STARTTIME\')}', maxDate: '%y-%M-%d'*@
+                    </div>
+                    <div class="single_cell">
+                        <a id="btn_Search" class="btn btn-primary" style="width:90px !important;margin-left:8px;"><i class="fa fa-life-bouy"></i>开始制图</a>
+                        <a class="btn btn-primary" onclick="reset()" style="background-color:gray;">重置</a>
+                        <a class="btn" onclick="downFile()">下载</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div id="mapControl"></div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script>
+    var layout2NorthH = 1;
+    var filePath = "";
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        //GetTree();
+        GetMapData();
+        initControl();
+        GetLastTime();
+        //var date = new Date();
+        //var dateStringEn = date.getFullYear();
+        //$("#ENDYEAR").val(dateStringEn);
+        //$("#STARTYEAR").val(dateStringEn - 1);
+
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        //折叠面板显隐
+        $('#accordion').accordion({
+            active: false,
+            collapsible: true
+        })
+
+    });
+    var dataSEASON;
+    function timeClick(obj) {
+        if (!dataSEASON) {
+            dataSEASON = cfGetDicData("SEASON");
+        }
+        var text = $(obj).attr("text");
+        $.each(dataSEASON, function (index, item) {
+            if (item.text == text) {
+                if (item.value) {
+                    var year = new Date().getFullYear();
+                    var strValueArr = item.value.split(',');
+                    var startTime = year + '-' + addZero(strValueArr[0]) + '-01';
+                    var endTime = year + '-' + addZero(strValueArr[strValueArr.length - 1]) + '-' + getLastDay(strValueArr[strValueArr.length - 1]);
+                    $("#STARTYEAR").val(startTime);
+                    $("#ENDYEAR").val(endTime);
+                }
+            }
+        });
+    };
+    function GetLastTime() {
+        $.ajax({
+            type: "get",
+            async:false,
+            url: "../../DMCJManage/Drawing/GetLastTime",
+            success: function (data) {
+                var lastTime = data.substring(0, 4);
+                $("#ENDYEAR").val(lastTime);
+                $("#STARTYEAR").val(lastTime - 1);
+            }
+        });
+    }
+    //获取最后一天
+    function getLastDay(month) {
+        var new_date = new Date(new Date().getFullYear(), month, 1);
+        var last_date = (new Date(new_date.getTime() - 1000 * 60 * 60 * 24)).getDate();
+        return last_date;
+    }
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            west__size: 280,
+            applyDemoStyles: true,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+            }
+        });
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            e.stopPropagation();
+        });
+        function resize() {
+            window.setTimeout(function () {
+                $('.center-Panel').height($('#layout').parent().height() - 20);
+                // $('#gridTable').setGridHeight($(window).height() - $('#mapControl').height() - $('.panel-Title').height());
+                $('#itemTree').setTreeHeight($(window).height() - 64);
+                $('#ui_map').css('overflow', 'hidden');
+
+            }, 200);
+        };
+        $(window).resize();
+    }
+
+    //加载地图
+    var mapCtlExt = null;
+    var screenheights = window.screen.height;
+    var heights = document.body.clientHeight - 10;
+    function GetMapData() {
+        mapCtlExt = $("#mapControl").mapCtl(
+            cfGetMapData({})
+        );
+    };
+
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        $.ajax({
+            url: "../../DMCJManage/Drawing/GetDMCJContourLineQuery",
+            data: { queryJson: JSON.stringify(queryJson) },
+            beforeSend: function () {
+                learun.loading({ isShow: true, text: "正在制图，请稍等..." });
+                $("#btn_Search").attr("disabled", true);
+            },
+            complete: function () {
+                learun.loading({ isShow: false });
+            },
+            success: function (data) {
+                try {
+
+                    data = JSON.parse(data);
+                    mapCtlExt.loadGeoJsonFile('../../' + data.Data);
+                    filePath = data.fileName;
+                    var returnValue = [];
+                    for (var i = 0; i < data.GDZBList.length; i++) {
+                        if (data.GDZBList[i]) {
+                            returnValue.push({ coordinates: data.GDZBList[i] });
+                        }
+                    }
+                    cfShowGDZBAreaArr2(returnValue, mapCtlExt);
+                    if (filePath) {
+                    } else {
+                        dialogMsg('没有数据！', 0);
+                    }
+                } catch (e) {
+                    dialogMsg('制图失败！', 0);
+                }
+                $("#btn_Search").attr("disabled", false);
+            },
+            error: function () {
+                $("#btn_Search").attr("disabled", false);
+                dialogMsg('制图失败！', 0);
+            }
+        });
+    }
+
+
+    //初始化控件
+    function initControl() {
+        var html = " <table><tr style=\"\"><td class=\"formTitle\" style=\"\">省</td><td style=\"\"> <div id=\"PROVINCE\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin-right: 1px;\"></div></td></tr>" +
+           "<tr><td class=\"formTitle\">市</td><td><div id=\"CITY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin-right: 1px;\"></div></td></tr>" +
+        "<tr><td class=\"formTitle\">区</td><td><div id=\"COUNTY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 160px; margin-right: 1px;\"></div> </td></tr></table>";
+        var usercode = usercodes();
+        var district = $("#XZQHCODE").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            html: html
+        });
+
+        cfInitComboBox("JCDJB", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=JCDJB");//监测点级别
+        cfInitComboBox("POINTTYPE", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=POINTTYPE");//监测点类型
+        cfInitComboBox("MEASURETYPE", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=MONITORMODE");//监测手段
+        cfInitComboBox("ISCHECK", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=yesorno");//考核点
+        cfInitComboBox("SFTCD", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=yesorno");//统测点
+        //cfInitComboBox("SSSWDZDY", "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=SSSWDZDY");//水文地质单元
+        //区域
+        $("#QY").ComboBox({
+            data: [
+                { F_ItemValue: "1", F_ItemName: "鲁北" },
+                { F_ItemValue: "2", F_ItemName: "鲁西" },
+            ],
+            id: "F_ItemValue",
+            text: "F_ItemName",
+            height: "300px",
+            width: "160px"
+        }).bind("change", function () {
+
+        });
+
+        timeClick($("#STARTYEAR"));
+    }
+    function downFile() {
+        //location.href = filePath;
+        location.href = "../../DMCJManage/Drawing/ExcelDownload?FileName=" + filePath;
+    }
+    function GetString(num) {
+        if (num.toString().length == 1) {
+            return "0" + num.toString();
+        }
+        return num.toString();
+    }
+</script>
+}

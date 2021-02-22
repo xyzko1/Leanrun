@@ -1,0 +1,171 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+                      <div style="clear:both;"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left',sortable: true  },
+                { label: 'CGH灾害点编号', name: 'CGHUNIFIEDCODE', index: 'CGHUNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: '规模', name: 'SCALE', index: 'SCALE', width: 100, align: 'left',sortable: true  },
+                { label: '规模等级', name: 'SCALELEVEL', index: 'SCALELEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '本住户注意事项', name: 'HOUSEHOLDNOTES', index: 'HOUSEHOLDNOTES', width: 100, align: 'left',sortable: true  },
+                //{ label: '撤离路线', name: 'LEAVEROUTES', index: 'LEAVEROUTES', width: 100, align: 'left',sortable: true  },
+                //{ label: '本卡发放单位', name: 'CARDRELEASUNIT', index: 'CARDRELEASUNIT', width: 100, align: 'left',sortable: true  },
+                //{ label: '发放单位负责人', name: 'CARDRELEASUNITHEADER', index: 'CARDRELEASUNITHEADER', width: 100, align: 'left',sortable: true  },
+                //{ label: '联系电话', name: 'CARDRELEASUNITTEL', index: 'CARDRELEASUNITTEL', width: 100, align: 'left',sortable: true  },
+                //{ label: '更新时间', name: 'UPDATETIME', index: 'UPDATETIME', width: 100, align: 'left',sortable: true  },
+                //{ label: '记录状态', name: 'RECORDSTATUS', index: 'RECORDSTATUS', width: 100, align: 'left',sortable: true  },
+                //{ label: '创建者ID', name: 'CREATORUSERID', index: 'CREATORUSERID', width: 100, align: 'left',sortable: true  },
+                //{ label: '导出状态', name: 'EXPSTATUS', index: 'EXPSTATUS', width: 100, align: 'left',sortable: true  },
+                //{ label: '创建时间', name: 'CREATORTIME', index: 'CREATORTIME', width: 100, align: 'left',sortable: true  },
+                //{ label: '更新者ID', name: 'UPDATEUSERID', index: 'UPDATEUSERID', width: 100, align: 'left',sortable: true  },
+                //{ label: '更新次数', name: 'UPDATETIMES', index: 'UPDATETIMES', width: 100, align: 'left',sortable: true  },
+                //{ label: '户主姓名', name: 'HOUSEHOLDERNAME', index: 'HOUSEHOLDERNAME', width: 100, align: 'left',sortable: true  },
+                //{ label: '家庭人数', name: 'HOUSEHOLDSIZE', index: 'HOUSEHOLDSIZE', width: 100, align: 'left',sortable: true  },
+                //{ label: '房屋类型', name: 'HOUSINGTYPE', index: 'HOUSINGTYPE', width: 100, align: 'left',sortable: true  },
+                //{ label: '家庭住址', name: 'ADDRESS', index: 'ADDRESS', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名1', name: 'NAME1', index: 'NAME1', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名2', name: 'NAME2', index: 'NAME2', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名3', name: 'NAME3', index: 'NAME3', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名4', name: 'NAME4', index: 'NAME4', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名5', name: 'NAME5', index: 'NAME5', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名6', name: 'NAME6', index: 'NAME6', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名7', name: 'NAME7', index: 'NAME7', width: 100, align: 'left',sortable: true  },
+                //{ label: '姓名8', name: 'NAME8', index: 'NAME8', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别1', name: 'SEX1', index: 'SEX1', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别2', name: 'SEX2', index: 'SEX2', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别3', name: 'SEX3', index: 'SEX3', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别4', name: 'SEX4', index: 'SEX4', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别5', name: 'SEX5', index: 'SEX5', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别6', name: 'SEX6', index: 'SEX6', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别7', name: 'SEX7', index: 'SEX7', width: 100, align: 'left',sortable: true  },
+                //{ label: '性别8', name: 'SEX8', index: 'SEX8', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄1', name: 'AGE1', index: 'AGE1', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄2', name: 'AGE2', index: 'AGE2', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄3', name: 'AGE3', index: 'AGE3', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄4', name: 'AGE4', index: 'AGE4', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄5', name: 'AGE5', index: 'AGE5', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄6', name: 'AGE6', index: 'AGE6', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄7', name: 'AGE7', index: 'AGE7', width: 100, align: 'left',sortable: true  },
+                //{ label: '年龄8', name: 'AGE8', index: 'AGE8', width: 100, align: 'left',sortable: true  },
+                //{ label: '本卡发放单位ID', name: 'CARDRELEASUNITID', index: 'CARDRELEASUNITID', width: 100, align: 'left',sortable: true  },
+                //{ label: '发放单位负责人ID', name: 'CARDRELEASUNITHEADERID', index: 'CARDRELEASUNITHEADERID', width: 100, align: 'left',sortable: true  },
+                //{ label: '灾害体与本住户的位置关系', name: 'POSITIONALRELATIONSHIP', index: 'POSITIONALRELATIONSHIP', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加群测群防避灾明白卡',
+            url: '/JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/TBL_QCQF_ESCUNDERSTANDCARDForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑群测群防避灾明白卡',
+                url: '/JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/TBL_QCQF_ESCUNDERSTANDCARDForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_QCQF_ESCUNDERSTANDCARD/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的群测群防避灾明白卡！', 0);
+        }
+    }
+</script>
+}

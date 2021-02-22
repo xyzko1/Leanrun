@@ -1,0 +1,26 @@
+﻿/*
+    公用报表相关的样式信息
+    2018-5-2 by wc
+
+*/
+
+.delIcon {
+    display: inline-block;
+    margin-left: 6px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+    .delIcon:hover {
+        color: red;
+    }
+
+.link {
+    color: blue;
+}
+
+.report-list {
+    height: 32px;
+    line-height: 32px;
+    width: 400px;
+}

@@ -1,0 +1,560 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style type="text/css">
+    .action_title{
+        color:#666666;
+        font-size:16px;
+        height:45px;
+        line-height:45px;
+        padding-left:15px;
+        font-weight:bold;
+        border-bottom:1px solid #ededed;
+    }
+    .action_title1 {
+        color: #666666;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+        font-weight:bold;
+    }
+    .button_style a {
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 25px;
+        color: #fff;
+        background: #007aff;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+        .button_style a:hover{
+            background:#3395ff;
+
+
+
+        }
+        
+        
+        
+ .button_style {
+            /*border-bottom: 1px dashed #ededed;*/
+            padding-bottom:10px;
+            margin: 0 25px;
+        }
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        /*border-bottom: 1px solid #ededed;*/
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 24px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+  
+</style>
+
+
+<script type="text/javascript">
+
+
+    $(function () {
+        //InitialPage();
+
+
+
+        //$('#abc').height($(window).height() - 20);
+
+
+    });
+    //初始化页面
+    //function InitialPage() {
+    //    $('#abc').height($(window).height() - 20);
+
+    //    //resize重设布局;
+    //    $(window).resize(function (e) {
+    //        window.setTimeout(function () {
+    //            $('#abc').height($(window).height() - 20);
+    //        }, 200);
+    //        e.stopPropagation();
+    //    });
+    //}
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">前端UI组件</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、样式
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/webstandard/size" target="_blank">尺寸</a>
+                                <a href="@ViewBag.ControlUrl#/app/webstandard/color" target="_blank">颜色</a>
+                                <a href="@ViewBag.ControlUrl#/app/webstandard/icon" target="_blank">图标</a>
+                                <a href="@ViewBag.ControlUrl#/app/webstandard/utility" target="_blank">通用</a>
+                            </div>
+
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、 按钮类
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                      
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/controls/checkboxs" target="_blank">复选框</a>
+                                <a href="@ViewBag.ControlUrl#/app/controls/radios" target="_blank">单选框</a>
+                                <a href="@ViewBag.ControlUrl#/app/controls/hyperlinks" target="_blank">超链接</a>
+                                <a href="@ViewBag.ControlUrl#/app/controls/buttons" target="_blank">按钮</a>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、文本类
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                         
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/textElements/textBoxs" target="_blank">单行文本框</a>
+                                <a href="@ViewBag.ControlUrl#/app/textElements/numericBoxs" target="_blank">数值录入框</a>
+                                <a href="@ViewBag.ControlUrl#/app/textElements/textareas" target="_blank">多行文本框</a>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、交互类
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/interactive/dialogBoxs" target="_blank">对话框</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/notifications" target="_blank">通知图标</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/groups" target="_blank">分组</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/panelAreas" target="_blank">面板区域</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/mask" target="_blank">遮罩</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/breadcrumb" target="_blank">面包屑</a>
+                                <a href="@ViewBag.ControlUrl#/app/interactive/tabs" target="_blank">选项卡</a>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        五、下拉框
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/selectElements/filterSelectEl" target="_blank">过滤下拉框</a>
+                                <a href="@ViewBag.ControlUrl#/app/selectElements/newSelectEl" target="_blank">新样式下拉框</a>
+                            </div> 
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        六、控件类
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/tipEl" target="_blank">Tip提示</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/uploadEl" target="_blank">上传控件</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/breakpointUpload" target="_blank">HTML5断点上传</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/uiModals" target="_blank">弹出框</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/uiTree" target="_blank">树形</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/fuzzy" target="_blank">模糊匹配录入</a>
+                                <a href="@ViewBag.ControlUrl#/app/ctrlElements/drag" target="_blank">拖拽服务演示</a>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        七、个性控件
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/personality/district" target="_blank">行政区划控件</a>
+                                <a href="@ViewBag.ControlUrl#/app/personality/multimedia" target="_blank">多媒体</a>
+                                <a href="@ViewBag.ControlUrl#/app/personality/kneeCoordinate" target="_blank">拐点坐标</a>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        八、查询控件
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+
+                            <div class="button_style">
+                                <a href="@ViewBag.ControlUrl#/app/formSearch/search" target="_blank">查询类</a>
+                                <a href="@ViewBag.ControlUrl#/app/formSearch/tableel" target="_blank">网格类</a>
+                                <a href="@ViewBag.ControlUrl#/app/formCalendar" target="_blank">日历控件</a>
+                                <a href="@ViewBag.ControlUrl#/app/map" target="_blank">地图</a>
+                            </div>
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+

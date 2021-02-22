@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+
+<script>
+;
+    $(function () {
+        InitialPage();
+        
+        GetMapData();
+    
+        $('.mapHeight').height($(window).height() - 55);
+        $('.mapDiv').height($(window).height() - 55);
+        console.log("abc", $('.mapHeight').height());
+   
+    });
+    //初始化页面
+    function InitialPage() {
+        $('.mapHeight').height($(window).height() - 55);
+        $('.mapDiv').height($(window).height() - 55);
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('.mapHeight').height($(window).height() - 55);
+                $('.mapDiv').height($(window).height() - 55);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+ 
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData() {
+        mapCtlExt = $("#mapControl").mapCtl(
+                cfGetMapData({})
+            );
+    };
+
+
+
+</script>
+
+
+<style type="text/css">
+    .more_btn {
+        float: right;
+        margin-right: 10px;
+        height: 36px;
+        line-height: 36px;
+        border-left:1px solid #ededed;
+        width:100px;
+        padding-left:10px;
+        text-align:center;
+
+    }
+        .more_btn a {
+            color: #666666;
+            text-decoration: none;
+            font-weight: normal;
+            cursor:pointer;
+        }
+        .more_btn a:hover{
+            color:#007aff;
+        }
+</style>
+
+
+
+        <div class="center-Panel" style="margin:10px; " >
+          
+             
+
+            <div style="height: 100%; background:#fff;">
+                <div class="panel-Title" style="height:36px; line-height:36px; font-size:14px;">
+                    地图
+                    <div class="more_btn">
+
+                        <a href="@ViewBag.ControlUrl#/app/map" target="_blank">查看更多>></a>
+                    </div>
+                </div>
+                <div id="mapControl" class="mapHeight"></div>
+            </div>
+                    
+               
+           
+        </div>
+
+

@@ -1,0 +1,144 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    body {
+        height: auto;
+    }
+
+    .form .formTitle {
+        background: #fff;
+    }
+</style>
+<div style="margin: 10px;">
+    <table class="form" id="ZLGC_YS">
+        <tr>
+            <td class="formTitle" style="padding-left: 100px; height: 30px; line-height: 30px; background: #FFF; text-align: left; background: #ebebeb;" colspan="6">初验:</td>
+        </tr>
+        <tr>
+            <td class="formTitle">初验验收单位<span class="required" style="color: red">*</span></td>
+            <td class="formValue" colspan="5">
+                <textarea id="CYDEPT" class="form-control" style="height: 30px"></textarea>
+                <input id="MEDIAGUID" type="text" class="form-control" style="display: none;" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">初验验收时间</td>
+            <td class="formValue">
+                <input id="CYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">初验验收专家</td>
+            <td class="formValue">
+                <input id="CYZJ" type="text" class="form-control"></input>
+            </td>
+
+        </tr>
+        <tr>
+            <td class="formTitle">初验验收地点</td>
+            <td class="formValue" colspan="5">
+                <textarea id="CYPLACE" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">初验验收批文</td>
+            <td class="formValue" colspan="5">
+                <textarea id="CYPW" class="form-control" style="height: 100px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" style="padding-left: 100px; height: 30px; line-height: 30px; background: #FFF; text-align: left; background: #ebebeb;" colspan="6">终验:</td>
+        </tr>
+        <tr>
+            <td class="formTitle">终验验收单位</td>
+            <td class="formValue" colspan="5">
+                <textarea id="ZYDEPT" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">终验验收时间</td>
+            <td class="formValue">
+                <input id="ZYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">终验验收专家</td>
+            <td class="formValue">
+                <textarea id="ZYZJ" type="text" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">终验验收地点</td>
+            <td class="formValue" colspan="5">
+                <textarea id="ZYPLACE" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">终验验收批文</td>
+            <td class="formValue" colspan="5">
+                <textarea id="ZYPW" class="form-control" style="height: 100px"></textarea>
+            </td>
+        </tr>
+        <tr style="display: none">
+            <td class="formTitle">治理工程编号</td>
+            <td class="formValue">
+                <input id="ZLGCID" type="text" class="form-control readonly" readonly="readonly" />
+            </td>
+            <td class="formTitle">治理工程名称</td>
+            <td class="formValue">
+                <input id="ZLGCNAME" type="text" class="form-control readonly" readonly="readonly" />
+            </td>
+        </tr>
+    </table>
+    <div style="height: 200px; width: 100%;">
+        <iframe class="LRADMS_iframe" id="QCQFLmedia6" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var xq = request('xq');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                //url: "../../JXGeoManage/TBL_ZLGC_YSINFO/GetFormJson",
+                url: "../../api/TBL_ZLGC/GetGCYS",
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+        if (readonly == 01 || xq == 02) {
+            $("input").attr("disabled", "disabled");
+            $("textarea").attr("disabled", "disabled");
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_ZLGC_YSINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

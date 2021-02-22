@@ -1,0 +1,384 @@
+﻿@{
+    ViewBag.Title = "SignalR使用说明文档";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 28px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+
+    .orm_item_title_note1 img {
+     
+        margin: 20px;
+     
+    }
+</style>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">SignalR使用说明文档</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、引用SignalR库
+                    </td>
+
+                </tr>
+                <tr><td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr1.png" />
+                            </p>
+
+
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr2.png" />
+                            </p>
+
+
+
+
+
+                        </div>
+                    
+                    </td></tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、html页面调用SignalRjs
+
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr3.png" />
+                            </p>
+
+
+
+
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、js初始化服务端SignalR
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                          
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr4.png" />
+                            </p>
+                          
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、 发送消息
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr5.png" />
+                            </p>
+                         
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        五、 接收消息
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr6.png" />
+                            </p>
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        六、 获取未读记录数
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/signalr7.png" />
+                            </p>
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+</div>

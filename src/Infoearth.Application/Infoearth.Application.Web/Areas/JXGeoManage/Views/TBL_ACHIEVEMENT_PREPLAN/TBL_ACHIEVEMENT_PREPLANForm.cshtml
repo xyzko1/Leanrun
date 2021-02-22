@@ -1,0 +1,324 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .formTitle {
+        width: 110px !important;
+        background:#f6f6f6;
+    }
+    .haszard{
+        background:#C3C3C3;
+    }
+    .form td {
+        border:1px solid #d6d6d6;
+        text-align:center !important;
+    }
+    .form td input{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form td textarea{
+        border-top:none;
+        border-left:none;
+        border-right:none;
+    }
+    .form-control:disabled
+    {
+        background:#fff;
+    }
+    .formValue {
+        background:#fff;
+    }
+
+    .btn-group.open .dropdown-toggle
+    {
+        -webkit-box-shadow:none;
+        box-shadow:none;
+    }
+    .readonly{
+        background:#f5f5f5 !important
+    }
+
+    #DEVICETYPECODE,#MONITORPOINTCODE_DEVICE{
+        border:1px solid #ccc;
+        border-radius:4px;
+    }
+    .div_close{
+    float: right;
+    width: 12px;
+    height: 13px;
+    margin-right: -5px;
+    margin-left: 5px;
+    margin-top: 0px;
+    display: block;
+    background: url(../../../../Content/adminDefault/img/tab_close.png) no-repeat;
+    }
+</style>
+<div style="width:100%;height:100%">
+    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1);color:#000;height:30px;border-radius:5px;text-align:left;padding-left:9px">
+        <i class="fa fa-bars"></i>灾害点基本信息
+        <div style="float:right;margin-right:25px;display:none;" id="li_close">
+            <a class="btn btn-default" style="border:1px solid #ccc;border-radius:4px;margin-top:-5px;padding:5px 10px;" onclick="thisClose('DZLSSJCX')"><i class="fa fa-close"></i> 关闭</a>
+        </div>
+    </div>
+    <table class="form">
+        <tr>
+            <td class="formTitle">灾害点编号</td>
+            <td class="formValue">
+                <input id="UNIFIEDCODE" class="form-control readonly" readonly="readonly"  />
+            </td>
+            <td class="formTitle">灾害点名称<span class="required" style="color: red">*</span></td>
+            <td class="formValue">
+                <input id="DISASTERNAME" type="text" class="form-control readonly" readonly="readonly" placeholder="请单击选择" isvalid="yes" checkexpession="NotNull"/>
+            </td>
+            <td class="formTitle">省名称</td>
+            <td class="formValue">
+                <input id="PROVINCENAME" class="form-control readonly" readonly="readonly"   />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市名称</td>
+            <td class="formValue">
+                <input id="CITYNAME" class="form-control readonly" readonly="readonly"   />
+            </td>
+            <td class="formTitle">乡镇名称</td>
+            <td class="formValue">
+                <input id="TOWNNAME" class="form-control readonly" readonly="readonly"   />
+            </td>
+            <td class="formTitle">县名称</td>
+            <td class="formValue">
+                <input id="COUNTYNAME" class="form-control readonly" readonly="readonly"   />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" class="form-control readonly" readonly="readonly"   />
+            </td>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" class="form-control readonly" readonly="readonly"   />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地理位置</td>
+            <td class="formValue" colspan="5">
+                <textarea id="LOCATION" class="form-control readonly" readonly="readonly"  ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formValue" colspan="6" style="padding:0">
+                <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1);color:#000;height:30px;border-radius:5px;text-align:left;padding-left:9px"><i class="fa fa-bars"></i>防治规划成果信息</div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">成果名称</td>
+            <td class="formValue">
+                <input id="ACHIEVEMENTNAME" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">规划区域类型</td>
+            <td class="formValue">
+                <div id="AREATYPE"></div>
+            </td>
+            <td class="formTitle">规划时间类型</td>
+            <td class="formValue">
+                <div id="TIMETYPE"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地质灾害类型</td>
+            <td class="formValue">
+                <div id="DISASTERTYPE"></div>
+            </td>
+            <td class="formTitle">易发区域</td>
+            <td class="formValue">
+                <input id="PRONEAREA" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">重点防治区域</td>
+            <td class="formValue">
+                <input id="MAINPREVENTAREA" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治内容</td>
+            <td class="formValue" colspan="5">
+                <textarea id="PREVENTION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">目前稳定程度</td>
+            <td class="formValue" colspan="5">
+                <textarea id="CURSTABLESTATUS" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">今后变化趋势</td>
+            <td class="formValue" colspan="5">
+                <textarea id="STABLETREND" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治原则和目标</td>
+            <td class="formValue" colspan="5">
+                <textarea id="PRINCIPLEGOAL" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">总体部署和主要任务</td>
+            <td class="formValue" colspan="5">
+                <textarea id="MAINTAST" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治预期效果</td>
+            <td class="formValue" colspan="5">
+                <textarea id="DESIREDRESULT" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">方案编写人</td>
+            <td class="formValue">
+                <input id="WRITENAME" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">方案录入人</td>
+            <td class="formValue">
+                <input id="CREATENAME" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">方案编写日期</td>
+            <td class="formValue">
+                <input id="WRITETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">方案录入日期</td>
+            <td class="formValue">
+                <input id="CREATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">方案版本号</td>
+            <td class="formValue">
+                <input id="VESION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">成果文件</td>
+            <td colspan="5" class="formValue">
+                <div id="divPingmian" style="float:left;width:80%;">
+                </div>
+                <div style="float:right;width:20%;">
+                    <a id="lr-add" class="btn btn-default" onclick="cfupfile('divPingmian', '5f8a0a55-9a83-4e12-bd23-a8b1c2be7974')"><i class="fa fa-plus"></i>添加</a>
+                </div>
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td class="formTitle">主键</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+        </tr>
+    </table>
+</div>
+<div>
+    <div id="multimedia" style="display:none;"></div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/infoearthcustom/dictionaryControl.js"></script>
+<script src="~/Content/scripts/plugins/Kneecoordinate/Kneecoordinate.js"></script>
+<script src="~/Content/scripts/comForm.js"></script>
+<script>
+    var keyValue = request('keyValue');
+    var belongGuid = keyValue == "" ? null : keyValue;
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var callback = request('callback');//"返回"跳转url
+    $(function () {
+        initControl();
+        if (callback) {
+            $("#li_close").show();
+        }
+        //对应灾害下拉赋值
+        $("#DISASTERNAME").click(function () {
+            PREPLAN_Selec_Hazardbas();
+        });
+        if (readonly == "01") {
+            $(".form-control").attr("disabled", "disabled");
+            $("#AREATYPE").attr("disabled", "disabled");
+            $("#TIMETYPE").attr("disabled", "disabled");
+            $("#DISASTERTYPE").attr("disabled", "disabled");
+            $(".control").attr("disabled", "disabled");
+            $("#lr-add").attr("disabled", "disabled");
+            $("#divPingmian .div_close").css("display", "none");
+        }
+
+
+        cfInitMultiMedia("multimedia", modeId_ZLGCInfo, belongGuid);
+        showMedia("divPingmian", moduledClassPingM, modeId_ZLGCInfo, belongGuid);
+    });
+    //初始化控件
+    function initControl() {
+        $("#AREATYPE").dictionaryControl({ dicCode: "AREATYPE", type: "radio" });
+        $("#TIMETYPE").dictionaryControl({ dicCode: "TIMETYPE", type: "radio" });
+        $("#DISASTERTYPE").dictionaryControl({ dicCode: "DISASTERTYPE", type: "radio" });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_ACHIEVEMENT_PREPLAN/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //选择灾害点信息
+    function PREPLAN_Selec_Hazardbas() {
+        dialogOpen({
+            id: 'SELECTHazardbas',
+            title: '获取灾害信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HAZARDBASCOMMONIndex',
+            width: '970px',
+            height: '460px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var selectedRowIndex = top.frames[iframeId].$('#gridTable').getGridParam('selrow');
+                var dt = top.frames[iframeId].$('#gridTable').jqGrid("getRowData", selectedRowIndex);
+                $("#UNIFIEDCODE").val(dt.UNIFIEDCODE);      //灾害点编号
+                $("#DISASTERNAME").val(dt.DISASTERNAME);    //灾害点名称                
+                $("#PROVINCENAME").val(dt.PROVINCENAME);    //省名称
+                $("#CITYNAME").val(dt.CITYNAME);            //市名称
+                $("#COUNTYNAME").val(dt.COUNTYNAME);        //县名称
+                $("#LOCATION").val(dt.LOCATION);            //位置（数据库:工程地理位置）
+                $("#LONGITUDE").val(dt.LONGITUDE);          //经度
+                $("#LATITUDE").val(dt.LATITUDE);            //纬度
+                $("#TOWNNAME").val(dt.TOWNNAME);            //乡镇名称
+
+            }
+        });
+    }
+
+
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../api/TBL_ACHIEVEMENT_PREPLAN/SaveForm?keyValue=" + keyValue,
+            authToken: authToken,
+            param: postData,
+            success: function (data) {
+                    //返回GUID然后根据GUID保存对应的文件内容
+                $("#frmMultimedia")[0].contentWindow.SaveFileInfo(belongGuid);
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

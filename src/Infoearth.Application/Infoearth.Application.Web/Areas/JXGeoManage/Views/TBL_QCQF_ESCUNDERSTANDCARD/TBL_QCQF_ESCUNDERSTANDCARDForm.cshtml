@@ -1,0 +1,633 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .Ndispplay {
+        display: none;
+    }
+
+    .uiLTE {
+        margin: 0 0;
+    }
+
+    #mainContent {
+        background: #fff;
+    }
+
+    .formTitle {
+        width: 110px !important;
+        background: #ebebeb;
+    }
+
+    .haszard {
+        background: #C3C3C3;
+    }
+
+    .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+
+        .form td input {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .form td textarea {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+    .form-control:disabled {
+        background: #fff;
+    }
+
+    .formValue {
+        background: #fff;
+    }
+
+    .ui-select .ui-select-text {
+        border: 0px;
+    }
+
+    .btn-group.open .dropdown-toggle {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .readonly {
+        background: #f1efef !important;
+    }
+
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+
+    #DEVICETYPECODE, #MONITORPOINTCODE_DEVICE {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .add {
+        width: 100%;
+        align-items: center;
+        justify-content: space-around;
+        display: flex;
+        background: rgba(236, 247, 255, 1);
+        height: 40px;
+    }
+
+    .ESCUNDERSTANDCARDli-on {
+        color: #fff;
+        background-color: #3c8dbc;
+    }
+</style>
+<div id="BZcard">
+    <div class="btn-group" id="clearnew" style="float: left; width: 21%;">
+        <div class="add" style="position: fixed; top: 0; left: 0; width: 21%" id="xqad">
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-message" class="btn btn-default" onclick="btn_save()"><i class="fa fa-pencil-square-o"></i>&nbsp;保存</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <div style="margin-top: 10px; text-align: center; margin-top: 40px">
+            <ul class="gridPanel" id="treelist" style="position: fixed; width: 21%"></ul>
+        </div>
+    </div>
+    <div id="myTabContent1" class="tab-content" style="float: left; width: 78%; margin-bottom: 15px">
+        <table class="form" id="ESCUNDERSTANDCARD">
+            <tr class="clearinput">
+                <td class="formTitle">户主姓名</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="HOUSEHOLDERNAME" class="form-control" />
+                </td>
+                <td class="formTitle">家庭人数</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="HOUSEHOLDSIZE" class="form-control" />
+                </td>
+                <td class="formTitle">房屋类型</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="HOUSINGTYPE" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">家庭住址</td>
+                <td class="formValue" style="background: transparent" colspan="5">
+                    <input type="text" id="ADDRESS" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left"><i class="fa fa-bars"></i>家庭成员基本情况</div>
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名1</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME1" class="form-control" />
+                </td>
+                <td class="formTitle">性别1</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX1" class="form-control" />
+                </td>
+                <td class="formTitle">年龄1</td>
+                <td class="formValue" style="background: transparent">@*<input id="AGE1" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />*@
+                    <input id="AGE1" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名2</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME2" class="form-control" />
+                </td>
+                <td class="formTitle">性别2</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX2" class="form-control" />
+                </td>
+                <td class="formTitle">年龄2</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE2" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名3</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME3" class="form-control" />
+                </td>
+                <td class="formTitle">性别3</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX3" class="form-control" />
+                </td>
+                <td class="formTitle">年龄3</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE3" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名4</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME4" class="form-control" />
+                </td>
+                <td class="formTitle">性别4</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX4" class="form-control" />
+                </td>
+                <td class="formTitle">年龄4</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE4" type="text" class="form-control"  />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名5</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME5" class="form-control" />
+                </td>
+                <td class="formTitle">性别5</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX5" class="form-control" />
+                </td>
+                <td class="formTitle">年龄5</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE5" type="text" class="form-control"  />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名6</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME6" class="form-control" />
+                </td>
+                <td class="formTitle">性别6</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX6" class="form-control" />
+                </td>
+                <td class="formTitle">年龄6</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE6" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名7</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME7" class="form-control" />
+                </td>
+                <td class="formTitle">性别7</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX7" class="form-control" />
+                </td>
+                <td class="formTitle">年龄7</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE7" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr class="clearinput">
+                <td class="formTitle">姓名8</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="NAME8" class="form-control" />
+                </td>
+                <td class="formTitle">性别8</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="SEX8" class="form-control" />
+                </td>
+                <td class="formTitle">年龄8</td>
+                <td class="formValue" style="background: transparent">
+                    <input id="AGE8" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left"><i class="fa fa-bars"></i>基本情况</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">统一编号</td>
+                <td class="formValue">
+                    <input id="UNIFIEDCODE" type="text" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">灾害点名称</td>
+                <td class="formValue">
+                    <input id="DISASTERNAME" type="text" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">灾害类型</td>
+                <td class="formValue">
+                    <input id="DISASTERTYPE" type="text" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">野外编号</td>
+                <td class="formValue">
+                    <input id="OUTDOORCODE" type="text" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">省编号</td>
+                <td class="formValue">
+                    <input id="PROVINCE" type="text" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">规模等级</td>
+                <td class="formValue clearinput">
+                    <input id="SCALELEVEL" type="text" class="form-control" />
+                </td>
+                <td class="formTitle">规模</td>
+                <td class="formValue clearinput">
+                    <input id="SCALE" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">位置关系</td>
+                <td class="formValue clearinput" style="background: transparent" colspan="5">
+                    <input type="text" id="POSITIONALRELATIONSHIP" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">诱发因素</td>
+                <td class="formValue" style="background: transparent" colspan="5">
+                    <input type="text" id="TRIGGERFACTORS" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">本住户注意事项</td>
+                <td class="formValue clearinput" style="background: transparent" colspan="5">
+                    <input type="text" id="HOUSEHOLDNOTES" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left"><i class="fa fa-bars"></i>监测与预警</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">监测人</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="MONITORRESPONSIBLE" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">监测人联系电话</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="MONITORRESPONSIBLETEL" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">预警信号</td>
+                <td class="formValue" colspan="5" style="background: transparent">
+                    <input type="text" id="ALARMSIGNAL" class="form-control"  disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">预警信号发布人</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="ALARMPEOPLE" class="form-control" disabled="disabled"  />
+                </td>
+                <td class="formTitle">发布人联系电话</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="ALARMTEL" class="form-control" disabled="disabled"  />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left"><i class="fa fa-bars"></i>撤离与安置</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">撤离路线</td>
+                <td class="formValue clearinput" style="background: transparent" colspan="5">
+                    <input type="text" id="LEAVEROUTES" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">安置单位地点</td>
+                <td class="formValue" style="background: transparent" colspan="5">
+                    <input type="text" id="EVACUATIONROUTES" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">安置单位负责人</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="RISKUNITANDHEADER" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">安置单位联系电话</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="RISKDUTYPHONE" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">救护单位</td>
+                <td class="formValue" style="background: transparent" colspan="5">
+                    <input type="text" id="MEDICALCAREUNIT" class="form-control" disabled="disabled" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">救护单位负责人</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="MEDICALCAREUNITHEADER" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">救护单位联系电话</td>
+                <td class="formValue" style="background: transparent">
+                    <input type="text" id="MEDICALCAREDUTYPHONE" class="form-control" disabled="disabled" />
+                </td>
+                <td class="formTitle">发放单位负责人</td>
+                <td class="formValue clearinput" style="background: transparent">
+                    <input type="text" id="CARDRELEASUNITHEADER" class="form-control" />  @*CARDRELEASUNITHEADER*@
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">本卡发放单位</td>
+                <td class="formValue clearinput" style="background: transparent">
+                    <input type="text" id="CARDRELEASUNIT" class="form-control" /> @*CARDRELEASUNITBZ*@
+                </td>
+                <td class="formTitle">联系电话</td>
+                <td class="formValue clearinput" style="background: transparent">
+                    <input type="text" id="CARDRELEASUNITTEL" class="form-control" /> @*CARDRELEASUNITTELBZ*@
+                </td>
+                <td class="formTitle">日期</td>
+                <td class="formValue clearinput">
+                    <input id="UPDATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                    <input id="GUID" style="display: none" />
+                </td>
+
+            </tr>
+        </table>
+        <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px"><i class="fa fa-bars"></i>附件</div>
+        <div style="height: 300px; width: 100%;">
+            <iframe class="LRADMS_iframe" id="QCQFLmedia3" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        var keyValue = request('keyValue');
+        var UNIFIEDCODE = request('UNIFIEDCODE');
+        var authToken = getAuthorizationToken();
+        var watch = "";
+        var zhuangtai = "";
+        var readonaly = request('readonaly');
+        var idname = "";
+        var NewIfrem = request('NewIfrem');
+        var details = request('details');
+        $(function () {
+            if (NewIfrem == "") {
+                $("input").attr("disabled", "disabled");
+            }
+            $("#UNIFIEDCODE").val(UNIFIEDCODE);
+            searchESCUNDERSTANDCARD(UNIFIEDCODE);
+            if (readonaly == 01 || details == "01") {
+                $("#lr-add").addClass("disabled");
+                $("#lr-message").addClass("disabled");
+                $("#lr-delete").addClass("disabled");
+                $(".form-control").attr("disabled", "disabled");
+                $('.add').hide();
+            }
+
+        });
+        //新增
+        function btn_add() {
+            //生成GUID
+            $(".clearinput input").val("");
+            $(".ESCUNDERSTANDCARD").val(UNIFIEDCODE);
+            $("#lr-message").removeClass("disabled");
+            zhuangtai = "";
+            //cfInitMultiMedia("QCQFLmedia3", "D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6", "", details);
+            $('#QCQFLmedia3').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6&details=" + details + "&belongObjectGuid=");
+
+        }
+        var date = new Date;
+        var year = date.getFullYear();
+        //保存
+        function btn_save() {
+            // var ESCUNDERSTANDCARDguid = "";
+            if (!$('#ESCUNDERSTANDCARD').Validform()) {
+                return false;
+            }
+            //编辑时的保存
+            //if (zhuangtai == "ESCUNDERSTANDCARDIdetnew") {
+            //    ESCUNDERSTANDCARDguid = watch;
+            //}
+            var values = $("#UNIFIEDCODE").val();
+            if (values != "" && values != undefined) {
+                var entity3 = $("#ESCUNDERSTANDCARD").GetWebControls(keyValue);
+                if ($("#AGE1").val()) {
+                    var a1 = $("#AGE1").val();
+                    csbirth1 = year - a1;
+                    entity3.AGE1 = csbirth1+"-01-01";
+                } if ($("#AGE2").val()) {
+                    var a2 = $("#AGE2").val();
+                    csbirth2 = year - a2;
+                    entity3.AGE2 = csbirth2 + "-01-01";
+                } if ($("#AGE3").val()) {
+                    var a3 = $("#AGE3").val();
+                    csbirth3 = year - a3;
+                    entity3.AGE3= csbirth3 + "-01-01";
+                } if ($("#AGE4").val()) {
+                    var a4 = $("#AGE4").val();
+                    csbirth4 = year - a4;
+                    entity3.AGE4 = csbirth4 + "-01-01";
+                } if ($("#AGE5").val()) {
+                    var a5 = $("#AGE5").val();
+                    csbirth5 = year - a5;
+                    entity3.AGE5 = csbirth5 + "-01-01";
+                } if ($("#AGE6").val()) {
+                    var a6 = $("#AGE6").val();
+                    csbirth6 = year - a6;
+                    entity3.AGE6 = csbirth6 + "-01-01";
+                } if ($("#AGE7").val()) {
+                    var a7 = $("#AGE7").val();
+                    csbirth7 = year - a7;
+                    entity3.AGE7= csbirth7 + "-01-01";
+                } if ($("#AGE8").val()) {
+                    var a8 = $("#AGE8").val();
+                    csbirth8 = year - a8;
+                    entity3.AGE8 = csbirth8 + "-01-01";
+                }
+                window.setTimeout(function () {
+                    $.ajax({
+                        url: "../../api/TBL_HAZARDBASICINFOApi/QCQFSaveForm2",
+                        data: JSON.stringify({
+                            keyValue: "",
+                            entity3: entity3,
+                            //  entitys: idname
+                        }),
+                        type: "post",
+                        contentType: 'application/json',
+                        success: function (data) {
+                            if (zhuangtai != "ESCUNDERSTANDCARDIdetnew" || zhuangtai == "") {
+                                var name = data.HOUSEHOLDERNAME;
+                                var values = data.GUID;
+                                $("#treelist").append("<li class='ESCUNDERSTANDCARDli' id=" + values + " style='margin-bottom:10px;cursor:pointer;' onclick='search(this)' >" + "避灾明白卡(" + name + ")" + "</li>");
+                                dialogMsg("新增成功", 1);
+                            } else if (zhuangtai == "ESCUNDERSTANDCARDIdetnew") {
+                                $(".ESCUNDERSTANDCARDli").detach();
+                                dialogMsg("修改成功", 1);
+                                searchESCUNDERSTANDCARD(UNIFIEDCODE);
+                            }
+                            $("#QCQFLmedia3")[0].contentWindow.SaveFileInfo(data.GUID);
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        },
+                        beforeSend: function (c, b) {
+                            if (authToken != null)
+                                c.setRequestHeader("Authorization", authToken);
+                        },
+                        complete: function () {
+                        }
+                    });
+                }, 500);
+            } else {
+                dialogMsg('请先填写防灾预案表！', 0);
+            }
+
+        }
+
+        //根据主键值查询避灾明白卡信息
+        function search(obj) {
+            $(".ESCUNDERSTANDCARDli").removeClass("ESCUNDERSTANDCARDli-on");
+            $(obj).addClass("ESCUNDERSTANDCARDli-on");
+            $("#lr-message").removeClass("disabled");
+            if (readonaly == 01) {
+                $("#lr-message").addClass("disabled");
+            }
+            zhuangtai = "ESCUNDERSTANDCARDIdetnew";
+            var ESCUNDERSTANDCARDguid = obj.id;
+            watch = ESCUNDERSTANDCARDguid;
+            $.SetForm({
+                url: "../../api/TBL_HAZARDBASICINFOApi/GetFormJson3",
+                authToken: authToken,
+                param: { keyValue: ESCUNDERSTANDCARDguid },
+                success: function (data) {
+                    birth1 = data.AGE1; birth2 = data.AGE2; birth3 = data.AGE3; birth4 = data.AGE4; birth5 = data.AGE5; birth6 = data.AGE6; birth7 = data.AGE7; birth8 = data.AGE8;
+                    if (birth1) {
+                        data.AGE1 = ages(birth1);
+                    }if (birth2) {
+                        data.AGE2 = ages(birth2);
+                    } if (birth3) {
+                        data.AGE3 = ages(birth3);
+                    } if (birth4) {
+                        data.AGE4 = ages(birth4);
+                    } if (birth5) {
+                        data.AGE5 = ages(birth5);
+                    } if (birth6) {
+                        data.AGE6 = ages(birth6);
+                    } if (birth7) {
+                        data.AGE7 = ages(birth7);
+                    } if (birth8) {
+                        data.AGE8 = ages(birth8);
+                    } 
+                    $("#ESCUNDERSTANDCARD").SetWebControls(data);
+                    //cfInitMultiMedia("QCQFLmedia3", "D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6", data.GUID, details);
+                    $('#QCQFLmedia3').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=D83F7E2E-FFD5-41AB-BE62-D3FA37590AF6&details=" + details + "&belongObjectGuid=" + data.GUID);
+
+                }
+            })
+        }
+        //根据灾害点编号查询避灾明白卡信息
+        function searchESCUNDERSTANDCARD(UNIFIEDCODE) {
+            $("#UNIFIEDCODE").val(UNIFIEDCODE);
+            var queryJson = $("#ESCUNDERSTANDCARD").getWebControls();
+            if (NewIfrem == "addnew") {//新增时
+                queryJson["UNIFIEDCODE"] = UNIFIEDCODE;
+            } else if (NewIfrem == "Idetnew" || NewIfrem == "") {//编辑时
+                //queryJson["UNIFIEDCODE"] = keyValue;
+                queryJson["UNIFIEDCODE"] = UNIFIEDCODE;
+                $.SetForm({
+                    url: "../../api/TBL_HAZARDBASICINFOApi/GetJsonEscunderstandcardSearch",
+                    param: { queryJson: JSON.stringify(queryJson) },
+                    datatype: "json",
+                    authToken: authToken,
+                    success: function (data) {
+                        var name = "";
+                        var values = "";
+                        for (var i = 0; i < data.rows.length; i++) {
+                            name = data.rows[i].HOUSEHOLDERNAME;
+                            values = data.rows[i].GUID;
+                            $("#treelist").append("<li class='ESCUNDERSTANDCARDli' id=" + values + " style='padding:5px 0;cursor:pointer;'onclick='search(this)' >" + "避灾明白卡(" + name + ")" + "</li>");
+                           
+                        }
+                        if (data.rows.length > 0)
+                            $(".ESCUNDERSTANDCARDli:first").trigger('click');
+                        
+                      //  console.log(age);
+
+                    }
+                })
+            }
+        }
+        function ages(str) {
+            if (str) {
+                if (str.length > 4) {
+                    str = str.substring(0, 10);
+                }
+                var r = str.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+                if (r == null) return false;
+                var d = new Date(r[1], r[3] - 1, r[4]);
+                if (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[3] && d.getDate() == r[4]) {
+                    var Y = new Date().getFullYear();
+                    return (Y - r[1]);
+                }
+            }
+            return ("输入的日期格式错误！");
+        }
+        //删除
+        function btn_delete() {
+            var keyValue = $(".ESCUNDERSTANDCARDli").attr('id');
+            if (keyValue) {
+                $.RemoveForm({
+                    url: "../../api/TBL_HAZARDBASICINFOApi/RemoveFormThree",
+                    param: { keyValue: keyValue },
+                    authToken: authToken,
+                    success: function (data) {
+                        //reload();
+                        $("#" + keyValue).closest('li').remove();
+                        $('#treelist').trigger('reloadGrid');
+                    }
+                })
+            } else {
+                dialogMsg('请选择需要删除的数据！', 0);
+            }
+        }
+
+    </script>
+}

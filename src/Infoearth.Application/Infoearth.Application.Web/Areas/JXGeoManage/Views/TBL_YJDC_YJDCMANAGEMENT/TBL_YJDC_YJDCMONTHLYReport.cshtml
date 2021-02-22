@@ -1,0 +1,257 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+}
+
+<style>
+    .west-Panel tr 
+    {
+        height: 36px;
+    }
+    #result_tab_high tr 
+    {
+        height: 36px;
+    }
+    .ui-layout-west
+    {
+        background-color: #fff;
+    }
+
+    .ui-select-text 
+    {
+        padding-right: 12px;
+    }
+    .west-Panel, .center-Panel 
+    {
+        min-height: 98%;
+    }
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        /*background:#DCDCDC*/
+    }
+</style>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="height: 100%;margin:0">
+            <div id="filter-form" style="width: 100%; height: 100%">
+                <div class="panel-Title">辅助月报</div>
+                <div id="XZQHCODE" style="width: 100%;"></div>
+                <table>
+                        <tr>
+                            <td class="formTitle" style="padding-left:25px;">
+                                年份:
+                            </td>
+                            <td>
+                                <div id="total_year_cm" type="select" " multiples="true" class="ui-select" style="float:left;  width:180px;  margin:5px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="formTitle" style="padding-left:25px;">
+                                月份:
+                            </td>
+                            <td>
+                                <div id="total_month_cm" type="select" " multiples="true" class="ui-select" style="float:left;  width:180px;  margin:5px;"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 10px; text-align: left; padding-left:80px;" colspan="2">
+                                <a id="btn_Report" class="btn btn-primary"><i class="fa fa-file-text"></i> 生成月报</a>
+                            </td>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;margin:0">
+            <div class="ui-layout" id="layout2" style="height: 100%; width: 100%;">
+                <div class="ui-layout-center" id="ui_grid">
+@*                    <div class="titlePanel">
+                        <div class="" style="width:100%;height:60px">
+                            <div class="btn-group">
+                                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+                                <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                                <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                                <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                            </div>
+                        </div>
+                    </div>*@
+                    
+                    <div class="gridPanel" style="overflow:auto">
+                        <table id="gridTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiTownDistricts.js"></script>
+<script>  
+    $(function () {
+        initControl();
+        InitialPage();
+        initControlTool();
+        GetGrid();
+        $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+        $("#btn_Report").click(function () {
+            ReportEvent();
+        });
+
+    });
+
+    function initControlTool() {
+        var myDate = new Date();
+        var startYear = myDate.getFullYear() - 50;
+        var endYear = myDate.getFullYear();
+        //对应年选择控件（值得选择需要微调）
+        var deviceTypeValue = "";
+        groupType = [];
+        groupTypeCode = [];
+        for (var i = startYear; i <= endYear; i++) {
+            groupType.push({ label: i, value: i });
+            groupTypeCode += i;
+            deviceTypeValue += i;
+        }
+        $("#total_year_cm").ComboBox({
+            id: 'label',
+            text: 'value',
+            description: null,
+            height: '300px',
+            data: groupType,
+            tag: groupTypeCode
+        });
+        $("#total_year_cm").comboBoxSetValue(deviceTypeValue);
+        //对应月选择（值得选择微调）
+        var MonthValue = "";
+        MonthName = [];
+        MonthCode = [];
+        for (var i = 1; i <= 12; i++) 
+        {
+            MonthName.push({ label: i, value: i });
+            MonthCode += i;
+            MonthValue += i;
+        }
+        $("#total_month_cm").ComboBox({
+            id: 'label',
+            text: 'value',
+            description: null,
+            height: '300px',
+            data: MonthName,
+            tag: MonthCode
+        });
+        $("#total_month_cm").comboBoxSetValue(MonthValue);
+    }
+
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: false,
+            height: $(window).height() - 55,
+            rowNum: 0,
+            url: "/JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/EMERGENCYSURVEYApi_GetFZMonthReport",
+            datatype: "json",
+            postData: { "city": "", "year": "", "month": "" },
+            colModel: [
+                { label: '市名称', index: 'cityname', name: 'cityname', width: 80, align: 'center', sortable: false },
+                { label: '年份', index: 'yearname', name: 'yearname', width: 50, align: 'center', sortable: false },
+                { label: '月份', index: 'monthname', name: 'monthname', width: 50, align: 'center', sortable: false },
+                { label: '灾情总数(起)', index: 'zqtotal', name: 'zqtotal', width: 100, align: 'center', sortable: false },
+                { label: '自然因素', index: 'ziranys', name: 'ziranys', width: 80, align: 'center', sortable: false },
+                { label: '人为因素', index: 'renweiys', name: 'renweiys', width: 80, align: 'center', sortable: false },
+                { label: '特大型', index: 'tedaxing', name: 'tedaxing', width: 60, align: 'center', sortable: false },
+                { label: '大型', index: 'daxing', name: 'daxing', width: 50, align: 'center', sortable: false },
+                { label: '中型', index: 'zhongxing', name: 'zhongxing', width: 50, align: 'center', sortable: false },
+                { label: '小型', index: 'xiaoxing', name: 'xiaoxing', width: 50, align: 'center', sortable: false },
+                { label: '滑坡', index: 'huapo', name: 'huapo', width: 50, align: 'center', sortable: false },
+                { label: '崩塌', index: 'bengta', name: 'bengta', width: 50, align: 'center', sortable: false },
+                { label: '泥石流', index: 'nishiliu', name: 'nishiliu', width: 60, align: 'center', sortable: false },
+                { label: '塌陷', index: 'taxian', name: 'taxian', width: 50, align: 'center', sortable: false },
+                { label: '地裂缝', index: 'diliefeng', name: 'diliefeng', width: 60, align: 'center', sortable: false },
+                { label: '地面沉降', index: 'dimiancj', name: 'dimiancj', width: 80, align: 'center', sortable: false },
+                { label: '受灾人口', index: 'szrst', name: 'szrs', width: 80, align: 'center', sortable: false },
+                { label: '死亡人数', index: 'swrs', name: 'swrs', width: 80, align: 'center', sortable: false },
+                { label: '失踪人数', index: 'szrs', name: 'szrs', width: 80, align: 'center', sortable: false },
+                { label: '受伤人数', index: 'ssrs', name: 'ssrs', width: 80, align: 'center', sortable: false },
+                { label: '直接经济损失(万元)', index: 'zjjjss', name: 'zjjjss', width: 100, align: 'center', sortable: false },
+            ],
+            viewrecords: true,
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    function ReportEvent()
+    {
+        var code_cs = $("#CITY").find(".ui-select-text").text();
+        var year_cs = "";
+        if ($("#total_year_cm").attr("data-value") != undefined)
+        {
+            year_cs = $("#total_year_cm").attr("data-value");
+            if (year_cs = "196819691970197119721973197419751976197719781979198019811982198319841985198619871988198919901991199219931994199519961997199819992000200120022003200420052006200720082009201020112012201320142015201620172018") {
+                year_cs = "1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018"
+            } 
+            
+        }
+        var month_cs = "";
+        if ($("#total_month_cm").attr("data-value") != undefined) {
+            month_cs = $("#total_month_cm").attr("data-value");
+            if (month_cs=="123456789101112") {
+                month_cs="1,2,3,4,5,6,7,8,9,10,11,12"
+            }
+        }
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { "city": code_cs, "year": year_cs, "month": month_cs },
+            url: "/JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/EMERGENCYSURVEYApi_GetFZMonthReport",
+        }).trigger('reloadGrid');
+
+    }
+
+
+
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 280,
+            onresize: function () {
+                $(window).resize();
+            }
+        });
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($(window).width()));
+                $("#gridTable").setGridHeight($(window).height() - 55 );
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+
+
+    function initControl()
+    {
+        var html = " <table><tr style=\"display:none;\"><td class=\"formTitle\" style=\"width: 50px;text-align:right;\">省:</td><td> <div id=\"PROVINCE\" multiples=\"true\" readonly=\"readonly\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 180px; margin: 8px;background:#959595;\"></div></td></tr>" +
+           "<tr><td class=\"formTitle\" style=\"width: 50px;text-align:right;\">市:</td><td><div id=\"CITY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 180px; margin: 8px;\"></div></td></tr>" +
+           "<tr style=\"display:none;\"><td class=\"formTitle\" style=\"width: 130px;text-align:right;\">县:</td><td><div id=\"COUNTY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 180px; margin: 8px;\"></div></td></tr>" +
+           "<tr style=\"display:none;\"><td class=\"formTitle\" style=\"width: 130px;text-align:right;display:none;\">乡(镇):</td><td><div id=\"TOWN\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left; width: 180px; margin: 8px;\"></div> </td></tr></table>";
+        var usercode = usercodes();
+        var district = $("#XZQHCODE").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            html: html
+        });
+    }
+</script>
+}

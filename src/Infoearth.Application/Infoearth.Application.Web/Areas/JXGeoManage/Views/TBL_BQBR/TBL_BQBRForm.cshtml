@@ -1,0 +1,704 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .Ndispplay {
+        display: none;
+    }
+
+    #mainContent {
+        background: #fff;
+    }
+
+    .formTitle {
+        width: 110px !important;
+        background: #f6f6f6;
+    }
+
+    .haszard {
+        background: #C3C3C3;
+    }
+
+    .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+
+        .form td input {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .form td textarea {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+    .form-control:disabled {
+        background: #fff;
+    }
+
+    .formValue {
+        background: #fff;
+    }
+
+    .btn-group.open .dropdown-toggle {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .readonly {
+        background: #f5f5f5 !important;
+    }
+
+    #DEVICETYPECODE, #MONITORPOINTCODE_DEVICE {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+</style>
+<div style="width: 100%; height: 100%">
+    <div style="height: 40px; width: 100%;">
+        <ul class="nav nav-tabs" style="padding-top: 2px">
+            <li class="active" id="li_XMJBXX"><a href="#XMJBXX" data-toggle="tab">基本信息</a></li>
+            <li id="li_DMT"><a href="#DMT" data-toggle="tab">多媒体信息</a></li>
+            <li style="float: right; margin-right: 25px; " id="li_close">
+                <a class="btn btn-default" style="border: 1px solid #ccc;display:none; border-radius: 4px; margin-top: 5px; padding: 5px 10px;" onclick="thisClose('BQBRXQ')"><i class="fa fa-close"></i>关闭</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="ui-layout" id="layout2" style="height: calc(100% - 40px); width: 100%;">
+        <div id="myTabContent" class="tab-content" style="height: 100%; width: 100%;">
+            <div class="tab-pane fade in active" id="XMJBXX" style="height: 100%; width: 100%;">
+                <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left; padding-left: 9px"><i class="fa fa-bars"></i>灾害点基本信息</div>
+                <table class="form" >
+                    <tr>
+                        <td class="formTitle">灾害点编号<span class="required" style="color: red">*</span></td>
+                        <td class="formValue">
+                            <input id="UNIFIEDCODE" type="text" class="form-control readonly" readonly="readonly" placeholder="请单击选择" isvalid="yes" checkexpession="NotNull" />
+                        </td>
+                        <td class="formTitle">灾害点名称</td>
+                        <td class="formValue">
+                            <input id="DISASTERNAME" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">省名称</td>
+                        <td class="formValue">
+                            <input id="PROVINCENAME" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">市名称</td>
+                        <td class="formValue">
+                            <input id="CITYNAME" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">县名称</td>
+                        <td class="formValue">
+                            <input id="COUNTYNAME" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">乡镇名称</td>
+                        <td class="formValue">
+                            <input id="TOWNNAME" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">村</td>
+                        <td class="formValue">
+                            <input id="VILLAGE" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">组</td>
+                        <td class="formValue">
+                            <input id="TEAM" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">经度</td>
+                        <td class="formValue">
+                            <input id="LONGITUDE" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="formTitle">纬度</td>
+                        <td class="formValue">
+                            <input id="LATITUDE" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                        <td class="formTitle">地理位置</td>
+                        <td class="formValue" colspan="3">
+                            <input id="LOCATION" type="text" class="form-control readonly" readonly="readonly" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formValue" colspan="6" style="padding: 0">
+                            <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1); color: #000; height: 30px; border-radius: 5px; text-align: left; padding-left: 9px"><i class="fa fa-bars"></i>搬迁避让明确信息</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">立项年度<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <input id="ANNUAL" type="text" class="form-control input-wdatepicker"  onfocus="WdatePicker({dateFmt:'yyyy'})"  isvalid="yes" checkexpession="NotNull"/>
+                        </td>
+                        <td class="formTitle">项目名称<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <input id="XMMC" type="text" class="form-control"  isvalid="yes" checkexpession="NotNull"/>
+                        </td>
+                        <td class="formTitle">户主姓名<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <input id="HOUSEHOLDERNAME" type="text" class="form-control"  isvalid="yes" checkexpession="NotNull"/>
+                        </td>
+
+
+                    </tr>
+
+                    <tr>
+                        <td class="formTitle">单户搬迁人数<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <input id="MOVEDECIMAL" type="text" class="form-control"  isvalid="yes" checkexpession="NotNull"/>
+                        </td>
+                        <td class="formTitle">安置方式<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                            <div id="RESETTLEMENT" type="select" class="ui-select" ></div>
+                        </td>
+                        <td class="formTitle">安置点名称<span style="color:red;">*</span></td>
+                        <td class="formValue">
+                        <input id="AZDMC" type="text" class="form-control" isvalid="yes" checkexpession="NotNull"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">搬迁户口性质</td>
+                        <td class="formValue">
+                            <input id="MINENATURE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">搬迁原因</td>
+                        <td class="formValue">
+                            <input id="BQYY" type="text" class="form-control"  />
+                        </td>
+                        <td class="formTitle">是否存在隐患</td>
+                        <td class="formValue">
+                           <div  id="ISYH"  type="select" class="ui-select" ></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">旧户籍地址</td>
+                        <td class="formValue">
+                            <input id="OLDHJDZ" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">旧房地址</td>
+                        <td class="formValue">
+                            <input id="JFDZ"  type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">旧房面积(㎡)</td>
+                        <td class="formValue">
+                            <input id="JFMJ" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">旧房经度</td>
+                        <td class="formValue">
+                            <input id="JFJD" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">旧房纬度</td>
+                        <td class="formValue">
+                            <input id="JFWD" type="text" class="form-control"" />
+                        </td>
+                        <td class="formTitle">新户籍地址</td>
+                        <td class="formValue">
+                            <input id="NEWHJDZ" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">新房地址</td>
+                        <td class="formValue">
+                            <input id="XFDZ" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">新房面积(㎡)</td>
+                        <td class="formValue">
+                            <input id="XFMJ" type="text" class="form-control"" />
+                        </td>
+                        <td class="formTitle">新房经度</td>
+                        <td class="formValue">
+                            <input id="XFJD" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                       <tr>
+                        <td class="formTitle">新房纬度</td>
+                        <td class="formValue">
+                            <input id="XFWD" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">新房建成时间</td>
+                        <td class="formValue">
+                            <input id="XFJCDATA" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()"/>
+                        </td>
+                        <td class="formTitle">新房迁入时间</td>
+                        <td class="formValue">
+                            <input id="XFQRDATA" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                    </tr>
+                       <tr>
+                        <td class="formTitle">旧房是否拆除</td>
+                        <td class="formValue">
+                            <div id="ISDEMOLITION" type="select" class="ui-select"></div>
+                        </td>
+                        <td class="formTitle">旧房拆除时间</td>
+                        <td class="formValue">
+                            <input id="DEMOLITIONTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()"/>
+                        </td>
+                        <td class="formTitle">旧房拆除说明</td>
+                        <td class="formValue">
+                            <input id="JFCCSM" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                     <tr>
+                        <td class="formTitle">补助标准</td>
+                        <td class="formValue">
+                        <input id="BZBZ" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">发放单位</td>
+                        <td class="formValue">
+                            <input id="FFDW" type="text" class="form-control"/>
+                        </td>
+                        <td class="formTitle">总安置补贴金额（万元）</td>
+                        <td class="formValue">
+                            <input id="ZAZBTJE" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                   <tr>
+                        <td class="formTitle">已发金额（万元）</td>
+                        <td class="formValue">
+                        <input id="YFJE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">发放时间</td>
+                        <td class="formValue">
+                            <input id="FFSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()"/>
+                        </td>
+                        <td class="formTitle">待发金额（万元）</td>
+                        <td class="formValue">
+                            <input id="DFJR" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                      <tr>
+                        <td class="formTitle">经手人</td>
+                        <td class="formValue">
+                        <input id="JSR" type="text" class="form-control" />
+ 
+                        </td>
+                        <td class="formTitle">建档立卡贫困户</td>
+                        <td class="formValue">
+                            <input id="JDLK" type="text"  class="form-control"/>
+                        </td>
+                        <td class="formTitle">是否完成</td>
+                        <td class="formValue">
+                            <div id="SFWC" type="select" class="ui-select" ></div>
+                        </td>
+                    </tr>
+                   <tr>
+                        <td class="formTitle">是否验收</td>
+                        <td class="formValue">
+                            <div id="SFYS" type="select" class="ui-select"></div>
+                        </td>
+                        <td class="formTitle">是否公示</td>
+                        <td class="formValue">
+                            <div id="SFGS" type="select" class="ui-select"></div>
+                        </td>
+                    </tr>
+
+                    @*<tr>
+                        <td class="formTitle">安置方式</td>
+                        <td class="formValue">
+                            <input id="RESETTLEMENT" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">自主安置人住时间</td>
+                        <td class="formValue">
+                            <input id="RESETTLEMENTTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">原址是否拆除</td>
+                        <td class="formValue">
+                            <div id="ISDEMOLITION" type="select" class="ui-select"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">旧房拆除时间</td>
+                        <td class="formValue">
+                            <input id="DEMOLITIONTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">是否完成</td>
+                        <td class="formValue">
+                            <div id="ISCOMPLETE" type="select" class="ui-select"></div>
+                        </td>
+                        <td class="formTitle">是否验收</td>
+                        <td class="formValue">
+                            <div id="ISACCEPTANCE" type="select" class="ui-select"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">是否公示</td>
+                        <td class="formValue">
+                            <div id="ISOFPUBLIC" type="select" class="ui-select"></div>
+                        </td>
+                        <td class="formTitle">搬迁户性质</td>
+                        <td class="formValue">
+                            <input id="MINENATURE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">省补助金</td>
+                        <td class="formValue">
+                            <input id="SHENGGRANT" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">市补助金</td>
+                        <td class="formValue">
+                            <input id="SHIGRANT" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">县补助金</td>
+                        <td class="formValue">
+                            <input id="XIANGRANT" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">汛期自主安置点名称</td>
+                        <td class="formValue" colspan="5">
+                            <input id="FLOODRESETTLEMENTNAME" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">对搬迁工作认同情况</td>
+                        <td class="formValue" colspan="5">
+                            <input id="IDENTITY" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td class="formTitle">集中或安置分散点名称</td>
+                        <td class="formValue" colspan="5">
+                            <input id="RESETTLEMENTNAME" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">集中或分散安置人住时间</td>
+                        <td class="formValue" colspan="2">
+                            <input id="SCATTEREDRESETTLEMENTTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">迁入地是否存在地灾隐患</td>
+                        <td class="formValue" colspan="2">
+                            <div id="ISHIDDENDANGER" type="select" class="ui-select"></div>
+                        </td>
+                    </tr>*@
+                    <tr>
+                        <td class="formTitle">安置点生活条件改善情况</td>
+                        <td class="formValue" colspan="5">
+                            <textarea id="SITUATION" type="text" class="form-control"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">认同情况及原因</td>
+                        <td class="formValue" colspan="5">
+                            <textarea id="IDENTITYWHY" class="form-control"></textarea>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td class="formTitle">后续工作建议</td>
+                        <td class="formValue" colspan="5">
+                            <textarea id="HXGZJY" class="form-control"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="formTitle">备注</td>
+                        <td class="formValue" colspan="5">
+                            <textarea id="NOTE" class="form-control"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr style="display: none;">
+                        <td class="formTitle">GUID</td>
+                        <td class="formValue">
+                            <input id="GUID" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">省编号</td>
+                        <td class="formValue">
+                            <input id="PROVINCE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">市编号</td>
+                        <td class="formValue">
+                            <input id="CITY" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">县编号</td>
+                        <td class="formValue">
+                            <input id="COUNTY" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">乡镇编号</td>
+                        <td class="formValue">
+                            <input id="TOWN" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">对搬迁工作认同情况</td>
+                        <td class="formValue">
+                            <input id="IDENTITY" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">认同情况原因</td>
+                        <td class="formValue">
+                            <textarea id="IDENTITYWHY" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">修改人</td>
+                        <td class="formValue">
+                            <input id="MODIFYUSER" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">灾害体类型</td>
+                        <td class="formValue">
+                            <input id="DISASTERTYPE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">创建人</td>
+                        <td class="formValue">
+                            <input id="CREATEUSER" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">修改时间</td>
+                        <td class="formValue">
+                            <input id="MODIFYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">创建时间</td>
+                        <td class="formValue">
+                            <input id="CREATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">室内编号</td>
+                        <td class="formValue">
+                            <input id="INDOORCODE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">扩展字段5</td>
+                        <td class="formValue">
+                            <textarea id="BZ005" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">野外编号</td>
+                        <td class="formValue">
+                            <input id="OUTDOORCODE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">扩展字段3</td>
+                        <td class="formValue">
+                            <textarea id="BZ003" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">扩展字段4</td>
+                        <td class="formValue">
+                            <textarea id="BZ004" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">填报人</td>
+                        <td class="formValue">
+                            <textarea id="BZ001" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">填报时间</td>
+                        <td class="formValue">
+                            <textarea id="BZ002" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">市级审核时间</td>
+                        <td class="formValue">
+                            <input id="CITYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                        <td class="formTitle">市级审核意见</td>
+                        <td class="formValue">
+                            <textarea id="CITYOPINION" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">县级审核意见</td>
+                        <td class="formValue">
+                            <textarea id="COUNTYOPINION" class="form-control"></textarea>
+                        </td>
+                        <td class="formTitle">市级审核人</td>
+                        <td class="formValue">
+                            <input id="CITYPEOPLE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">县级审核人</td>
+                        <td class="formValue">
+                            <input id="COUNTYPEOPLE" type="text" class="form-control" />
+                        </td>
+                        <td class="formTitle">县级审核时间</td>
+                        <td class="formValue">
+                            <input id="COUNTYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="tab-pane fade" id="DMT" style="height: 500px; width: 100%;">
+                <iframe id="MultMedia" class="LRADMS_iframe" frameborder="0" src="" style="border: none; width: 100%; height: 500px;"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var unifycode = request('unifycode');
+    var details = request('details');
+    var bj = request('bj');
+    var callback = request('callback');//"返回"跳转url
+    $(function () {
+        initControl();
+       
+        $("#li_DMT").click(function () {
+            window.setTimeout(function () {
+                $('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=ecce6ba5-0ce1-4c71-af06-12dec020bc4a&belongObjectGuid=" + keyValue + "&details=" + details);
+            }, 300);
+        });
+
+        $("#li_DMTPHONT").click(function () {
+            window.setTimeout(function () {
+                $('#MultMedia').attr('src', contentPath + "/SystemManage/MultMedia/Index?belongObjectGuid=" + keyValue + "&XQing=" + XQing + "&details=" + details);
+            }, 300);
+        });
+        if (readonly == "01") {
+            $(".form-control").attr("disabled", "disabled");
+            $("#ISDEMOLITION").attr("disabled", "disabled");
+            $("#SFYS").attr("disabled", "disabled");
+            $("#RESETTLEMENT").attr("disabled", "disabled");
+            $("#ISYH").attr("disabled", "disabled");
+            $("#SFGS").attr("disabled", "disabled");
+            $("#SFWC").attr("disabled", "disabled");
+        }
+
+        $("#UNIFIEDCODE").click(function () {
+            Selec_Hazardbas();
+        });
+    });
+    //初始化控件
+    function initControl() {
+        if (bj == "yincang" ) {
+            $("#li_close").hide();
+        }
+        //if (callback) {
+        //    $("#li_close").show();
+        //}
+        //安置方式
+        $("#RESETTLEMENT").ComboBox({
+            data: [{ 'text': '集中安置', 'value': 1 }, { 'text': '分散安置', 'value': 2 }, { 'text': '购房安置', 'value': 3 }, { 'text': '其它安置', 'value': 4 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //是否存在隐患
+        $("#ISYH").ComboBox({
+            data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //原址是否拆除
+        $("#ISDEMOLITION").ComboBox({
+            data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //是否完成
+        $("#SFWC").ComboBox({
+            data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //是否验收
+        $("#SFYS").ComboBox({
+            data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+        //是否公示
+        $("#SFGS").ComboBox({
+            data: [{ 'text': '是', 'value': 1 }, { 'text': '否', 'value': 0 }],
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../api/TBL_BQBRApi/GetFormJson",
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    if (data.ANNUAL) {
+                        $("#ANNUAL").val(data.ANNUAL.substring(0, 4));
+                    }
+                }
+            })
+        }
+        else if (!!unifycode) {
+            $.SetForm({
+                url: "../../api/TBL_BQBRApi/GetFormJsonByUnifycode",
+                authToken: authToken,
+                param: { keyValue: unifycode },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                    if (data.ANNUAL) {
+                        $("#ANNUAL").val(data.ANNUAL.substring(0, 4));
+                    }
+                }
+            })
+        }
+    }
+
+
+    //选择灾害点信息
+    function Selec_Hazardbas() {
+        dialogOpen({
+            id: 'Form2',
+            title: '获取灾害信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HAZARDBASCOMMONIndex',
+            width: '970px',
+            height: '460px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var selectedRowIndex = getInfoTop().frames[iframeId].$('#gridTable').getGridParam('selrow');
+                var dt = getInfoTop().frames[iframeId].$('#gridTable').jqGrid("getRowData", selectedRowIndex);
+                $("#UNIFIEDCODE").val(dt.UNIFIEDCODE);
+                $("#DISASTERNAME").val(dt.DISASTERNAME);
+                $("#PROVINCENAME").val(dt.PROVINCENAME);
+                $("#CITYNAME").val(dt.CITYNAME);
+                $("#COUNTYNAME").val(dt.COUNTYNAME);
+                $("#TOWNNAME").val(dt.TOWNNAME);
+                $("#LONGITUDE").val(dt.LONGITUDE);
+                $("#LATITUDE").val(dt.LATITUDE);
+                $("#LOCATION").val(dt.LOCATION);
+                //隐藏行政区划代码和灾害类型
+                $("#DISASTERTYPE").val(dt.DISASTERTYPE);
+                $("#PROVINCE").val(dt.PROVINCE);
+                $("#CITY").val(dt.CITY);
+                $("#COUNTY").val(dt.COUNTY);
+                $("#TOWN").val(dt.TOWN);
+            }
+        });
+    }
+
+
+
+    //保存表单;    
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        if (postData.RESETTLEMENT == "") {
+            dialogAlert("安置方式不允许为空");
+            return false;
+        }
+        $.SaveForm({
+            url: "../../api/TBL_BQBRApi/SaveForm?keyValue=" + keyValue,
+            authToken: authToken,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function (data) {
+                if ($("#MultMedia").attr("src") != "") {
+                    $("#MultMedia")[0].contentWindow.SaveFileInfo(data.resultdata);
+                }
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                    getInfoTop().learun.currentIframe().BindMapMarker();
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

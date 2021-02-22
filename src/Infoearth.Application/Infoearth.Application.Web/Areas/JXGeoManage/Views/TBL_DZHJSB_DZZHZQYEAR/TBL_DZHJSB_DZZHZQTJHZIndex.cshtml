@@ -1,0 +1,231 @@
+@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div style="height:60px;width:100%">
+
+        <div class="title-search" style="width:50%;height:60px;margin-left:25%;margin-right:25%;margin-top:20px">
+            <input id="year" type="text" value="2019" onchange="baobiao()" class="nianfen select" onfocus="WdatePicker({dateFmt:'yyyy'})" />年
+            <select name="sel" value="1" onchange="baobiao()" id="qsMonth" class="yuefen select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>--
+            <select name="sel2" value="2" onchange="baobiao()" id="zzMonth" class="yuefen select">
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            @*<input id="month1" type="text" onchange="qsyf()" class="yuefen select" onfocus="WdatePicker({dateFmt:'MM'})" />--
+                <input id="month2" type="text" onchange="zzyf()" class="yuefen select" onfocus="WdatePicker({dateFmt:'MM'})" />*@月份各月地质灾害灾情统计汇总表
+        </div>
+
+    </div>
+    <div class="gridPanel" style="height:calc(100% - 100px);width:100%;overflow:auto">
+        <table id="gridTable"></table>
+    </div>
+</div>
+<style>
+    .select {
+        width: 100px;
+        height: 20px;
+        margin-right: 5px;
+        /*border-color:rgb(169,169,169);*/
+    }
+
+    .yuefen {
+        width: 50px;
+    }
+
+    #year {
+        margin-left: 3px;
+    }
+</style>
+
+@section Scripts{
+    <script>
+        //读取
+        function getAuthorizationToken() {
+            var strCookie = document.cookie;
+            var cookieArray = strCookie.split('; ');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var key = cookieArray[i].split('=')[0];
+                var value = cookieArray[i].split('=')[1];
+                if (key == 'Token') {
+                    value = unescape(value);
+                    //去掉逗号、用户名
+                    value = value.split(',')[0];
+                    //md5加密、转大写
+                    value = $.md5(value).toUpperCase();
+                    return value;
+                }
+            }
+        }
+        //setGrid();
+        var authToken = getAuthorizationToken();
+        var w = 0;
+        function baobiao() {
+            if ($('select[name=sel]').val() >= $('select[name=sel2]').val()) {
+                learun.dialogMsg({ msg: '起始月份必须小于结束月份!', type: 0 });
+                return
+            }
+            setGrid();
+            w += 1;
+            if (w != 1) {
+                setGrid();
+            }
+        }
+
+        var colModel = [];
+        var $gridTable = $('#gridTable');
+        //设置表格
+        var p = true;
+        function setGrid() {
+            var total = {};
+            var queryJson = { Year: $("#year").val(), EndMonth: $("#zzMonth").val(), StartMonth: $("#qsMonth").val() };
+            $.ajax({
+                type: "get",
+                data: { queryJson: JSON.stringify(queryJson) },
+                url: "../../api/TBL_DZHJSB_DZZHQKMONTH_GDApi/Getdata",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                dataType: "json",
+                async: false,
+                //contentType: false,
+                //processData: false,
+                success: function (data) {
+                    total['月'] = '累计';
+                    total['灾情总数（起）'] = 0;
+                    total['自然'] = 0;
+                    total['人为'] = 0;
+                    total['特大型'] = 0;
+                    total['大型'] = 0;
+                    total['中型'] = 0;
+                    total['达到统计标准'] = 0;
+                    total['未达到统计标准'] = 0;
+                    total['滑坡'] = 0;
+                    total['崩塌'] = 0;
+                    total['泥石流'] = 0;
+                    total['地面塌陷'] = 0;
+                    total['地裂缝'] = 0;
+                    total['地面沉降'] = 0;
+                    total['死亡'] = 0;
+                    total['失踪'] = 0;
+                    total['受伤'] = 0;
+                    total['经济损失（万元）'] = 0;
+                    total['备注'] = '';
+                    for (i = 0; i < data.length;  i++) {
+                        var item = data[i];
+                        total['灾情总数（起）'] += parseFloat(item['灾情总数（起）']);
+                        total['自然'] += parseFloat(item['自然']);
+                        total['人为'] += parseFloat(item['人为']);
+                        total['特大型'] += parseFloat(item['特大型']);
+                        total['大型'] += parseFloat(item['大型']);
+                        total['中型'] += parseFloat(item['中型']);
+                        total['达到统计标准'] += parseFloat(item['达到统计标准']);
+                        total['未达到统计标准'] += parseFloat(item['未达到统计标准']);
+                        total['滑坡'] += parseFloat(item['滑坡']);
+                        total['崩塌'] += parseFloat(item['崩塌']);
+                        total['泥石流'] += parseFloat(item['泥石流']);
+                        total['地面塌陷'] += parseFloat(item['地面塌陷']);
+                        total['地裂缝'] += parseFloat(item['地裂缝']);
+                        total['地面沉降'] += parseFloat(item['地面沉降']);
+                        total['死亡'] += parseFloat(item['死亡']);
+                        total['失踪'] += parseFloat(item['失踪']);
+                        total['受伤'] += parseFloat(item['受伤']);
+                        total['经济损失（万元）'] += parseFloat(item['经济损失（万元）']);
+                    }
+                    if (data.length != 0) {
+                        data.push(total);
+                    }
+                    console.log(data);
+                    $gridTable.jqGrid({
+                        shrinkToFit: false,
+                        data: data,
+                        datatype: "local",
+                        colModel: [
+                            { label: '灾险情唯一编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 80, align: 'left', hidden: true, sortable: true },
+                            { label: '月', name: '月', index: '月', width: 60, align: 'left', sortable: true },
+                            { label: '灾情总数', name: '灾情总数（起）', index: '灾情总数（起）', width: 60, align: 'left', sortable: true },
+                            { label: '自然', name: '自然', index: '自然', width: 60, align: 'left', sortable: true },
+                            { label: '人为', name: '人为', index: '人为', width: 60, align: 'left', sortable: true, },
+                            { label: '特大型', name: '特大型', index: '特大型', width: 80, align: 'left', sortable: true },
+                            { label: '大型', name: '大型', index: '大型', width: 60, align: 'left', sortable: true },
+                            { label: '中型', name: '中型', index: '中型', width: 60, align: 'left', sortable: true },
+                            { label: '达到统计标准', name: '达到统计标准', index: '达到统计标准', width: 100, align: 'left', sortable: true, },
+                            { label: '未达到统计标准', name: '未达到统计标准', index: '未达到统计标准', width: 100, align: 'left', sortable: true, },
+                            { label: '滑坡', name: '滑坡', index: '滑坡', width: 60, align: 'left', sortable: true, },
+                            { label: '崩塌', name: '崩塌', index: '崩塌', width: 60, align: 'left', sortable: true, },
+                            { label: '泥石流', name: '泥石流', index: '泥石流', width: 80, align: 'left', sortable: true },
+                            { label: '地面塌陷', name: '地面塌陷', index: '地面塌陷', width: 80, align: 'left', sortable: true },
+                            { label: '地裂缝', name: '地裂缝', index: '地裂缝', width: 80, align: 'left', sortable: true },
+                            { label: '地面沉降', name: '地面沉降', index: '地面沉降', width: 80, align: 'left', sortable: true },
+                            { label: '死亡', name: '死亡', index: '死亡', width: 60, align: 'left', sortable: true },
+                            { label: '失踪', name: '失踪', index: '失踪', width: 60, align: 'left', sortable: true },
+                            { label: '受伤', name: '受伤', index: '受伤', width: 60, align: 'left', sortable: true },
+                            { label: '经济损失（万元）', name: '经济损失（万元）', index: '经济损失（万元）', width: 100, align: 'left', sortable: true },
+                            { label: '备注', name: '备注', index: 'RECEIVEPERSONID', width: 80, align: 'left', sortable: true },
+                        ],
+                        //rownumbers: true,
+                        // pager: "#gridPager",
+                        //rowNum: 30,
+                        viewrecords: true,
+                        height: 500,
+                        altRows: false,//启用隔行换色
+                        onSelectRow: function (i) {
+                        }
+                    })
+
+                    $(window).resize();
+                    if (p) {
+                        p = false;
+                        $gridTable.jqGrid("setGroupHeaders", {
+                            useColSpanStyle: true,
+                            groupHeaders: [
+                                { startColumnName: '特大型', numberOfColumns: 5, titleText: '灾害级别(起)' },
+
+                                { startColumnName: '自然', numberOfColumns: 2, titleText: '引发因素(起)' },
+                                { startColumnName: '滑坡', numberOfColumns: 6, titleText: '灾害类型(起)' },
+                                { startColumnName: '死亡', numberOfColumns: 3, titleText: '伤亡人数(人)' },
+                                { startColumnName: '月', numberOfColumns: 1, titleText: '' },
+                                { startColumnName: '灾情总数（起）', numberOfColumns: 1, titleText: '' },
+                                { startColumnName: '经济损失（万元）', numberOfColumns: 1, titleText: '' },
+                                { startColumnName: '备注', numberOfColumns: 1, titleText: '' },
+                            ],
+                        });
+                        $gridTable.jqGrid("setGroupHeaders", {
+                            useColSpanStyle: true,
+                            groupHeaders: [
+                                { startColumnName: '达到统计标准', numberOfColumns: 2, titleText: '小型' },
+                            ],
+                        });
+                    }
+                    $gridTable.jqGrid('setGridParam', {  // 重新加载数据
+                        data: data,
+                        datatype: "local",
+                    }).trigger("reloadGrid");
+                }
+            })
+        }
+    </script>
+
+}

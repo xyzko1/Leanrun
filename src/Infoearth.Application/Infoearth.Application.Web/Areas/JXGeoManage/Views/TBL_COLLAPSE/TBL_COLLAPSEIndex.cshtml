@@ -1,0 +1,345 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../JXGeoManage/TBL_COLLAPSE/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '统一编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: 'CGHMDB系统灾害体编码', name: 'CGHUNIFIEDCODE', index: 'CGHUNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: '名称', name: 'DISASTERUNITNAME', index: 'DISASTERUNITNAME', width: 100, align: 'left',sortable: true  },
+                { label: '室内编号', name: 'INDOORCODE', index: 'INDOORCODE', width: 100, align: 'left',sortable: true  },
+                { label: '野外编号', name: 'OUTDOORCODE', index: 'OUTDOORCODE', width: 100, align: 'left',sortable: true  },
+                { label: '省', name: 'PROVINCE', index: 'PROVINCE', width: 100, align: 'left',sortable: true  },
+                { label: '市（县）', name: 'CITY', index: 'CITY', width: 100, align: 'left',sortable: true  },
+                { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left',sortable: true  },
+                { label: '地理位置（村）', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left',sortable: true  },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left',sortable: true  },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left',sortable: true  },
+                { label: 'X坐标', name: 'X', index: 'X', width: 100, align: 'left',sortable: true  },
+                { label: 'Y坐标', name: 'Y', index: 'Y', width: 100, align: 'left',sortable: true  },
+                { label: '标高', name: 'Z', index: 'Z', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑号1', name: 'MONOCONUM1', index: 'MONOCONUM1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑形状1', name: 'MONOCOSHAPE1', index: 'MONOCOSHAPE1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑口规模1', name: 'MONOCOSCALE1', index: 'MONOCOSCALE1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑变形面积1', name: 'MONOCOAREA1', index: 'MONOCOAREA1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑深度1', name: 'MONOCODEPTH1', index: 'MONOCODEPTH1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑规模等级1', name: 'MONOCOLEVEL1', index: 'MONOCOLEVEL1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑长轴方向1', name: 'MONOCOAXISDIRE1', index: 'MONOCOAXISDIRE1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑充水水位深1', name: 'MONOCOWATLEVDEPTH1', index: 'MONOCOWATLEVDEPTH1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑水位变动1', name: 'MONOCOWATLEVCHANGE1', index: 'MONOCOWATLEVCHANGE1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发生时间1', name: 'MONOCOTIME1', index: 'MONOCOTIME1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发展变化1', name: 'MONOCODEVELOPCHANGE1', index: 'MONOCODEVELOPCHANGE1', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑号2', name: 'MONOCONUM2', index: 'MONOCONUM2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑形状2', name: 'MONOCOSHAPE2', index: 'MONOCOSHAPE2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑口规模2', name: 'MONOCOSCALE2', index: 'MONOCOSCALE2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑深度2', name: 'MONOCODEPTH2', index: 'MONOCODEPTH2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑变形面积2', name: 'MONOCOAREA2', index: 'MONOCOAREA2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑规模等级2', name: 'MONOCOLEVEL2', index: 'MONOCOLEVEL2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑长轴方向2', name: 'MONOCOAXISDIRE2', index: 'MONOCOAXISDIRE2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑充水水位深2', name: 'MONOCOWATLEVDEPTH2', index: 'MONOCOWATLEVDEPTH2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑水位变动2', name: 'MONOCOWATLEVCHANGE2', index: 'MONOCOWATLEVCHANGE2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发展变化2', name: 'MONOCODEVELOPCHANGE2', index: 'MONOCODEVELOPCHANGE2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发生时间2', name: 'MONOCOTIME2', index: 'MONOCOTIME2', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑号3', name: 'MONOCONUM3', index: 'MONOCONUM3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑形状3', name: 'MONOCOSHAPE3', index: 'MONOCOSHAPE3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑坑口规模3', name: 'MONOCOSCALE3', index: 'MONOCOSCALE3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑深度3', name: 'MONOCODEPTH3', index: 'MONOCODEPTH3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑变形面积3', name: 'MONOCOAREA3', index: 'MONOCOAREA3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑规模等级3', name: 'MONOCOLEVEL3', index: 'MONOCOLEVEL3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑长轴方向3', name: 'MONOCOAXISDIRE3', index: 'MONOCOAXISDIRE3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑充水水位深3', name: 'MONOCOWATLEVDEPTH3', index: 'MONOCOWATLEVDEPTH3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑水位变动3', name: 'MONOCOWATLEVCHANGE3', index: 'MONOCOWATLEVCHANGE3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发生时间3', name: 'MONOCOTIME3', index: 'MONOCOTIME3', width: 100, align: 'left',sortable: true  },
+                { label: '单体陷坑发展变化3', name: 'MONOCODEVELOPCHANGE3', index: 'MONOCODEVELOPCHANGE3', width: 100, align: 'left',sortable: true  },
+                { label: '陷坑坑数', name: 'COLLAPSENUM', index: 'COLLAPSENUM', width: 100, align: 'left',sortable: true  },
+                { label: '陷坑分布面积', name: 'COLLAPSEDISTRAREA', index: 'COLLAPSEDISTRAREA', width: 100, align: 'left',sortable: true  },
+                { label: '排列形式', name: 'ARRFORM', index: 'ARRFORM', width: 100, align: 'left',sortable: true  },
+                { label: '长列方向', name: 'LONGLISTDIRE', index: 'LONGLISTDIRE', width: 100, align: 'left',sortable: true  },
+                { label: '最小陷坑口径', name: 'MINCOLLAPSECALIBER', index: 'MINCOLLAPSECALIBER', width: 100, align: 'left',sortable: true  },
+                { label: '最大陷坑口径', name: 'MAXCOLLAPSECALIBER', index: 'MAXCOLLAPSECALIBER', width: 100, align: 'left',sortable: true  },
+                { label: '最小陷坑深度', name: 'MINCOLLAPSEDEPTH', index: 'MINCOLLAPSEDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '最大陷坑深度', name: 'MAXCOLLAPSEDEPTH', index: 'MAXCOLLAPSEDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '始发时间', name: 'STARTTIME', index: 'STARTTIME', width: 100, align: 'left',sortable: true  },
+                { label: '盛发开始时间', name: 'SFSTARTTIME', index: 'SFSTARTTIME', width: 100, align: 'left',sortable: true  },
+                { label: '盛发截止时间', name: 'SFENDTIME', index: 'SFENDTIME', width: 100, align: 'left',sortable: true  },
+                { label: '停止时间', name: 'ENDTIME', index: 'ENDTIME', width: 100, align: 'left',sortable: true  },
+                { label: '尚在发展', name: 'DEVELOPING', index: 'DEVELOPING', width: 100, align: 'left',sortable: true  },
+                { label: '单缝缝号1', name: 'ONECRACKNUM1', index: 'ONECRACKNUM1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝形态1', name: 'ONECRACKFORM1', index: 'ONECRACKFORM1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝延伸方向1', name: 'ONECRACKDIRE1', index: 'ONECRACKDIRE1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾向1', name: 'ONECRACKTENDENCY1', index: 'ONECRACKTENDENCY1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾角1', name: 'ONECRACKANGLE1', index: 'ONECRACKANGLE1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝长度1', name: 'ONECRACKLENGTH1', index: 'ONECRACKLENGTH1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝宽度1', name: 'ONECRACKWIDTH1', index: 'ONECRACKWIDTH1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝深度1', name: 'ONECRACKDEPTH1', index: 'ONECRACKDEPTH1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝性质1', name: 'ONECRACKNATURE1', index: 'ONECRACKNATURE1', width: 100, align: 'left',sortable: true  },
+                { label: '单缝缝号2', name: 'ONECRACKNUM2', index: 'ONECRACKNUM2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝形态2', name: 'ONECRACKFORM2', index: 'ONECRACKFORM2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝延伸方向2', name: 'ONECRACKDIRE2', index: 'ONECRACKDIRE2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾向2', name: 'ONECRACKTENDENCY2', index: 'ONECRACKTENDENCY2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾角2', name: 'ONECRACKANGLE2', index: 'ONECRACKANGLE2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝长度2', name: 'ONECRACKLENGTH2', index: 'ONECRACKLENGTH2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝宽度2', name: 'ONECRACKWIDTH2', index: 'ONECRACKWIDTH2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝深度2', name: 'ONECRACKDEPTH2', index: 'ONECRACKDEPTH2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝性质2', name: 'ONECRACKNATURE2', index: 'ONECRACKNATURE2', width: 100, align: 'left',sortable: true  },
+                { label: '单缝缝号3', name: 'ONECRACKNUM3', index: 'ONECRACKNUM3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝形态3', name: 'ONECRACKFORM3', index: 'ONECRACKFORM3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝延伸方向3', name: 'ONECRACKDIRE3', index: 'ONECRACKDIRE3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾向3', name: 'ONECRACKTENDENCY3', index: 'ONECRACKTENDENCY3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝倾角3', name: 'ONECRACKANGLE3', index: 'ONECRACKANGLE3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝长度3', name: 'ONECRACKLENGTH3', index: 'ONECRACKLENGTH3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝宽度3', name: 'ONECRACKWIDTH3', index: 'ONECRACKWIDTH3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝深度3', name: 'ONECRACKDEPTH3', index: 'ONECRACKDEPTH3', width: 100, align: 'left',sortable: true  },
+                { label: '单缝性质3', name: 'ONECRACKNATURE3', index: 'ONECRACKNATURE3', width: 100, align: 'left',sortable: true  },
+                { label: '缝数', name: 'CRACKNUM', index: 'CRACKNUM', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝分布面积', name: 'CRACKDISTRAREA', index: 'CRACKDISTRAREA', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝间距', name: 'CRACKSPACE', index: 'CRACKSPACE', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝排列形式', name: 'CRACKARRFORM', index: 'CRACKARRFORM', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝倾向', name: 'CRACKTENDENCY', index: 'CRACKTENDENCY', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝倾角', name: 'CRACKANGLE', index: 'CRACKANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝长MAX', name: 'CRACKLENGTHMAX', index: 'CRACKLENGTHMAX', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝长MIN', name: 'CRACKLENGTHMIN', index: 'CRACKLENGTHMIN', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝宽MAX', name: 'CRACKWIDTHMAX', index: 'CRACKWIDTHMAX', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝宽MIN', name: 'CRACKWIDTHMIN', index: 'CRACKWIDTHMIN', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝深MAX', name: 'CRACKDEPTHMAX', index: 'CRACKDEPTHMAX', width: 100, align: 'left',sortable: true  },
+                { label: '裂缝深MIN', name: 'CRACKDEPTHMIN', index: 'CRACKDEPTHMIN', width: 100, align: 'left',sortable: true  },
+                { label: '塌陷区地貌特征', name: 'COLLAPSEAREATOPFEA', index: 'COLLAPSEAREATOPFEA', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷地层时代', name: 'KARSTCOSTRATIGRAPHICTIME', index: 'KARSTCOSTRATIGRAPHICTIME', width: 100, align: 'left',sortable: true  },
+                { label: '成因类型', name: 'COLLAPSEGENETICTYPE', index: 'COLLAPSEGENETICTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷地层岩性', name: 'KARSTCOLITH', index: 'KARSTCOLITH', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷岩层倾向', name: 'KARSTCOSTRATUMDIRE', index: 'KARSTCOSTRATUMDIRE', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷岩层倾角', name: 'KARSTCOSTRATUMANGLE', index: 'KARSTCOSTRATUMANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷断裂情况', name: 'KARSTCOFRACSITUATION', index: 'KARSTCOFRACSITUATION', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷溶洞发育情况', name: 'KARSTCOCAVEDEVELOPSITUATION', index: 'KARSTCOCAVEDEVELOPSITUATION', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷岩层发育程度', name: 'KARSTCOROCKDEVELOPDEGREE', index: 'KARSTCOROCKDEVELOPDEGREE', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷塌顶溶洞埋深', name: 'KARSTCOROOFCAVEDEPTH', index: 'KARSTCOROOFCAVEDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷地下水位埋深', name: 'KARSTCOGROUNDWATERDEPTH', index: 'KARSTCOGROUNDWATERDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '岩溶塌陷诱发动力因素', name: 'KARSTCOTRIGGERSPOWER', index: 'KARSTCOTRIGGERSPOWER', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷单层土性', name: 'HOLECOSINGLESOILNATURE', index: 'HOLECOSINGLESOILNATURE', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷单层土厚', name: 'HOLECOSINGLESOILTHICK', index: 'HOLECOSINGLESOILTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷双层上部土性', name: 'HOLECODOUBTOPSOILNATURE', index: 'HOLECODOUBTOPSOILNATURE', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷双层上部土厚', name: 'HOLECODOUBTOPSOILTHICK', index: 'HOLECODOUBTOPSOILTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷双层下部土性', name: 'HOLECODOUBLOWERSOILNATURE', index: 'HOLECODOUBLOWERSOILNATURE', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷双层下部土厚', name: 'HOLECODOUBLOWERSOILTHICK', index: 'HOLECODOUBLOWERSOILTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷下伏基岩时代', name: 'HOLECOUNDERBEDROCKTIME', index: 'HOLECOUNDERBEDROCKTIME', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷下伏基岩岩性', name: 'HOLECOUNDERBEDROCKLITH', index: 'HOLECOUNDERBEDROCKLITH', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷地下水位埋深', name: 'HOLECOGROUNDWATERDEPTH', index: 'HOLECOGROUNDWATERDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '土洞塌陷诱发动力因素', name: 'HOLECOTRIGGERSPOWER', index: 'HOLECOTRIGGERSPOWER', width: 100, align: 'left',sortable: true  },
+                { label: '井位塌陷区方向', name: 'WELLPLACECOAREADIRE', index: 'WELLPLACECOAREADIRE', width: 100, align: 'left',sortable: true  },
+                { label: '井位塌陷区距离', name: 'WELLPLACECOAREADIST', index: 'WELLPLACECOAREADIST', width: 100, align: 'left',sortable: true  },
+                { label: '井位塌陷区抽水降深', name: 'WELLPLACECOAREAPUMPDEPTH', index: 'WELLPLACECOAREAPUMPDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '井位塌陷区日出水量', name: 'WELLPLACECOAREADAYPUMPVOL', index: 'WELLPLACECOAREADAYPUMPVOL', width: 100, align: 'left',sortable: true  },
+                { label: '江河水位塌陷区方向', name: 'RIVERWATLEVCOAREADIRE', index: 'RIVERWATLEVCOAREADIRE', width: 100, align: 'left',sortable: true  },
+                { label: '江河水位塌陷区距离', name: 'RIVERWATLEVCOAREADIST', index: 'RIVERWATLEVCOAREADIST', width: 100, align: 'left',sortable: true  },
+                { label: '江河水位塌陷区水位变幅', name: 'RIVERWATLEVCOAREAAMP', index: 'RIVERWATLEVCOAREAAMP', width: 100, align: 'left',sortable: true  },
+                { label: '江河水位塌陷区变化类型', name: 'RIVERWATLEVCOAREACHANGETYPE', index: 'RIVERWATLEVCOAREACHANGETYPE', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷土层时代', name: 'ROOFFALLCOSOILTIME', index: 'ROOFFALLCOSOILTIME', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷土层土性', name: 'ROOFFALLCOSOILNATURE', index: 'ROOFFALLCOSOILNATURE', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷土层厚度', name: 'ROOFFALLCOSOILTHICK', index: 'ROOFFALLCOSOILTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷岩层时代', name: 'ROOFFALLCOSTRATUMTIME', index: 'ROOFFALLCOSTRATUMTIME', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷岩层岩性', name: 'ROOFFALLCOSTRATUMLITH', index: 'ROOFFALLCOSTRATUMLITH', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷岩层厚度', name: 'ROOFFALLCOSTRATUMTHICK', index: 'ROOFFALLCOSTRATUMTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷地下水位埋深', name: 'ROOFFALLCOGROUNDWATERDEPTH', index: 'ROOFFALLCOGROUNDWATERDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷诱发动力因素', name: 'ROOFFALLCOTRIGGERSPOWER', index: 'ROOFFALLCOTRIGGERSPOWER', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷矿层厚度', name: 'ROOFFALLCOSEAMTHICK', index: 'ROOFFALLCOSEAMTHICK', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷开采时间', name: 'ROOFFALLCOMINETIME', index: 'ROOFFALLCOMINETIME', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷开采厚度', name: 'ROOFFALLCOMINETHICK', index: 'ROOFFALLCOMINETHICK', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷开采深度', name: 'ROOFFALLCOMINEDEPTH', index: 'ROOFFALLCOMINEDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷开采方法', name: 'ROOFFALLCOMINEMETHOD', index: 'ROOFFALLCOMINEMETHOD', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷工作面推进速度', name: 'ROOFFALLCOWORKSURFFORWSPEED', index: 'ROOFFALLCOWORKSURFFORWSPEED', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷采出量', name: 'ROOFFALLCOMINEVOL', index: 'ROOFFALLCOMINEVOL', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷顶板管理方法', name: 'ROOFFALLCOROOFMANAGEMETHOD', index: 'ROOFFALLCOROOFMANAGEMETHOD', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷重复采动', name: 'ROOFFALLCOREPEATMINE', index: 'ROOFFALLCOREPEATMINE', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷采空区形态', name: 'ROOFFALLCOGOBFORM', index: 'ROOFFALLCOGOBFORM', width: 100, align: 'left',sortable: true  },
+                { label: '冒顶塌陷采空区规模', name: 'ROOFFALLCOGOBSCALE', index: 'ROOFFALLCOGOBSCALE', width: 100, align: 'left',sortable: true  },
+                { label: '毁坏田地', name: 'DESTROYEDFARM', index: 'DESTROYEDFARM', width: 100, align: 'left',sortable: true  },
+                { label: '毁坏房屋', name: 'DESTROYEDHOME', index: 'DESTROYEDHOME', width: 100, align: 'left',sortable: true  },
+                { label: '阻断交通', name: 'BLOCKINGTRAFFIC', index: 'BLOCKINGTRAFFIC', width: 100, align: 'left',sortable: true  },
+                { label: '地下水源枯竭', name: 'GROUNDWATEREXHAUSTED', index: 'GROUNDWATEREXHAUSTED', width: 100, align: 'left',sortable: true  },
+                { label: '地下水井突水', name: 'GROUNDWATERINRUSH', index: 'GROUNDWATERINRUSH', width: 100, align: 'left',sortable: true  },
+                { label: '掩埋地面物资', name: 'BURYGROUNDSUBSTANCE', index: 'BURYGROUNDSUBSTANCE', width: 100, align: 'left',sortable: true  },
+                { label: '死亡人口', name: 'DEATHNUM', index: 'DEATHNUM', width: 100, align: 'left',sortable: true  },
+                { label: '直接损失', name: 'DIRETLOSSES', index: 'DIRETLOSSES', width: 100, align: 'left',sortable: true  },
+                { label: '灾情等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '新增陷坑', name: 'ADDCOLLAPSE', index: 'ADDCOLLAPSE', width: 100, align: 'left',sortable: true  },
+                { label: '潜在毁田', name: 'POTDESTROYEDFARM', index: 'POTDESTROYEDFARM', width: 100, align: 'left',sortable: true  },
+                { label: '扩大陷区', name: 'EXPCOLLAPSEAREA', index: 'EXPCOLLAPSEAREA', width: 100, align: 'left',sortable: true  },
+                { label: '潜在毁房', name: 'POTDESTROYEDHOME', index: 'POTDESTROYEDHOME', width: 100, align: 'left',sortable: true  },
+                { label: '出现新陷区', name: 'APPNEWCOLLAPSE', index: 'APPNEWCOLLAPSE', width: 100, align: 'left',sortable: true  },
+                { label: '新陷区面积', name: 'NEWCOLLAPSEAREA', index: 'NEWCOLLAPSEAREA', width: 100, align: 'left',sortable: true  },
+                { label: '断路', name: 'OPENCIRCUIT', index: 'OPENCIRCUIT', width: 100, align: 'left',sortable: true  },
+                { label: '其他危害', name: 'OTHERHARM', index: 'OTHERHARM', width: 100, align: 'left',sortable: true  },
+                { label: '威胁人口', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '威胁财产', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 100, align: 'left',sortable: true  },
+                { label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '隐患点', name: 'HIDDENPOINT', index: 'HIDDENPOINT', width: 100, align: 'left',sortable: true  },
+                { label: '防灾预案', name: 'PREVENTIONPLAN', index: 'PREVENTIONPLAN', width: 100, align: 'left',sortable: true  },
+                { label: '防治措施', name: 'TREATMENTMEASURE', index: 'TREATMENTMEASURE', width: 100, align: 'left',sortable: true  },
+                { label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 100, align: 'left',sortable: true  },
+                { label: '群测人员', name: 'MONITORMASS', index: 'MONITORMASS', width: 100, align: 'left',sortable: true  },
+                { label: '村长', name: 'VILLAGEHEADER', index: 'VILLAGEHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '电话', name: 'PHONE', index: 'PHONE', width: 100, align: 'left',sortable: true  },
+                { label: '调查负责人', name: 'SURVEYHEADER', index: 'SURVEYHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '填表人', name: 'FILLTABLEPEOPLE', index: 'FILLTABLEPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '审核人', name: 'VERIFYPEOPLE', index: 'VERIFYPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '调查单位', name: 'SURVEYDEPT', index: 'SURVEYDEPT', width: 100, align: 'left',sortable: true  },
+                { label: '阶步指向', name: 'HOMPOINT', index: 'HOMPOINT', width: 100, align: 'left',sortable: true  },
+                { label: '填表日期', name: 'FILLTABLEDATE', index: 'FILLTABLEDATE', width: 100, align: 'left',sortable: true  },
+                { label: '更新时间', name: 'UPDATETIME', index: 'UPDATETIME', width: 100, align: 'left',sortable: true  },
+                { label: '记录状态', name: 'RECORDSTATUS', index: 'RECORDSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '导出状态', name: 'EXPSTATUS', index: 'EXPSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '防治情况', name: 'CONTROLSTATE', index: 'CONTROLSTATE', width: 100, align: 'left',sortable: true  },
+                { label: '创建者ID', name: 'CREATORUSERID', index: 'CREATORUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '创建时间', name: 'CREATORTIME', index: 'CREATORTIME', width: 100, align: 'left',sortable: true  },
+                { label: '更新者ID', name: 'UPDATEUSERID', index: 'UPDATEUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '更新次数', name: 'UPDATETIMES', index: 'UPDATETIMES', width: 100, align: 'left',sortable: true  },
+                { label: '地面塌陷情况', name: 'COLLAPSEDESC', index: 'COLLAPSEDESC', width: 100, align: 'left',sortable: true  },
+                { label: '项目编号', name: 'PROJECTID', index: 'PROJECTID', width: 100, align: 'left',sortable: true  },
+                { label: '图幅编号', name: 'MAPID', index: 'MAPID', width: 100, align: 'left',sortable: true  },
+                { label: '县市编号', name: 'COUNTYCODE', index: 'COUNTYCODE', width: 100, align: 'left',sortable: true  },
+                { label: '遥感解译点（0：否；1：是）', name: 'ISRSPNT', index: 'ISRSPNT', width: 100, align: 'left',sortable: true  },
+                { label: '勘查点（0：否；1：是）', name: 'ISSURVEYPNT', index: 'ISSURVEYPNT', width: 100, align: 'left',sortable: true  },
+                { label: '测绘点（0：否；1：是）', name: 'ISMEASURINGPNT', index: 'ISMEASURINGPNT', width: 100, align: 'left',sortable: true  },
+                { label: '野外记录信息', name: 'OUTDOORRECORD', index: 'OUTDOORRECORD', width: 100, align: 'left',sortable: true  },
+                { label: '村', name: 'VILLAGE', index: 'VILLAGE', width: 100, align: 'left',sortable: true  },
+                { label: '组', name: 'TEAM', index: 'TEAM', width: 100, align: 'left',sortable: true  },
+                { label: '阻断铁路（M)', name: 'BLOCKINGRAILWAY', index: 'BLOCKINGRAILWAY', width: 100, align: 'left',sortable: true  },
+                { label: '阻断公路', name: 'BLOCKINGROAD', index: 'BLOCKINGROAD', width: 100, align: 'left',sortable: true  },
+                { label: '阻断通讯(小时)', name: 'BLOCKINGCOMMUNICATION', index: 'BLOCKINGCOMMUNICATION', width: 100, align: 'left',sortable: true  },
+                { label: '水量增大(立方米/秒）', name: 'WATERINCREASE', index: 'WATERINCREASE', width: 100, align: 'left',sortable: true  },
+                { label: '成灾损失', name: 'DISASTERLOSS', index: 'DISASTERLOSS', width: 100, align: 'left',sortable: true  },
+                { label: '淹井损失（万元）', name: 'FLOODEDWELLLOSS', index: 'FLOODEDWELLLOSS', width: 100, align: 'left',sortable: true  },
+                { label: '河水减少', name: 'RIVERWATERREDUCE', index: 'RIVERWATERREDUCE', width: 100, align: 'left',sortable: true  },
+                { label: '断流(立方米/米）', name: 'INTERRUPTEDRIVERWATER', index: 'INTERRUPTEDRIVERWATER', width: 100, align: 'left',sortable: true  },
+                { label: '井泉水流量减少', name: 'WELLWATERREDUCE', index: 'WELLWATERREDUCE', width: 100, align: 'left',sortable: true  },
+                { label: '水位降低（米）', name: 'WATERLEVELREDUCE', index: 'WATERLEVELREDUCE', width: 100, align: 'left',sortable: true  },
+                { label: '威胁房屋（户）', name: 'THREATENHOME', index: 'THREATENHOME', width: 100, align: 'left',sortable: true  },
+                { label: '威胁对象', name: 'THREATENOBJ', index: 'THREATENOBJ', width: 100, align: 'left',sortable: true  },
+                { label: '危害对象', name: 'DESTROYEDOBJ', index: 'DESTROYEDOBJ', width: 100, align: 'left',sortable: true  },
+                { label: '更新人(最近)', name: 'UPDATEUSER', index: 'UPDATEUSER', width: 100, align: 'left',sortable: true  },
+                { label: '遥感解译', name: 'DISASTERSID', index: 'DISASTERSID', width: 100, align: 'left',sortable: true  },
+                { label: '群测人员ID', name: 'MONITORMASSID', index: 'MONITORMASSID', width: 100, align: 'left',sortable: true  },
+                { label: '村长ID', name: 'VILLAGEHEADERID', index: 'VILLAGEHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '调查负责人ID', name: 'SURVERYHEADERID', index: 'SURVERYHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '填表人ID', name: 'FILLTABLEPEOPLEID', index: 'FILLTABLEPEOPLEID', width: 100, align: 'left',sortable: true  },
+                { label: '审核人ID', name: 'VERIFYPEOPLEID', index: 'VERIFYPEOPLEID', width: 100, align: 'left',sortable: true  },
+                { label: '调查单位ID', name: 'SURVEYDEPTID', index: 'SURVEYDEPTID', width: 100, align: 'left',sortable: true  },
+                { label: '是否单层', name: 'ISHOLECOSINGLE', index: 'ISHOLECOSINGLE', width: 100, align: 'left',sortable: true  },
+                { label: '是否双层', name: 'ISHOLECODOUBLE', index: 'ISHOLECODOUBLE', width: 100, align: 'left',sortable: true  },
+                { label: '阶段指向', name: 'CRACKSTAGEPOINT', index: 'CRACKSTAGEPOINT', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加地面塌陷调查表',
+            url: '/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑地面塌陷调查表',
+                url: '/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_COLLAPSE/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的地面塌陷调查表！', 0);
+        }
+    }
+</script>
+}

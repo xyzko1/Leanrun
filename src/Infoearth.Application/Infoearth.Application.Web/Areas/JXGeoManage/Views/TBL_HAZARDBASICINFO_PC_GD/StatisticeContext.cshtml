@@ -1,0 +1,279 @@
+﻿@{
+    ViewBag.Title = "统计内容";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .zaihai-leixing1 td {
+        padding-left: 0px;
+    }
+</style>
+<div class="tanchukuan">
+    <div class="tanchukuan-left">
+        <div class="tanchukuan-left1" id="tj1">
+            <h1>灾害类型</h1>
+            <table class="zaihai-leixing1">
+                <tr>                  
+                    <td>
+                        <input type="checkbox" class="huxian" id="dangerousCount" value="隐患点" />隐患点
+                    </td>                   
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        <input type="checkbox" class="huxian" id="allzh" value="allzh" />全选
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="huap" value="滑坡" />滑坡
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxbengt" value="崩塌" />崩塌
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxxiep" value="斜坡" />斜坡
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxnisl" value="泥石流" />泥石流
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxdimcj" value="地面沉降" />地面沉降
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxdilf" value="地裂缝" />地裂缝
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zhlxtax" value="地面塌陷" />地面塌陷
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div class="tanchukuan-left1" id="tj2">
+            <h1>稳定性及隐患点状态</h1>
+            <table class="zaihai-leixing2">
+                <tr>
+                    <td rowspan="2">
+                        <input type="checkbox" class="huxian" id="allwendbxqk" value="allwendbxqk" />全选
+                    </td>
+                    <td>稳定性</td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="wdwendxh" value="目前稳定性好" />稳定性好
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="wdwendxjc" value="目前稳定性较差" />稳定性较差
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="wdwendxc" value="目前稳定性差" />稳定性差
+                    </td>
+                </tr>             
+            </table>
+
+        </div>
+
+        <div class="tanchukuan-left1" id="tj3">
+            <h1>灾害影响及潜在威胁</h1>
+            <table class="zaihai-leixing3">
+                <tr>
+                    <td rowspan="2">
+                        <input type="checkbox" class="huxian" id="allzhyxjqzwx" value="allzhyxjqzwx" />全选
+                    </td>                  
+                <tr>                  
+                    <td class="auto-style1">
+                        <input type="checkbox" class="huxian" id="qianzwxweixrk" value="威胁人数" />威胁人数(人)
+                    </td>
+                    <td class="auto-style1">
+                        <input type="checkbox" class="huxian" id="qianzwxweixcc" value="威胁财产" />威胁财产(万元)
+                    </td>
+                    <td class="auto-style1"></td>
+                </tr>
+            </table>
+
+        </div>     
+        <div class="tanchukuan-left1" id="tj4" style="display:none;">
+            <h1>灾害体规模及危害性</h1>
+            <table class="zaihai-leixing4" style="margin-left: 18px;">
+                <tr>
+                    <td rowspan="2">
+                        <input type="checkbox" class="huxian" id="allzxq" value="allzxq" />全选
+                    </td>
+                    <td>灾害体规模</td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zqxx" value="小型" />小型
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zqzx" value="中型" />中型
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zqdx" value="大型" />大型
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="zqtdx" value="特大型" />特大型
+                    </td>
+                </tr>
+                <tr>
+                    <td>危害性</td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="xqxx" value="小" />小
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="xqzx" value="中" />中
+                    </td>
+                    <td>
+                        <input type="checkbox" class="huxian" id="xqdx" value="大" />大
+                    </td>                
+                </tr>
+
+            </table>
+
+        </div>
+    </div>
+    <div class="tanchukuan-right">
+        <fieldset class="tanchukuan-right1">
+            <legend>统计内容</legend>
+            <div style="margin: 0 0 10px 0;">
+                <a href="javascript:void(0);" class="xuanding" id="allcheck">全部选定</a>
+                <a href="javascript:void(0);" class="xuanding" id="canclecheck">取消全部</a>
+            </div>
+            <div style="margin: 0 0 10px 0; display: none;">
+                <a href="javascript:void(0);" class="xuanding" id="selectup">上移</a>
+                <a href="javascript:void(0);" class="xuanding" id="selectdown">下移</a>
+            </div>
+            <div style="margin: 0 0 10px 0;">
+                <a href="javascript:void(0);" class="xuanding" id="checkall" style="display: none;">查看全部字段</a>
+                <a href="javascript:void(0);" class="xuanding" id="delectselect">删除</a>
+            </div>
+            <div class="wenzi">
+                <div id="treeDiv" style="height: 288px; overflow: auto; background-color: #FFFFFF; margin: 0 auto;">
+                    <div id="treemenu">
+                        <ul id="tree" style="list-style-type: none">
+
+                            <li style="text-align: left; cursor: pointer; display: none;" id="yinhuandiancount" class="caidan" onclick="javascript:object_statistics_p=$(this)[0];object_check='dangerousCount,allzh'">
+                                <p>隐患点<span style="display: none">|0|yinhuandiancount|dangerousCount</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="huaPo" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='huap,allzh'">
+                                <p>滑坡<span style="display: none">|6|huaPo|huap,allzh</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="bengTa" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxbengt,allzh'">
+                                <p>崩塌<span style="display: none">|1|bengTa|zhlxbengt,allzh</span></p>
+                            </li>
+
+                            <li state="closed" class="caidan" id="xiePo" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxxiep,allzh'">
+                                <p>斜坡<span style="display: none">|7|xiePo|zhlxxiep,allzh</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="nishiLiu" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxnisl,allzh'">
+                                <p>泥石流<span style="display: none">|3|nishiLiu|zhlxnisl,allzh</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="dimcj" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxdimcj,allzh'">
+                                <p>地面沉降<span style="display: none">|4|dimcj|zhlxdimcj,allzh</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="dilieFeng" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxdilf,allzh'">
+                                <p>地裂缝<span style="display: none">|5|dilieFeng|zhlxdilf,allzh</span></p>
+                            </li>
+                            <li state="closed" class="caidan" id="taXian" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zhlxtax,allzh'">
+                                <p>地面塌陷<span style="display: none">|2|taXian|zhlxtax,allzh</span></p>
+                            </li>
+
+                            <li state="closed" class="caidan" id="wendingcd" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='wdwendxh,wdwendxjc,wdwendxc,allwendbxqk'">
+                                <p>目前稳定程度	<span style="display: none">|8|wendingcd|wdwendxh,wdwendxjc,wdwendxc,allwendbxqk</span></p>
+                                <ul style="list-style-type: none">
+                                    <li id="wendwendxh" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='wdwendxh,allwendbxqk|wendingcd';mark_statistics=true">
+                                        <div>稳定好</div>
+                                        <span style="display: none">|0|3|wendingcd</span>
+                                    </li>
+                                    <li id="wendwendxjc" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='wdwendxjc,allwendbxqk|wendingcd';mark_statistics=true">
+                                        <div>稳定性较差</div>
+                                        <span style="display: none">|1|3|wendingcd</span>
+                                    </li>
+                                    <li id="wendwenxc" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='wdwendxc,allwendbxqk|wendingcd';mark_statistics=true">
+                                        <div>稳定性差</div>
+                                        <span style="display: none">|2|3|wendingcd</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li state="closed" class="caidan" id="qianzwx" style="cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='qianzwxweixrk,qianzwxweixcc'">
+                                <p>潜在威胁<span style="display: none">|11|qianzwx|qianzwxweixrk,qianzwxweixcc</span></p>
+                                <ul style="list-style-type: none">
+                                    <li id="qzwxwxrk" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='qianzwxweixrk,allzhyxjqzwx|qianzwx';mark_statistics=true">
+                                        <div>威胁人数</div>
+                                        <span style="display: none">|0|3|qianzwx</span>
+                                    </li>
+                                    <li id="qzwxwxcc" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='qianzwxweixcc,allzhyxjqzwx|qianzwx';mark_statistics=true">
+                                        <div>威胁财产</div>
+                                        <span style="display: none">|1|3|qianzwx</span>
+                                    </li>
+                                    <li id="qzwxwxhs" style="display: none"></li>
+                                </ul>
+                            </li>
+                            <li state="closed" class="caidan" id="zaiqing" style="display:none; cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='zqxx,zqzx,zqdx,zqtdx,allzxq'">
+                                <p>灾害体规模<span style="display: none">|12|zaiqing|zqxx,zqzx,zqdx,zqtdx,allzxq</span></p>
+                                <ul style="list-style-type: none">
+                                    <li id="zaiqingxx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='zqxx,allzxq|zaiqing';mark_statistics=true">
+                                        <div>小型</div>
+                                        <span style="display: none">|0|4|zaiqing</span>
+                                    </li>
+                                    <li id="zaiqingzx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='zqzx,allzxq|zaiqing';mark_statistics=true">
+                                        <div>中型</div>
+                                        <span style="display: none">|1|4|zaiqing</span>
+                                    </li>
+                                    <li id="zaiqingdx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='zqdx,allzxq|zaiqing';mark_statistics=true">
+                                        <div>大型</div>
+                                        <span style="display: none">|2|4|zaiqing</span>
+                                    </li>
+                                    <li id="zaiqingtdx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='zqtdx,allzxq|zaiqing';mark_statistics=true">
+                                        <div>特大型</div>
+                                        <span style="display: none">|3|4|zaiqing</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li state="closed" class="caidan" id="xianqing" style="display:none;cursor: pointer" onclick="javascript:object_statistics_p=$(this)[0];object_check='xqxx,xqzx,xqdx,allzxq'">
+                                <p>危害性<span style="display: none">|12|xianqing|xqxx,xqzx,xqdx,allzxq</span></p>
+                                <ul style="list-style-type: none">
+                                    <li id="xianqingxx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='xqxx,allzxq|xianqing';mark_statistics=true">
+                                        <div>小</div>
+                                        <span style="display: none">|0|4|xianqing</span>
+                                    </li>
+                                    <li id="xianqingzx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='xqzx,allzxq|xianqing';mark_statistics=true">
+                                        <div>中</div>
+                                        <span style="display: none">|1|4|xianqing</span>
+                                    </li>
+                                    <li id="xianqingdx" onclick="javascript:$('.caidan p').each(function () {  $(this).css('color', '#000');});  $('.caidan li').each(function () {  $(this).css('color', '#000');  });$(this).css('color','green');parent_statistics=false;markname_statistics=true;object_statistics=$(this)[0];txmark_statistics='xqdx,allzxq|xianqing';mark_statistics=true">
+                                        <div>大</div>
+                                        <span style="display: none">|2|4|xianqing</span>
+                                    </li>                                  
+                                </ul>
+                            </li>                         
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:void(0);" class="queding" id="yes">确定</a><a href="javascript:void(0);" class="quxiao" id="cancle">取消</a>
+        </fieldset>
+
+    </div>
+
+
+
+</div>
+@System.Web.Optimization.Styles.Render(
+    "~/Content/disaster/Base.css",
+"~/Content/disaster/GeoMap2.css")
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/disaster/StatisticsNew.js"
+)
+@section Scripts{
+<script>
+    function AcceptClick() {
+        var queryJson = $("#Tj").getWebControls();
+        learun.dialogClose();
+        return queryJson;
+    }
+    //2013-6-14 cml
+
+
+</script>
+}

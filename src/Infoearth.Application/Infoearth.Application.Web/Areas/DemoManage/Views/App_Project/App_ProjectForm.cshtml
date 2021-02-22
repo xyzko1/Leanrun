@@ -1,0 +1,79 @@
+﻿@{;
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../DemoManage/App_Project/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../DemoManage/App_Project/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                $.currentIframe().$("#gridTable").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">F_Name</td>
+            <td class="formValue">
+                <input id="F_Name" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">F_Icon</td>
+            <td class="formValue">
+                <input id="F_Icon" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">F_IsTabed</td>
+            <td class="formValue">
+                <input id="F_IsTabed" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">F_Description</td>
+            <td class="formValue">
+                <input id="F_Description" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">F_CreateDate</td>
+            <td class="formValue">
+                <input id="F_CreateDate" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">F_CreateUserId</td>
+            <td class="formValue">
+                <input id="F_CreateUserId" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">F_CreateUserName</td>
+            <td class="formValue" colspan='3'>
+                <input id="F_CreateUserName" type="text" class="form-control"  />
+            </td>
+        </tr>
+       
+    </table>
+</div>

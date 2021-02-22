@@ -1,0 +1,573 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 48px;
+        line-height: 48px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top:5px;
+ 
+    }
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+     
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+    .orm_table{
+        width:100%;
+
+    }
+    .orm_table tr th{
+        color:#5b5b60;
+        height:30px;
+        line-height:30px;
+        font-size:14px;
+    }
+        .orm_table tr td{
+            vertical-align:top;
+            text-align:center;
+        }
+    .orm_item{
+        border:1px solid #eeeeee;
+        margin:10px;
+        text-align:center;
+        padding:20px;
+    
+
+
+    }
+    .orm_item_title{
+        background:#007aff;
+        padding:10px 20px;
+        border-radius:8px;
+        display:inline-block;
+        font-style:italic;
+        color:#fff;
+        font-size:24px;
+        font-weight:bold;
+    }
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+    .orm_item_title_note1 {
+        color: #8e8e93;
+    
+        line-height: 24px;
+
+    }
+    .orm_action1 {
+        margin: 10px;
+    }
+ .orm_action {
+        width: 100%;
+
+    }
+
+.orm_action tr td {
+            border: 1px solid #eeeeee;
+            width:50%;
+     
+        }
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+
+    //$(function () {
+    //    InitialPage();
+
+
+
+
+    //});
+    //初始化页面
+    //function InitialPage() {
+       
+    //    $(window).resize(function (e) {
+    //        window.setTimeout(function () {
+    //            $('#abc').height($(window).height() - 20);
+    //        }, 200);
+    //        e.stopPropagation();
+    //    });
+    //}
+
+
+
+</script>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; margin-bottom:10px;">
+        <div class="orm_title">新框架快速开发指引</div>
+        <div class="orm_title_note">New Framework Rapid Development Guidelines</div>
+        <div class="orm_title_note" style="border-bottom:none;">
+            本框架前端基于angular的MVC结构，属于单页应用。控件基于clip_two的风格。
+
+            后台是基于DDD架构的ABP框架。为了更快速，更准确地把该框架运用到各业务系统中去，开发指引顺势而生。
+        </div>
+
+        <div style="border-bottom:2px solid #ee8339; margin:15px 0;"></div>
+        <table class="orm_table">
+            <thead><tr><th>框架结构图</th><th>前端结构图</th></tr></thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <img src="~/Content/adminDefault/img/mainPage02.jpg" />
+                    </td>
+                    <td>
+                        <img src="~/Content/adminDefault/img/mainPage01.jpg" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div  style="background: #fff; margin-bottom: 10px;">
+     <table style="width:100%;">
+         <tr>
+         <td>
+             <div class="orm_item">
+              
+                     <span class="orm_item_title">1</span>
+                     <div class="orm_item_title_note">创建路由</div>
+                     <div class="orm_item_title_note1">创建路由的文件位于App/Main/assets/js/config.router.js 中。</div>
+               
+             </div>
+             </td>
+         <td>
+             <div class="orm_item">
+             
+                     <span class="orm_item_title">2</span>
+                     <div class="orm_item_title_note">创建软加载</div>
+                     <div class="orm_item_title_note1">创建软加载的文件位于App/Main/assets/js/config.constant.js中。</div>
+                 </div>
+         </td>
+         <td>
+             <div class="orm_item">
+
+                 <span class="orm_item_title">3</span>
+                 <div class="orm_item_title_note">创建导航栏目</div>
+                 <div class="orm_item_title_note1">创建导航栏目的文件位于App/Main/assets/views/partials/nav.html中。</div>
+                 </div>
+
+</td>
+         <td>
+             <div class="orm_item">
+               
+                     <span class="orm_item_title">4</span>
+                     <div class="orm_item_title_note">创建控制器和模板</div>
+                     <div class="orm_item_title_note1">根据路由中设置的模板路径和软加载中设置的控制器路径，创建控制器.js文件和模板.html文件。</div>
+                
+                 </div>
+         </td>
+         </tr>
+     </table>
+      
+
+     
+      
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、创建路由
+                    </td>
+                    <td class="orm_action_title">示例</td>
+                </tr>
+                <tr>
+                    <td><div style="padding:15px;">
+    <p class="orm_item_title_note1">创建路由的文件位于App/Main/assets/js/config.router.js 中。</p>
+
+    <p class="orm_item_title_note1"><b>调用</b></p>
+
+                            <p class="orm_item_title_note1">
+                                需要调用状态配置$stateProvider对象的state()方法,该方法需要传入两个参数：分别是路由名称和配置对象。</p>
+
+                            <p class="orm_item_title_note1">
+                                参数说明:</p>
+
+                            <p class="orm_item_title_note1">
+                                1)路由名称是string类型且与其对应的ui-sref="xxx"的名字是相同的,另外多级路由需要用点号分开。</p>
+
+                            <p class="orm_item_title_note1">
+                                2)配置对象是object类型,有如下成员:</p>
+
+                            <p class="orm_item_title_note1">
+                                {url:"",template:"",templateUrl:"", resolve:{},title:"",parentPage:"", abstract:true}。</p>
+
+                            <p class="orm_item_title_note1">
+                                其中url是当前路由级别下的路径，template是html模板。</p>
+
+                            <p class="orm_item_title_note1">
+                                templateUrl是模板路径,不必同时使用template和templateUrl。</p>
+
+                            <p class="orm_item_title_note1">
+                                resolve是软加载js、css等文件。</p>
+
+                            <p class="orm_item_title_note1">
+                                title是标题,parentPage是父页面的路由字符串,仅在启用面包屑导航时使用。</p>
+
+                            <p class="orm_item_title_note1">
+                                abstract:true表明此路由不能被显性激活,只能被子状态隐性激活。</p>
+
+                            <p class="orm_item_title_note1"> abstract:true表明此路由不能被显性激活,只能被子状态隐性激活。</p>
+</div>
+                    </td>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage03.jpg" />
+</div>
+</td>
+                </tr>
+
+            </table>
+
+
+        </div>
+        
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、创建软加载
+                    </td>
+                    <td class="orm_action_title">示例</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">创建软加载的文件位于App/Main/assets/js/config.constant.js中。</p>
+
+                            <p class="orm_item_title_note1"><b>为scripts属性添加成员</b></p>
+
+                            <p class="orm_item_title_note1">
+                                找到js文件夹下面的config.constant.js并为scripts对象添加新的key和value.
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                key是有意义的取名,且须在你路由文件的loadSequence()方法中调用。
+                                value是软加载的资源文件路径。
+                            </p>
+                         
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage04.jpg" />
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、创建导航栏目
+                    </td>
+                    <td class="orm_action_title">示例</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">创建导航栏目的文件位于App/Main/assets/views/partials/nav.html中。</p>
+
+                            <p class="orm_item_title_note1"><b>添加HTML代码</b></p>
+
+                            <p class="orm_item_title_note1">
+                                在< ul class="main-navigation-menu">< /ul>节点下添加html代码。
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                设置li的ng-class="{'active':$state.includes('app.xxxxxx')}"。
+                            </p>
+                            <p class="orm_item_title_note1">
+                                通过设置< i class="icon xxx">< /i>节点的class属性来实现设置导航的不同的图标。
+                            </p>
+                            <p class="orm_item_title_note1">
+                                同样通过< span class="title">text< /span >节点里text来设置导航的文字内容。
+                            </p>
+                            <p class="orm_item_title_note1">
+                                对二级目录须在一级目录li节点中再加上< ul class="sub-menu" >
+                                    节点
+
+                                    对子级目录或者无子级的目录须设置li的ui-sref-active=”active”，且须设置a节点的ui-sref=”app.xxxx.xxxx”，
+
+                                    即点击跳转的路由，同样须设置
+                                   < span class="title" >text< /span >节点的文本。
+</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage05.jpg" />
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、创建控制器和模板
+                    </td>
+                    <td class="orm_action_title">示例</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">根据路由中设置的模板路径和软加载中设置的控制器路径，创建控制器.js文件和模板.html文件。</p>
+
+                            <p class="orm_item_title_note1"><b>内容</b></p>
+
+                            <p class="orm_item_title_note1">
+                                在控制器文件中添加控件器的方法体, 注意一下控制器的命名和依赖注入即可。
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                在模板文件中添加一个DIV层,并设置DIV层的ng-controller属性等于控制器的命名。
+                            </p>                      
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage06.jpg" />
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        *后台WebApi调用注意事项*
+                    </td>
+                    <td class="orm_action_title">后台代码</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">后台APP控制层方法如图所示。</p>
+
+                            <p class="orm_item_title_note1"><b>前端调用</b></p>
+
+                            <p class="orm_item_title_note1">
+                                在前端控制器中注入"abp.services.app.layerManager"，用变量名layerManager调用getAllTest()方法，请求后台完成后在success()回调方法中返回数据。
+                            </p>
+
+                            <p class="orm_item_title_note1">
+                                前端完整代码如图所示。
+                            </p>
+                            <p class="orm_item_title_note1">
+                                注意命名规范：后台——大驼峰；前端——小驼峰。
+                            </p>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage07.jpg" style="max-width:500px"  />
+                        </div>
+                    </td>
+                </tr>
+                <tr><td class="orm_action_title">前端代码</td></tr>
+                <tr><td><div style="padding:15px;">
+                            <img src="~/Content/adminDefault/img/mainPage08.jpg" style="max-width:500px" />
+</div></td></tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td><div style="padding:15px;">
+    <p class="orm_item_title_note1"><b style="font-size:14px;">部署注意事项</b></p>
+
+
+    <p class="orm_item_title_note1">
+        控件的js和css样式文件在内外网的引用地址如下：
+    </p>
+
+    <p class="orm_item_title_note1">
+        外网引用地址：
+    </p>
+
+    <p class="orm_item_title_note1">
+        http://cpdzhjt.infoearth.com:8001/cdn/v1.0/control.lib.min.js
+    </p>
+
+    <p class="orm_item_title_note1">
+        http://cpdzhjt.infoearth.com:8001/cdn/v1.0/control.lib.min.css
+    </p>
+
+    <p class="orm_item_title_note1">
+        内网引用地址：
+    </p>
+
+    <p class="orm_item_title_note1">
+        http://192.168.100.69:8001/cdn/v1.0/control.lib.min.js
+    </p>
+
+    <p class="orm_item_title_note1">
+        http://192.168.100.69:8001/cdn/v1.0/control.lib.min.css
+    </p>
+
+    <p class="orm_item_title_note1">   注：若须单独部署，则需要下载js和css样式文件到本地，并在相关页面进行引用。</p>
+</div>
+</td>
+                
+                </tr>
+            
+
+            </table>
+
+
+     
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+</div>
+
+

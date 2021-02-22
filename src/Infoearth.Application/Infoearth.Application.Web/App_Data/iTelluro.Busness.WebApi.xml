@@ -1,0 +1,3508 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>iTelluro.Busness.WebApi</name>
+    </assembly>
+    <members>
+        <member name="T:iTelluro.Busness.WebApi.ApiControllerBase">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 
+            创建人：佘赐雄
+            日 期：2015.11.9 10:45
+            描 述：基控Api制器
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.ApiControllerBase.Logger">
+            <summary>
+            日志操作
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ApiControllerBase.ToJsonResult(System.Object)">
+            <summary>
+            返回成功消息
+            </summary>
+            <param name="data">数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ApiControllerBase.Success(System.String)">
+            <summary>
+            返回成功消息
+            </summary>
+            <param name="message">消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ApiControllerBase.Success(System.String,System.Object)">
+            <summary>
+            返回成功消息
+            </summary>
+            <param name="message">消息</param>
+            <param name="data">数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ApiControllerBase.Error(System.String)">
+            <summary>
+            返回失败消息
+            </summary>
+            <param name="message">消息</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.WebApiResult">
+            <summary>
+            WebAPi结果
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.WebApiResult.type">
+            <summary>
+            获取操作结果类型
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.WebApiResult.resultcode">
+            <summary>
+            获取操作结果编码
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.WebApiResult.message">
+            <summary>
+            获取消息内容
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.WebApiResult.resultdata">
+            <summary>
+            获取返回数据
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.WebApiResult.otherinfo">
+            <summary>
+            附属信息
+            </summary>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.SingleParam">
+            <summary>
+            处理POST请求下,单个参数写法怪异问题
+            
+            主要用于RemoveFrom      wc 2018-4-18
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.SingleParam.KeyValue">
+            <summary>
+            单个参数的值（传参名称需要对应）
+            </summary>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.DataItemDetailApiController">
+            <summary>
+            地灾字典接口  by wc 2018-4-27
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.DataItemDetailApiController.GetDataItemListJson(System.String)">
+            <summary>
+            获取数据字典列表（绑定控件）
+            </summary>
+            <param name="EnCode">字典代码</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 16:41
+            描 述：解译工程项目基本信息表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.GetListJson(System.String)">
+            <summary>
+            获取工程类型列表
+            </summary>
+            <param name="queryJson">
+            查询参数
+            txt_keyword 模糊匹配工程文件名
+            </param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.GetProjectIDList(System.String)">
+            <summary>
+            获取所有的调查项目、排查项目
+            </summary>
+            <param name="queryJson">
+            PROJECTTYPE 项目类型(调查、排查)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.GetOrCreateProjectId(System.String)">
+            <summary>
+            获取或者创建一个项目ID
+            </summary>
+            <param name="projectName">项目名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.GetListByDateDiff(System.String)">
+            <summary>
+            获取日期范围项目
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.JYGC_PROJECTBASEINFOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.JYGC_PROJECTBASEINFOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController">
+            <summary>
+            地面沉降点
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetListJson(System.String,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.PostListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetSubList(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="queryJson">{DMCJBH:"地面沉降编号"}</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetValueList(System.String)">
+            <summary>
+            取所有输入字段的值列表
+            </summary>
+            <param name="queryJson">
+            FIELDNAME:字段名<br/>
+            TABLENAME:表名
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetStatisticsByDmcj">
+            <summary>
+            地面沉降点统计(按行政区划)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.GetStatisticsByDmcjPie">
+            <summary>
+            地面沉降监测点统计(按监测点等级)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.RemoveForm(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.SaveForm(System.String,Infoearth.Application.Entity.DMCJManage.MasterDetailEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_BASEINFOController.ExcelDownload_POST(Infoearth.Application.Entity.PostExcelEntity)">
+            <summary>
+            地面沉降点查询（导出Excel）
+            </summary>
+            <param name="queryJson"></param>
+            <param name="outColumn"></param>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController">
+            <summary>
+            地面沉降监测数据
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController.SaveForm(System.String,Infoearth.Application.Entity.MONITORPOINT.TBL_DMCJ_MONITORDATAEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController.GetQueryList(System.String)”忽略有格式错误的 XML 注释 -->
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController.GetQueryListByMonitorPoint(System.String)">
+            <summary>
+            根据监测点统计数据
+            </summary>
+            <param name="queryJson">{STARTYEAR:'2015',ENDYEAR:'2018',
+            MONITORPOINTIDS:'3701020001,3701020003'}</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.MONITORPOINT.TBL_DMCJ_MONITORDATAController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController">
+            <summary>
+            地面沉降监测点信息表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.PostPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.GetListJson(System.String,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.PostListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.GetUserInfo">
+            <summary>
+            获取当前登录用户
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.RemoveForm(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.SaveForm(System.String,Infoearth.Application.Entity.MONITORPOINT.TBL_DMCJ_MONITORPOINTEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DMCJ_MONITORPOINTController.ExcelDownload_POST(Infoearth.Application.Entity.PostExcelEntity)">
+            <summary>
+            监测点查询(导出Excel)
+            </summary>
+            <param name="queryJson"></param>
+            <param name="outColumn"></param>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-17 14:51
+            描 述：审核信息表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.GetPageSubmitListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取提交列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.GetPageAuditListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取审核列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.GetPageNoAuditListJson(System.String)">
+            <summary>
+            获取待审核列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="param">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AUDITINFOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.SubmitAudit(System.Collections.Generic.List{System.String})">
+            <summary>
+            根据审核ID列表，提交审核
+            </summary>
+            <param name="keyValues">业务ID集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.CancelSubmit(System.Collections.Generic.List{System.String})">
+            <summary>
+            根据审核ID列表，撤销审核
+            </summary>
+            <param name="keyValues">业务ID集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.AuditData(iTelluro.Busness.WebApi.Controllers.AuditInfo)">
+            <summary>
+            根据审核信息，审核数据
+            </summary>
+            <param name="infos"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITINFOApiController.Verification(iTelluro.Busness.WebApi.Controllers.VerificationInfo)">
+            <summary>
+            核销数据
+            </summary>
+            <param name="keyValue">主键</param>
+            <param name="submitStr">提交</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.AuditInfo">
+            <summary>
+            审核信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.Controllers.AuditInfo.keyValues">
+            <summary>
+            审核业务ID主键
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.Controllers.AuditInfo.state">
+            <summary>
+            审核状态（2-通过，3-不通过）
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.Controllers.AuditInfo.comment">
+            <summary>
+            审核批注
+            </summary>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.VerificationInfo">
+            <summary>
+            核销数据信息
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.Controllers.VerificationInfo.BussnessKey">
+            <summary>
+            核销数据的业务主键
+            </summary>
+        </member>
+        <member name="P:iTelluro.Busness.WebApi.Controllers.VerificationInfo.VerificationType">
+            <summary>
+            核销类型
+            </summary>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-17 14:53
+            描 述：审计人表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AUDITORSEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.DisabledAudit(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            开启审核
+            </summary>
+            <param name="keyValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AUDITORSApiController.EnabledAudit(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            禁用审核
+            </summary>
+            <param name="keyValue"></param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：崩塌调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            queryJson为空查全部
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHEApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AVALANCHEEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：崩塌调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            queryJson为空查全部
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDENApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AVALANCHE_HIDDENEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 11:17
+            描 述：崩塌调查表历史表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HIDDEN_HISTOYRApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AVALANCHE_HIDDEN_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 11:17
+            描 述：崩塌调查表历史表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_AVALANCHE_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_AVALANCHE_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController">
+            <summary>
+            关于搬迁避让WEBAPI接口
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            pagination分页信息
+            queryJson包含：
+            1、DISASTERNAME-灾害点名称
+            2、UNIFIEDCODE-灾害点编号
+            3、DISASTERTYPE-灾害类型
+            4、ISCOMPLETE-是否完成
+            5、ISACCEPTANCE-是否验收
+            6、省市县级联查询
+            7、BQBRSTARTTIME-查询浏览页面中开始时间
+            8、BQBRENDTIME-查询浏览页面中开始时
+            9、COMPPARAM综合DISASTERNAME灾害名称和UNIFIEDCODE灾害编号的字段模糊查询
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.PostPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表
+            pagination分页信息(增加地图框选)
+            queryJson包含：
+            1、DISASTERNAME-灾害点名称
+            2、UNIFIEDCODE-灾害点编号
+            3、DISASTERTYPE-灾害类型
+            4、ISCOMPLETE-是否完成
+            5、ISACCEPTANCE-是否验收
+            6、省市县级联查询
+            7、BQBRSTARTTIME-查询浏览页面中开始时间
+            8、BQBRENDTIME-查询浏览页面中开始时
+            9、COMPPARAM综合DISASTERNAME灾害名称和UNIFIEDCODE灾害编号的字段模糊查询
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetListJson(System.String)">
+            BQBR不分页
+            销号用的查询判断
+            勿动勿动 
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetPageList(System.String)">
+            <summary>
+            获取所有搬迁避让信息
+            不带参数直接查询所有搬迁避让信息列表
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetFormJsonByUnifycode(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.BQBRCountStatics(System.String)">
+            <summary>
+            统计搬迁避让信息
+            queryJson包含字段信息：
+            1、行政区划信息
+            2、Static_Year统计年度
+            3、Static_Unit统计单位
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.GetZYListJson(System.String,System.String)">
+            <summary>
+            获取地图摘要信息(框选)
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.PostZYListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取地图摘要信息(框选)
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.RemoveForm(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_BQBRApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_BQBREntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：地面塌陷调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSEApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_COLLAPSEEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 11:37
+            描 述：地面塌陷调查表历史表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_COLLAPSE_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_COLLAPSE_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：泥石流调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOWApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_DEBRISFLOWEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 11:38
+            描 述：泥石流调查表历史表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DEBRISFLOW_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_DEBRISFLOW_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_DZHJSB_DZZHQKMONTH_GDApiController.Getdata(System.String)">
+            <summary>
+            统计
+            Year
+            StartMonth
+            EndMonth
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController">
+            <summary>
+            地灾调查接口  by wc 2018-4-27
+            用于地灾调查查询、管理
+            群策群防查询、管理
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetListJson(System.String)">
+            <summary>
+            根据条件查询灾害点基本信息（不分页）
+            </summary>
+            <param name="queryJson">
+            查询参数
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            txt_Key 名称、编号、位置模糊匹配
+            DISASTERNAME 灾害名称 
+            UNIFIEDCODE 统一编号
+            DISASTERTYPE 灾害类型
+            HIDDENDANGER 是否隐患点 0-否，1-是 字典项（HIDDENDANGER）
+            DISASTERLEVEL 灾害等级 字典项（DANGERLEVEL）
+            DANGERLEVEL 险情等级   字典项（DISASTERLEVEL）
+            CURSTABLESTATUS 目前稳定程度 A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定(字典项CURRENTSTABLESTATUS)
+            STABLETREND 今后发展趋势  A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定 （字典项STABLETREND）
+            TREATMENTSUGGESTION 防治建议 字典项（TREATMENTSUGGESTION）
+            MONITORSUGGESTION监测建议 字典项（MONITORSUGGESTION）
+            THREATENPEOPLEBEGIN 威胁人口开始 THREATENPEOPLEEND 威胁人口结束
+            THREATENASSETSBEGIN 威胁财产开始 THREATENASSETSEND 威胁财产结束
+            DEATHTOLLBEGIN 死亡人口开始 DEATHTOLLEND 死亡人口结束
+            ASSETSLOSEBEGIN 财产损失开始 ASSETSLOSEEND 财产损失结束
+            </param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostZYListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取地图摘要信息
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">可选参数(可以不传)
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostZYListJson2(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取地图摘要信息(有防灾预案表信息的点)
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">可选参数(可以不传)
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetMaxCode(System.String)">
+            <summary>
+            灾害点后四位编号生成
+            </summary>
+            <param name="xzqh">行政区划6位+灾害类型2位</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPastListJson2(System.String)">
+            <summary>
+            获取灾害点历史数据查询列表（不分页用于地图绑定）
+            </summary>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROJECTID 项目类型 字典表 JYGC_PROJECTBASEINFO-PROJECTGUID
+            MODIFYTYPE 操作类型 U-更新 A-新增  D-核销 I-批量新增
+            shifouhexiao 是否已经核销 0-否 1-是
+            ISZLGCPNT 是否治理工程 0-否 1-是
+            RELOCATION 是否搬迁避让 0-否 1-是
+            BeginTime 开始时间
+            EndTime 结束时间
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetNoQcqfPageList(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>	 
+            获取没有两卡一表信息的灾害点信息
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetListCodes">
+            <summary>
+            地灾首页聚合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetListDataCJ(System.String)">
+            <summary>
+            地灾采集界面聚合
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByXQDJ(System.String)">
+            <summary>
+            险情等级统计(最近一个项目)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByGMDJ(System.String)">
+            <summary>
+            灾害规模等级统计(最近一个项目)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByZQDJ(System.String)">
+            <summary>
+            灾情等级统计(最近一个项目)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            根据条件查询灾害点基本信息（分页）
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            txt_Key 名称、编号、位置模糊匹配
+            DISASTERNAME 灾害名称 
+            UNIFIEDCODE 统一编号
+            DISASTERTYPE 灾害类型
+            HIDDENDANGER 是否隐患点 0-否，1-是 字典项（HIDDENDANGER）
+            DISASTERLEVEL 灾害等级 字典项（DANGERLEVEL）
+            DANGERLEVEL 险情等级   字典项（DISASTERLEVEL）
+            CURSTABLESTATUS 目前稳定程度 A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定(字典项CURRENTSTABLESTATUS)
+            STABLETREND 今后发展趋势  A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定 （字典项STABLETREND）
+            TREATMENTSUGGESTION 防治建议 字典项（TREATMENTSUGGESTION）
+            MONITORSUGGESTION监测建议 字典项（MONITORSUGGESTION）
+            THREATENPEOPLEBEGIN 威胁人口开始 THREATENPEOPLEEND 威胁人口结束
+            THREATENASSETSBEGIN 威胁财产开始 THREATENASSETSEND 威胁财产结束
+            DEATHTOLLBEGIN 死亡人口开始 DEATHTOLLEND 死亡人口结束
+            ASSETSLOSEBEGIN 财产损失开始 ASSETSLOSEEND 财产损失结束
+            </param>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonByZhtj(Infoearth.Util.WebControl.Pagination,System.String)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetAnalyseListPC(System.String)”忽略有格式错误的 XML 注释 -->
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            根据条件查询灾害点基本信息（分页）
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            txt_Key 名称、编号、位置模糊匹配
+            DISASTERNAME 灾害名称 
+            UNIFIEDCODE 统一编号
+            DISASTERTYPE 灾害类型
+            HIDDENDANGER 是否隐患点 0-否，1-是 字典项（HIDDENDANGER）
+            DISASTERLEVEL 灾害等级 字典项（DANGERLEVEL）
+            DANGERLEVEL 险情等级   字典项（DISASTERLEVEL）
+            CURSTABLESTATUS 目前稳定程度 A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定(字典项CURRENTSTABLESTATUS)
+            STABLETREND 今后发展趋势  A-稳定 B-基本稳定  C-潜在不稳定  D-不稳定 （字典项STABLETREND）
+            TREATMENTSUGGESTION 防治建议 字典项（TREATMENTSUGGESTION）
+            MONITORSUGGESTION监测建议 字典项（MONITORSUGGESTION）
+            THREATENPEOPLEBEGIN 威胁人口开始 THREATENPEOPLEEND 威胁人口结束
+            THREATENASSETSBEGIN 威胁财产开始 THREATENASSETSEND 威胁财产结束
+            DEATHTOLLBEGIN 死亡人口开始 DEATHTOLLEND 死亡人口结束
+            ASSETSLOSEBEGIN 财产损失开始 ASSETSLOSEEND 财产损失结束
+            PROJECTID 项目编号
+            ISXH 是否销号 0-未销号 1-销号
+            YEAR 查询年度
+            PROJECTTYPE 项目类型(调查、排查)
+            </param>
+            <param name="condition">
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostPageListJsonFirst(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            根据条件查询灾害点基本信息（无查询参数）
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.CheckExpression(System.String)">
+            <summary>
+            检查查询条件语句是否正确（用于web统计条件检测）
+            </summary>
+            <param name="sqlWhere">查询语句条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetFormJson(System.String)">
+            <summary>
+            根据主键查询灾害点基本表详细信息
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetSinglePageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取单列数据（用于web统计条件查询）
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            查询条件
+            colmn 列名称
+            </param>
+            <returns>返回列表Json（只有已经传列数据，并筛选去重）</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPastPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取灾害点历史数据列表（分页）
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROJECTID 项目类型 字典表 JYGC_PROJECTBASEINFO-PROJECTGUID
+            MODIFYTYPE 操作类型 U-更新 A-新增  D-核销 I-批量新增
+            shifouhexiao 是否已经核销 0-否 1-是
+            ISZLGCPNT 是否治理工程 0-否 1-是
+            RELOCATION 是否搬迁避让 0-否 1-是
+            BeginTime 开始时间
+            EndTime 结束时间
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPastListJson(System.String,System.String)">
+            <summary>
+            获取灾害点历史数据查询列表（不分页用于地图绑定）
+            </summary>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROJECTID 项目类型 字典表 JYGC_PROJECTBASEINFO-PROJECTGUID
+            MODIFYTYPE 操作类型 U-更新 A-新增  D-核销 I-批量新增
+            shifouhexiao 是否已经核销 0-否 1-是
+            ISZLGCPNT 是否治理工程 0-否 1-是
+            RELOCATION 是否搬迁避让 0-否 1-是
+            BeginTime 开始时间
+            EndTime 结束时间
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetSinglePastPageListJson(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            获取最近一条灾害点历史数据列表（分页）
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROJECTID 项目类型 字典表 JYGC_PROJECTBASEINFO-PROJECTGUID
+            MODIFYTYPE 操作类型 U-更新 A-新增  D-核销 I-批量新增
+            shifouhexiao 是否已经核销 0-否 1-是
+            ISZLGCPNT 是否治理工程 0-否 1-是
+            RELOCATION 是否搬迁避让 0-否 1-是
+            BeginTime 开始时间
+            EndTime 结束时间
+            </param>
+            <param name="condition">空间查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetSinglePastListJson(System.String,System.String)">
+            <summary>
+            获取最近一条灾害点历史数据查询列表（不分页用于地图绑定）
+            </summary>
+            <param name="queryJson">
+            查询条件
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROJECTID 项目类型 字典表 JYGC_PROJECTBASEINFO-PROJECTGUID
+            MODIFYTYPE 操作类型 U-更新 A-新增  D-核销 I-批量新增
+            shifouhexiao 是否已经核销 0-否 1-是
+            ISZLGCPNT 是否治理工程 0-否 1-是
+            RELOCATION 是否搬迁避让 0-否 1-是
+            BeginTime 开始时间
+            EndTime 结束时间
+            </param>
+            <param name="condition">空间查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetSingleFillListJson(System.String)">
+            <summary>
+            获取一条历史数据的所有调查时间列表信息
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.ExcelDownloadInfo(System.String)">
+            <summary>
+            导出（？？接口有问题）...
+            </summary>
+            <param name="queryJson"></param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetAnalyseList(System.String)">
+            <summary>
+            根据条件统计灾害点信息
+            </summary>
+            <param name="queryJson">
+            level -灾害点统计级数（接受传值‘省’,'市','县'，‘乡镇’）
+            type-统计类型 （0-灾害点类型，1-灾情级别）
+            
+            sqlWhere  筛选条件（sql语句）
+            TOWN 镇   行政区划筛选（多个用逗号隔开）
+            COUNTY 县
+            CITY 市
+            PROVINCE 省
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetHazardStatisticsJson(System.String)">
+            <summary>
+            灾害点统计（按市县、灾害点总数|灾害点类型|灾情等级|险情等级 统计）
+            </summary>
+            <param name="type">统计类型：<br/>
+            DISASTER(灾害点总数)|DISASTERTYPE(灾害点类型)|DISASTERLEVEL(灾情等级)|DANGERLEVEL(险情等级)</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetWXRKStatisticsJson(System.String)">
+            <summary>
+            统计威胁人数
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetWXCCStatisticsJson(System.String)">
+            <summary>
+            威胁财产统计
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByZHLX(System.String)">
+            <summary>
+            年度灾害类型统计(全部区域)
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetHistoryStatisticsZHD(System.String)">
+            <summary>
+            年度灾害点统计(隐患点/新增点/销号点)
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetTypeStatistics(System.String)">
+            <summary>
+            操作类型统计
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByZHLX2(System.String)">
+            <summary>
+            灾害类型统计(扇形图)
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByXH(System.String)">
+            <summary>
+            拟销号点统计
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByZHD(System.String)">
+            <summary>
+            灾害点统计(最近一个项目)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByZLGC(System.String)">
+            <summary>
+            治理工程统计
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetStatisticsByBABR(System.String)">
+            <summary>
+            搬迁避让统计
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.SSOGeodisaster(System.String)">
+            <summary>
+            sso首页统计
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetDictionaryData(System.String,System.String,System.String,System.String,System.Collections.Generic.List{Infoearth.Application.Entity.JXGeoManage.TBL_HAZARDBASICINFOEntity})">
+            <summary>
+            获取行政单位灾害相关的各类型数据统计
+            </summary>
+            <param name="sheng">省名称</param>
+            <param name="shi">市名称</param>
+            <param name="xian">区县名称</param>
+            <param name="zhen">乡镇名称</param>
+            <param name="shujuyuan">数据源（灾害基本信息表）</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.ToDataTable(System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.String}})">
+            <summary>
+            键值集合List转换成datatable
+            </summary>
+            <param name="data">数据源</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonDISASTERPREVENTION(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表(判定是否存在两卡一表)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonQCQFSearch(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表(群测群防查询浏览)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonQCQFSearchs(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            获取列表(群测群防查询浏览)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonQCQFSearchNew(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表(群测群防查询浏览)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonQCQFSearchZHD(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取灾害点列表(群测群防监测点管理)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonNoQCQF(System.String,Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            排除掉已存在群测群防数据的灾害点
+            </summary>
+            <param name="queryJson"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetUNIFIEDCODEEntity(System.String)">
+            <summary>
+            根据UNIFIEDCODE查询灾害点基本表详细信息
+            </summary>
+            <param name="UNIFIEDCODE"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostPageListJsonQCQFSearch(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表(群测群防查询浏览)新增地图框选
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.PostPageListJsonQCQFSearchNew(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取列表(群测群防查询浏览)新增地图框选
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetListJsonQCQFSearch(System.String)">
+            <summary>
+            获取列表(群测群防查询浏览)
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.RemoveFormTwo(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除两卡一表数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.RemoveFormThree(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除避灾明白卡
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetPageListJsonEscunderstandcardSearch(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            避灾明白卡查询
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.WORKUNDERSTANDSearch(System.String)">
+            <summary>
+            通过灾害点编号查询工作明白卡
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.QCQFSaveForm(iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.parmes)">
+            <summary>
+            保存表单（新增、修改）
+            直接操作防灾预案表和工作明白卡
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.QCQFSaveForm2(iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.parmes)">
+            <summary>
+            保存表单（新增、修改）
+            操作避灾明白卡
+            </summary>
+            <param name="keyValue">主键值(GUID)</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetFormJson2(System.String)">
+            <summary>
+            获取防灾预案表实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetFormJson3(System.String)">
+            <summary>
+            获取避灾明白卡实体 
+            </summary>
+            <param name="keyValue">主键值(guid)</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetJsonEscunderstandcardSearch(System.String)">
+            <summary>
+            避灾明白卡查询
+            </summary>
+            <param name="queryJson">查询参数</param>
+            查询条件:
+            UNIFIEDCODE 灾害点编号
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetDicAnalyse(System.String)">
+            <summary>
+            获取字典项统计结果
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetAllListJson">
+            <summary>
+            获取灾害点总数
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetHazardStatisticsJson2(System.String)">
+            <summary>
+            灾害点统计只按灾害类型
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetAllAPIJson">
+            <summary>
+            接口数量统计
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.GetZYListJson(System.String,System.String)">
+            <summary>
+            获取地图摘要信息
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">可选参数(可以不传)
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.RemoveForm(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="param">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_HAZARDBASICINFOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.ViewExcelData">
+            <summary>
+            预览Excel数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.ImportExcelData">
+            <summary>
+            导入Excel模板数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.ImportExcelZDData">
+            <summary>
+            导入重大隐患点Excel模板数据
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- 对于成员“T:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFOApiController.parmes”忽略有格式错误的 XML 注释 -->
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            DISASTERTYPE 灾害点类型<br/>
+            UNIFIEDCODE 灾害点编号<br/>  
+            </param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetSinglePastPageListJson(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            带空间查询
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetHXMapList(System.String,System.String)">
+            <summary>
+            地图查询
+            </summary>
+            <param name="queryJson"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            DISASTERNAME 灾害点名称<br/>
+            DISASTERTYPE 灾害点类型<br/>
+            UNIFIEDCODE 灾害点编号<br/>
+            OUTDOORCODE 野外编号<br/>
+            STARTTIME 开始时间<br/>
+            ENDTIME 结束时间
+            </param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_HAZARDBASICINFO_PC_GDApiController.GetZHDCountResult(System.String)">
+            <summary>
+            地图上加载柱状图
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：地裂缝调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACKApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDCRACKEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-16 11:39
+            描 述：地裂缝调查表历史表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDCRACK_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDCRACK_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息工程股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：地面沉降调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENTApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSETTLEMENTEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息工程股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-13 15:54
+            描 述：地面沉降调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSETTLEMENT_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSETTLEMENT_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：滑坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIPApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSLIPEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：滑坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDENApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSLIP_HIDDENEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-13 13:14
+            描 述：滑坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HIDDEN_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSLIP_HIDDEN_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-13 13:14
+            描 述：滑坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_LANDSLIP_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_LANDSLIP_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-06-13 16:22
+            描 述：巡查记录表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.GetPageListJsonByCondition(Infoearth.Util.WebControl.Pagination,System.String)">
+             <summary>
+            根据DISASTERNAME和UPLOADNAME查询宏观巡查数据
+             </summary>
+             <param name="pagination"></param>
+             <param name="queryJson"></param>
+             <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_AROUNDRECORDApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_AROUNDRECORDEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController">
+            <summary>
+            防灾预案表接口  by huangzy 2019-1-22
+            用于防灾预案表查询、管理
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.GetPageList(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.GetList(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.GetAnalyseListQCQF(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.GetEntity(System.String)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_DISASTERPREVENTIOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_DISASTERPREVENTIONEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController">
+            <summary>
+            避灾明白卡接口  by huangzy 2019-1-22
+            用于避灾明白卡查询、管理
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.GetPageList(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.GetList(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.GetEntity(System.String)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.GetEntity2(System.String)">
+            <summary>
+            根据灾害点编号获取
+            </summary>
+            <param name="keyValue">灾害点编号</param>
+            <returns>返回分页列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_ESCUNDERSTANDCARDApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_ESCUNDERSTANDCARDEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController">
+            <summary>
+            工作明白卡接口  by huangzy 2019-1-22
+            用于工作明白卡查询、管理
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController.GetPageList(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController.GetList(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController.GetEntity(System.String)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_QCQF_WORKUNDERSTANDCARDApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_WORKUNDERSTANDCARDEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：滑坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            queryJson为空查全部
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SENSEApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_SENSEEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息工程股份有限公司
+            创 建：huangzy
+            日 期：2019-01-22 
+            描 述：斜坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPEApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_SLOPEEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息工程股份有限公司
+            创 建：超级管理员
+            日 期：2018-03-13 16:04
+            描 述：斜坡调查表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.GetEntityByUNIFIEDCODE(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">UNIFIEDCODE</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.GetAuditFormJson(System.String)">
+            <summary>
+            获取当前实体前最近审核通过的实体
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_SLOPE_HISTORYApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_SLOPE_HISTORYEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController">
+            <summary>
+            销号表
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            DISASTERNAME 灾害点名称<br/>
+            DISASTERTYPE 灾害点类型<br/>
+            UNIFIEDCODE 灾害点编号<br/>
+            OUTDOORCODE 野外编号<br/>
+            STARTTIME 开始时间<br/>
+            ENDTIME 结束时间
+            </param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.GetSinglePastPageListJson(Infoearth.Util.WebControl.Pagination,System.String,System.String)">
+            <summary>
+            带空间查询
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.GetHXMapList(System.String,System.String)">
+            <summary>
+            地图查询
+            </summary>
+            <param name="queryJson"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">
+            DISASTERNAME 灾害点名称<br/>
+            DISASTERTYPE 灾害点类型<br/>
+            UNIFIEDCODE 灾害点编号<br/>
+            OUTDOORCODE 野外编号<br/>
+            STARTTIME 开始时间<br/>
+            ENDTIME 结束时间
+            </param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.RemoveForm(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_XIAOHAOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <param name="projectid">项目id</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_XIAOHAOApiController.DeleteHidden(System.String)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController">
+            <summary>
+            关于治理工程WEBAPI接口
+            2018-05-12 
+            niming
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            查询治理工程基本信息列表
+            说明queryJson：
+            NAMESS包含字段:ZLGCNAME--治理工程名称和DISASTERNAME--地质灾害名称
+            省市县查询方式：
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.PostPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            查询治理工程基本信息列表
+            说明queryJson：
+            NAMESS包含字段:ZLGCNAME--治理工程名称和DISASTERNAME--地质灾害名称（新加地图框选）
+            省市县查询方式：
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.PostPageListJsonNEW(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            查询治理工程基本信息列表
+            说明queryJson：
+            NAMESS包含字段:ZLGCNAME--治理工程名称和DISASTERNAME--地质灾害名称（新加地图框选）
+            省市县查询方式：
+            PROVINCE 省编号（'c1','c2'..）
+            CITY  市编号
+            COUNTY 县编号
+            TOWN 乡镇编号
+            PROVINCENAME 省名称 模糊匹配
+            CITYNAME 市名称
+            COUNTYNAME 县名称
+            
+            </summary>
+            <param name="pagination">分页</param>
+            <param name="queryJson">查询参数</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.PostZYListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取地图摘要信息
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">可选参数(可以不传)
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetListJson(System.String)">
+            治理工程不分页
+            销号用的查询判断
+            勿动勿动 
+             <param name="queryJson">查询参数</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetXMLX(System.String)">
+            <summary>
+            获取对应治理工程立项实体信息 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetYWKC(System.String)">
+            <summary>
+            获取对应治理工程野外勘察实体信息 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetSGSJ(System.String)">
+            <summary>
+            获取对应治理工程施工设计实体信息 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetGCJL(System.String)">
+            <summary>
+            获取对应治理工程工程监理实体信息 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetGCYS(System.String)">
+            <summary>
+            获取对应治理工程工程项目验收
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.SGSJ_GetZZQDList(System.String)">
+            <summary>
+            获取对应治理工程施工设计实体信息中资质清单字段信息列表 
+            </summary>
+            <param name="keyValue">主键值工程ID</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.SGSJ_GetQQHFList(System.String)">
+            <summary>
+            获取对应治理工程施工设计实体信息中区域划分单字段信息列表 
+            </summary>
+            <param name="keyValue">主键值工程ID</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GCJL_GetZZQDList(System.String)">
+            <summary>
+            获取对应治理工程中工程监理中资质清单信息列表
+            </summary>
+            <param name="keyValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetZZQDForm(System.String)">
+            <summary>
+            获取对应治理工程施工设计中资质清单单独行信息
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetQYHFForm(System.String)">
+            <summary>
+            获取对应治理工程施工设计中区域划分单独行信息
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetGCSGPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            根据工程编号获取工程施工信息列表
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetGCSG(System.String)">
+            <summary>
+            获取对应治理工程工程施工实体信息
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.ZLGCCountStatics(System.String)">
+            <summary>
+            对治理工程应统计中条件
+            PROVINCENAME 省名称
+            CITYNAME     市名称
+            COUNTRYNAME  县名称
+            Static_Year  统计年份-----暂用XMJLXSJ字段（项目立项时间）
+            ZLGCUNIT     统计单位
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.ZLGCCountStaticsNew(System.String)">
+            <summary>
+            对治理工程应统计中条件
+            PROVINCENAME 省名称
+            CITYNAME     市名称
+            COUNTRYNAME  县名称
+            Static_Year  统计年份-----暂用XMJLXSJ字段（项目立项时间）
+            ZLGCUNIT     统计单位
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetDataZLGCStatics(System.String)">
+            <summary>
+            新增治理工程统计方法
+            </summary>
+            <param name="queryJson">查询条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GetZLGTJResult(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.RemoveForm(System.String)">
+            <summary>
+            工程项目立项主表删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.SaveForm_ZLGC(iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.parmesssss)">
+            <summary>
+            保存表单（新增、修改）
+            治理工程 
+            </summary>
+            <param name="keyValue">主键值(GUID)</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GCSG_SaveForm(iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GCSGEntity)">
+            <summary>
+            工程施工-保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ZLGCController.GCSG_RemoveForm(System.String)">
+            <summary>
+            工程施工-删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController">
+            <summary>
+            关于治理工程WEBAPI接口
+            2018-05-30 
+            niming
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            分页获取对应防治规划成果列表信息
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.PostPageListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            分页获取对应防治规划成果列表信息(加载框选)
+            </summary>
+            <param name="pagination"></param>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.PostZYListJson(Infoearth.Application.Entity.QueryJsonEntity)">
+            <summary>
+            获取地图摘要信息
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <param name="condition">可选参数(可以不传)
+            WKTString:拐点坐标 POLYGON((119.76735720875 35.15413150875,119.76735720875 36.30549869625))
+            x:中心点横坐标
+            y:中心点纵坐标
+            radius:半径(米)
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.GetFormJson(System.String)">
+            <summary>
+            根据主键获取实体信息
+            </summary>
+            <param name="keyValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.PREPLANCountStatics(System.String)">
+            <summary>
+            对防治规划成果统计中条件
+            PROVINCENAME 省名称
+            CITYNAME     市名称
+            COUNTRYNAME  县名称
+            Static_Year  统计年份-----暂用WRITETIME字段（方案编写时间）
+            ZLGCUNIT     统计单位
+            </summary>
+            <param name="queryJson"></param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.RemoveForm(System.String)">
+            <summary>
+            防治规划成果管理删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.TBL_ACHIEVEMENT_PREPLANController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_ACHIEVEMENT_PREPLANEntity)">
+            <summary>
+            防治规划成果管理保存数据
+            </summary>
+            <param name="keyValue"></param>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.UniversalApiController">
+            <summary>
+            业务系统公共Api接口
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.UniversalApiController.GetApiCount">
+            <summary>
+            获取api接口数量
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.Controllers.UploadApiController">
+            <summary>
+            业务系统公共Api接口
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.UploadApiController.UploadFile">
+            <summary>
+            上传导入工具文件的服务接口
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.UploadApiController.EncodeBase64(System.String,System.String)">
+            编码
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.Controllers.UploadApiController.DecodeBase64(System.String,System.String)">
+            解码
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.ClientDataController">
+            <summary>
+            客户端数据
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ClientDataController.GetDataItem">
+            <summary>
+            获取数据字典
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.ExcelDownloadOnlyDT(System.Data.DataTable,System.String,System.String,System.Collections.Generic.List{Infoearth.Application.Entity.MergedRegionEntity})">
+            <summary>
+            Excel导出下载（只需DataTable）
+            </summary>
+            <param name="dtSource">DataTable数据源</param>
+            <param name="excelConfig">导出设置包含文件名、标题、列设置</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.ExportDT(System.Data.DataTable,System.String,System.Collections.Generic.List{Infoearth.Application.Entity.MergedRegionEntity},Infoearth.Util.Offices.ExcelConfig)">
+            <summary>
+            DataTable导出到Excel的MemoryStream
+            </summary>
+            <param name="dtSource">源DataTable</param>
+            <param name="strHeaderText">表头文本</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.ExcelDownloadOnlyDT(System.Collections.Generic.List{System.Data.DataTable},System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Infoearth.Application.Entity.MergedRegionEntity}})">
+            <summary>
+            Excel导出下载（只需DataTable）
+            </summary>
+            <param name="dtSource">DataTable数据源</param>
+            <param name="excelConfig">导出设置包含文件名、标题、列设置</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.ExportDT(System.Collections.Generic.List{System.Data.DataTable},System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{Infoearth.Application.Entity.MergedRegionEntity}})">
+            <summary>
+            DataTable导出到Excel的MemoryStream
+            </summary>
+            <param name="dtSource">源DataTable</param>
+            <param name="strHeaderText">表头文本</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.ListToExcelTabs``1(System.String,System.Collections.Generic.IList{``0},System.String,System.String,System.String[],System.Boolean)">
+            <summary>
+            导出Excel 由controller层多次调用,导出包含多个Tab页的Excel文件
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="tabName"></param>
+            <param name="list"></param>
+            <param name="fileName"></param>
+            <param name="extName"></param>
+            <param name="propertyName"></param>
+            <param name="isWrite">是否输出Excel文件 最后一次调用时参数设为true</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx.WriteExcel(System.String,System.String,System.Byte[])">
+            <summary>
+            向浏览器输出Excel文件
+            </summary>
+            <param name="fileName"></param>
+            <param name="extName"></param>
+            <param name="bytes"></param>
+        </member>
+        <!-- 对于成员“T:iTelluro.Busness.WebApi.ExcelHelperEx`1”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:iTelluro.Busness.WebApi.ExcelHelperEx`1.ExcelDownload(System.Collections.Generic.List{`0},Infoearth.Util.Offices.ExcelConfig,System.Boolean)”忽略有格式错误的 XML 注释 -->
+        <!-- 对于成员“M:iTelluro.Busness.WebApi.ExcelHelperEx`1.ExcelImport(System.Collections.Generic.List{`0},Infoearth.Util.Offices.ExcelConfig)”忽略有格式错误的 XML 注释 -->
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx`1.ExportMemoryStream(System.Collections.Generic.List{`0},Infoearth.Util.Offices.ExcelConfig)">
+            <summary>
+            DataTable导出到Excel的MemoryStream Export()
+            </summary>
+            <param name="dtSource">DataTable数据源</param>
+            <param name="excelConfig">导出设置包含文件名、标题、列设置</param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.ExcelHelperEx`1.ExcelImport(System.Collections.Hashtable,System.String)">
+            <summary>
+            导入Excel
+            </summary>
+            <param name="lists"></param>
+            <param name="head">中文列名对照</param>
+            <param name="workbookFile">Excel所在路径</param>
+            <returns></returns>
+        </member>
+        <member name="T:iTelluro.Busness.WebApi.UtilityController">
+            <summary>
+            公共控制器
+            </summary>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.UtilityController.ConvertDicValue``1(System.Collections.Generic.List{``0})">
+            <summary>
+            字典项转换
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="list"></param>
+            <param name="dicColumn"></param>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.UtilityController.GetAllDicFiled``1">
+            <summary>
+            获取字典字段
+            </summary>
+            <typeparam name="T4"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:iTelluro.Busness.WebApi.UtilityController.GetDicValue(System.Collections.Generic.Dictionary{System.String,System.Object},System.String,System.String)">
+            <summary>
+            获取字典值
+            </summary>
+            <param name="dicColumn"></param>
+            <param name="dicName"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_ADMINISTRATIVEApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-04-16 23:15
+            描 述：群测群防行政管理体系
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_ADMINISTRATIVEApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_ADMINISTRATIVEApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_ADMINISTRATIVEApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_ADMINISTRATIVEEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-06-07 17:24
+            描 述：群测群防监测点信息表
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_LAYOUTPOINTINFOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_LAYOUTPOINTINFOApiController.SaveFormQcqf(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_LAYOUTPOINTINFOEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-06-07 17:19
+            描 述：群测群防观测人信息表
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_OBSERVATIONEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_OBSERVATIONApiController.SaveFormGcr(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_OBSERVATIONEntity)">
+            <summary>
+            保存表单（观测人管理 新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-06-11 15:39
+            描 述：群测群防监测点和观测人关联表
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTOBSERVATIONApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_POINTOBSERVATIONEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-06-13 16:23
+            描 述：群测群防监测流水数据表
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.GetPageListJsonByCondition(Infoearth.Util.WebControl.Pagination,System.String)">
+             <summary>
+            根据DISASTERNAME和UPLOADNAME查询监测流水数据
+             </summary>
+             <param name="pagination"></param>
+             <param name="queryJson"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_QCQF_POINTRECORDApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_QCQF_POINTRECORDEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="T:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController">
+            <summary>
+            版 本 6.1
+            Copyright (c) 2013-2016 武汉地大信息股份有限公司
+            创 建：超级管理员
+            日 期：2018-04-28 16:05
+            描 述：统计公用报表
+            </summary>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController.GetPageListJson(Infoearth.Util.WebControl.Pagination,System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="pagination">分页参数</param>
+            <param name="queryJson">查询参数</param>
+            <returns>返回分页列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController.GetListJson(System.String)">
+            <summary>
+            获取列表
+            </summary>
+            <param name="queryJson">查询参数</param>
+            <returns>返回列表Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController.GetFormJson(System.String)">
+            <summary>
+            获取实体 
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns>返回对象Json</returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController.RemoveForm(iTelluro.Busness.WebApi.SingleParam)">
+            <summary>
+            删除数据
+            </summary>
+            <param name="keyValue">主键值</param>
+            <returns></returns>
+        </member>
+        <member name="M:Infoearth.Application.Web.Areas.JXGeoManage.Controllers.TBL_REPORTApiController.SaveForm(System.String,Infoearth.Application.Entity.JXGeoManage.TBL_REPORTEntity)">
+            <summary>
+            保存表单（新增、修改）
+            </summary>
+            <param name="keyValue">主键值</param>
+            <param name="entity">实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteNonQuery(System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回受影响的行数  
+            </summary>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作影响的数据行数</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteNonQuery(System.Data.OracleClient.OracleTransaction,System.Data.CommandType,System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库事务查询操作,返回受影响的行数  
+            </summary>  
+            <param name="transaction">数据库事务对象</param>  
+            <param name="cmdType">Command类型</param>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前事务查询操作影响的数据行数</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteNonQuery(System.Data.OracleClient.OracleConnection,System.Data.CommandType,System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回受影响的行数  
+            </summary>  
+            <param name="connection">Oracle数据库连接对象</param>  
+            <param name="cmdType">Command类型</param>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作影响的数据行数</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteReader(System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回OracleDataReader类型的内存结果集  
+            </summary>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作返回的OracleDataReader类型的内存结果集</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteDataSet(System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回DataSet类型的结果集  
+            </summary>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作返回的DataSet类型的结果集</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteDataTable(System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回DataTable类型的结果集  
+            </summary>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作返回的DataTable类型的结果集</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteScalar(System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回结果集中位于第一行第一列的Object类型的值  
+            </summary>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作返回的结果集中位于第一行第一列的Object类型的值</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteScalar(System.Data.OracleClient.OracleTransaction,System.Data.CommandType,System.String,System.Data.OracleClient.OracleParameter[])">
+               <summary>  
+               执行数据库事务查询操作,返回结果集中位于第一行第一列的Object类型的值  
+               </summary>  
+               <param name="transaction">一个已存在的数据库事务对象</param>  
+               <param name="commandType">命令类型</param>  
+               <param name="commandText">Oracle存储过程名称或PL/SQL命令</param>  
+               <param name="commandParameters">命令参数集合</param>  
+               <returns>当前事务查询操作返回的结果集中位于第一行第一列的Object类型的值</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.ExecuteScalar(System.Data.OracleClient.OracleConnection,System.Data.CommandType,System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库查询操作,返回结果集中位于第一行第一列的Object类型的值  
+            </summary>  
+            <param name="connection">数据库连接对象</param>  
+            <param name="cmdType">Command类型</param>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+            <returns>当前查询操作返回的结果集中位于第一行第一列的Object类型的值</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.PrepareCommand(System.Data.OracleClient.OracleCommand,System.Data.OracleClient.OracleConnection,System.Data.OracleClient.OracleTransaction,System.Data.CommandType,System.String,System.Data.OracleClient.OracleParameter[])">
+            <summary>  
+            执行数据库命令前的准备工作  
+            </summary>  
+            <param name="command">Command对象</param>  
+            <param name="connection">数据库连接对象</param>  
+            <param name="trans">事务对象</param>  
+            <param name="cmdType">Command类型</param>  
+            <param name="cmdText">Oracle存储过程名称或PL/SQL命令</param>  
+            <param name="commandParameters">命令参数集合</param>  
+        </member>
+        <member name="M:DAL.DBhelper.GetOracleDateFormat(System.DateTime)">
+            <summary>  
+            将.NET日期时间类型转化为Oracle兼容的日期时间格式字符串  
+            </summary>  
+            <param name="date">.NET日期时间类型对象</param>  
+            <returns>Oracle兼容的日期时间格式字符串（如该字符串：TO_DATE('2007-12-1','YYYY-MM-DD')）</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.GetOracleDateFormat(System.DateTime,System.String)">
+            <summary>  
+            将.NET日期时间类型转化为Oracle兼容的日期格式字符串  
+            </summary>  
+            <param name="date">.NET日期时间类型对象</param>  
+            <param name="format">Oracle日期时间类型格式化限定符</param>  
+            <returns>Oracle兼容的日期时间格式字符串（如该字符串：TO_DATE('2007-12-1','YYYY-MM-DD')）</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.HandleLikeKey(System.String)">
+            <summary>  
+            将指定的关键字处理为模糊查询时的合法参数值  
+            </summary>  
+            <param name="source">待处理的查询关键字</param>  
+            <returns>过滤后的查询关键字</returns>  
+        </member>
+        <member name="M:DAL.DBhelper.WriteCLOB(System.String,System.String,System.String,System.String)">
+            <summary>  
+            将文本内容写入到数据库的CLOB字段中（不可用：报连接被关闭的异常）  
+            </summary>  
+            <param name="connectionString">数据库连接字符串</param>  
+            <param name="table">数据库表名称</param>  
+            <param name="where">指定的WHERE条件语句</param>  
+            <param name="clobField">CLOB字段的名称</param>  
+            <param name="content">要写入的文本内容</param>  
+        </member>
+        <member name="M:DAL.DBhelper.ReadCLOB(System.String,System.String,System.String,System.String,System.String@)">
+            <summary>  
+            从数据库中读取CLOB字段的内容并进行输出  
+            </summary>  
+            <param name="connectionString">数据库连接字符串</param>  
+            <param name="table">数据库表名称</param>  
+            <param name="where">指定的WHERE条件语句</param>  
+            <param name="clobField">CLOB字段的名称</param>  
+            <param name="output">保存内容输出的字符串变量</param>  
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+</style>
+<div style="padding: 10px;">
+    <table class="form" id="formqcqc_ob" style="margin-bottom: 10px">
+        <tr>
+            <td class="formTitle">观测人姓名<span style="color: red">*</span></td>
+            <td class="formValue">
+                <input id="OBSERVATIONPEOPLE" type="text" class="form-control" onclick="btn_SelectPeople()" readonly="readonly" placeholder="点击选择" isvalid="yes" checkexpession="NotNull" />
+            </td>
+            <td class="formTitle">观测人电话<span style="color: red">*</span></td>
+            <td class="formValue">
+                <input id="OBSERVATIONPHONE" type="text" class="form-control" isvalid="yes" checkexpession="MobileOrPhone" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle" style="display: none;">登录密码</td>
+            <td class="formValue" style="display: none;">
+                <input id="LOGINPASSWORD" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">更新时间</td>
+            <td class="formValue">
+                <input id="UPDATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">是否限制范围</td>
+            <td class="formValue">
+                <div id="ISLIMITED" type="select" class="ui-select"></div>
+            </td>
+        </tr>
+        @*<tr>
+            <td class="formTitle">是否限制范围</td>
+            <td class="formValue">
+                <div id="ISLIMITED" type="select" class="ui-select"></div>
+            </td>
+        </tr>*@
+        <tr style="display: none">
+            <td class="formTitle">GUID</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">ID</td>
+            <td class="formValue">
+                <input id="ID" type="text" class="form-control" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+    });
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#formqcqc_ob').Validform()) {
+            return false;
+        }
+        var postData = $("#formqcqc_ob").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../api/TBL_QCQF_OBSERVATIONApi/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            authToken: authToken,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        });
+    }
+    //初始化控件
+    function initControl() {
+        $("#ISLIMITED").ComboBox({
+            id: "label",
+            text: "value",
+            description: "请选择",
+            height: "170px",
+            data: [
+                { label: "1", value: "是" },
+                { label: "0", value: "否" }
+            ]
+        });
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../api/TBL_QCQF_OBSERVATIONApi/GetFormJson",
+                param: { keyValue: keyValue },
+                authToken: authToken,
+                success: function (data) {
+                    $("#formqcqc_ob").SetWebControls(data);
+                    $("#ISLIMITED").ComboBoxSetValue(data["ISLIMITED"]);
+                }
+            })
+        }
+    }
+    function SearchEvent(data) {
+        $("#gridTable").jqGrid('setGridParam', {
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            postData: { queryJson: JSON.stringify(data) },
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //获取观测人姓名
+    function btn_SelectPeople() {
+        dialogOpen({
+            id: 'ContactPersonForm',
+            title: '选择审核人',
+            url: '../../ContactPerson/ContactPersonForm',
+            width: '800px',
+            height: '500px',
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                $("#OBSERVATIONPEOPLE").val(data["UserName"]);
+                $("#OBSERVATIONPHONE").val(data["Mobile"]);
+                $("#ID").val(data["ContactPeopleID"]);
+            }
+        });
+    }
+</script>
+}

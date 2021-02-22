@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    html,body, #form1 {
+        height:100%;
+    }
+</style>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var celldata = [], types = "";
+    $(function () {
+        GetGrid()
+    });
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = {};
+        queryJson["UnifyCode"] = keyValue;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: 450,
+            url: "../../api/TBL_HAZARDBASICINFOApi/GetPastListJson2",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 200, align: 'left', sortable: true, hidden: true },
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 150, align: 'left', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERUNITNAME', index: 'DISASTERUNITNAME', width: 250, align: 'left', sortable: true },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 150, align: 'left', sortable: true },
+                {
+                    label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 350, align: 'left', sortable: true, hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == null) {
+                            return "";
+                        } else {
+                            return cellvalue.replace(/,/g, '');
+                        }
+                    }
+                },
+                {
+                    label: '灾情等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 150, align: 'left', sortable: true, hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return getInfoTop().learun.data.get(["dataItem", "DISASTERLEVEL", cellvalue]);
+                    }
+                },
+                {
+                    label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 150, align: 'left', sortable: true, hidden: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", cellvalue]);
+                    }
+                },
+                {
+                    label: '操作类型', name: 'MODIFYTYPE', index: 'MODIFYTYPE', width: 150, align: 'left', sortable: true,
+                    formatter: "select", editoptions: { value: "I:批量导入;A:新增;U:修改;D:核销" }
+                },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '操作人', name: 'EDITOR', index: 'EDITOR', width: 150, align: 'left', hidden: true, sortable: true },
+                { label: '审核人', name: 'AUDITOR', index: 'AUDITOR', width: 150, align: 'left', hidden: true, sortable: true },
+                { label: '操作时间', name: 'MODIFIEDDATE', index: 'MODIFIEDDATE', width: 150, align: 'left', sortable: true }
+            ],
+            multiselect: true,
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'MODIFIEDDATE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function (rowId, status) {
+                if (status) {
+                    var indexDATA = $gridTable.jqGrid("getRowData", rowId);
+                    types = indexDATA.DISASTERTYPE;
+                    celldata.push(indexDATA.GUID);
+                    console.log(celldata);
+                    console.log(indexDATA);
+                    //var cellvalues = indexDATA.BUSINESSID + "," + indexDATA.BASICINFO.split(',')[3];
+                }
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    function AcceptClick() {
+        if (celldata) {
+        var type = '01';
+        switch (types) {
+            case "滑坡":
+                type = '01';
+                break;
+            case "崩塌":
+                type = '02';
+                break;
+            case "泥石流":
+                type = '03';
+                break;
+            case "地面沉降":
+                type = '04';
+                break;
+            case "地面塌陷":
+                type = '05';
+                break;
+            case "地裂缝":
+                type = '06';
+                break;
+            case "斜坡":
+                type = '07';
+                break;
+            default:
+                break;
+        }
+        var cellvalue = "", cellvalue1 = "";
+        if (celldata.length > 1) {
+            cellvalue = celldata[celldata.length - 1];
+            cellvalue1 = celldata[celldata.length - 2];
+        } else if (celldata.length == 1) {
+            cellvalue = celldata[0];
+        }
+        dialogOpen({
+            id: 'CompareForm',
+            title: '对比' + types + '信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HisComparer?type=' + type + "&keyValue=" + cellvalue + "&keyValue1=" + cellvalue1 + "&flag=true",
+            width: '1366px',
+            height: '',
+            btn: []
+        });
+        learun.dialogClose();
+        }
+    }
+    
+</script>
+}

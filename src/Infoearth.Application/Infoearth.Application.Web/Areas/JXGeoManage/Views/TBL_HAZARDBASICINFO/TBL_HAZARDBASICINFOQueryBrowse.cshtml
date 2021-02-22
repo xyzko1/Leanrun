@@ -1,0 +1,729 @@
+﻿@{
+    ViewBag.Title = "最新数据查询";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<div id="GJCX" style="position: absolute; top: -120px; z-index: 3; width: 100%; transition: all 0.6s">
+    <div id="" style="width: 100%; height: 40px; background-color: rgba(255, 255, 255, 0.8); color: #000; display: flex; align-items: center; position: relative;">
+        <span class="spans">灾害点名称:</span><input id="DISASTERNAME" type="text" class="form-control" style="width: 16%" />
+        <span class="spans">灾害点编号:</span><input id="UNIFIEDCODE" type="text" class="form-control" style="width: 16%" />
+        <span class="spans">灾害点类型:</span><div id="DISASTERTYPE" type="select" class="ui-select" style="width: 16%"></div>
+        <span class="spans">是否隐患点:</span><div id="HIDDENDANGER" type="select" class="ui-select" style="width: 16%"></div>
+    </div>
+    <div id="" style="width: 100%; height: 40px; background-color: rgba(255, 255, 255, 0.8); color: #000; display: flex; align-items: center; position: relative;">
+        <span class="spans">灾情等级:</span><div id="DISASTERLEVEL" type="select" class="ui-select" style="width: 16.5%"></div>
+        <span class="spans">威胁人口范围:</span><input id="THREATENPEOPLEBEGIN" type="text" class="form-control" style="width: 8%" />~<input id="THREATENPEOPLEEND" type="text" class="form-control" style="width: 8%" />
+        <span class="spans">死亡人口范围:</span><input id="DEATHTOLLBEGIN" type="text" class="form-control" style="width: 8%" />~<input id="DEATHTOLLEND" type="text" class="form-control" style="width: 8%" />
+        <span class="spans">财产损失范围:</span><input id="ASSETSLOSEBEGIN" type="text" class="form-control" style="width: 8%;" />~<input id="ASSETSLOSEEND" type="text" class="form-control" style="width: 8%" />
+    </div>
+    <div id="" style="width: 100%; height: 40px; background-color: rgba(255, 255, 255, 0.8); color: #000; display: flex; justify-content: flex-end; align-items: center; position: relative;">
+        @*        <span class="spans">稳定程度:</span><div id="CURSTABLESTATUS" type="select" class="ui-select" style="width: 16%"></div>
+        <span class="spans">日后变化情况:</span><div id="STABLETREND" type="select" class="ui-select" style="width: 16%;"></div>
+        *@
+        @*        <span class="spans">防治建议:</span><div id="TREATMENTSUGGESTION" type="select" class="ui-select" style="width: 16%;"></div>
+        <span class="spans">监测建议:</span><div id="MONITORSUGGESTION" type="select" class="ui-select" style="width: 16%;"></div>
+        *@
+        <a id="btn_Search_higher" class="btn btn-primary" style="cursor: pointer; color: white; padding: 4px 4px; margin-left: 30px"><i class="fa fa-search"></i>查询</a>
+        <a class="btn btn-primary" id="btn_Reset" style="background: gray; border: 1px solid gray; height: 28px; padding: 4px 12px; margin: 0 30px; color: white; display: inline-block; cursor: pointer;">重置</a>
+    </div>
+</div>
+<div class="ui-layout" id="layout2" style="height: 100%; width: 100%; position: relative;">
+    <div class="ui-layout-north" id="ui_map">
+        <div id="mapControl" style="height: 350px;">
+        </div>
+        <div id="tl">
+            <img src="~/Content/images/七大类图例.png" />
+        </div>
+        <div id="mapControlZZ" style="position: absolute; bottom: 0%; right: 0%; background-color: black; width: 100%; opacity: 0.3; color: #e6e5e5;">
+            <div style="position: absolute; left: 50%; top: 45%;">
+                <img src="~/Content/images/timg2.gif" />
+                <div id="nei"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-layout-center" id="ui_grid">
+        <div class="titlePanel" style="height: 40px; line-height: 40px">
+            @*<span class="panel-Title" style="color: #000">数据列表</span>
+            <input id="txt_Key" type="text" class="form-control" placeholder="请输入灾害名称或编号" style="width: 160px; display: inline-block; margin-left: 6px;" />
+            <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>*@
+            <div class="toolbar" style="float: right; height: 40px; line-height: 40px; display: flex; align-items: center;">
+                <div class="btn-group">
+                    <a id="lr_ExpExl" class="btn btn-default" onclick="ExpExl()"><i class="fa fa-refresh"></i>&nbsp;导出Excel</a>
+                    <a id="lr-export-word" class="btn btn-default" onclick="btn_Word()"><i class="fa fa-file-word-o"></i>导出Word</a>
+                    <a id="lr_detail" class="btn btn-default" onclick="ViewDetail()"><i class="fa fa-chevron-down"></i>详情</a>
+                    <a id="lr-replace" class="btn btn-default" onclick="reload2()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+                    <a id="lr-colgrid" class="btn btn-default" onclick="ColDataGrid()"><i class="fa fa-chevron-down"></i>列表</a>
+                    <a id="lr-colmap" class="btn btn-default" onclick="ColMapDiv()"><i class="fa fa-chevron-up"></i>地图</a>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridTable"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+</div>
+<style>
+    .ui-th-column, .ui-jqgrid .ui-jqgrid-htable th.ui-th-column {
+        border-top: 1px solid #ccc;
+    }
+
+    #tl {
+        position: absolute;
+        bottom: 0%;
+        right: 0%;
+    }
+
+    .spansa {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px;
+    }
+
+    .divselect {
+        width: 21%;
+    }
+
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+
+    .ui-select-text, .form-control {
+        border-radius: 4px;
+    }
+
+    .ui-layout-resizer {
+        background: #f5f5f5 !important;
+    }
+
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+
+    #gridTable tr:nth-child(odd) {
+        /*background: #DCDCDC*/
+    }
+</style>
+@section Scripts{
+<script>
+    $("#mapControlZZ").hide();
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    var queryJson = {};
+    var usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+    $(function () {
+        InitialPage();
+        GetMapData();
+        GetGrid();
+        BindMapMarker({ "userCode": usercode });
+        //重置
+        $("#btn_Reset").click(function () {
+            $("#DISASTERNAME").val("");
+            $("#UNIFIEDCODE").val("");
+            $("#HIDDENDANGER .ui-select-text").text("");
+            $("#DISASTERLEVEL .ui-select-text").text("");
+            $("#THREATENPEOPLEBEGIN").val("");
+            $("#DEATHTOLLBEGIN").val("");
+            $("#ASSETSLOSEBEGIN").val("");
+            $("#THREATENPEOPLEEND").val("");
+            $("#DEATHTOLLEND").val("");
+            $("#ASSETSLOSEEND").val("");
+            // $("#DISASTERTYPE").attr("data-value", "").attr("data-text", "");
+            $("#DISASTERTYPE .ui-select-text").text(" ");
+        });
+        //高级查询点击事件
+        $("#btn_Search_higher").click(function () {
+            SearchEvent();
+        })
+        //查询
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        })
+        var flag = true;
+        $("#serch-btn").click(function () {
+            if (flag) {
+                $("#GJCX").css("top", 40)
+                $(".fa-sort-desc").css("transform", "rotate(0deg)")
+                flag = false
+            } else {
+                $("#GJCX").css("top", -120)
+                $(".fa-sort-desc").css("transform", "rotate(-90deg)")
+                flag = true
+            }
+        })
+    });
+    //初始化页面
+    function InitialPage() {
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $('#layout2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                resize();
+                if (isResize > 1) {
+                    resized = 1;
+                } else {
+                    if (count == 1 || resized == 0) {
+                        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                    }
+                }
+                count++;
+            }
+        });
+        //resize重设布局;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            resize();
+            e.stopPropagation();
+        });
+        function resize() {
+            window.setTimeout(function () {
+                if (mapCtlExt != null) {
+                    mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                }
+                $('#mapControlZZ').height($('#mapControl').height());
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width());
+                $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width());
+                $('.ui-jqgrid-bdiv').height($('#layout2 .ui-layout-center').height() - 60 - 60);
+                $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height() - 8);
+                $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 128 + 33 - 10);
+                $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+            }, 200);
+        };
+        $(window).resize();
+        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+        layout2NorthH = $("#layout2 .ui-layout-north").height();
+
+    }
+    var n = 0;
+    var id = 0;
+    var nei = $("#nei");
+    function dian() {
+        debugger;
+        var nei = $("#nei");
+        nei.text("0%");
+        id = setInterval(frame, 50);
+    }
+    function frame() {
+        //nei.text(n * 1 + "%");
+        if (n >= 100) {
+            //$("#mapControlZZ").hide();
+            clearInterval(id);
+        }
+        else {
+            nei.text(n * 1 + "%");
+        }
+    }
+    //var nei = $("#nei");
+    //nei.html("0%");
+    //var unm = 0;
+    //var n = 0;
+    //var id = setInterval(function () {
+    //    debugger;
+    //    frame(nei, n);
+    //}, 10);
+    //function frame(obj,n) {
+    //    if (n > 100) {
+    //        clearInterval(id);
+    //    }
+    //    else {
+    //        //nei.innerHTML = n + "%";
+    //        obj.html(n + "%");
+    //    }
+    //}
+    //加载地图marker
+    function BindMapMarker(queryJson) {
+        $("#mapControlZZ").show();
+        nei.hide();
+        nei.text("0%");
+        $.ajax({
+            url: "../../api/TBL_HAZARDBASICINFOApi/PostZYListJson",
+            //async: false,
+            data: { condition: JSON.stringify(WKTString), queryJson: JSON.stringify(queryJson) },
+            type: "POST",
+            beforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (dataList) {
+                var data = eval(dataList);
+                var returnValue = [];
+                var type = [];
+                //dian();
+
+                //var id = setInterval(frame, 10);
+                //function frame() {
+                //    debugger;
+                //window.setInterval(function () {
+                //    if (n > 100) {
+                //        //clearInterval(id);
+                //    }
+                //    else {
+                //        nei.innerHTML = n + "%";
+                //    }
+                //}, 200);
+                //if (n > 100) {
+                //    clearInterval(id);
+                //}
+                //else {
+                //    nei.innerHTML = n + "%";
+                //}
+                //}
+                //var data = eval(dataList);
+                //var code = [];
+                //var returnValue = [];
+                //var type = [];
+                //var count = data.length;
+                //var n = 0;
+                //function show() {
+                //    //count = count - 1;
+                //    //n = (count / data.length) * 100;
+                //    nei.text(n * 1 + "%")
+                //}
+                //setInterval("show()",100);
+                //id = setInterval(frame, 50);
+                for (var i = 0; i < data.length; i++) {
+                    n = ((i + 1) / (data.length)) * 100;
+                    var asd = (n * 1 + "%");
+                    nei.animate({ text: asd });
+                    //id = setInterval("show()", 1000);
+                    //clearInterval(id);
+                    if (data[i].DANGERLEVEL == null) {
+                        data[i].DANGERLEVEL = "";
+                    }
+                    if (data[i].THREATENPEOPLE == null) {
+                        data[i].THREATENPEOPLE = "";
+                    }
+                    if (data[i].THREATENASSETS == null) {
+                        data[i].THREATENASSETS = "";
+                    }
+                    //详情页面
+                    var divhtml = '<div style="font-weight: bold;"></div>';
+                    divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">灾害点名称：</span><span>' + data[i].DISASTERNAME + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害类型：</span><span>' + data[i].DISASTERTYPE + '</span></div>';
+                    divhtml += '<div><input type="hidden" id="keyID" value="' + data[i].UNIFIEDCODE + '"/></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点编号：</span><span>' + data[i].UNIFIEDCODE + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁人口(人)：</span><span>' + data[i].THREATENPEOPLE + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁财产(万元)：</span><span>' + data[i].THREATENASSETS + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">险情等级：</span><span>' + getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", data[i].DANGERLEVEL]) + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">地理位置：</span><span>' + data[i].LOCATION + '</span></div>';
+                    divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="MapViewDetail(\'' + data[i].DISASTERTYPE + "," + data[i].UNIFIEDCODE + '\')" href="#" class="link-detail">详细信息</a></span>';
+                    var longitude, latitude;
+                    if (data[i].LONGITUDE) {
+                        longitude = parseFloat(data[i].LONGITUDE);
+                    }
+                    if (data[i].LATITUDE) {
+                        latitude = parseFloat(data[i].LATITUDE);
+                    }
+                    returnValue.push({ id: "all", url: "../../Content/images/" + data[i].DISASTERTYPE + "-16.png", location: [longitude, latitude], popupHtml: divhtml });
+
+                }
+                mapCtlExt.addMarker(returnValue);
+                setTimeout($("#mapControlZZ").hide(), 1000);
+            }, error: function (e) {
+            },
+            cache: false
+        });
+
+    };
+
+    //获取点击Marker时对应的数据
+    var isMarkerClick = false;
+    function getMarkerData(UNIFIEDCODE) {
+        isMarkerClick = true;
+        var datas = $('#gridTable').jqGrid("getRowData");
+        var count = 0;
+        $.each(datas, function (i, e) {
+            if (e.UNIFIEDCODE.trim().indexOf(UNIFIEDCODE) > -1) {
+                count = 1;
+                $('#gridTable').setSelection(i + 1);
+                $('#gridTable tr').eq(i + 1).focus();
+            }
+        });
+        if (count == 0) {
+            $.ajax({
+                url: "../../api/TBL_HAZARDBASICINFOApi/GetFormJson",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                data: { keyValue: UNIFIEDCODE },
+                type: "get",
+                dataType: "json",
+                success: function (res) {
+                    var rowId = datas.length + 1;
+                    $("#gridTable").addRowData(rowId.toString(), res);
+                    window.setTimeout(function () { $('#gridTable').setSelection(rowId); }, 200);
+                    $('#gridTable tr:last').focus();
+                },
+            });
+        };
+    };
+    var mapCtlExt = null;
+    function GetMapData() {
+        mapCtlExt = $("#mapControl").mapCtl(
+            cfGetMapData({
+                markerDataId: "keyID",
+                getMarkerData: getMarkerData,
+                gdzbdbx: true
+            })
+           );
+        usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+        GetAreaGeometry(usercode);
+    }
+
+    //加载表格
+    function GetGrid() {
+        var queryJson = $("#GJCX").getWebControls();
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 548,
+            mtype: 'POST',
+            url: "../../api/TBL_HAZARDBASICINFOApi/PostPageListJson",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 300, align: 'left', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 500, align: 'left', sortable: true },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 200, align: 'left', sortable: true },
+                {
+                    label: '灾情等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return getInfoTop().learun.data.get(["dataItem", "DISASTERLEVEL", cellvalue]);
+                    }
+                },
+                {
+                    label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", cellvalue]);
+                    }
+                },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 500, align: 'left', sortable: true },
+                 {
+                     label: '重大隐患点', name: 'ISZDYHD', index: 'ISZDYHD', width: 150, align: 'left', sortable: true,hidden: true,
+                     formatter: function (cellvalue, options, rowObject) {
+                         return getInfoTop().learun.data.get(["dataItem", "HIDDENDANGER", cellvalue]);
+                     }
+                 },
+                { label: '市', name: 'CITY', index: 'CITY', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '市名称', name: 'CITYNAME', index: 'CITYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '县', name: 'COUNTY', index: 'COUNTY', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '县名称', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '目前稳定程度', name: 'CURSTABLESTATUS', index: 'CURSTABLESTATUS', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '今后变化趋势', name: 'STABLETREND', index: 'STABLETREND', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '威胁人口', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '威胁财产', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '死亡人口', name: 'DEATHTOLL', index: 'DEATHTOLL', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '财产损失', name: 'ASSETSLOSE', index: 'ASSETSLOSE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '隐患点', name: 'HIDDENDANGER', index: 'HIDDENDANGER', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '监测建议', name: 'MONITORSUGGESTION', index: 'MONITORSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '修改日期', name: 'MODIFYTIME', index: 'MODIFYTIME', width: 100, align: 'left', sortable: true, hidden: true }
+
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'MODIFYTIME',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            onSelectRow: function (rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var dt = $gridTable.jqGrid("getRowData", rowId);
+                var data = [];
+                var longitude = 0, latitude = 0;
+                if (dt.LONGITUDE) {
+                    longitude = parseFloat(dt.LONGITUDE);
+                }
+                if (dt.LATITUDE) {
+                    latitude = parseFloat(dt.LATITUDE);
+                }
+                data.push({ longitude: longitude, latitude: latitude });
+                if (isMarkerClick) {
+                    isMarkerClick = false;
+                } else {
+                    mapCtlExt.addLocation(data, true);
+                }
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    function SearchEvent(QueryJson) {
+
+        queryJson = QueryJson;
+        BindMapMarker(queryJson);
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { condition: JSON.stringify(WKTString), queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            //url: "../../api/TBL_HAZARDBASICINFOApi/GetPageListJson",
+            url: "../../api/TBL_HAZARDBASICINFOApi/PostPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    function ColDataGrid() {
+        var centerHeight = $("#layout2").height();
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colgrid i").hasClass("fa-chevron-down")) {
+            var northH = centerHeight - 45;
+            layout2.sizePane("north", northH);
+            $("#lr-colgrid i").removeClass("fa-chevron-down");
+            $("#lr-colgrid i").addClass("fa-chevron-up");
+            if ($("#lr-colmap i").hasClass("fa-chevron-down")) {
+                $("#lr-colmap i").removeClass("fa-chevron-down");
+                $("#lr-colmap i").addClass("fa-chevron-up");
+            }
+        }
+        else {
+            layout2.sizePane("north", layout2NorthH);
+            $("#lr-colgrid i").removeClass("fa-chevron-up");
+            $("#lr-colgrid i").addClass("fa-chevron-down");
+        }
+        mapCtlExt.updateSize();
+    }
+    function ColMapDiv() {
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colmap i").hasClass("fa-chevron-up")) {
+            layout2.sizePane("north", 1);
+            $("#lr-colmap i").removeClass("fa-chevron-up");
+            $("#lr-colmap i").addClass("fa-chevron-down");
+            if ($("#lr-colgrid i").hasClass("fa-chevron-up")) {
+                $("#lr-colgrid i").removeClass("fa-chevron-up");
+                $("#lr-colgrid i").addClass("fa-chevron-down");
+            }
+        }
+        else {
+            layout2.sizePane("north", layout2NorthH);
+            $("#lr-colmap i").removeClass("fa-chevron-down");
+            $("#lr-colmap i").addClass("fa-chevron-up");
+            if (mapCtlExt != null) {
+                mapCtlExt.setHeight($("#mapControl").parent().height() - 32 - 4);
+            }
+        }
+        mapCtlExt.updateSize();
+    }
+    //地图详情
+    function MapViewDetail(type) {
+        var keyValue = type.split(",")[1];
+        var types = type.split(",")[0];
+        //var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        //var type = $("#gridTable").jqGridRowValue('DISASTERTYPE');
+        if (types == "滑坡") {
+            types = "001"
+        } else if (types == "崩塌") {
+            types = "002"
+        } else if (types == "泥石流") {
+            types = "003"
+        } else if (types == "地面沉降") {
+            types = "004"
+        } else if (types == "地面塌陷") {
+            types = "005"
+        } else if (types == "地裂缝") {
+            types = "006"
+        } else if (types == "斜坡") {
+            types = "007"
+        } else if (types == "滑坡隐患点") {
+            types = "008"
+        } else if (types == "崩塌隐患点") {
+            types = "009"
+        } else if (types == "遥感解译点") {
+            types = "010"
+        }
+        if (checkedRow(keyValue)) {
+            newTab({
+                id: "DZDCCXXQ",
+                url: "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL?keyValue=" + keyValue + "&types=" + types + "&callback=show"
+            });
+        }
+    }
+    //初始化控件
+    function initControl() {
+        //灾害类型
+        $("#DISASTERTYPE").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "HazardType" },
+            id: "text",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //是否隐患点
+        $("#HIDDENDANGER").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "HIDDENDANGER" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //灾害等级
+        $("#DISASTERLEVEL").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "DISASTERLEVEL" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //稳定程度
+        $("#CURSTABLESTATUS").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "CURRENTSTABLESTATUS" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //日后变形情况
+        $("#STABLETREND").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "STABLETREND" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //防治建议
+        $("#TREATMENTSUGGESTION").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "TREATMENTSUGGESTION" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+
+        //监测建议
+        $("#MONITORSUGGESTION").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "MONITORSUGGESTION" },
+            id: "value",
+            text: "text",
+            height: '200px',
+            description: "==请选择=="
+        });
+    }
+    //详情
+    function ViewDetail(type) {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        var keyNAME = $("#gridTable").jqGridRowValue('DISASTERNAME');
+        var types = $("#gridTable").jqGridRowValue('DISASTERTYPE');
+        var title = types;
+        if (types == "滑坡") {
+            types = "001"
+        } else if (types == "崩塌") {
+            types = "002"
+        } else if (types == "泥石流") {
+            types = "003"
+        } else if (types == "地面沉降") {
+            types = "004"
+        } else if (types == "地面塌陷") {
+            types = "005"
+        } else if (types == "地裂缝") {
+            types = "006"
+        } else if (types == "斜坡") {
+            types = "007"
+        }
+        if (checkedRow(keyValue)) {
+            newTab({
+                id: "DZDCCXXQ",
+                url: "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL?keyValue=" + keyValue + "&types=" + types + "&keyNAME=" + keyNAME + "&callback=show"
+            });
+            //var url = "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL?keyValue=" + keyValue + "&types=" + types + "&callback=" + $.currentIframe().document.URL;
+            //$.currentIframe().document.location.href = url;
+
+        }
+
+    }
+
+    //获取地址
+    function GetUrl(v) {
+        var url = null;
+        switch (v) {
+            case "滑坡":
+                url = "/JXGeoManage/TBL_LANDSLIP/TBL_LANDSLIPForm";
+                break;
+            case "崩塌":
+                url = "/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm";
+                break;
+            case "泥石流":
+                url = "/JXGeoManage/TBL_DEBRISFLOW/TBL_DEBRISFLOWForm";
+                break;
+            case "地面沉降":
+                url = "/JXGeoManage/TBL_LANDSETTLEMENT/TBL_LANDSETTLEMENTForm";
+                break;
+            case "地面塌陷":
+                url = "/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm";
+                break;
+            case "地裂缝":
+                url = "/JXGeoManage/TBL_LANDCRACK/TBL_LANDCRACKForm";
+                break;
+            case "斜坡":
+                url = "/JXGeoManage/TBL_SLOPE/TBL_SLOPEForm";
+                break;
+            default:
+                break;
+        }
+        return url;
+    }
+
+    //对应导出
+    function ExpExl() {
+        //if (!queryJson) {
+        //queryJson = $("#GJCX").getWebControls();
+        //}
+        location.href = "../../JXGeoManage/TBL_HAZARDBASICINFO/ExcelDownloadExt?queryJson=" + JSON.stringify(queryJson);
+    }
+    function btn_Word() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (checkedRow(keyValue)) {
+            var selectedRowIndex = $('#gridTable').getGridParam('selrow');
+            var dt = $('#gridTable').jqGrid("getRowData", selectedRowIndex);
+            var fileName = dt.DISASTERNAME;
+            var queryJson = { "GUID": dt.UNIFIEDCODE, "DISASTERTYPE": dt.DISASTERTYPE, moduleId: "86343CDB-BCA2-4083-87A6-6E6AD38CCC5E" };
+            var url = "../../JXGeoManage/TBL_HAZARDBASICINFO/ExportWord?filename=" + fileName + "&queryJson=" + JSON.stringify(queryJson);
+            window.location.href = url;
+        }
+    }
+
+    function reload2() {
+        window.parent.$("#btn_Reset").trigger('click');
+        window.parent.$("#btn_ResetTree").trigger('click');
+        reload();
+    }
+</script>
+}

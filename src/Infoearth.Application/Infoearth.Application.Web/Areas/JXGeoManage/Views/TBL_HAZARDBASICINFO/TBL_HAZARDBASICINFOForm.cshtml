@@ -1,0 +1,324 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">灾害体类型</td>
+            <td class="formValue">
+                <input id="DISASTERTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾害体编号</td>
+            <td class="formValue">
+                <input id="UNIFIEDCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾害体名称</td>
+            <td class="formValue">
+                <textarea id="DISASTERNAME" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">野外编号</td>
+            <td class="formValue">
+                <input id="OUTDOORCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">室内编号</td>
+            <td class="formValue">
+                <input id="INDOORCODE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">省</td>
+            <td class="formValue">
+                <input id="PROVINCE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">省名称</td>
+            <td class="formValue">
+                <input id="PROVINCENAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市</td>
+            <td class="formValue">
+                <input id="CITY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">市名称</td>
+            <td class="formValue">
+                <input id="CITYNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">乡镇</td>
+            <td class="formValue">
+                <input id="TOWN" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">乡镇名称</td>
+            <td class="formValue">
+                <input id="TOWNNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地理位置</td>
+            <td class="formValue">
+                <textarea id="LOCATION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">X</td>
+            <td class="formValue">
+                <input id="X" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">Y</td>
+            <td class="formValue">
+                <input id="Y" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">Z</td>
+            <td class="formValue">
+                <input id="Z" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡顶/最大标高</td>
+            <td class="formValue">
+                <input id="ALTTOP" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">坡底/最小标高</td>
+            <td class="formValue">
+                <input id="ALTBOTOM" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">治理情况</td>
+            <td class="formValue">
+                <textarea id="CONTROLSTATE" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地下水类型</td>
+            <td class="formValue">
+                <textarea id="GROUNDWATERTYPE" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">构造部位</td>
+            <td class="formValue">
+                <input id="TECTONICREGION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地震烈度</td>
+            <td class="formValue">
+                <textarea id="EARTHQUAKEINTENSITY" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">目前稳定程度</td>
+            <td class="formValue">
+                <textarea id="CURSTABLESTATUS" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">今后变化趋势</td>
+            <td class="formValue">
+                <textarea id="STABLETREND" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">威胁人口</td>
+            <td class="formValue">
+                <input id="THREATENPEOPLE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">威胁财产</td>
+            <td class="formValue">
+                <input id="THREATENASSETS" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾害等级</td>
+            <td class="formValue">
+                <textarea id="DISASTERLEVEL" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">险情等级</td>
+            <td class="formValue">
+                <textarea id="DANGERLEVEL" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">防治建议</td>
+            <td class="formValue">
+                <textarea id="TREATMENTSUGGESTION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">隐患点</td>
+            <td class="formValue">
+                <input id="HIDDENDANGER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测建议</td>
+            <td class="formValue">
+                <textarea id="MONITORSUGGESTION" class="form-control" ></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁坏房屋</td>
+            <td class="formValue">
+                <input id="DESTROYEDHOME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁路</td>
+            <td class="formValue">
+                <input id="DESTROYEDROAD" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">毁渠</td>
+            <td class="formValue">
+                <input id="DESTROYEDCANAL" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">GUID</td>
+            <td class="formValue">
+                <input id="GUID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">工程编号</td>
+            <td class="formValue">
+                <input id="PROJECTID" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">县</td>
+            <td class="formValue">
+                <input id="COUNTY" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">县名称</td>
+            <td class="formValue">
+                <input id="COUNTYNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查类型(详查、巡查、排查)</td>
+            <td class="formValue">
+                <input id="SURVEYTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">调查时间</td>
+            <td class="formValue">
+                <input id="SURVEYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否为重要灾害点</td>
+            <td class="formValue">
+                <input id="ISIMPORTANT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">创建时间</td>
+            <td class="formValue">
+                <input id="CREATETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">创建人</td>
+            <td class="formValue">
+                <input id="CREATEUSER" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改时间</td>
+            <td class="formValue">
+                <input id="MODIFYTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">修改人</td>
+            <td class="formValue">
+                <input id="MODIFYUSER" type="text" class="form-control"  />
+            </td>
+        </tr>
+    </table>
+</div>
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_HAZARDBASICINFO/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            });
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_HAZARDBASICINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

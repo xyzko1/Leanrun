@@ -1,0 +1,500 @@
+﻿@{
+    ViewBag.Title = "防治规划列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+ <style>
+    .ui-layout-center {
+       overflow-x: hidden !important;
+    }
+    .ui-layout-resizer {
+        background-color:#f0f3f4 !important;
+    }
+     .fa-folder-open {
+         color: transparent !important;
+         background: url("../../Content/images/zTreeStandard.png") no-repeat;
+         background-position: -110px -16px;
+         margin-right: 2px;
+         width: 16px !important;
+         height: 16px !important;
+     }
+
+     .fa-folder {
+         color: transparent !important;
+         background: url("../../Content/images/zTreeStandard.png") no-repeat;
+         background-position: -110px 0;
+         margin-right: 2px;
+         width: 16px !important;
+         height: 16px !important;
+     }
+
+     .fa-file-o {
+         color: transparent !important;
+         background: url("../../Content/images/zTreeStandard.png") no-repeat;
+         background-position: -110px -32px;
+         width: 16px !important;
+         height: 16px !important;
+     }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" style="margin:0">
+             <div class="panel-Title">行政区划信息</div>
+             <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;margin:0">
+        <div class="ui-layout" id="layout2" style="height: 100%; width: 100%;">
+           <div class="ui-layout-north" id="ui_map" style="height: 350px;">
+                  <div id="mapControl" style="height:350px;"></div>
+          </div>
+          <div class="ui-layout-center" id="ui_grid">
+                    <div class="titlePanel" style="height:40px;">
+                        <div class="title-search" id="DZHJManage" style="height: 40px; line-height: 40px; width: 100%">
+                            <div class="title-search" id="filter-form" style="height:40px;line-height:40px">
+                                <span class="panel-Title" style="color:#000;margin-right:10px;">数据列表</span>
+                                <input id="COMPPARAM" type="text" class="form-control" placeholder="灾害点名称、成果名称" style="width: 250px; display: inline-block; margin-left: 10px" />
+                                <a style="margin-left:15px" id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                            </div>
+                            <div class="btn-group" style="float: right; height: 100%; display: flex; align-items: center;margin-right:23px">
+                                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+                                <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                                <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                                <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                                <a id="lr-colgrid" class="btn btn-default" onclick="ColDataGrid()"><i class="fa fa-chevron-down"></i>列表</a>
+                                <a id="lr-colmap" class="btn btn-default" onclick="ColMapDiv()"><i class="fa fa-chevron-up"></i>地图</a>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                  <div class="gridPanel">
+                      <table id="gridTable"></table>
+                    <div id="gridPager"></div>
+                  </div>
+              </div>
+          </div>
+       </div>
+    </div>
+ </div>
+
+@section Scripts{
+<script>
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    var AreaCode = 0, PROVINCE = "", CITY = "", COUNTY = "";
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetMapData();
+        GetGrid();
+        BindMapMarker();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        //layout布局
+        $('#layout').layout({
+                west__size: 190,
+                applyDemoStyles: true,
+                onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+             }
+         });
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $('#layout2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                resize();
+                if (isResize > 1) {
+                resized = 1;
+                 } else {
+                    if (count == 1 || resized == 0) {
+                        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                    }
+                 }
+                  count++;
+             }
+         });
+          //resize重设布局;
+         $(window).resize(function (e) {
+              if (isResize<10) {
+                 isResize ++;
+              }
+              resize();
+              e.stopPropagation();
+         });
+         function resize() {
+              window.setTimeout(function () {
+                  if (mapCtlExt != null) {
+                        mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                  }
+                  $('.center-Panel').height($('#layout').parent().height() - 2);
+                  $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                  $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                  $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width() - 10);
+                  $('.ui-jqgrid-bdiv').height($('#layout2 .ui-layout-center').height() - 60 - 60);
+                  $('#itemTree').setTreeHeight($(window).height() - 52);
+                  $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height() - 5);
+                  $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 105 + 8);
+                  $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+              }, 200);
+           };
+           $(window).resize();
+           $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+           layout2NorthH = $("#layout2 .ui-layout-north").height();
+     }
+    //加载行政区划树
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMap",
+            onnodeclick: function (item) {
+                AreaCode = item.id;
+                var level = item.value.split(',')[1];
+                if (level == 1) {
+                    PROVINCE = item.id;
+                    CITY = "";
+                    COUNTY = "";
+                } else if (level == 2) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id;
+                    COUNTY = "";
+                } else if (level == 3) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id.substring(0, 4) + "00";
+                    COUNTY = item.id;
+                }
+                var data = [{
+                    latitude: item.value.split(',')[3],
+                    longitude: item.value.split(',')[2],
+                    popupHtml: ""
+                }]
+                mapCtlExt.addLocation(data,false,level);
+                $('#btn_Search').trigger("click");
+            },
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    };
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData() {
+          $.ajax({
+             url: '../../Map/GetMapDatas',
+             async: false,
+             type: "GET",
+             success: function (data) {
+                       var dataSet = JSON.parse(data);
+                        mapCtlExt= $("#mapControl").mapCtl({
+                                mapwidth: 1500,
+                                isShowGisLayer:false,
+                                isFrame:true,
+                                dataset: dataSet,
+                                zoom: center.split(',')[2],
+                                center: [center.split(',')[0], center.split(',')[1]],
+                                isCluster: true
+                             });
+                        }, error: function (e) {
+                    },
+             cache: false
+         });
+    };
+   
+
+
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#DZHJManage").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 560 + 8,
+            url: "../../api/TBL_ACHIEVEMENT_PREPLAN/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '主键', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '成果名称', name: 'ACHIEVEMENTNAME', index: 'ACHIEVEMENTNAME', width: 200, align: 'left', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true },
+                {
+                    label: '规划区域类型', name: 'AREATYPE', index: 'AREATYPE', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "A") {
+                            return '国家规划';
+                        }
+                        else if (cellvalue =="B") {
+                            return '地区规划';
+                        }
+                        else if (cellvalue == "C") {
+                            return '流域规划';
+                        }
+                        else
+                            return "";
+                    }
+
+                },
+                {
+                    label: '规划时间类型', name: 'TIMETYPE', index: 'TIMETYPE', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "A") {
+                            return '超长期规划';
+                        }
+                        else if (cellvalue == "B") {
+                            return '长期规划';
+                        }
+                        else if (cellvalue == "C") {
+                            return '中期规划';
+                        }
+                        else if (cellvalue == "D") {
+                            return '短期规划';
+                        }
+                        else
+                            return "";
+                    }
+                },
+                {
+                    label: '地质灾害类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "A") {
+                            return '单类地质灾害防治规划';
+                        }
+                        else if (cellvalue =="B") {
+                            return '综合地质灾害防治规划';
+                        }
+                        else
+                            return "";
+                    }
+                },
+                { label: '方案编写人', name: 'WRITENAME', index: 'WRITENAME', width: 100, align: 'left', sortable: true },
+                { label: '方案编写日期', name: 'WRITETIME', index: 'WRITETIME', width: 150, align: 'left', sortable: true },
+                { label: '方案版本号', name: 'VESION', index: 'VESION', width: 150, align: 'left', sortable: true },
+                {
+                    label: '成果文件', name: 'DOWNLOAD', index: 'DOWNLOAD', width: 100, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return "<a class=\"label-success btn\" onclick=\"MultiMediaView('" + rowObject.GUID + "')\"><i class='fa fa-smile-o'></i>&nbsp;查看</a>";
+                    }
+
+                },
+
+                { label: '防治内容', name: 'PREVENTION', index: 'PREVENTION', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '目前稳定程度', name: 'CURSTABLESTATUS', index: 'CURSTABLESTATUS', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '今后变化趋势', name: 'STABLETREND', index: 'STABLETREND', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '防治原则和目标', name: 'PRINCIPLEGOAL', index: 'PRINCIPLEGOAL', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '总体部署和主要任务', name: 'MAINTAST', index: 'MAINTAST', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '防治预期效果', name: 'DESIREDRESULT', index: 'DESIREDRESULT', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '易发区域', name: 'PRONEAREA', index: 'PRONEAREA', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '重点防治区域', name: 'MAINPREVENTAREA', index: 'MAINPREVENTAREA', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '方案录入人', name: 'CREATENAME', index: 'CREATENAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '方案录入日期', name: 'CREATETIME', index: 'CREATETIME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '省名称', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '市名称', name: 'CITYNAME', index: 'CITYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '县名称', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 100, align: 'left', sortable: true, hidden: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function(rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var dt = $gridTable.jqGrid("getRowData", rowId);
+                var data = [];
+                var longitude = 0, latitude = 0;
+                if (dt.LONGITUDE) {
+                    longitude = parseFloat(dt.LONGITUDE);
+                }
+                if (dt.LATITUDE) {
+                    latitude = parseFloat(dt.LATITUDE);
+                }
+                data.push({ longitude: longitude, latitude: latitude });
+                mapCtlExt.addLocation(data,true);
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+    //规划治理多媒体
+    function MultiMediaView(GUID) {
+        dialogOpen({
+            id: "DataInspection" + GUID,
+            title: "防治规划成果中文件详情",
+            closed: true,
+            replace: true,
+            width: '1100px',
+            height: '640px',
+            url: top.contentPath + "/JXGeoManage/TBL_ACHIEVEMENT_PREPLAN/TBL_PREPLANMultiMedia?details=01" + "&keyValue=" + GUID,
+        })
+    }
+
+    //加载地图marker
+    function BindMapMarker() {
+        var queryJson = $.extend($("#filter-form").getWebControls(), $("#DZHJManage").getWebControls());
+        $.ajax({
+            url: contentPath + "/api/TBL_ACHIEVEMENT_PREPLAN/GetPageListJson",
+            beforeSend: function (a) {
+                if (authToken != null)
+                    a.setRequestHeader("Authorization", authToken);
+            },
+            datatype: 'json',
+            data: { queryJson: JSON.stringify(queryJson) },
+            async: true,
+            cache: false,
+            type: "GET",
+            success: function (dataList) {
+                var data = eval(dataList.rows);
+                var returnValue = [];
+                var type = [];
+                for (var i = 0; i < data.length; i++) {
+                    //详情页面
+                    var divhtml = '<div style="font-weight: bold;"></div>';
+                    divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">治理工程名称：</span><span>' + data[i].ACHIEVEMENTNAME + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点名称：</span><span>' + data[i].DISASTERNAME + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点类型：</span><span>' + data[i].DISASTERTYPE + '</span></div>';
+                    divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">成果地理位置：</span><span>' + data[i].LOCATION + '</span></div>';
+                    //divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="ViewZLGCDetail(\'' + data[i].GUID + '\')" href="#" class="link-detail">详细信息</a></span>';
+
+                    var longitude, latitude;
+                    if (data[i].LONGITUDE != '' && data[i].LONGITUDE != null && data[i].LONGITUDE != undefined) {
+                        longitude = parseFloat(data[i].LONGITUDE);
+                    }
+                    if (data[i].LATITUDE != '' && data[i].LATITUDE != null && data[i].LATITUDE != undefined) {
+                        latitude = parseFloat(data[i].LATITUDE);
+                    }
+                    returnValue.push({ id: "all", url: contentPath + "/Content/images/规划成果.png", location: [longitude, latitude], popupHtml: divhtml });
+
+                }
+                mapCtlExt.addMarker(returnValue);
+            }, error: function (e) {
+            },
+            cache: false
+        });
+    };
+
+
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加防治规划成果表',
+            url: '/JXGeoManage/TBL_ACHIEVEMENT_PREPLAN/TBL_ACHIEVEMENT_PREPLANForm',
+            width: '1100px',
+            height: '640px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑防治规划成果表',
+                url: '/JXGeoManage/TBL_ACHIEVEMENT_PREPLAN/TBL_ACHIEVEMENT_PREPLANForm?keyValue=' + keyValue,
+                width: '1100px',
+                height: '640px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../api/TBL_ACHIEVEMENT_PREPLAN/RemoveForm',
+                authToken: authToken,
+                param: { "": keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的防治规划成果表！', 0);
+        }
+    }
+      //查询表格函数
+      function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        queryJson["PROVINCE"] = PROVINCE;
+        queryJson["CITY"] = CITY;
+        queryJson["COUNTY"] = COUNTY;
+        $("#gridTable").jqGrid('setGridParam', {
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                postData: { queryJson: JSON.stringify(queryJson) },
+                url: "../../api/TBL_ACHIEVEMENT_PREPLAN/GetPageListJson",
+                page: 1
+        }).trigger('reloadGrid');
+    }
+      function ColDataGrid() {
+        var centerHeight = $("#ui_center .ui-layout").height();
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colgrid i").hasClass("fa-chevron-down")) {
+             var northH = centerHeight - 65;
+             layout2.sizePane("north", northH);
+             $("#lr-colgrid i").removeClass("fa-chevron-down");
+             $("#lr-colgrid i").addClass("fa-chevron-up");
+             if ($("#lr-colmap i").hasClass("fa-chevron-down")) {
+                  $("#lr-colmap i").removeClass("fa-chevron-down");
+                  $("#lr-colmap i").addClass("fa-chevron-up");
+             }
+        }
+        else {
+             layout2.sizePane("north", layout2NorthH);
+             $("#lr-colgrid i").removeClass("fa-chevron-up");
+             $("#lr-colgrid i").addClass("fa-chevron-down");
+        }
+        mapCtlExt.updateSize();
+      }
+      function ColMapDiv() {
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colmap i").hasClass("fa-chevron-up")) {
+            layout2.sizePane("north", 1);
+            $("#lr-colmap i").removeClass("fa-chevron-up");
+            $("#lr-colmap i").addClass("fa-chevron-down");
+            if ($("#lr-colgrid i").hasClass("fa-chevron-up")) {
+                $("#lr-colgrid i").removeClass("fa-chevron-up");
+                $("#lr-colgrid i").addClass("fa-chevron-down");
+            }
+        }
+        else {
+            layout2.sizePane("north", layout2NorthH);
+            $("#lr-colmap i").removeClass("fa-chevron-down");
+            $("#lr-colmap i").addClass("fa-chevron-up");
+            if (mapCtlExt != null) {
+                mapCtlExt.setHeight($("#mapControl").parent().height() - 32 - 4);
+            }
+        }
+        mapCtlExt.updateSize();
+      }
+</script>
+}

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@section Scripts{
+    <script>
+        $(function () {
+            initControl();
+        });
+        //初始化控件
+        function initControl() {
+            var userinfo = unescape(request('userinfo'));
+            userinfo = JSON.parse(userinfo);
+            $('#UserName').val(userinfo.UserName);
+            $('#DeptName').val(userinfo.DeptName);
+            $('#Mobile').val(userinfo.Mobile);
+            $('#Telephone').val(userinfo.Telephone);
+        }
+    </script>
+}
+<style>
+    .center_div {
+        line-height: 40px;
+        text-align: center;
+    }
+
+    .spans {
+        display: inline-block;
+        padding-right: 20px;
+        width: 100px;
+        text-align: right;
+        line-height: 40px;
+        white-space: nowrap;
+    }
+
+    .center_div input {
+        width: 200px !important;
+        display: inline-block;
+    }
+</style>
+<div id="form1">
+    <div style="width: 100%;background: #fff; padding: 20px 0 0 0">
+        <ul class="center_div">
+            <li><span class="spans">姓名:</span><input id="UserName" type="text" class="form-control" disabled /></li>
+            <li><span class="spans">单位名称:</span><input id="DeptName" type="text" class="form-control" disabled /></li>
+            <li><span class="spans">电话:</span><input id="Mobile" type="text" class="form-control" disabled /></li>
+            <li><span class="spans">手机:</span><input id="Telephone" type="text" class="form-control" disabled /></li>
+        </ul>
+    </div>
+</div>

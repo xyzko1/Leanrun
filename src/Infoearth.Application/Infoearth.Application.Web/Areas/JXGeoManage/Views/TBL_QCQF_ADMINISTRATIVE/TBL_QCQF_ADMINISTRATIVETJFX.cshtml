@@ -1,0 +1,280 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        margin: 0 !important;
+    }
+
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .titlePanel {
+        height: 195px !important;
+        line-height: 0px !important;
+    }
+
+    #districtsCtls2 > div > span,
+    .disaster-search > span {
+        width: 6%;
+        text-align: right;
+        display: inline-block;
+    }
+
+    #districtsCtls2 .divselect,
+    .disaster-search > input {
+        width: 23%;
+        margin: 0 15px
+    }
+
+    #DZHJManage {
+        padding-left: 15px;
+    }
+
+    #districtsCtls2,
+    .disaster-search {
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+    .ui-select-text {
+        border-radius:4px;
+        font-weight:normal;
+    }
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        background: #DCDCDC;
+    }
+</style>
+<div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+        <i class="fa fa-bars" style="margin: 0 5px;font-weight:900"></i><span>查询条件:</span>
+    </div>
+</div>
+<div id="DZHJManage" class="panel-Title" style="width:100%;height:40px;background:#fff;position:relative;z-index:23;">
+    <div id="districtsCtls2" style="width:80%;float:left;"></div>
+    <div class="disaster-search" style="width:20%;float:left;margin-top:-2px;">
+        @* <span>灾害点名称：</span>
+            <input id="DISASTERNAME" type="text" class="form-control">
+            <span>开始时间：</span>
+            <input id="STARTTIME" type="text" class="form-control">
+            <span>结束时间：</span>
+            <input id="ENDTIME" type="text" class="form-control">*@
+        <a id="btn_Search" class="btn btn-primary" style="padding: 4px 8px"><i class="fa fa-search"></i>查询</a>
+        <a id="btn_Clear" class="btn btn-primary" style="padding: 4px 8px;background:gray;margin-left:20px"><i class="fa fa-refresh"></i>重置</a>
+    </div>
+</div>
+<div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+        <span>数据列表:</span>
+    </div>
+</div>
+@*<div style="padding-left: 15px; background: #ECF7FF; height: 40px; line-height: 40px; border-bottom: 1px solid #ccc; ">
+    <span style="padding-right: 10px; font-weight: 900; font-size: 14px; display: inline-block;">数据列表</span>
+    <div class="btn-group" style="float: right; height: 100%; display: flex; align-items: center;margin-right:23px">
+        <a id="lr-import" class="btn btn-default" onclick=""><i class="fa fa fa-upload"></i>导出</a>
+    </div>
+</div>*@
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script>
+    var authToken = getAuthorizationToken();
+    var layout2NorthH = 1;
+    $(function () {
+        InitialPage();
+        initControl()
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        $("#btn_Clear").click(function () {
+            ClearEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        var isResize = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            var offsetTop = $('.ui-jqgrid-bdiv').offset().top;
+            var footerH = $('#gridPager').outerHeight(true);
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - offsetTop - footerH - 2);
+            }, 200);
+            e.stopPropagation();
+        });
+        ////添加列
+        //for (var i = 0; i < dicCol.length; i++) {
+        //    if (dicCol[i] != null) {
+        //        colmns.push({ label: dicCol[i].value, name: dicCol[i].key, index: dicCol[i].key, width: "250px", align: 'left', sortable: false });
+        //    }
+        //}
+        ////添加隐藏列
+        //colmns.push({
+        //    label: '详情', index: 'view', name: 'view', width: 120, align: 'center', sortable: false,
+        //    formatter: function (cellvalue, options, rowObject) {
+        //        if (rowObject.disastername != "" && rowObject.disastername != null) {
+        //            return '<a onclick=\"openDisaster(\'areacode,' + rowObject.areacode + ',20\')\" style=\"color: #008cee;cursor: pointer;\">详情</a>';
+        //        }
+        //        else {
+        //            return "";
+        //        }
+        //    }
+        //});
+    }
+    //灾害点列表
+    function openDisaster(keyValue) {
+        var url = document.location.protocol + "//" + document.location.host + '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEForm?keyValue=' + keyValue + '&IdetIfrem=Idetnew&UNIFIEDCODE=' + keyValue + '&Readonaly=01&XQing=01' + "&callback=" + document.URL;
+        document.location.href = url;
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $("#DZHJManage").getWebControls();
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 282 + 12,
+            url: "../../api/TBL_HAZARDBASICINFOApi/GetAnalyseListQCQF",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            treeGrid: true,
+            treeGridModel: "adjacency",
+            ExpandColumn: "area",
+            colModel:
+                [{ label: '行政区划', index: 'area', name: 'area', width: 250, align: 'center', sortable: false },
+                    { label: '群测群防', index: 'count', name: 'count', width: 250, align: 'center', sortable: false },
+                    { label: '灾害点名称', index: 'disastername', name: 'disastername', width: 250, align: 'center', sortable: false },
+                    { label: '灾害点类型', index: 'disastertype', name: 'disastertype', width: 250, align: 'center', sortable: false },
+                    {
+                         label: '详情', index: 'view', name: 'view', width: 120, align: 'center', sortable: false,
+                         formatter: function (cellvalue, options, rowObject) {
+                                 if (rowObject.disastername != "" && rowObject.disastername != null) {
+                                 return '<a onclick=\"openDisaster('+ rowObject.areacode +' )\" style=\"color: #008cee;cursor: pointer;\">详情</a>';
+                             }
+                             else {
+                                 return "";
+                             }
+                         }
+                     }
+            ],
+            treeReader: { level_field: "level", parent_id_field: "parent_field", leaf_field: "isLeaf", expanded_field: "expanded" },
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+        var offsetTop = $('.ui-jqgrid-bdiv').offset().top;
+        var footerH = $('#gridPager').outerHeight(true);
+        $gridTable.setGridHeight($(window).height() - offsetTop - footerH - 1);
+    }
+    //新增
+    function btn_add() {
+        var UNIFIEDCODE = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        dialogOpen({
+            id: 'Form4',
+            title: '添加两卡一表',
+            url: '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEForm?UNIFIEDCODE=' + UNIFIEDCODE,
+            width: '1900px',
+            height: '',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    ///编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        dialogOpen({
+            id: 'Form4',
+            title: '编辑群测群防行政管理体系',
+            url: '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEForm?keyValue=' + keyValue,
+            width: '1900px',
+            height: '',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的群测群防行政管理体系！', 0);
+        }
+    }
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#DZHJManage").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_HAZARDBASICINFOApi/GetAnalyseListQCQF",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //重置控件赋值
+    function ClearEvent() {
+        $("#DZHJManage").find("input[type='text']").val("");
+        $("#DZHJManage").find(".divselect").attr("data-value", "").attr("data-text", "");
+        //加载行政区划
+        var district2 = $("#districtsCtls2").mulDistrictsCtl({
+            provinceId: code,
+            selectProviceId: code,
+            selectCityId: "",
+            selectCounty: "",
+            type: 'B',
+            showTown: false
+        });
+    }
+    //初始化控件
+    function initControl() {
+        //var html = " <table><tr><td class=\"formTitle\"   style=\"width: 110px;text-align:right;\">省:</td><td> <div id=\"PROVINCE\" readonly=\"readonly\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left;text-align:center; width:180px; margin: 8px;\"></div></td>" +
+        //   "<td class=\"formTitle\" style=\"width: 110px;text-align:right;\">市:</td><td><div id=\"CITY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left;text-align:center; width: 180px; margin: 8px;\"></div></td>" +
+        //   "<td class=\"formTitle\" style=\"width: 110px;text-align:right;\">县:</td><td><div id=\"COUNTY\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left;text-align:center; width: 180px; margin: 8px;\"></div></td>" +
+        //"<td class=\"formTitle\" style=\"width: 110px;text-align:right;\">乡(镇):</td><td><div id=\"TOWN\" multiples=\"true\" type=\"select\" class=\"ui-select\" style=\"float: left;text-align:center; width: 180px; margin: 8px;\"></div> </td></tr></table>";
+        var usercode = usercodes();
+        //加载行政区划
+        var district2 = $("#districtsCtls2").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            type: 'B',
+            showTown: false
+        });
+    }
+</script>
+}

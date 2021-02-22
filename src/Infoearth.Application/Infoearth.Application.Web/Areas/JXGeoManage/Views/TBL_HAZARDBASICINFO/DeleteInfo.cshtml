@@ -1,0 +1,417 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .form {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+        .form td {
+            border: 1px solid #ddd;
+            height: 38px;
+        }
+
+    .formValue input[type=text] {
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+    }
+</style>
+<div style="padding-top:20px;">
+    <div style="float:right;margin-right:25px;display:none;" id="li_close">
+        <a class="btn btn-default" style="border:1px solid #ccc;border-radius:4px;margin-top:5px;padding:5px 10px;" onclick="thisClose('DZLSSJCX')"><i class="fa fa-close"></i> 关闭</a>
+    </div>
+    <table class="form">
+        <tr>
+            <td class="formTitle">灾害点名称<font>*</font></td>
+            <td class="formValue">
+                <input id="DISASTERNAME" type="text" class="form-control" placeholder="请单击选择灾害点名称" onclick="zhxx()" isvalid="yes" checkexpession="NotNull" readonly="readonly" />
+            </td>
+            <td class="formTitle" style="display:none;">原统一编号<font>*</font></td>
+            <td class="formValue" style="display:none;">
+                <input id="UNIFIEDCODE" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" disabled="disabled" />
+                <input id="PROJECTID" type="text" class="form-control" style="display:none" />
+            </td>
+            <td class="formTitle">野外编号</td>
+            <td class="formValue"><input id="OUTDOORCODE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾害类型</td>
+            <td colspan="5"><div id="DISASTERTYPE"></div></td>
+        </tr>
+        <tr>
+            <td class="formTitle" rowspan="2">地理位置</td>
+            <td class="formValue" rowspan="2" colspan="2"><input id="LOCATION" type="text" class="form-control" /></td>
+            <td class="formTitle" rowspan="2">坐标</td>
+            <td class="formTitle">经度</td>
+            <td class="formValue"><input id="LONGITUDE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">纬度</td>
+            <td class="formValue"><input id="LATITUDE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">批准销号时间</td>
+            <td class="formValue"><input id="XHSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+            <td class="formTitle" style="display:none;">销号点情况</td>
+            <td class="formValue" colspan="3" style="display:none;"><div id="XHQK"></div></td>
+        </tr>
+        <tr>
+            <td class="formTitle" rowspan="13">批准销号原因</td>
+            <td class="formTitle" rowspan="5">
+                <label onclick="zlgcxz()"><input type="checkbox" id="ISZLGC" value="0">完成工程治理</label>
+            </td>
+            <td class="formTitle" colspan="2">防治工程等级/工程投资</td>
+            <td class="formValue" colspan="2"><input id="ZLGCQK" type="text" class="form-control wczlgc" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">主要防治措施</td>
+            <td class="formValue" colspan="2"><input id="ZLGCQK2" type="text" class="form-control wczlgc" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">工程竣工时间与竣工验收情况</td>
+            <td class="formValue" colspan="2"><input id="ZLGCQK3" type="text" class="form-control wczlgc" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">治理效果和监测情况</td>
+            <td class="formValue" colspan="2"><input id="ZLGCQK4" type="text" class="form-control wczlgc" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">现场核实治理工程变形情况丶毁损丶完整性丶稳定情况</td>
+            <td class="formValue" colspan="2"><input id="ZLGCQK5" type="text" class="form-control wczlgc" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" rowspan="6">
+                <label onclick="bqbrxz()"><input type="checkbox" id="ISBQBR" value="0">完成搬迁避让</label>
+            </td>
+            <td class="formTitle" colspan="2">搬迁户数/人数</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">搬迁避让项目实施部门</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK2" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">是否全部实施搬迁</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK3" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">影响范围内有误耕地以外的其他保护对象</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK4" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">搬迁后房屋是否全部拆除丶居民有无回流可能</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK5" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle" colspan="2">搬迁地质灾害点是否已设置警示标志</td>
+            <td class="formValue" colspan="2"><input id="BQBQQK6" type="text" class="form-control wcbqbr" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">
+                <label onclick="zrztxz()"><input type="checkbox" id="ISZRZT" value="1">确认责任主体</label>
+            </td>
+            <td class="formTitle" colspan="2">责任主体明确情况</td>
+            <td class="formValue" colspan="2"><input id="ZRZTQK" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">其他</td>
+            <td class="formTitle" colspan="2">灾害点现状</td>
+            <td class="formValue" colspan="2"><input id="ZHDXZ" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">同意销号意见</td>
+            <td class="formValue" colspan="5"><input id="BZ" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表单位</td>
+            <td class="formValue" colspan="5"><input id="FILLTABLEUNIT" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表人</td>
+            <td class="formValue"><input id="FILLTABLEPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">复核人</td>
+            <td class="formValue"><input id="VERIFYPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">填表日期</td>
+            <td class="formValue"><input id="FILLTABLEDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+    </table>
+</div>
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/plugins/infoearthcustom/dictionaryControl.js"
+)
+@section Scripts{
+<script src=></script>
+<script>
+    var keyValue = request('keyValue');
+    var projectid = "";
+    var authToken = getAuthorizationToken();
+    var guid = request('guid');  //核销数据的GUID
+    var types = "";
+    $(function () {
+        initSelect();
+        initControl();
+    });
+    //先获取当前用户
+    function GetCurrentUserCode() {
+        $.ajax({
+            url: ssoPath + 'api/AdministrativeApi/GetCurrentUserCode',
+            async: false,
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            type: 'GET',
+            dataType: "json",
+            success: function (data) {
+                if (WebApiResultWrap) {
+                    data = data.Result;
+                }
+                if (data.length == 1) {
+                    if (data.join(",").indexOf("000000") < 0) {
+                        selectCityId = data[0].substring(0, 4) + "00";
+                        selectCounty = data[0].substring(0, 6);
+                        xzqhCode = data[0].substring(0, 6);
+                    }
+                    else {
+                        xzqhCode = AreaCode;
+                    }
+                } else if (data.join(",").indexOf("0000") < 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].substring(4, 6) == "00" && data[i].length < 9) {
+                            selectCityId = data[i];
+                            xzqhCode = data[i];
+                        }
+                    }
+                }
+
+
+            }, error: function (e) {
+            },
+            cache: false
+        });
+    }
+    //初始化控件
+    function initControl() {
+        if (guid) {
+            //$("#li_close").show();
+            $.ajax({
+                url: '../../api/TBL_XIAOHAOApi/GetFormJson',
+                data: { keyValue: guid },
+                beforeSend: function (a) {
+                    if (authToken)
+                        a.setRequestHeader("Authorization", authToken);
+                },
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    $("input").attr("disabled", "disabled");
+                    $("#form1").SetWebControls(data);
+                }, error: function (e) {
+                },
+                cache: false
+            });
+        } else {
+            if (keyValue) {
+                var queryJson = {
+                    'UNIFIEDCODE': keyValue
+                };
+                $.ajax({
+                    url: '../../api/TBL_HAZARDBASICINFOApi/GetListJson',
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    beforeSend: function (a) {
+                        if (authToken)
+                            a.setRequestHeader("Authorization", authToken);
+                    },
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (data) {
+                        data = data[0]
+                        $("#form1").SetWebControls(data);
+                        zlgcxz();
+                        bqbrxz();
+                        zrztxz();
+                        $("#UNIFIEDCODE").attr('disabled', 'disabled');
+                        $("#DISASTERNAME").attr('disabled', 'disabled');
+                        if (data && data.DISASTERTYPE) {
+                            for (var i = 0; i < $('#DISASTERTYPE label').length; i++) {
+                                if ($('#DISASTERTYPE label').eq(i).text() == data.DISASTERTYPE) {
+                                    $('#DISASTERTYPE input').eq(i).attr("checked", true);
+                                    $('#DISASTERTYPE input').attr('disabled', 'disabled');
+                                    types = $('#DISASTERTYPE label').eq(i).text();
+                                    return
+                                }
+                            }
+                        }
+
+                    }, error: function (e) {
+                    },
+                    cache: false
+                });
+                //工程治理
+                $.ajax({
+                    url: '../../api/TBL_ZLGC/GetListJson',
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    beforeSend: function (a) {
+                        if (authToken)
+                            a.setRequestHeader("Authorization", authToken);
+                    },
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length == 0) {
+                            console.log('治理');
+                            $("#ISZLGC").attr('disabled', 'disabled');
+                        }
+                    }, error: function (e) {
+                    },
+                    cache: false
+                });
+                //搬迁避让
+                $.ajax({
+                    url: '../../api/TBL_BQBRApi/GetListJson',
+                    data: { queryJson: JSON.stringify(queryJson) },
+                    beforeSend: function (a) {
+                        if (authToken)
+                            a.setRequestHeader("Authorization", authToken);
+                    },
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length == 0) {
+                            $("#ISBQBR").attr('disabled', 'disabled');
+                        }
+                    }, error: function (e) {
+                    },
+                    cache: false
+                });
+            } else {
+                $('.wczlgc').attr('disabled', 'disabled');
+                $('.wcbqbr').attr('disabled', 'disabled');
+                $('#ZRZTQK').attr('disabled', 'disabled');
+            }
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (keyValue) {
+            if (types == "滑坡") {
+                types = "01"
+            } else if (types == "崩塌") {
+                types = "02"
+            } else if (types == "泥石流") {
+                types = "03"
+            } else if (types == "地面沉降") {
+                types = "04"
+            } else if (types == "地面塌陷") {
+                types = "05"
+            } else if (types == "地裂缝") {
+                types = "06"
+            } else if (types == "斜坡") {
+                types = "00"
+            }
+            var queryJson = { 'unifycode': keyValue, "type": types }
+            $.ajax({
+                url: "../../api/TBL_AUDITINFOApi/GetPageNoAuditListJson",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                data: { queryJson: JSON.stringify(queryJson) },
+                type: "get",
+                async: false,
+                dataType: "json",
+                success: function (res) {
+                    if (res.rows.length > 0) {
+                        dialogMsg('该点存在未审核数据，请审核后再执行此操作！', 0);
+                        return;
+                    } else {
+                        SaveInfo();
+                    }
+                },
+            });
+        }
+
+    }
+
+    function SaveInfo() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var entity = $("#form1").GetWebControls(keyValue);
+        //entity.DISASTERTYPE = $('#DISASTERTYPE label').eq(entity.DISASTERTYPE).text();
+        $.SaveForm({
+            url: "../../api/TBL_XIAOHAOApi/SaveForm?keyValue=" + keyValue,
+            param: entity,
+            authToken: authToken,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+    function initSelect() {
+        $("#DISASTERTYPE").dictionaryControl({ dicCode: "HazardType", type: "radio" });
+        $("#XHQK").dictionaryControl({ dicCode: "xhdqk", type: "radio" });
+    }
+    function zlgcxz() {
+        if ($('#ISZLGC').is(":checked")) {
+            $('.wczlgc').removeAttr('disabled');
+        } else {
+            $('.wczlgc').val('');
+            $('.wczlgc').attr('disabled', 'disabled');
+        }
+    }
+    function bqbrxz() {
+        if ($('#ISBQBR').is(":checked")) {
+            $('.wcbqbr').removeAttr('disabled');
+        } else {
+            $('.wcbqbr').val('');
+            $('.wcbqbr').attr('disabled', 'disabled');
+        }
+    }
+    function zrztxz() {
+        if ($('#ISZRZT').is(":checked")) {
+            $('#ZRZTQK').removeAttr('disabled');
+        } else {
+            $('#ZRZTQK').val('');
+            $('#ZRZTQK').attr('disabled', 'disabled');
+        }
+    }
+    //选择灾害点信息
+    function zhxx() {
+        dialogOpen({
+            id: 'Form2',
+            title: '获取灾害信息',
+            url: '/JXGeoManage/TBL_HAZARDBASICINFO/HAZARDBASCOMMONIndex',
+            width: '970px',
+            height: '460px',
+            isClose: true,
+            callBack: function (iframeId) {
+                var selectedRowIndex = getInfoTop().frames[iframeId].$('#gridTable').getGridParam('selrow');
+                var dt = getInfoTop().frames[iframeId].$('#gridTable').jqGrid("getRowData", selectedRowIndex);
+                $("#UNIFIEDCODE").val(dt.UNIFIEDCODE);
+                $("#DISASTERNAME").val(dt.DISASTERNAME);
+                $("#UNIFIEDCODE").attr('disabled', 'disabled');
+                $("#DISASTERNAME").attr('disabled', 'disabled');
+                $("#PROJECTID").val(dt.PROJECTID);
+                $("#OUTDOORCODE").val(dt.OUTDOORCODE);
+                $("#LOCATION").val(dt.LOCATION);
+                projectid = dt.PROJECTID;
+                if (dt.DISASTERTYPE) {
+                    for (var i = 0; i < $('#DISASTERTYPE label').length; i++) {
+                        if ($('#DISASTERTYPE label').eq(i).text() == dt.DISASTERTYPE) {
+                            $('#DISASTERTYPE input').eq(i).attr("checked", true);
+                            $('#DISASTERTYPE input').attr('disabled', 'disabled');
+                        }
+                    }
+                }
+            }
+        });
+    }
+</script>
+}

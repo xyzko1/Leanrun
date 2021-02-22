@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndex.cshtml";
+    }
+
+<script type="text/javascript">
+    var contentid = request('contentid');
+    var userid = request('userid');
+    var status = request('status');
+    var sendId = request('sendId');
+    $(function () {
+        NoticeXq();      
+    });
+    function NoticeXq(){ 
+        $.ajax({
+            url: "/NoticeCenter/ReadMsg",
+            data: {
+                contentId: contentid,
+                userId:userid,
+                status:status,
+                sendId: sendId
+
+
+            },
+            success: function (data) {             
+               var json = JSON.parse(data)
+                    $("#people").text(json.F_SendId);
+                    $("#date").text(json.F_CreateDate);
+                    $("#content").text(json.F_Content);
+                    $("#title").text(json.F_MsgTitle);                          
+            },
+            error: function (e) {
+
+            },
+            cache: false
+        });
+
+    }
+
+</script>
+
+
+
+
+
+
+
+<div class="row" style="margin:10px; background:#fff;">
+    
+        <div class="title" style="margin:0 20px; height:48px;line-height:48px; color:#666666;font-size:18px; border-bottom:2px solid #919191; text-align:center;" id="title">
+           
+        </div>
+
+
+        <div style="padding: 15px 25px; color:#666;  line-height:24px;">
+            <p style="text-align: right; font-size: 9px; height: 24px; line-height: 24px; color: #999;">发布人：<span style="margin-right:30px;" id="people"></span>发布日期：<span id="date"></span></p>
+
+            <p style="text-indent:2em;" id="content"></p>
+
+
+      
+
+            <p style="text-align: right; font-size: 9px; height: 24px; line-height: 24px; color:#999; border-top:1px dashed #f1f1f1;margin-top:10px;">文章来源：新疆地质灾害信息系统</p>
+</div>
+</div>
+

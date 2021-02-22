@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+@section Scripts{
+    <script>
+        var userinfo = request('userinfo') == "" ? null : request('userinfo');
+        var authToken = getAuthorizationToken();
+        $(function () {
+            GetGrid();
+            initControl();
+        });
+        //初始化控件
+        var queryJson = {}
+        function initControl() {
+            if (userinfo && userinfo != "null") {
+                if (userinfo == "qf") {
+                    queryJson.AreaCode = request("typeorcode");
+                    $.ajax({
+                        url: '../../JXGeoManage/TBL_QCQF_DISASTERPREVENTION/GetQCQFZRRInfo',
+                        data: { queryJson: JSON.stringify(queryJson) },
+                        type: 'GET',
+                        async: false,
+                        success: function (data) {
+                            data = JSON.parse(data);
+                            var obj = {};
+                            for (var a in data) {
+                                data[a] = JSON.parse(data[a]);
+                            }
+                            $('#gridTable').jqGrid('setGridParam', { data: data }).trigger('reloadGrid');
+                        }
+                    })
+                } else {
+                    userinfo = unescape(userinfo);
+                    userinfo = JSON.parse(userinfo);
+                    $('#gridTable').jqGrid('addRowData', userinfo.ContactPeopleID, userinfo);
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            }
+        }
+        //加载统计表
+        function GetGrid() {
+            $('#gridTable').jqGrid({
+                autowidth: true,
+                height: 300,
+                datatype: "local",
+                colModel: [
+                    { label: 'ContactPeopleID', name: 'ContactPeopleID', index: 'ContactPeopleID', width: 150, align: 'center', sortable: false, hidden: true },
+                    { label: '姓名', name: 'UserName', index: 'UserName', width: 150, align: 'center', sortable: false },
+                    { label: '登录名', name: 'LoginName', index: 'LoginName', width: 150, align: 'center', sortable: false },
+                    { label: '手机', name: 'Mobile', index: 'Mobile', width: 150, align: 'center', sortable: false },
+                    { label: '邮箱', name: 'Email', index: 'Email', width: 150, align: 'center', sortable: false },
+                    {
+                        label: '操作', name: 'CZ', index: 'CZ', width: 150, align: 'left', sortable: false,
+                        formatter: function (cellvalue, options, rowObject) {
+                            return '<a style="color:#3185c7;cursor:pointer;" onclick="delect(' + options.rowId + ')">删除</a>';
+                        }
+                    },
+                ],
+                pager: 'false',
+                onSelectRow: function (rowId, status) {
+                },
+                gridComplete: function () {
+                }
+            });
+        }
+        function addlxr() {
+            dialogOpen({
+                id: 'ContactPersonForm',
+                title: '新增联系人',
+                url: '../../ContactPerson/ContactPersonForm',
+                width: '800px',
+                height: "500px",
+                callBack: function (iframeId) {
+                    var data = getInfoTop().frames[iframeId].AcceptClick();
+                    var ids = $('#gridTable').jqGrid('getDataIDs');
+                    for (var a = 0; a < ids.length; a++) {
+                        var getData = $('#gridTable').jqGrid('getRowData', ids[a]);
+                        if (getData.ContactPeopleID == data.ContactPeopleID) {
+                            dialogAlert('当前用户已存在！无需重复添加');
+                            return
+                        }
+                    }
+                    $('#gridTable').jqGrid('addRowData', data.ContactPeopleID, data);
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            });
+        }
+        function addlslxr() {
+            dialogOpen({
+                id: 'addlslxr',
+                title: '新增临时联系人',
+                url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_INSERT_LSLXRFrom',
+                width: '400px',
+                height: '300px',
+                callBack: function (iframeId) {
+                    var data = getInfoTop().frames[iframeId].AcceptClick();
+                    var ids = $('#gridTable').jqGrid('getDataIDs');
+                    $('#gridTable').jqGrid('addRowData', ids.length + 1, data);
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            });
+        }
+        function delect(id) {
+            $('#gridTable').jqGrid('delRowData', id);
+            $('#gridTable').trigger('reloadGrid');
+        }
+    </script>
+}
+<style>
+    textarea {
+        padding-left: 4px;
+        resize: none;
+        height: 200px;
+        line-height: 25px;
+        border: 1px solid #ccc;
+    }
+</style>
+<div id="form1">
+    <div style="width: 100%;background: #fff; padding: 10px 0 0 0">
+        <div class="titlePanel" style="height:40px;line-height:40px;border:none;">
+            <div class="toolbar2" style="float:right;margin-right:30px;height:40px;line-height:40px;display:flex;align-items: center;">
+                <div class="btn-group">
+                    <a id="lr-add" class="btn btn-default" onclick="addlxr()"><i class="fa fa-plus"></i>新增联系人</a>
+                    <a id="lr-add" class="btn btn-default" onclick="addlslxr()"><i class="fa fa-plus"></i>新增临时联系人</a>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div style="width: 100%; height: 40px; display: flex; align-items: center; justify-content: start; padding-left: 9px">
+            <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                <span>收件人列表</span>
+            </div>
+        </div>
+        <div class="gridPanel">
+            <table id="gridTable"></table>
+        </div>
+        <div style="width: 100%; height: 40px; display: flex; align-items: center; justify-content: start; padding-left: 9px;margin-top:20px;">
+            <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                <span>发送内容</span>
+            </div>
+        </div>
+        <div style="width:98%;margin:0 auto;">
+            <textarea style="width:100%;" id="fsnr"></textarea>
+        </div>
+    </div>
+</div>

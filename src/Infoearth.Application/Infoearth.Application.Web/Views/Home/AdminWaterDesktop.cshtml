@@ -1,0 +1,365 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<div id="layout">
+    <div style="width: 100%;">
+        <div id="mapControl"></div>
+    </div>
+    <div style="width: 100%;">
+        <div style="width: 64%;" id="ZHD">
+        </div>
+        <div style="width: 35%;" id="JCD"> 
+        </div>
+    </div>
+</div>
+<style>
+    #ZHD,#JCD {
+        display:inline-block;
+    }
+</style>
+@section Scripts{
+@System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/echarts/echarts.min.js") 
+<script>
+    var layout2NorthH = 1;
+    var tabvalue = "";
+    var authToken = getAuthorizationToken();
+    var ZJJCURL = GetConfig("ZJJCURL");
+    var myChart,myChart1;
+    $(function () {
+        GetMapData();
+        GetZHDCount();
+        GetZHDPie();
+        InitialPage();
+    });
+    //初始化页面
+    function InitialPage() {
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            resize();
+            e.stopPropagation();
+        });
+        $(window).resize();
+    }
+    function resize() {
+        window.setTimeout(function () {
+            var H = $(window).height();
+            if (mapCtlExt != null) {
+                mapCtlExt.setHeight(H * 0.56);
+            }
+            $("#ZHD").height(H * 0.44);
+            $("#JCD").height(H * 0.44);
+            mapCtlExt.setHeight($('#mapControl').parent().height()-8);
+            if (myChart) {
+                myChart.resize();
+            }
+            if (myChart1) {
+                myChart1.resize();
+            }
+        }, 200);
+    };
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData() {
+        mapCtlExt = $("#mapControl").mapCtl(
+            cfGetMapData({
+                mapheight: $(window).height() * 0.56,
+                isCluster:false,
+                zoomEvent: zoomEvent
+            }));
+        usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+        GetAreaGeometry(usercode);
+    };
+    var XZQHDatabc = '';
+    function zoomEvent(zoom, XZJB, extent, addMarkerCluster) {
+        if (!XZQHDatabc) {
+            $.ajax({
+                url: "../../api/TBL_HAZARDBASICINFOApi/GetListCodes",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", authToken);
+                },
+                async: true,
+                type: "GET",
+                success: function (res) {
+                    var XZQHData = {};
+                    //省的循环
+                    var returnValue = [];
+                    for (var i = 0; i < res.provicenameList.length; i++) {
+                        var html = "<div>" + res.provicenameList[i] + "：" + res.provicecount[0].data[i] + "</div>";
+                        returnValue.push({
+                            id: "all",
+                            location: [Number(res.provicelongitude[i]), Number(res.provicelatitude[i])],
+                            popupHtml: html,
+                            dataCount: res.provicecount[0].data[i]+''
+                        });
+                    }
+                    XZQHData['省'] = returnValue;
+                    addMarkerCluster(returnValue);
+                    //市的循环
+                    var returnValue1 = [];
+                    for (var i = 0; i < res.citynameList.length; i++) {
+                        var html = "<div>" + res.citynameList[i] + "：" + res.citycount[0].data[i] + "</div>";
+                        returnValue1.push({
+                            id: "all",
+                            location: [Number(res.citylongitude[i]), Number(res.citylatitude[i])],
+                            popupHtml: html,
+                            dataCount: res.citycount[0].data[i] + ''
+                        });
+                    }
+                    XZQHData['市'] = returnValue1;
+                    //区的循环
+                    var returnValue2 = [];
+                    for (var i = 0; i < res.countynameList.length; i++) {
+                        var html = "<div>" + res.countynameList[i] + "：" + res.countycount[0].data[i] + "</div>";
+                        if (!res.countylongitude[i] || !res.countylatitude[i]) { continue };
+                        returnValue2.push({
+                            id: "all",
+                            location: [Number(res.countylongitude[i]), Number(res.countylatitude[i])],
+                            popupHtml: html,
+                            dataCount: res.countycount[0].data[i] + ''
+                        });
+                    }
+                    XZQHData['区'] = returnValue2;
+                    XZQHData['数据'] = res.data;
+                    XZQHDatabc = JSON.stringify(XZQHData);
+                }, error: function (e) {
+
+                }, cache: false
+            });
+        } else {
+            if (XZJB) {
+                var XZQHData = JSON.parse(XZQHDatabc);
+                if (mapCtlExt) {
+                    mapCtlExt.removeClusterMarker();
+                }
+                if (XZJB == '数据') {
+                    dataMarker(XZQHData[XZJB])
+                } else {
+                    addMarkerCluster(XZQHData[XZJB]);
+                }
+            }
+        }
+    }
+    function dataMarker(data){
+        var returnValue = [];
+        var type = [];
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].dangerlevel == null) {
+                data[i].dangerlevel = "";
+            }
+            else if (data[i].dangerlevel == "A") {
+                data[i].dangerlevel = "特大型";
+            } else if (data[i].dangerlevel == "B") {
+                data[i].dangerlevel = "大型";
+            } else if (data[i].dangerlevel == "C") {
+                data[i].dangerlevel = "中型";
+            } else if (data[i].dangerlevel == "D") {
+                data[i].dangerlevel = "小型";
+            }
+            if (data[i].threatenpeople == null) {
+                data[i].threatenpeople = "";
+            }
+            if (data[i].threatenassets == null) {
+                data[i].threatenassets = "";
+            }
+            //详情页面
+            var divhtml = '<div style="font-weight: bold;"></div>';
+            divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">灾害点名称：</span><span>' + data[i].disastername + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害类型：</span><span>' + data[i].disastertype + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">灾害点编号：</span><span>' + data[i].unifiedcode + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁人口(人)：</span><span>' + data[i].threatenpeople + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">威胁财产(万元)：</span><span>' + data[i].threatenassets + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">险情等级：</span><span>' + getInfoTop().learun.data.get(["dataItem", "DANGERLEVEL", data[i].dangerlevel]) + '</span></div>';
+            divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">地理位置：</span><span>' + data[i].location + '</span></div>';
+            divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="ViewDetail(\'' + data[i].disastertype + "," + data[i].unifiedcode + '\')" href="#" class="link-detail">详细信息</a></span>';
+            var longitude = 0, latitude = 0;
+            if (data[i].longitude) {
+                longitude = parseFloat(data[i].longitude);
+            }
+            if (data[i].latitude) {
+                latitude = parseFloat(data[i].latitude);
+            }
+            returnValue.push({ id: "all", url: "../../Content/images/" + data[i].disastertype + "-16.png", location: [longitude, latitude], popupHtml: divhtml });
+
+        }
+        mapCtlExt.addMarker(returnValue);
+    }
+
+    //加载Echars报表(所有区域)
+    function GetZHDCount() {
+        var queryJson = {};
+        var colorArr = ["#123456", "#008cee", "#d274b6", "#d29574"];
+        $.ajax({
+           url: '../../api/TBL_HAZARDBASICINFOApi/GetStatisticsByZHD?queryJson=' + JSON.stringify(queryJson),
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            async: true,
+            type: "GET",
+            success: function (data) {
+                var chartBarData1 = {
+                    title: "地质灾害点统计 (单位:个)",
+                    legend: {},
+                    xAxis: {
+                        type: 'category',
+                        data: data.columnList,
+                        axisLabel: {
+                            interval: 0,
+                            rotate: 45,
+                            show: true,
+                            //splitNumber: 15,
+                            textStyle: {
+
+                            }
+                        }
+                    },
+                    yAxis: [{ type: 'value' }],
+                    grid: {
+                        "borderWidth": 0,
+                        top: 60, right: 80,
+                        containLabel: true
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: {
+                                show: true,
+                            }
+                        },
+                        right: '20'
+                    },
+                    series: [{
+                        name: "",
+                        type: 'bar',
+                        data: data.dataList[0].data,
+                        itemStyle: { normal: { color: function (params) { return colorArr[0]; } } }
+                    }]
+                };
+                myChart1 = initMonitorChart("ZHD", chartBarData1);
+            }
+        });
+    }
+    function GetZHDPie() {
+        var dataSeries = [];
+        var zhdSeries = [];
+        var activeSubjectsArr = [];
+        $.ajax({
+            url: "../api/TBL_HAZARDBASICINFOApi/GetDicAnalyse",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            data: { enCode: 'HazardType' },
+            async: true,
+            type: "GET",
+            success: function (dataList) {
+                var data = dataList[0];
+                for (var key in data) {
+                    dataSeries.push(key);
+                    zhdSeries.push(data[key]);
+                }
+                for (var i = 0; i < dataSeries.length; i++) {
+                    var activeSubjectsObject = {};
+                    for (var j = 0; j < zhdSeries.length; j++) {
+                        if (i == j) {
+                            activeSubjectsObject.name = dataSeries[i];
+                            activeSubjectsObject.value = zhdSeries[j];
+                            activeSubjectsArr.push(activeSubjectsObject);
+                        }
+                    }
+                }
+                myChart = echarts.init(document.getElementById("JCD"));
+                //指定图表配置数据
+                option = {
+                    title: {
+                        x: 'left',
+                        top: 8,
+                        text: '灾害点（类型）统计  (单位:个)',
+                        textStyle: {
+                            color: '#008cee',
+                            fontStyle: 'normal',
+                            fontWeight: 'normal',
+                            fontSize: 16
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        type: 'scroll',
+                        orient: 'vertical',
+                        right: 31,
+                        top: 30,
+                        bottom: 20,
+                        data: dataSeries
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            mark: true,
+                            //dataView:{ show:true,readOnly:false},
+                            saveAsImage: {
+                                show: true,
+                                excludeComponents: ['toolbox'],
+                                pixelRatio: 2
+                            }
+                        },
+                        right: 20
+                    },
+                    series: [
+                        {
+                            name: '灾害数据',
+                            type: 'pie',
+                            radius: '55%',
+                            center: ['50%', '60%'],
+                            data: activeSubjectsArr,
+                            itemStyle: {
+                                emphasis: {
+                                    shadowBlur: 10,
+                                    shadowOffsetX: 0,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            }
+                        }
+                    ]
+                }
+                myChart.setOption(option, true);
+            }
+        })
+    }
+    //详情
+    function ViewDetail(type) {
+        var keyValue = type.split(",")[1];
+        var types = type.split(",")[0];
+        var title = types;
+        if (types == "滑坡") {
+            types = "001"
+        } else if (types == "崩塌") {
+            types = "002"
+        } else if (types == "泥石流") {
+            types = "003"
+        } else if (types == "地面沉降") {
+            types = "004"
+        } else if (types == "地面塌陷") {
+            types = "005"
+        } else if (types == "地裂缝") {
+            types = "006"
+        } else if (types == "斜坡") {
+            types = "007"
+        }
+        if (checkedRow(keyValue)) {
+            newTabs({
+                id: "DZXQ",
+                url: "/JXGeoManage/TBL_HAZARDBASICINFO/DETAIL?keyValue=" + keyValue + "&types=" + types + "&details=01&callback=show"
+            });
+        }
+    }
+</script>
+}

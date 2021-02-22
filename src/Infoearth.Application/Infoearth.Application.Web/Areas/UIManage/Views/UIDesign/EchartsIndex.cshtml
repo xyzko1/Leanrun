@@ -1,0 +1,385 @@
+﻿
+@{
+    ViewBag.Title = "图表";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+
+ <style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 24px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+     .echarts_item{
+         border-right:1px solid #eee;
+         width:316px;
+         height:240px;
+         text-align:center;
+         float:left;
+      
+        
+       
+
+     }
+</style>
+
+
+<script type="text/javascript">
+
+
+    //$(function () {
+    //    InitialPage();
+
+
+
+
+    //});
+    //初始化页面
+    //function InitialPage() {
+
+    //    $(window).resize(function (e) {
+    //        window.setTimeout(function () {
+    //            $('#abc').height($(window).height() - 20);
+    //        }, 200);
+    //        e.stopPropagation();
+    //    });
+    //}
+
+
+
+</script>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">图表展示</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、折线图
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                          
+                               
+                            <div class="echarts_item">
+                                 <img src="~/Content/adminDefault/img/echarts_03.png" />
+                            </div>
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts_05.png" />
+                            </div>
+
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts0_03.png" />
+                            </div>
+                            <div class="echarts_item" style="border:none;">
+                                <img src="~/Content/adminDefault/img/echarts1_03.png" />
+                            </div>
+
+
+                                <div style="clear:both;"></div>
+                         
+
+
+
+                          
+
+
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、柱状图
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echart2_03.png" />
+                            </div>
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts3_03.png" />
+                            </div>
+
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts4_03.png" />
+                            </div>
+                            <div class="echarts_item" style="border:none;">
+                                <img src="~/Content/adminDefault/img/echarts5_03.png" />
+                            </div>
+
+
+                            <div style="clear:both;"></div>
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、饼形图
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts6_03.png" />
+                            </div>
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts6_05.png" />
+                            </div>
+
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts7_03.png" />
+                            </div>
+                            <div class="echarts_item" style="border:none;">
+                                <img src="~/Content/adminDefault/img/echarts8_03.png" />
+                            </div>
+
+
+                            <div style="clear:both;"></div>
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、散点图
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts9_03.png" />
+                            </div>
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts10_03.png" />
+                            </div>
+
+                            <div class="echarts_item">
+                                <img src="~/Content/adminDefault/img/echarts10_05.png" />
+                            </div>
+                            <div class="echarts_item" style="border:none;">
+                                <img src="~/Content/adminDefault/img/echarts11_03.png" />
+                            </div>
+
+
+                            <div style="clear:both;"></div>
+                        </div>
+                     
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    
+
+</div>
+

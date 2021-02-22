@@ -1,0 +1,325 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        margin:0;
+    }
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+    .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+background:#fff !important;
+color:#000 !important;
+    }
+</style>
+<div class="titlePanel">
+    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1);color:#000;height:35px"><i class="fa fa-bars"></i>查询条件</div>
+    <div class="title-search" style="width: 100%; height: 40px;color:#000;display: flex; align-items: center;flex-wrap:wrap;padding:0">
+        <span class="spans">灾害点名称:</span><input id="DISASTERNAME" type="text" class="form-control" placeholder="请输入灾害点名称" style="width: 16%" />
+        <span class="spans">监测类型:</span><div id="MONITORPOINTCODE" type="select" class="ui-select" placeholder="请选择" style="width: 16%"></div>
+        <span class="spans">监测部位:</span><input id="MONITORPOINTPOSITION" type="text" class="form-control" placeholder="请输入监测部位" style="width: 16%" />
+        <a id="btn_Search" class="btn btn-primary" style="margin-bottom:0;margin-left:30px"><i class="fa fa-search"></i> 查询</a>
+       <a id="btn_Reset" class="btn btn-primary" style="margin-bottom:0;margin-left:30px;background:gray;border-color:gray;cursor: pointer;"><i class="fa fa-search"></i> 重置</a>&nbsp;  
+    </div>
+    <div style="background-color: rgba(236, 247, 255, 1);width:100%;height:35px;color:#000;display:flex;align-items: center;">
+        <span style="flex:1;font-weight:700;padding-left:9px;height:35px;line-height:35px">监测点列表</span>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<div style="background-color: rgba(236, 247, 255, 1);width:100%;height:35px;color:#000;display:flex;align-items: center;">
+    <span style="flex:1;font-weight:700;padding-left:9px;height:35px;line-height:35px">已关联监测点</span>
+</div>
+<div class="gridPanel">
+    <table id="gridTables"></table>
+</div>
+
+@section Scripts{
+<script>
+    var authToken = getAuthorizationToken();
+    var checkeddatas = [];
+    var keyValue = request('keyValue');
+    var ID = request('ID');
+    var gljcecode = request('gljcecode');
+    
+    $(function () {
+        InitialPage();
+        initControl();
+        GetGrid();
+        GetGrids()
+    });
+    //初始化控件
+    function initControl() {
+        $.ajax({
+            url: "../../api/TBL_QCQF_POINTOBSERVATIONApi/GetListByID",
+            type: "GET",
+            async: false,
+            data: { ID: keyValue },
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (data) {
+                if (data != undefined && data != null && data != '') {
+                    for (var i = 0; i < data.length; i++) {
+                        checkeddatas.push(data[i]["UNIFIEDCODE"]);
+                    }
+                }
+            }
+        })
+        $("#btn_Search").click(SearchEvent);
+        $("#btn_Reset").click(ClearEvent);
+    }
+    function SearchEvent() {
+        var queryJson = $(".title-search").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    function ClearEvent() {
+        $(".title-search").find("input[type='text']").val("");
+        $("#MONITORPOINTCODE").ComboBoxSetValue(" ");
+    }
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5 - 34);
+            }, 200);
+            e.stopPropagation();
+        });
+        $("#MONITORPOINTCODE").ComboBox({
+            id: "label",
+            text: "value",
+            description: "请选择",
+            height: "170px",
+            data: [
+                { label: "DG", value: "地鼓" },
+                { label: "DL", value: "地裂" },
+                { label: "QL", value: "墙裂" },
+                { label: "JS", value: "井水" },
+                { label: "QS", value: "泉水" },
+            ]
+        });
+    }
+    var dataArr = [];  var uuid = [];
+    var guids = guid();
+    //加载表格
+    function GetGrid() {
+        console.log("加载");
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $(".title-search").getWebControls();
+        queryJson["areecode"] = gljcecode;
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: ($(window).height() - 136.5 - 34)/2,
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetPageListJson",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 250, align: 'left', sortable: true,hidden:true},
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 350, align: 'left', sortable: true },
+                { label: '监测部位', name: 'MONITORPOINTPOSITION', index: 'MONITORPOINTPOSITION', width: 250, align: 'left', sortable: true, hidden: true },
+                { label: '监测点标号', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 150, align: 'left', sortable: true },
+                {
+                    label: '监测类型', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 120, align: 'left', sortable: true
+                 , formatter: function (cellvalue, options, rowObject) {
+                    //防止空值substring报错
+                     if (cellvalue != null || cellvalue != undefined || cellvalue != "") {
+                         switch (cellvalue.substring(0, 2)) {
+                             case "DG":
+                                 return "地鼓";
+                             case "DL":
+                                 return "地裂";
+                             case "QL":
+                                 return "墙裂";
+                             case "JS":
+                                 return "井水";
+                             case "QS":
+                                 return "泉水";
+                             default:
+                                 return "";
+                         }
+                     } else {
+                         return "";
+                     }
+                     
+                 }
+                },
+            ],
+            multiselect: true,
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectAll:function(rowids,statue){ 
+                dataArr = [];
+                $("#gridTables").jqGrid("clearGridData");
+                var ids = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+                for (var i = 0; i < ids.length; i++) {
+                    var rowData = $('#gridTable').jqGrid('getRowData', ids[i]);
+                    dataArr.push(rowData);
+                }
+                $("#gridTables").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: dataArr,
+                    page: 1
+                }).trigger("reloadGrid");
+            },
+            onSelectRow: function (rowId, status) {
+               //var rowData = $("#gridTable").getRowData(rowId);
+               //if (!IsInArr(rowData.GUID, checkeddatas)) {
+               //    checkeddatas.push(rowData.GUID);
+               //    $("#" + rowId).find(":checkbox").prop('checked', true);
+               // }
+               // else {
+               //    checkeddatas.splice(checkeddatas.indexOf(rowData.GUID), 1)
+               //    $("#" + rowId).find(":checkbox").prop('checked', false);
+               //}
+                uuid = []; dataArr = []; checkeddatas = [];
+               $("#gridTables").jqGrid("clearGridData");
+               var ids = $('#gridTable').jqGrid('getGridParam', 'selarrrow');
+               for(var i=0;i<ids.length;i++){
+                   var rowData = $('#gridTable').jqGrid('getRowData', ids[i]);
+                   dataArr.push(rowData);
+                   uuid.push(ID);
+                   checkeddatas.push(rowData.GUID);
+               }
+                $("#gridTables").jqGrid('setGridParam', {
+                   datatype: 'local',
+                   data: dataArr,
+                   page: 1
+               }).trigger("reloadGrid");
+            },
+            gridComplete: function () {
+                //var rowIds = $("#gridTable").jqGrid("getDataIDs");
+                //for (var i = 0; i < checkeddatas.length; i++) {
+                //    for (var j = 1; j < rowIds.length+1; j++) {
+                //        if (checkeddatas[i] == $("#gridTable").getRowData(j).GUID) {
+                //            var curChk = $("#" + j).find(":checkbox");
+                //            curChk.attr('checked', 'true');
+                //        }
+                //    }
+                //}
+            }
+        });
+    }
+    function IsInArr(a, arr) {
+        var flag= false;
+        for (var i = 0; i < arr.length; i++) {
+            if (a==arr[i]) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+    //加载表格
+    function GetGrids() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTables');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 486.5 - 28,
+            datatype: 'local',
+            data: dataArr,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 250, align: 'left', sortable: true, hidden: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 350, align: 'left', sortable: true },
+                { label: '监测部位', name: 'MONITORPOINTPOSITION', index: 'MONITORPOINTPOSITION', width: 250, align: 'left', sortable: true, hidden: true },
+                { label: '监测点编号', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 150, align: 'left', sortable: true },
+                {
+                    label: '监测类型', name: 'MONITORPOINTCODE', index: 'MONITORPOINTCODE', width: 120, align: 'left', sortable: true
+                    , formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue != null || cellvalue != undefined || cellvalue != "") {
+                            switch (cellvalue.substring(0, 2)) {
+                                case "DG":
+                                    return "地鼓";
+                                case "DL":
+                                    return "地裂";
+                                case "QL":
+                                    return "墙裂";
+                                case "JS":
+                                    return "井水";
+                                case "QS":
+                                    return "泉水";
+                                default:
+                                    return "";
+                            }
+                        } else {
+                            return "";
+                        }
+                    }
+                },
+                {
+                    label: '操作', name: 'Action', index: 'Action', width: 80, align: 'center', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a onclick=\"DeleteInfo(\'' + options.rowId + '\')\" style=\"color: #008cee;cursor: pointer;\">删除</a>';
+                    }
+                },
+            ],
+            viewrecords: true,
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //删除勾选
+    function DeleteInfo(guid) {
+        $("#gridTables").jqGrid("delRowData", guid);
+        var a = guid - 1;
+        $($("#gridTable").find(":checkbox")[a]).prop('checked', false);
+    }
+        //保存表单;
+    function AcceptClick() {
+        var rows = $("#gridTables").jqGrid('getRowData');
+        var aa = {};
+        aa.dataArr = dataArr; aa.checkeddatas = checkeddatas; aa.uuid = uuid;
+        return aa;
+            //return checkeddatas;
+    }
+    function guid() {
+        function S4() {
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+        }
+        return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    }
+</script>
+}

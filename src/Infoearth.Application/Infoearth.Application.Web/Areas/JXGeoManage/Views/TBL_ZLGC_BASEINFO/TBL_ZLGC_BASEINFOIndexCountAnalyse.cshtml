@@ -1,0 +1,1419 @@
+﻿@{
+    ViewBag.Title = "治理工程统计列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<link href="~/Content/styles/report.css" rel="stylesheet" />
+<style>
+    body, html {
+        background: #fff
+    }
+
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .diaochabiao {
+        text-align: center;
+    }
+
+    .table-top, .table-main, table-bottom {
+        margin: 0 20px;
+    }
+
+        .table-main td {
+            border: 1px solid #D6D6D6;
+        }
+
+    .formValue input[type=text] {
+        border: 0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .diaochabiao .formValue textarea {
+        /*height:80px;*/
+        border: none;
+    }
+
+    .diaochabiao .formTitle {
+        text-align: center !important;
+        /*width: 135px !important;*/
+        background-color: #F5F5F5;
+        white-space: inherit;
+    }
+
+    .diaochabiao .formCategory {
+        font-size: 15px;
+        /*color: #3F549E;*/
+    }
+
+    .diaochabiao .required {
+        color: red;
+        padding-left: 5px;
+        vertical-align: middle;
+    }
+
+    .diaochabiao select {
+        border: none;
+    }
+
+    .diaochabiao label {
+        margin: 0 2px;
+    }
+    /****************** td中的多个标签并列 START *************/
+    .diaochabiao .multi-label-48 {
+        width: 48%;
+    }
+
+        .diaochabiao .multi-label-48 input {
+            float: right;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-40 {
+        width: 40%;
+    }
+
+    .diaochabiao .multi-label-30 {
+        width: 30%;
+    }
+
+        .diaochabiao .multi-label-30 input {
+            float: left;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-10 {
+        width: 10%;
+    }
+
+        .diaochabiao .multi-label-10 input {
+            float: left;
+        }
+
+    .diaochabiao .multi-label-15 {
+        width: 15%;
+    }
+
+        .diaochabiao .multi-label-15 input {
+            float: left;
+            width: 20%;
+            margin: 0 2px;
+        }
+    /*新增*/
+    .formValue input[type=text] .diaochabiao .label-1 {
+        width: 5%;
+    }
+
+    .diaochabiao .label-1 input {
+        float: left;
+    }
+
+    .diaochabiao .form-control[readonly], fieldset[readonly] .form-control {
+        background-color: #fff;
+        border: none;
+        cursor: default;
+    }
+
+    .diaochabiao .form-control {
+        border: none;
+    }
+    /*新增*/
+    /****************** td中的多个标签并列 START *************/
+
+    /****************** 保持标题文字两边对其的样式 START *************/
+    .KONG {
+        padding-left: 24px;
+    }
+
+    .diaochabiao .multi-label-rigth-30 {
+        width: 30%;
+    }
+
+        .diaochabiao .multi-label-rigth-30 input {
+            float: right;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-rigth-25 {
+        width: 20%;
+        /*display:none;*/
+    }
+
+        .diaochabiao .multi-label-rigth-25 input {
+            float: right;
+            width: 90%;
+            margin: 0 2px;
+        }
+    /****************** td中的2个input并列 START *************/
+
+    /****************** 保持标题文字两边对其的样式 END *************/
+    .ui-priority-secondary {
+        background-color: #DCDCDC;
+        color: #222222;
+    }
+
+    .titlePanel {
+        height: 55px;
+    }
+
+    .spansa {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px
+    }
+
+    .divselect {
+        width: 16%;
+    }
+
+    .form-control, .ui-select, .ui-select-text {
+        border-radius: 3px;
+    }
+
+    .spans {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px;
+    }
+
+    .linkName {
+        display: inline-block;
+        width: 180px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        float: left;
+    }
+
+    .delIcon {
+        display: initial;
+    }
+
+    .link {
+        display: inline-block;
+        float: left;
+    }
+    /*tab*/
+    .lea-tabs {
+        height: 38px;
+        width: 100%;
+        background: #fff;
+        border-bottom: solid #ccc 1px;
+        padding-left: 15px;
+    }
+
+        .lea-tabs .tabs-right-tool {
+            position: absolute;
+            width: 236px !important;
+            height: 37px;
+            right: 0;
+            background-color: #fff;
+        }
+
+        .lea-tabs .roll-nav {
+            float: left;
+            width: 20px;
+            height: 37px;
+            line-height: 37px;
+            text-align: center;
+            color: #878EC3;
+            z-index: 2;
+            background: #fff;
+            border: 0;
+            outline: 0;
+            cursor: pointer;
+        }
+
+            .lea-tabs .roll-nav:hover {
+                color: #4c58a4;
+            }
+
+        .lea-tabs .user-menu {
+            float: left;
+            padding-top: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+    .menuTabs {
+        width: 100000px;
+    }
+
+    .menuTab i {
+        margin-right: 4px;
+        font-size: 13px;
+    }
+
+    .page-tabs-content .tab_close {
+        width: 12px;
+        height: 13px;
+        position: absolute;
+        top: 17px;
+        right: 13px;
+        cursor: pointer;
+        display: block;
+        background: url(../../../../Content/adminDefault/img/tab_close.png) no-repeat;
+    }
+
+        .page-tabs-content .tab_close:hover {
+            background-position: 0 -12px;
+        }
+
+    .page-tabs-content {
+        overflow: hidden;
+        height: 38px;
+        float: left;
+    }
+
+        .page-tabs-content .menuTab {
+            display: block;
+            float: left;
+            text-decoration: none;
+            color: #878EC3;
+            border: 1px solid #ccc;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 8px;
+            font-size: 14px;
+            margin-right: 8px;
+            padding: 0 22px 0 10px;
+        }
+
+            .page-tabs-content .menuTab.active {
+                border-bottom: 0;
+                background: #d5edfe;
+                font-weight: 700;
+                border-top: solid #4c58a4 2px;
+                color: #4c58a4;
+            }
+</style>
+<div id="layout" style="height:100%;">
+    <div style="width:100%;height:40px;background:#fff">
+        <ul class="nav nav-tabs" style="width:100%;background-color: rgba(248, 252, 255, 1);padding-top:2px">
+            <li class="active" id=""><a href="#JCTJ" data-toggle="tab">基础统计</a></li>
+            <li id="li_BTGL"><a href="#YBCTJ" data-toggle="tab">已保存统计报表</a></li>
+        </ul>
+    </div>
+
+    <div id="myTabContent" class="tab-content" style="height:calc(100% - 40px)">
+        <div class="tab-pane fade in active" id="JCTJ" style="height:100%;">
+            <div id="TjItem">
+                <div style="width:100%;border: 1px solid #ccc;border-top:none; height:40px;line-height:40px;background:#fff;display:flex;align-items: center;">
+                    <span style="font-size:14px;padding-left:20px; font-family:微软雅黑;color:#000;">行政区划:</span>
+                    <div id="districtsCtls" style="width:90%;"></div>
+                </div>
+                <div style="width:100%;border: 1px solid #ccc;border-top:none;height:40px;line-height:40px;background:#fff;display:flex;align-items: center;">
+                    <span style="font-size:14px;padding-left:20px; font-family:微软雅黑;color:#000;">筛选条件:</span>
+                    <div style="width:90%;height:40px;display:flex;align-items: center;">
+                        <span class="spans">统计年度：</span>
+                        <input style="width:16%" type="text" id="Static_Year" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt:'yyyy'})" />
+                        <span class="spans">统计单位：</span>
+                        <div style="width:16%" id="Static_Unit" type="selectTree" class="ui-select"></div>
+                        <a style="margin-left:30px" id="btn_genercode" onclick="" class="btn btn-primary" style="float:right"><i class="fa fa-save"></i>&nbsp;统计</a>
+                    </div>
+                </div>
+            </div>
+            <div id="tabListContentDiv"></div>
+            <div id="" class="tab-content" style="height:calc(100% - 120px)">
+                <div class="tab-pane fade in active" id="TJJG" style="height:100%;">
+                    <div class="gridPanel" id="GridContent">
+                        <table id="gridTable"></table>
+                    </div>
+                </div>
+                <div class="tab-pane fade in active" id="TJTB" style="height:100%;width:100%;float:left;position:relative">
+                    <div id="TBtype" type="select" style="width: 200px; position:absolute;top:0;right:0" class="ui-select"></div>
+                    <div id="chartsdata" style="width:100%;height:100%;float:left;margin-top:30px;"></div>
+                </div>
+                <div class="tab-pane fade in active" id="XZQHTJ" style="height:100%;">
+                    <div class="gridPanel">
+                        <table id="gridTableXZQH"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade in" id="YBCTJ" style="height:100%">
+            <ul id="YBCTJ_UI" style="display:flex;flex-wrap:wrap;height:100px;overflow-y:scroll"></ul>
+            <div style="width:100%;height:36px;background-color: rgba(236, 247, 255, 1);line-height:36px">
+                <ul class="nav nav-tabs" style="float: left; width: 100%;padding-top:0;padding-bottom:1px">
+                    <li id="li_YBTJJG" class="active"><a href="#YBTJJG" data-toggle="tab" class="active">统计结果</a></li>
+                    <li id="li_YBTJTB"><a href="#YBTJTB" data-toggle="tab">统计图表</a></li>
+                </ul>
+            </div>
+
+            <div id="tab_contents" class="tab-content" style="width:100%;height:100%">
+                <div class="tab-pane fade in active" id="YBTJJG" style="height:100%;">
+                    <div class="gridPanel" id="GridContentA">
+                        <table id="gridTableA"></table>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="YBTJTB" style="height:100%;width:100%;display:block">
+                    <div style="width:10%;float:right;">
+                        <div id="TBtypeA" type="select" style="width: 140px; margin: 1px 4px 8px 4px;display:inline-block;float:right;z-index:10" class="ui-select"></div>
+                    </div>
+                    <div id="chartsdataA" style="width:100%;height:calc(100% - 248px);margin-top:30px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">请输入报表名称
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    @*在这里添加一些文本*@
+                    <input type="text" class="clo" id="tablename" style="width: 90%; line-height: 26px; border-radius: 4px;" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="btn_save()">
+                        确定保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalCondition">
+                    报表详情
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div style="width: 100%; height: 45px; line-height: 45px; background: #fff; display: flex; align-items: center;">
+                    <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">行政区划:</span>
+                    <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px" id="bbssx">
+                        <span class="spans" style="white-space: nowrap;">省:</span>
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="PROVINCENAME2" class="form-control" disabled="disabled" />
+                        <span class="spans" style="white-space: nowrap;">市:</span>
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="CITYNAME2" class="form-control" disabled="disabled" />
+                        <span class="spans" style="white-space: nowrap;">县（区）:</span>
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="COUNTRYNAME2" class="form-control" disabled="disabled" />
+                    </div>
+                    <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px; padding-top: 10px; display: none;" id="quanguo">
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="qg" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+                <div style="width: 100%; height: 45px; line-height: 45px; background: #fff; display: flex">
+                    <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">统计条件:</span>
+                    <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px">
+                        <span class="spans" style="white-space: nowrap;">统计年度:</span>
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="Static_Year2" class="form-control" disabled="disabled" />
+                        <span class="spans" style="white-space: nowrap;">统计单位:</span>
+                        <input style="width: 16%; border-radius: 4px;" type="text" id="Static_Unit2" class="form-control" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+@section Scripts{
+    <script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+    <script src="~/Content/scripts/plugins/echarts/echarts.min.js"></script>
+    <script src="~/Content/report.js"></script>
+    <script src="~/Content/scripts/plugins/infoearthcustom/tabControl.js"></script>
+    <script>
+        var parmProvince = "";
+        var parmCity = "";
+        var parmCountry = "";
+        var parmTown = "";
+        var parmYear = "";
+        var echartedatajson = {};
+        var authToken = getAuthorizationToken();
+        var codeType = "省";
+        var xzqhcode = "";
+        var Showcols = [];
+        var Province_Showcols = [
+            {
+                label: '省', name: '省', index: '省', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            { label: '治理灾害点数量（个）', name: '治理灾害点个数', index: '治理灾害点个数', width: 200, align: 'center', sortable: true },
+            { label: '治理工程数（个）', name: '治理工程个数', index: '治理工程个数', width: 200, align: 'center', sortable: true },
+            { label: '项目立项（个）', name: '项目立项个数', index: '项目立项个数', width: 150, align: 'center', sortable: true },
+            { label: '野外勘察（个）', name: '野外勘察个数', index: '野外勘察个数', width: 150, align: 'center', sortable: true },
+            { label: '施工设计（个）', name: '施工设计个数', index: '施工设计个数', width: 150, align: 'center', sortable: true },
+            { label: '工程施工（个）', name: '工程施工个数', index: '工程施工个数', width: 150, align: 'center', sortable: true },
+            { label: '工程监理（个）', name: '工程监理个数', index: '工程监理个数', width: 150, align: 'center', sortable: true },
+            { label: '项目验收（个）', name: '项目验收个数', index: '项目验收个数', width: 150, align: 'center', sortable: true },
+            { label: '批复资金总数（万元）', name: '批复资金总数', index: '批复资金总数', width: 200, align: 'center', sortable: true },
+        ];
+
+        var City_Showcols = [
+            {
+                label: '省', name: '省', index: '省', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            {
+                label: '市名称', name: '市', index: '市', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            { label: '治理灾害点数量（个）', name: '治理灾害点个数', index: '治理灾害点个数', width: 200, align: 'center', sortable: true },
+            { label: '治理工程数（个）', name: '治理工程个数', index: '治理工程个数', width: 200, align: 'center', sortable: true },
+            { label: '项目立项（个）', name: '项目立项个数', index: '项目立项个数', width: 150, align: 'center', sortable: true },
+            { label: '野外勘察（个）', name: '野外勘察个数', index: '野外勘察个数', width: 150, align: 'center', sortable: true },
+            { label: '施工设计（个）', name: '施工设计个数', index: '施工设计个数', width: 150, align: 'center', sortable: true },
+            { label: '工程施工（个）', name: '工程施工个数', index: '工程施工个数', width: 150, align: 'center', sortable: true },
+            { label: '工程监理（个）', name: '工程监理个数', index: '工程监理个数', width: 150, align: 'center', sortable: true },
+            { label: '项目验收（个）', name: '项目验收个数', index: '项目验收个数', width: 150, align: 'center', sortable: true },
+            { label: '批复资金总数（万元）', name: '批复资金总数', index: '批复资金总数', width: 200, align: 'center', sortable: true },
+        ];
+        var County_Showcols = [
+            {
+                label: '省名称', name: '省', index: '省', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            {
+                label: '市名称', name: '市', index: '市', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            {
+                label: '县名称', name: '县', index: '县', width: 200, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                    if (cellvalue) {
+                        return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff;">' + cellvalue + '</a>';
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            { label: '治理灾害点数量（个）', name: '治理灾害点个数', index: '治理灾害点个数', width: 200, align: 'center', sortable: true },
+            { label: '治理工程数（个）', name: '治理工程个数', index: '治理工程个数', width: 200, align: 'center', sortable: true },
+            { label: '项目立项（个）', name: '项目立项个数', index: '项目立项个数', width: 150, align: 'center', sortable: true },
+            { label: '野外勘察（个）', name: '野外勘察个数', index: '野外勘察个数', width: 150, align: 'center', sortable: true },
+            { label: '施工设计（个）', name: '施工设计个数', index: '施工设计个数', width: 150, align: 'center', sortable: true },
+            { label: '工程施工（个）', name: '工程施工个数', index: '工程施工个数', width: 150, align: 'center', sortable: true },
+            { label: '工程监理（个）', name: '工程监理个数', index: '工程监理个数', width: 150, align: 'center', sortable: true },
+            { label: '项目验收（个）', name: '项目验收个数', index: '项目验收个数', width: 150, align: 'center', sortable: true },
+            { label: '批复资金总数（万元）', name: '批复资金总数', index: '批复资金总数', width: 200, align: 'center', sortable: true },
+        ];
+        $(function () {
+            tabCtl = $("#tabListContentDiv").tabCtlInit({ hasReport: true, toolWidth: 270 });
+            if (DefalutName == "全国") {
+                parmProvince = "";
+            }
+            $('#gridTableXZQH').setGridWidth($(window).width());
+            $('#gridTableA').setGridWidth($(window).width());
+            changeTabs();
+            getAreaCode(0);
+            initControl();
+            InitialPage();
+            //SearchEvent();
+            CityGetGrid();
+            CityGetGridA();
+            //查询点击事件
+            $("#btn_genercode").click(function () {
+                SearchEvent();
+            });
+            //导出点击事件
+            $("#Exl_export").click(function () {
+                EXL_Export();
+            });
+            $('#YBCTJ_UI').report({
+                module: 'TBL_ZLGC_BASEINFOIndexCountAnalyse',
+                viewReport: function (data) {
+                    if (data != null) {
+                        queryJson = JSON.parse(data.QUERYSTRING);
+                        showDta = JSON.parse(data.CONDITION);
+                        excelinfo(queryJson)
+                    }
+
+                },
+                ViewModal: function (data) {
+                    queryJson = JSON.parse(data.QUERYSTRING);
+                    $("#PROVINCENAME2").val(queryJson.PROVINCENAME);
+                    $("#CITYNAME2").val(queryJson.CITYNAME);
+                    $("#COUNTRYNAME2").val(queryJson.COUNTRYNAME);
+                    $("#Static_Year2").val(queryJson.Static_Year);
+                    $("#Static_Unit2").val(queryJson.Static_Unit);
+                    $("#myModal2").modal("show");
+                },
+                success: function (data) {
+                    $("#myModal").modal("hide");
+                }
+            });
+        });
+        //显示隐藏结果列表tab
+        function changeTabs() {
+            var removeId = [];
+            bindDataGridList({ value: "tab_zhd", title: "统计结果", aClick: "changeTo('TJJG')" });
+            bindDataGridList({ value: "tab_chart", title: "统计图表", aClick: "changeTo('TJTB')" });
+            //关闭没有数据的tab页
+            for (var i = 0; i < removeId.length; i++) {
+                var dom = $("#tabListContentDiv .menuTab[data-id=tab_" + removeId[i] + "]").children(":last");
+                dom.trigger("click");
+            }
+            $("#tabListContentDiv .menuTab:first").trigger("click");
+            $($(".tab_close")[0]).hide();
+            $($(".tab_close")[1]).hide();
+        }
+        //tab标签切换到统计图
+        function changeTo(type) {
+            if (type == 'TJTB') {
+                var myChart = echarts.init(document.getElementById("chartsdata"));
+                $("#TJJG").hide();
+                $("#XZQHTJ").hide();
+                $("#TJTB").show();
+                window.setTimeout(function () {
+                    myChart.resize();
+                }, 200);
+            } else if (type == 'TJJG') {
+                $("#TJTB").hide();
+                $("#XZQHTJ").hide();
+                $("#TJJG").show();
+                window.setTimeout(function () {
+                    $('#gridTable').setGridWidth($('.gridPanel').width());
+                    $('#gridTable').setGridHeight($(window).height() - 240);
+                }, 200);
+            } else if (type == 'XZQHTJ') {
+                $("#TJTB").hide();
+                $("#TJJG").hide();
+                $("#XZQHTJ").show();
+                window.setTimeout(function () {
+                    $('#gridTableXZQH').setGridWidth($(window).width());
+                    $('#gridTableXZQH').setGridHeight($(window).height() - 240);
+                }, 200);
+            }
+        }
+        //添加tab页
+        function bindDataGridList(item) {
+            var exists = tabCtl.newTab({ id: item.value, title: item.title, closed: true, icon: '', url: item.value, isTab: true, noNextTab: true, aClick: item.aClick, newUnActive: true });
+        }
+        //存入报表库
+        function btn_save() {
+            var queryJson = $("#TjItem").getWebControls();
+            queryJson['xzqhcode'] = xzqhcode;
+            queryJson['codeType'] = codeType;
+            queryJson['PROVINCENAME'] = parmProvince;
+            queryJson['CITYNAME'] = parmCity;
+            queryJson['COUNTRYNAME'] = parmCountry;
+            queryJson['TOWNNAME'] = parmTown;
+            $('#YBCTJ_UI').SaveReport($('#tablename').val(), JSON.stringify(queryJson), "");
+        }
+
+        function excelinfo(duixiang) {
+            var queryConditon = { "xzqhcode": duixiang.xzqhcode, "codeType": duixiang.codeType, "PROVINCENAME": parmProvince, "CITYNAME": duixiang.CITYNAME, "COUNTRYNAME": duixiang.COUNTRYNAME, "Static_Unit": duixiang.Static_Unit, "Static_Year": duixiang.Static_Year };
+            $("#GridContentA").empty();
+            $("#GridContentA").append('<table id="gridTableA"></table><div id="gridPager"></div>');
+            CityGetGridA(queryConditon);
+            $('#gridTableA').setGridWidth(($(window).width()));
+        }
+
+        //初始化控件
+        function initControl() {
+            //统计单位
+            var usercode = usercodes();
+            if (!usercode.provinceId) {
+                $("#Static_Unit").ComboBox({
+                    id: "value",
+                    text: "label",
+                    height: "170px",
+                    data: [
+                        { label: "省", value: "省" },
+                        { label: "市", value: "市" },
+                        { label: "县", value: "县" },
+                    ],
+                    Itemindex: 1,
+                });
+            } else {
+                $("#Static_Unit").ComboBox({
+                    id: "value",
+                    text: "label",
+                    height: "170px",
+                    data: [
+                        { label: "省", value: "省" },
+                        { label: "市", value: "市" },
+                        { label: "县", value: "县" },
+                    ],
+                    Itemindex: 1,
+                });
+            }
+            //行政区划加载
+            var district = $("#districtsCtls").mulDistrictsCtl({
+                provinceId: usercode.provinceId,
+                selectProviceId: usercode.provinceId,
+                selectCityId: usercode.selectCityId,
+                type: 'B',
+            });
+
+
+            if ($("#PROVINCE .ui-select-text").html() != undefined) {
+                parmProvince = $("#PROVINCE .ui-select-text").html();
+                //xzqhcode = $("#PROVINCE").attr("data-value");
+            }
+            if ($("#PROVINCE .ui-select-text").html() == "选择省" || $("#PROVINCE .ui-select-text").html() == "") {
+                parmProvince = "";
+                $("#Static_Unit").ComboBoxSetValue("省");
+            } else if ($("#CITY .ui-select-text").html() == "选择市" || $("#CITY .ui-select-text").html() == "") {
+                $("#Static_Unit").ComboBoxSetValue("市");
+            } else {
+                $("#Static_Unit").ComboBoxSetValue("县");
+            }
+
+            //统计图表类型
+            $("#TBtype").ComboBox({
+                data: eval("([{'text':'柱状图','value':'bar'},{'text':'折线图','value':'line'}])"),
+                id: "value",
+                text: "text",
+                height: '200px',
+                selectOne: true,
+                description: ""
+            }).bind("change", function () {
+                LoadChart(echartedatajson, echartedatajson.dataX, $(this).attr('data-value'));
+            });
+            $("#TBtypeA").ComboBox({
+                data: eval("([{'text':'柱状图','value':'bar'},{'text':'折线图','value':'line'}])"),
+                id: "value",
+                text: "text",
+                height: '200px',
+                selectOne: true,
+                description: ""
+            }).bind("change", function () {
+                LoadChartA(echartedatajson, echartedatajson.dataX, $("#TBtype").attr('data-value'));
+            });
+        }
+        function InitialPage() {
+            var isResize = 0;
+            var count = 0;
+            var resized = 0;
+            $(window).resize(function (e) {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+                e.stopPropagation();
+            });
+            //resize重设布局;
+            $(window).resize(function (e) {
+                window.setTimeout(function () {
+                    $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                    $('#gridTable').setGridHeight($(window).height() - 136.5 + 75 - 130);
+                }, 200);
+                e.stopPropagation();
+            });
+            function resize() {
+                window.setTimeout(function () {
+                    $('#chartsdata').width($(window).width());
+                    $('#chartsdata').height($(window).height() - 215);
+                    $('#chartsdataA').width($(window).width());
+                    $('#chartsdataA').height($(window).height() - 275);
+                    $('#gridTable').setGridWidth(($(window).width() - 22));
+                    $('#gridTableA').setGridWidth(($(window).width() - 22));
+                    $('#gridTableXZQH').setGridWidth(($(window).width() - 22));
+                    $('#gridTable').setGridHeight($(window).height() - 136.5 + 75);
+                    $('#gridTableA').setGridHeight($(window).height() - 136.5 + 75);
+                    $('#gridTableXZQH').setGridHeight($(window).height() - 136.5 + 75);
+                    var myChart = echarts.init(document.getElementById("chartsdata"));
+                    myChart.resize();
+                    var myChartA = echarts.init(document.getElementById("chartsdataA"));
+                    myChartA.resize();
+                }, 200);
+            };
+            //调整图表大小
+            $('#chartsdata').width($(window).width());
+            $('#chartsdata').height($(window).height() - 215);
+            $('#chartsdataA').width($(window).width());
+            $('#chartsdataA').height($(window).height() - 275);
+            $('#gridTable').setGridHeight($(window).height() - 136.5 + 52);
+            $('#gridTableXZQH').setGridWidth(($(window).width() - 22));
+            $('#gridTableXZQH').setGridHeight($(window).height() - 136.5 + 75);
+        }
+
+        //点击查询事件
+        function SearchEvent() {
+            //$("#gridTable").jqGrid('GridUnload');
+            $("#GridContent").empty();
+            $("#GridContent").append('<table id="gridTable"></table><div id="gridPager"></div>');
+            var unitZLGC = $("#Static_Unit").attr("data-value");
+            var yearZLGC = $("#Static_Year").val();
+            parmYear = yearZLGC;
+            //获得省、市、县的内容
+            if ($("#PROVINCE .ui-select-text").html() != undefined && $("#PROVINCE .ui-select-text").html() != "选择省") {
+                parmProvince = $("#PROVINCE .ui-select-text").html();
+                xzqhcode = $("#PROVINCE").attr("data-value");
+                codeType = "省";
+            }
+            if ($("#PROVINCE .ui-select-text").html() == "选择省") {
+                parmProvince = "";
+            }
+            if ($("#CITY .ui-select-text").html() != undefined && $("#CITY .ui-select-text").html() != "选择市" && $("#CITY .ui-select-text").html() != "") {
+                parmCity = $("#CITY .ui-select-text").html();
+                xzqhcode = $("#CITY").attr("data-value");
+                codeType = "市";
+            }
+            if ($("#CITY .ui-select-text").html() == "选择市") {
+                parmCity = "";
+            }
+            if ($("#COUNTY .ui-select-text").html() != undefined && $("#COUNTY .ui-select-text").html() != "选择县/区" && $("#COUNTY .ui-select-text").html() != "") {
+                parmCountry = $("#COUNTY .ui-select-text").html();
+                xzqhcode = $("#COUNTY").attr("data-value");
+                codeType = "县";
+            }
+            if ($("#COUNTY .ui-select-text").html() == "选择县/区") {
+                parmCountry = "";
+            }
+            var queryConditon = { "xzqhcode": "", "codeType": codeType, "PROVINCENAME": parmProvince, "CITYNAME": parmCity, "COUNTRYNAME": parmCountry, "Static_Unit": unitZLGC, "Static_Year": yearZLGC };
+            CityGetGrid(queryConditon);
+            $('#gridTable').setGridWidth(($(window).width()));
+        }
+
+        //加载图表
+        function LoadChart(data, name, pictype) {
+            var myChart = echarts.init(document.getElementById("chartsdata"));
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['项目阶段统计'],
+                    x: 'center',
+                    y: 30,
+                    padding: [5, 35, 5, 5]
+                },
+                grid: {
+                    "borderWidth": 0,
+                    top: 100,
+                    containLabel: true
+                },
+                xAxis: {
+                    data: name,
+                    name: '行政区划',
+                    axisLabel: {
+                        interval: 0,
+                        rotate: -30
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '个数'
+                },
+
+                series: [
+                    {
+                        name: '项目立项个数', type: pictype, data: data.data_xmlxcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '野外勘察个数', type: pictype, data: data.data_ywkccount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '施工设计个数', type: pictype, data: data.data_sgsjcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '工程施工个数', type: pictype, data: data.data_gcsgcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '工程监理个数', type: pictype, data: data.data_gcjlcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '项目验收个数', type: pictype, data: data.data_xmyscount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option, true);
+        }
+        //加载图表
+        function LoadChartA(data, name, pictype) {
+            var myChart = echarts.init(document.getElementById("chartsdataA"));
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                        type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['灾害点数量', '治理工程数'],
+                    x: 'center',
+                    y: 30,
+                    padding: [5, 35, 5, 5]
+                },
+                grid: {
+                    "borderWidth": 0,
+                    top: 100,
+                    containLabel: true
+                },
+                xAxis: {
+                    data: name,
+                    name: '行政区划',
+                    axisLabel: {
+                        interval: 0,
+                        rotate: -30
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '个数'
+                },
+
+                series: [
+                    //{
+                    //                name: '灾害点数量', type: pictype, data: data.data_disastercount,
+                    //                itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    //            },
+                    //                   {
+                    //                       name: '治理工程数', type: pictype, data: data.data_zlgccount,
+                    //                       itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    //                   }
+                    {
+                        name: '项目立项个数', type: pictype, data: data.data_xmlxcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '野外勘察个数', type: pictype, data: data.data_ywkccount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '施工设计个数', type: pictype, data: data.data_sgsjcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '工程施工个数', type: pictype, data: data.data_gcsgcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '工程监理个数', type: pictype, data: data.data_gcjlcount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                    {
+                        name: '项目验收个数', type: pictype, data: data.data_xmyscount,
+                        itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                    },
+                ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option, true);
+        }
+
+        //市不带年加载表格
+        function CityGetGrid(queryConditon) {
+            var selectedRowIndex = 0;
+            if (queryConditon != null) {
+                queryJson = queryConditon;
+                if (queryJson.Static_Unit == "省") {
+                    //ShowColName = Province_CloName;
+                    Showcols = Province_Showcols;
+
+                }
+                if (queryJson.Static_Unit == "市") {
+                    Showcols = City_Showcols;
+                }
+                if (queryJson.Static_Unit == "县") {
+                    Showcols = County_Showcols;
+                }
+            }
+            else {
+                queryJson = $("#TjItem").getWebControls();
+                queryJson['xzqhcode'] = "";
+                queryJson['codeType'] = codeType;
+                queryJson['PROVINCENAME'] = parmProvince;
+                queryJson['CITYNAME'] = parmCity;
+                queryJson['COUNTRYNAME'] = parmCountry;
+                queryJson['TOWNNAME'] = parmTown;
+                var jibie = queryJson['Static_Unit'];
+                if (jibie == "省") {
+                    Showcols = Province_Showcols;
+
+                }
+                if (jibie == "市") {
+                    Showcols = City_Showcols;
+                }
+                if (jibie == "县") {
+                    Showcols = County_Showcols;
+                }
+              //  Showcols = Province_Showcols;
+            }
+            var $gridTable = $('#gridTable');
+
+            $gridTable.jqGrid({
+                autowidth: true,
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                height: $(window).height() - 263.5 + 75,
+                //url: "../../api/TBL_ZLGC/ZLGCCountStaticsNew",
+                url: "../../api/TBL_ZLGC/GetDataZLGCStatics",
+                datatype: "json",
+                postData: { queryJson: JSON.stringify(queryJson) },
+                //colNames:ShowColName,
+                colModel: Showcols,
+                viewrecords: true,
+                rowNum: 30000,
+                sortorder: 'desc',
+                rownumbers: false,
+                shrinkToFit: true,
+                gridview: true,
+                altRows: true,
+                onSelectRow: function () {
+                    selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                },
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+                },
+                loadComplete: function (jsondata) {
+                    //每次重新加载都要清空变量
+                    var dataX = [];
+                    var data_xmlxcount = [];
+                    var data_ywkccount = [];
+                    var data_sgsjcount = [];
+                    var data_gcsgcount = [];
+                    var data_gcjlcount = [];
+                    var data_xmyscount = [];
+                    //省
+                    // if (jsondata.length == 1) {
+                    // if (jsondata != null && jsondata.length > 0) {
+                    //if (jsondata[0].provincename != null && jsondata[0].cityname == null && jsondata[0].countryname == undefined)
+                    if ($("#Static_Unit").text() == "省") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].cityname == "" || jsondata[i].cityname == null) {
+                                dataX.push(jsondata[i].省);
+                            }
+                            else {
+                                dataX.push(jsondata[i].市);
+                            }
+                            data_xmlxcount.push(jsondata[i].项目立项个数);
+                            data_ywkccount.push(jsondata[i].野外勘察个数);
+                            data_sgsjcount.push(jsondata[i].施工设计个数);
+                            data_gcsgcount.push(jsondata[i].工程施工个数);
+                            data_gcjlcount.push(jsondata[i].工程监理个数);
+                            data_xmyscount.push(jsondata[i].项目验收个数);
+                        };
+                    }
+                    if ($("#Static_Unit").text() == "市") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].市 == "" || jsondata[i].市 == null) {
+                            }
+                            else {
+                                dataX.push(jsondata[i].市);
+                                data_xmlxcount.push(jsondata[i].项目立项个数);
+                                data_ywkccount.push(jsondata[i].野外勘察个数);
+                                data_sgsjcount.push(jsondata[i].施工设计个数);
+                                data_gcsgcount.push(jsondata[i].工程施工个数);
+                                data_gcjlcount.push(jsondata[i].工程监理个数);
+                                data_xmyscount.push(jsondata[i].项目验收个数);
+                            }
+                        }
+                    }
+                    //县
+                    if ($("#Static_Unit").text() == "县") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].县) {
+                                dataX.push(jsondata[i].县);
+                                data_xmlxcount.push(jsondata[i].项目立项个数);
+                                data_ywkccount.push(jsondata[i].野外勘察个数);
+                                data_sgsjcount.push(jsondata[i].施工设计个数);
+                                data_gcsgcount.push(jsondata[i].工程施工个数);
+                                data_gcjlcount.push(jsondata[i].工程监理个数);
+                                data_xmyscount.push(jsondata[i].项目验收个数);
+                            }
+                        }
+                    }
+
+                    var echartedatajsonA = { "dataX": "", "data_xmlxcount": "", "data_ywkccount": "", "data_sgsjcount": "", "data_gcsgcount": "", "data_gcjlcount": "", "data_xmyscount": "" };
+                    echartedatajsonA['dataX'] = dataX;
+                    echartedatajsonA['data_xmlxcount'] = data_xmlxcount;
+                    echartedatajsonA['data_ywkccount'] = data_ywkccount;
+                    echartedatajsonA['data_sgsjcount'] = data_sgsjcount;
+                    echartedatajsonA['data_gcsgcount'] = data_gcsgcount;
+                    echartedatajsonA['data_gcjlcount'] = data_gcjlcount;
+                    echartedatajsonA['data_xmyscount'] = data_xmyscount;
+                    echartedatajson = echartedatajsonA;
+                    LoadChart(echartedatajson, echartedatajson.dataX, $("#TBtype").attr('data-value'));
+                }
+            });
+            $gridTable.jqGrid("setGroupHeaders", {
+                useColSpanStyle: true,
+                groupHeaders: [{ startColumnName: '项目立项个数', numberOfColumns: 6, titleText: '项目阶段统计' }]
+            });
+        }
+
+        //市不带年加载表格
+        function CityGetGridA(queryConditon) {
+            var selectedRowIndex = 0;
+            if (queryConditon != null) {
+                queryJson = queryConditon;
+                if (queryJson.Static_Unit == "省") {
+                    Showcols = Province_Showcols;
+                }
+                if (queryJson.Static_Unit == "市") {
+                    Showcols = City_Showcols;
+                }
+                if (queryJson.Static_Unit == "县") {
+                    Showcols = County_Showcols;
+                }
+            }
+            else {
+                queryJson = $("#TjItem").getWebControls();
+                queryJson['xzqhcode'] = xzqhcode;
+                queryJson['codeType'] = codeType;
+                queryJson['PROVINCENAME'] = parmProvince;
+                queryJson['CITYNAME'] = parmCity;
+                queryJson['COUNTRYNAME'] = parmCountry;
+                queryJson['TOWNNAME'] = parmTown;
+                var jibie = queryJson['Static_Unit'];
+                if (jibie == "省") {
+                    Showcols = Province_Showcols;
+                }
+                if (jibie == "市") {
+                    Showcols = City_Showcols;
+                }
+                if (jibie == "县") {
+                    Showcols = County_Showcols;
+                }
+            }
+            var $gridTable = $('#gridTableA');
+            $gridTable.jqGrid({
+                autowidth: true,
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                height: $(window).height() - 263.5 + 55,
+                //url: "../../api/TBL_ZLGC/ZLGCCountStaticsNew",
+                url: "../../api/TBL_ZLGC/GetDataZLGCStatics",
+                datatype: "json",
+                postData: { queryJson: JSON.stringify(queryJson) },
+                colModel: Showcols,
+                viewrecords: true,
+                rowNum: 30000,
+                sortorder: 'desc',
+                rownumbers: false,
+                shrinkToFit: true,
+                gridview: true,
+                altRows: true,
+                onSelectRow: function () {
+                    selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                },
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+                },
+                loadComplete: function (jsondata) {
+                    //每次重新加载都要清空变量
+                    var dataX = [];
+                    var data_xmlxcount = [];
+                    var data_ywkccount = [];
+                    var data_sgsjcount = [];
+                    var data_gcsgcount = [];
+                    var data_gcjlcount = [];
+                    var data_xmyscount = [];
+
+                    if (queryJson.Static_Unit == "省") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].市 == "" || jsondata[i].市 == null) {
+                                dataX.push(jsondata[i].省);
+                            }
+                            else {
+                                dataX.push(jsondata[i].市);
+                            }
+                            data_xmlxcount.push(jsondata[i].项目立项个数);
+                            data_ywkccount.push(jsondata[i].野外勘察个数);
+                            data_sgsjcount.push(jsondata[i].施工设计个数);
+                            data_gcsgcount.push(jsondata[i].工程施工个数);
+                            data_gcjlcount.push(jsondata[i].工程监理个数);
+                            data_xmyscount.push(jsondata[i].项目验收个数);
+                        };
+                    }
+                    //市
+                    if (queryJson.Static_Unit == "市") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].市 == "" || jsondata[i].市 == null) {
+
+                            }
+                            else {
+                                dataX.push(jsondata[i].市);
+                                data_xmlxcount.push(jsondata[i].项目立项个数);
+                                data_ywkccount.push(jsondata[i].野外勘察个数);
+                                data_sgsjcount.push(jsondata[i].施工设计个数);
+                                data_gcsgcount.push(jsondata[i].工程施工个数);
+                                data_gcjlcount.push(jsondata[i].工程监理个数);
+                                data_xmyscount.push(jsondata[i].项目验收个数);
+                            }
+                        }
+                    }
+                    //县
+                    if (queryJson.Static_Unit == "县") {
+                        for (var i = 0; i < jsondata.length; i++) {
+                            if (jsondata[i].县) {
+                                dataX.push(jsondata[i].县);
+                                data_xmlxcount.push(jsondata[i].项目立项个数);
+                                data_ywkccount.push(jsondata[i].野外勘察个数);
+                                data_sgsjcount.push(jsondata[i].施工设计个数);
+                                data_gcsgcount.push(jsondata[i].工程施工个数);
+                                data_gcjlcount.push(jsondata[i].工程监理个数);
+                                data_xmyscount.push(jsondata[i].项目验收个数);
+                            }
+                        }
+                    }
+                    var echartedatajsonA = { "dataX": "", "data_xmlxcount": "", "data_ywkccount": "", "data_sgsjcount": "", "data_gcsgcount": "", "data_gcjlcount": "", "data_xmyscount": "" };
+                    echartedatajsonA['dataX'] = dataX;
+                    echartedatajsonA['data_xmlxcount'] = data_xmlxcount;
+                    echartedatajsonA['data_ywkccount'] = data_ywkccount;
+                    echartedatajsonA['data_sgsjcount'] = data_sgsjcount;
+                    echartedatajsonA['data_gcsgcount'] = data_gcsgcount;
+                    echartedatajsonA['data_gcjlcount'] = data_gcjlcount;
+                    echartedatajsonA['data_xmyscount'] = data_xmyscount;
+                    echartedatajson = echartedatajsonA;
+                    LoadChartA(echartedatajson, echartedatajson.dataX, $("#TBtype").attr('data-value'));
+                }
+            });
+            $gridTable.jqGrid("setGroupHeaders", {
+                useColSpanStyle: true,
+                groupHeaders: [{ startColumnName: 'xmlx', numberOfColumns: 6, titleText: '项目阶段统计' }]
+            });
+        }
+        function setReportName(reportTitle) {
+            if (reportTitle == "" || reportTitle == undefined) {
+                var time = new Date();
+                var month = time.getMonth() + 1;
+                if (month < 10)
+                    month = '0' + month;
+                var day = time.getDate();
+                if (day < 10)
+                    day = '0' + day;
+                $("#tablename")[0].value = "治理工程统计分析 " + time.getFullYear() + "年" + month + "月" + day + "日";
+            }
+            else {
+                $("#tablename")[0].value = reportTitle;
+            }
+            $("#myModal").modal("show");
+        }
+
+        //对应导出
+        function btn_export() {
+            xzqhcode = "";
+            codeType = "省";
+            if ($("#PROVINCE .ui-select-text").html() != undefined && $("#PROVINCE .ui-select-text").html() != "选择省") {
+                xzqhcode = $("#PROVINCE").attr("data-value");
+                codeType = "省";
+            }
+            if ($("#CITY .ui-select-text").html() != undefined && $("#CITY .ui-select-text").html() != "选择市") {
+                parmCity = $("#CITY .ui-select-text").html();
+                xzqhcode = $("#CITY").attr("data-value");
+                codeType = "市";
+            }
+            if ($("#COUNTY .ui-select-text").html() != undefined && $("#COUNTY .ui-select-text").html() != "选择县/区") {
+                parmCountry = $("#COUNTY .ui-select-text").html();
+                xzqhcode = $("#COUNTY").attr("data-value");
+                codeType = "县";
+            }
+            var queryJson = {};
+            queryJson['xzqhcode'] = xzqhcode;
+            queryJson['codeType'] = codeType;
+            queryJson['unitZLGC'] = $("#Static_Unit").attr("data-value");
+            queryJson['yearZLGC'] = $("#Static_Year").val();
+            queryJson['ISDAOCHU'] = "false";
+            //var queryConditon = { "xzqhcode": xzqhcode, "PROVINCENAME": parmProvince, "CITYNAME": parmCity, "COUNTRYNAME": parmCountry, "Static_Unit": unitZLGC, "Static_Year": yearZLGC };
+            $.ajax({
+                url: "../../JXGeoManage/TBL_ZLGC_BASEINFO/ExcelZLGCCountDownloadExtNew?queryJson=" + JSON.stringify(queryJson),
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", getAuthorizationToken());
+                },
+                async: false,
+                type: "GET",
+                success: function (data) {
+                    if (data != "true") {
+                        dialogMsg("没有查询到相关的数据，未导出结果！", 0);
+                    } else {
+                        queryJson['ISDAOCHU'] = "true";
+                        location.href = "../../JXGeoManage/TBL_ZLGC_BASEINFO/ExcelZLGCCountDownloadExtNew?queryJson=" + JSON.stringify(queryJson);
+                    }
+                }, error: function (e) {
+                },
+                cache: false
+            });
+        }
+        //获取所有行政区划
+        function getAreaCode(code) {
+            subordinateArea = [];
+            $.ajax({
+
+                url: SSOURL + "/api/AdministrativeApi/GetAllDistrictsToCountry",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", getAuthorizationToken());
+                },
+                async: false,
+                type: "GET",
+                success: function (data) {
+                    if (data && data.Result.length > 0) {
+                        subordinateArea = subordinateArea.concat(data.Result);
+                    }
+                }, error: function (e) {
+                },
+                cache: false
+            });
+        }
+        //根据汉字返回编码
+        function changeNameToCode(str) {
+            for (var i = 0; i < subordinateArea.length; i++) {
+                if (str === subordinateArea[i]["F_AreaName"]) {
+                    return subordinateArea[i]["F_AreaCode"];
+                }
+            }
+            return "";
+        }
+        var a = 0;
+        //查看对应治理工程信息列表
+        function tjResult(name) {
+            var doms = $("#tabListContentDiv .menuTab");
+            var code = changeNameToCode(name);
+            for (var i = 0; i < doms.length; i++) {
+                var domI = $("#tabListContentDiv .menuTab:eq(" + i + ")");
+                if (domI.text().indexOf("统计内容") > -1) {
+                    domI.next().trigger("click");
+                }
+            }
+            var title = $('.menuTab.active')[0].innerText;
+            if (name) {
+                bindDataGridList({ value: "tab_" + code, title: "统计内容-" + name, aClick: "changeTo('XZQHTJ')", newUnActive: true, state: true });
+                $("#tabListContentDiv .menuTab:last").trigger("click");
+            }
+            if (a == 0) {
+                GetGridXZQH(code);
+            } else if (a == 1) {
+                var queryJson = {}
+                queryJson["AreaCode"] = code;
+                $("#gridTableXZQH").jqGrid('setGridParam', {
+                    postData: { queryJson: JSON.stringify(queryJson) },
+                    loadBeforeSend: function (a) {
+                        a.setRequestHeader("Authorization", authToken);
+                    },
+                    url: "../../api/TBL_ZLGC/GetZLGTJResult",
+                    page: 1,
+                }).trigger('reloadGrid');
+            }
+            a = 1;
+            //newTabs({
+            //    id: "tjjg",
+            //    url: '/JXGeoManage/TBL_ZLGC_BASEINFO/TBL_ZLGC_TJResultForm?code=' + code + '&IdetIfrem=Idetnew' + "&readonly=01",
+            //});
+
+        }
+        //
+        function GetGridXZQH(ccode) {
+            var selectedRowIndex = 0;
+            var queryJson = {}
+            queryJson["AreaCode"] = ccode;
+            var $gridTable = $('#gridTableXZQH');
+            $gridTable.jqGrid({
+                autowidth: true,
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                postData: { queryJson: JSON.stringify(queryJson) },
+                height: $(window).height() - 200,
+                url: "../../api/TBL_ZLGC/GetZLGTJResult",
+                datatype: "json",
+                colModel: [
+                    { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true },
+                    { label: '治理工程名称', name: 'ZLGCNAME', index: 'ZLGCNAME', width: 250, align: 'left', sortable: true },
+                    { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true },
+                    { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 200, align: 'left', sortable: true, hidden: true },
+                    { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 100, align: 'left', sortable: true },
+                    { label: '项目阶段', name: 'ZLSTATE', index: 'ZLSTATE', width: 100, align: 'left', sortable: true },
+                    { label: '负责单位', name: 'XMFZDW', index: 'XMFZDW', width: 200, align: 'left', sortable: true },
+                    { label: '批复资金(万元)', name: 'XMPFZJ', index: 'XMPFZJ', width: 100, align: 'left', sortable: true },
+                    {
+                        label: '立项时间', name: 'XMJLXSJ', index: 'XMJLXSJ', width: 100, align: 'left', sortable: true,
+                        formatter: function (cellvalue, options, rowObject) {
+                            if (cellvalue) {
+                                cellvalue = cellvalue.replace("T00:00:00", " ");
+                            } else {
+                                cellvalue = "";
+                            }
+                            return cellvalue;
+                        }
+                    },
+                    { label: '工程地理位置', name: 'LOCATION', index: 'LOCATION', width: 300, align: 'left', sortable: true },
+                    { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true, },
+                    { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true, },
+                ],
+                viewrecords: true,
+                rowNum: 30,
+                rowList: [30, 50, 100],
+                pager: "#gridPager",
+                sortname: 'GUID',
+                sortorder: 'desc',
+                rownumbers: true,
+                shrinkToFit: false,
+                gridview: true,
+                gridComplete: function () {
+                    $('#' + this.id).setSelection(selectedRowIndex, false);
+
+                }
+            });
+        }
+
+    </script>
+}

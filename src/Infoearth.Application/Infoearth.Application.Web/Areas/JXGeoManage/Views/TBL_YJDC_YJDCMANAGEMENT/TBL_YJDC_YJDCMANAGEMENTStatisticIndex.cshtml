@@ -1,0 +1,368 @@
+﻿@{
+    ViewBag.Title = "TBL_YJDC_YJDCMANAGEMENTStatisticIndex";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+
+<style>
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .titlePanel {
+        line-height: 0px !important;
+    }
+    .spans {
+        padding: 0 10px;
+        width:9%;
+        text-align:center;
+        height:28px;
+        line-height:28px;
+        min-width:100px
+    }
+    .divselect {
+        width:16%
+    }
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        /*background:#DCDCDC*/
+    }
+</style>
+
+<div class="titlePanel">
+    <div style="font-size:14px; font-weight: bold; padding-left: 15px;background: #ECF7FF;height: 40px;line-height: 40px;"><i class="fa fa-bars" style="margin-right:10px;"></i>查询条件:</div>
+    <div id="filter-form" style="overflow: hidden;">
+        <div class="title-search" style="width:100%;height:40px;display:flex;align-items: center">
+            <div id="XZQHCODE" style="width: 100%;"></div>
+        </div>
+        <div class="title-search" style="width: 100%; height: 40px;background-color: #fff;color:#000; display: flex; align-items: center; position: relative;">
+                    <input type="hidden" name="PROVINCENAME" id="PROVINCENAME" />
+                    <input type="hidden" name="CITYNAME" id="CITYNAME" />
+                    <input type="hidden" name="COUNTYNAME" id="COUNTYNAME" />
+                    <input type="hidden" name="TOWNNAME" id="TOWNNAME" />
+            <span class="spans">开始时间:</span><input id="StartTime" type="text" class="form-control" style="width: 16%"/>
+            <span class="spans">结束时间:</span><input id="EndTime" type="text" class="form-control" style="width: 16%"/>
+            <a id="btn_Search" style="margin:0 30px" class="btn btn-primary"><i class="fa fa-search"></i>统计</a>
+            <a id="btn_Clear" class="btn btn-primary" style="background:gray;border-color:gray"><i class="fa fa-search"></i>重置</a>
+        </div>
+        @*<div class="title-search">
+            <table>
+                <tr>
+                    <input type="hidden" name="PROVINCENAME" id="PROVINCENAME" />
+                    <input type="hidden" name="CITYNAME" id="CITYNAME" />
+                    <input type="hidden" name="COUNTYNAME" id="COUNTYNAME" />
+                    <input type="hidden" name="TOWNNAME" id="TOWNNAME" />
+                </tr>
+                <tr>
+                    <td class="formTitle" style="width: 110px;text-align:right">开始时间:</td>
+                    <td>
+                        <input id="StartTime" type="text" style="width: 180px;margin:8px;" class="form-control input-wdatepicker" datefmt="yyyy" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowToday:false,isShowClear:false})" />
+                    </td>
+                    <td class="formTitle" style="width: 110px;text-align:right">结束时间:</td>
+                    <td>
+                        <input id="EndTime" type="text" style="width: 180px;margin:8px;" class="form-control input-wdatepicker" datefmt="yyyy" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowToday:false,isShowClear:false})" />
+                    </td>
+                    <td style="padding-left: 50px;">
+                        <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>统计</a>
+
+                    </td>
+                    <td style="padding-left: 10px;display:none;">
+                        <a id="btn_Clear" class="btn btn-primary"><i class="fa fa-search"></i>重置</a>
+                    </td>
+                </tr>
+            </table>
+        </div>*@
+    </div>
+    <div style="padding-left: 15px; background: #ECF7FF;height: 40px; line-height: 40px; border-bottom: 1px solid #ccc">
+        <span style="padding-right: 10px; font-weight: bold; font-size: 14px; display: inline-block;">数据列表</span>
+        <div class="toolbar" style="display:none">
+            <div class="btn-group" style="padding-bottom: 13px;">
+                <a id="btn_export" class="btn btn-default" onclick="btn_export()" href="/Grw_WaterLevel/ExcelExport"><i class=" fa fa-sign-in"></i>&nbsp;导出</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<ul class="nav nav-tabs">
+    <li class="active" id="nav_tjjg" title="统计结果"><a href="#tab_1" data-toggle="tab">统计结果</a></li>
+    <li id="nav_tjtb" title="统计图表"><a href="#tab_2" data-toggle="tab">统计图表</a></li>
+</ul>
+<div id="myTabContent" class="tab-content" style="height: 100%; width: 100%;">
+    <div class="tab-pane fade in active " id="tab_1">
+        <div class="gridPanel">
+            <table id="gridTable"></table>
+            <div id="gridPager"></div>
+        </div>
+    </div>
+    <div class="tab-pane fade " id="tab_2"><div id="divTJ" style="width:1000px;height:400px;"></div> </div>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script src="~/Content/scripts/plugins/echarts/echarts.min.js"></script>
+<script>
+    var layout2NorthH = 1;
+    $(function () {
+        InitialPage();
+        initControl();
+        GetReport();
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            $("#PROVINCENAME").val($("#PROVINCE .ui-select-text").html())
+            $("#CITYNAME").val($("#CITY .ui-select-text").html())
+            $("#COUNTYNAME").val($("#COUNTY .ui-select-text").html())
+            $("#TOWNNAME").val($("#TOWN .ui-select-text").html())
+            SearchEvent();
+        });
+        $("#btn_Clear").click(function () {
+            ClearEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+        var isResize = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            //if (isResize<10) {
+            //   isResize ++;
+            //}
+            //resize();
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 282);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载Echars报表
+    function GetReport() {
+        var myChart = echarts.init(document.getElementById("divTJ"));
+        var queryJson = $("#filter-form").getWebControls();
+        $.post("../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/GetInfoStatistics",
+            { queryJson: JSON.stringify(queryJson) },
+            function (data) {
+                var jsonDatas = $.parseJSON(data);
+                var dataX = [];
+                var dataA1 = [];
+                var dataA2 = [];
+                var dataA3 = [];
+                var dataA4 = [];
+                var dataA5 = [];
+                var dataA6 = [];
+                if (jsonDatas != null && jsonDatas.length > 0) {
+                    for (var i = 0; i < jsonDatas.length; i++) {
+                        dataX.push(jsonDatas[i].AreaNAME);
+                        dataA1.push(jsonDatas[i].a1);
+                        dataA2.push(jsonDatas[i].a2);
+                        dataA3.push(jsonDatas[i].a3);
+                        dataA4.push(jsonDatas[i].a4);
+                        dataA5.push(jsonDatas[i].a5);
+                        dataA6.push(jsonDatas[i].a6);
+                    };
+                }
+
+                //指定图表配置数据
+                var option = {
+                    title: {
+                        text: '应急调查统计',
+                        left: 15,
+                        top: 15,
+                        textStyle: {
+                            color: '#666666',
+                            fontSize: 24,
+                            fontWeight: 100,
+                            fontFamily: '微软雅黑'
+                        }
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ['滑坡', '崩塌', '泥石流', '塌陷', '地裂缝', '地面沉降'],
+                        x: 'right',
+                        y: 30,
+                        padding: [5, 35, 5, 5]
+                    },
+                    grid: {
+                        "borderWidth": 0,
+                        top: 100,
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        name: '行政区划',
+                        data: dataX
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '次数'
+                    },
+                    series: [{
+                        name: '滑坡',
+                        type: 'bar',
+                        data: dataA1,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position:'top'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: '崩塌',
+                        type: 'bar',
+                        data: dataA2,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: '泥石流',
+                        type: 'bar',
+                        data: dataA3,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: '塌陷',
+                        type: 'bar',
+                        data: dataA4,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: '地裂缝',
+                        type: 'bar',
+                        data: dataA5,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    },
+                    {
+                        name: '地面沉降',
+                        type: 'bar',
+                        data: dataA6,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true,
+                                    position: 'top'
+                                }
+                            }
+                        }
+                    }
+                    ]
+                }
+                myChart.setOption(option);
+            })
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 282,
+            url: "../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/GetInfoStatistics",
+            datatype: "json",
+            colModel: [
+                { label: 'ID', name: 'id', index: 'id', width: 70, align: 'center', sortable: true, hidden: true },
+                { label: '省', name: 'GOEPOSITIONPROVINCENAME', index: 'GOEPOSITIONPROVINCENAME', width: 70, align: 'center', sortable: true },
+                { label: '市', name: 'GOEPOSITIONCITYNAME', index: 'GOEPOSITIONCITYNAME', width: 70, align: 'center', sortable: true },
+                { label: '县', name: 'GOEPOSITIONCOUNTYNAME', index: 'GOEPOSITIONCOUNTYNAME', width: 70, align: 'center', sortable: true },
+                { label: '乡(镇)', name: 'GOEPOSITIONTOWNNAME', index: 'GOEPOSITIONTOWNNAME', width: 70, align: 'center', sortable: true },
+                { label: '灾害次数', name: 'total', index: 'total', width: 70, align: 'center', sortable: true },
+                 { label: '滑坡', name: 'a1', index: 'a1', width: 70, align: 'center', sortable: true },
+                { label: '崩塌', name: 'a2', index: 'a2', width: 70, align: 'center', sortable: true },
+                { label: '泥石流', name: 'a3', index: 'a3', width: 70, align: 'center', sortable: true },
+                { label: '塌陷', name: 'a4', index: 'a4', width: 70, align: 'center', sortable: true },
+                { label: '地裂缝', name: 'a5', index: 'a5', width: 70, align: 'center', sortable: true },
+                 { label: '地面沉降', name: 'a6', index: 'a6', width: 70, align: 'center', sortable: true },
+                { label: '威胁户数（户）', name: 'DANGERTHREATFAMILY', index: 'DANGERTHREATFAMILY', width: 70, align: 'center', sortable: true },
+                { label: '威胁人口（人）', name: 'DANGERTHREATPEOPLENUM', index: 'DANGERTHREATPEOPLENUM', width: 70, align: 'center', sortable: true },
+                { label: '威胁财产（万元）', name: 'DANGERPOTENTIALECONOMICLOSSES', index: 'DANGERPOTENTIALECONOMICLOSSES', width: 70, align: 'center', sortable: true },
+                 { label: '受灾人口', name: 'DISASTERPEOPLENUM', index: 'DISASTERPEOPLENUM', width: 70, align: 'center', sortable: true },
+                { label: '死亡人数', name: 'DISASTERDEATHPEOPLENUM', index: 'DISASTERDEATHPEOPLENUM', width: 70, align: 'center', sortable: true },
+                { label: '失踪人数', name: 'DISASTERMISSINGPEOPLENUM', index: 'DISASTERMISSINGPEOPLENUM', width: 70, align: 'center', sortable: true },
+                { label: '受伤人数', name: 'DISASTERINJURYPEOPLENUM', index: 'DISASTERINJURYPEOPLENUM', width: 70, align: 'center', sortable: true },
+                { label: '直接经济损失', name: 'DISASTERDIRECTECONOMICLOSSES', index: 'DISASTERDIRECTECONOMICLOSSES', width: 70, align: 'center', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            url: "../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/GetInfoStatistics",
+            page: 1
+        }).trigger('reloadGrid');
+        GetReport();
+    }
+    //重置控件赋值
+    function ClearEvent() {
+        $("#filter-form").find("input[type='text']").val("");
+    }
+    //初始化控件
+    function initControl() {
+        var usercode = usercodes();
+        var district = $("#XZQHCODE").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            showTown: false,
+            type: 'B',
+        });
+    }
+</script>
+}

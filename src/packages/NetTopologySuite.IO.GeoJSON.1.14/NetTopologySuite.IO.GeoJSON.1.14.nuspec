@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>NetTopologySuite.IO.GeoJSON</id>
+    <version>1.14</version>
+    <title>NTS - Topology Suite - IO Library for GeoJSON</title>
+    <authors>NetTopologySuite - Team</authors>
+    <owners>NetTopologySuite - Team</owners>
+    <licenseUrl>http://www.gnu.org/licenses/lgpl.html</licenseUrl>
+    <projectUrl>https://github.com/NetTopologySuite/NetTopologySuite</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This package contains the GeoJSON IO library.</description>
+    <summary>GeoJSON IO library for NetTopologySuite</summary>
+    <tags>NTS GeoJSON</tags>
+    <dependencies>
+      <dependency id="NetTopologySuite" version="[1.14]" />
+      <dependency id="Newtonsoft.Json" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System" targetFramework="" />
+      <frameworkAssembly assemblyName="System.Core" targetFramework="" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

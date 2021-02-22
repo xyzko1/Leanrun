@@ -1,0 +1,403 @@
+﻿@{
+    ViewBag.Title = "报表模板";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+
+<style type="text/css">
+    .orm_title {
+        color: #666666;
+        font-size: 16px;
+        height: 36px;
+        line-height: 36px;
+        margin-left: 15px;
+        font-weight: bold;
+        padding-top: 5px;
+    }
+
+    .orm_title_note {
+        color: #999999;
+        height: 24px;
+        line-height: 24px;
+        margin: 0 15px;
+        border-bottom: 1px solid #ededed;
+    }
+
+    .action_title1 {
+        color: #666666;
+        font-size: 14px;
+        height: 40px;
+        line-height: 40px;
+        padding-left: 25px;
+    }
+
+    .button_style a {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 25px;
+        color: #fff;
+    }
+
+    .button_style {
+        border-bottom: 1px solid #ededed;
+        margin: 0 25px;
+    }
+
+    .orm_table {
+        width: 100%;
+    }
+
+        .orm_table tr th {
+            color: #5b5b60;
+            height: 30px;
+            line-height: 30px;
+            font-size: 14px;
+        }
+
+        .orm_table tr td {
+            vertical-align: top;
+            text-align: center;
+        }
+
+    .orm_item {
+        border: 1px solid #eeeeee;
+        margin: 10px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .orm_item_title {
+        background: #007aff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        display: inline-block;
+        font-style: italic;
+        color: #fff;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .orm_item_title_note {
+        font-size: 18px;
+        height: 48px;
+        line-height: 48px;
+    }
+
+    .orm_item_title_note1 {
+        color: #333;
+        line-height: 28px;
+    }
+
+    .orm_action1 {
+        margin: 10px;
+    }
+
+    .orm_action {
+        width: 100%;
+    }
+
+        .orm_action tr td {
+            border: 1px solid #eeeeee;
+            width: 100%;
+        }
+
+    .orm_action_title {
+        height: 36px;
+        line-height: 36px;
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 14px;
+        color: #5b5b60;
+    }
+
+    .orm_item_title_note1 img {
+        margin: 20px;
+        width:700px;
+    }
+</style>
+
+
+
+
+
+<div style=" margin:10px;" id="abc">
+    <div style="background:#fff; ">
+        <div class="orm_title">报表模板</div>
+
+
+        <div style="border-bottom:2px solid #ee8339; margin-top:15px;"></div>
+
+
+    </div>
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px; ">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        一、使用http://192.XXXXXXX 路径打开报表模板管理界面
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/baobiao1.png" />
+                            </p>
+
+
+                          
+
+
+
+
+                        </div>
+
+                    </td>
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        二、点击新增按钮可添加模板
+
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/baobiao2.png" />
+                            </p>
+
+
+                            <p class="orm_item_title_note1">
+                                	点击上传文件按钮可将HTML模板上传至服务器
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	系统名称和服务地址从服务注册功能中获取
+                            </p>
+                            <p class="orm_item_title_note1">     	点击服务地址可选择模板对应的数据源信息 </p>
+
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/baobiao3.png" />
+                            </p>
+
+
+
+</div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        三、点击查看模板按钮可查看上传的HTML格式
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/baobiao4.png" />
+                            </p>
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        四、 点击生成模板按钮可查看绑定数据后的报表数据
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                            <p class="orm_item_title_note1">
+                                <img src="~/Content/adminDefault/img/baobiao5.png" />
+                            </p>
+
+
+
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+    <div class="row" style="background: #fff; margin-bottom: 10px;">
+        <div class="orm_action1">
+
+
+            <table class="orm_action">
+
+
+                <tr>
+                    <td class="orm_action_title">
+                        五、 HMTL绑定数据格式
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <div style="padding:15px; padding-left:40px;">
+                           
+
+                            <p class="orm_item_title_note1">
+                                	＠Repeat 之间为循环的内容体,其中包含数据集编号
+                                < !--<%＠Repeat("cd3d4a2f-970a-4c10-b690-ca396e6f3ffe")-->< !-- %＠>-->
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	在列表中需绑定的字段信息格式为 ＠Item(ColumnName)，ColumnName为列表数据集中的字段名称
+                                <%＠Item("F_Day") %>
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	单项绑定数据式为：DataSource(TableName).Column(“ColumnName”),TableName为数据集编号，ColumnName为数据集中的字段名称
+                                <%#DataSource("197180ba-7c13-48b3-a095-d6cb12b6c96d").DataItem("F_WZ") %>
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	列表中提供合计功能@Sum,如带参数则为按列统计，如需要多个列合计，可使用逗号分隔，如DataSource(TableName).Sum(ColumnName1,ColumnName2);TableName为数据集编号，ColumnName为数据集中的字段名称
+                                <%&DataSource("cd3d4a2f-970a-4c10-b690-ca396e6f3ffe").Sum("F_January") %>
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	列表中提供平均值功能@Avg，使用参照Sum
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	列表中提供最大值功能@Max, 使用参照Sum
+                            </p>
+                            <p class="orm_item_title_note1">
+                                	列表中提供最小值功能@Min, 使用参照Sum
+                            </p>
+                            <p class="orm_item_title_note1">   	列表中提供个数功能@Count，使用参照Sum</p>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+                                </div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+</div>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+
+
+    
+
+</div>

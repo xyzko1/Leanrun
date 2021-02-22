@@ -1,0 +1,172 @@
+﻿@{
+    ViewBag.Title = "表数据";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    var dataBaseLinkId = learun.request('dataBaseLinkId');
+    var tableName = learun.request('tableName');
+    var comboxData;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设(表格、树形)宽高
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $("#gridTable").setGridHeight($(window).height() - 140);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var colModelData = [];
+        $.ajax({
+            url: "../../SystemManage/DataBaseTable/GetTableFiledListJson",
+            data: { dataBaseLinkId: dataBaseLinkId, tableName: tableName },
+            type: "get",
+            dataType: "json",
+            async: false,
+            success: function (json) {
+                comboxData = json;
+                $.each(json, function (i) {
+                    var field = json[i].f_column.toLocaleLowerCase();;
+                    var remark = json[i].f_remark;
+                    $("#switchWhere").append($("<option title=" + remark + "></option>").val(field).html(remark));
+                    $("#switchWhere1").append($("<option title=" + remark + "></option>").val(field).html(remark));
+                    colModelData.push({ label: "<div title=" + remark + ">" + remark + "</div>", name: field, align: "left", index: field, editable: true });
+
+                });
+            }
+        });
+        var $gridTable = $("#gridTable");
+        $gridTable.jqGrid({
+            url: "../../SystemManage/DataBaseTable/GetTableDataListJsonNew",
+            postData: { dataBaseLinkId: dataBaseLinkId, tableName: tableName },
+            datatype: "json",
+            height: $(window).height() - 270,
+            autowidth: true,
+            colModel: colModelData,
+            unwritten: false,
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true
+        });
+        //查询事件
+        $("#btn_Search").click(function () {
+            var countDiv = $("#divSearchCondition").find('div');
+            var _switchWhere = $("#switchWhere").val();
+            var _logic = $("#logic").val()
+            var _keyword = $("#txt_Keyword").val();
+            var _condition;
+
+            for (var i = 1; i <= countDiv.length; i++)
+            {
+                _switchWhere += "#" + $("#switchWhere" + i).val();
+                _logic += "#" + $("#logic" + i).val();
+                _keyword += "#" + $("#txt_Keyword" + i).val();
+                _condition += "#" + $("#Condition" + i).val();
+            }
+            $gridTable.jqGrid('setGridParam', {
+                postData: {
+                    dataBaseLinkId: dataBaseLinkId,
+                    tableName: tableName,
+                    switchWhere: _switchWhere,
+                    logic: _logic,
+                    keyword: _keyword,
+                    condition:_condition
+                },
+            }).trigger('reloadGrid');
+        });
+    }
+
+    function AddDiv(e) {
+        //e.style.display = 'none';
+        var countDiv = $("#divSearchCondition").find('div');
+        var flag = countDiv.length;
+        var divHtml = "<div id='divCondition" + flag + "' class='select-bottom'><select id='Condition" + flag + "' class='form-control auto_border' style='width: 65px; float: left;margin-right:5px;'><option value='AND'>AND</option><option value='OR'>OR</option></select><select id='switchWhere" + flag + "' class='form-control auto_border' style='width: 100px; float: left;margin-right:5px;'></select><select id='logic" + flag + "' class='form-control auto_border' style='width: 200px; float: left;margin-right:5px;'><option value='Equal'>等于</option><option value='NotEqual'>不等于</option><option value='Greater'>大于</option><option value='GreaterThan'>大于等于</option><option value='Less'>小于</option><option value='LessThan'>小于等于</option><option value='Null'>为空</option><option value='NotNull'>不为空</option><option value='Like'>包含</option></select><input id='txt_Keyword" + flag + "' type='text' class='form-control auto_border' placeholder='请输入要查询关键字' style='width: 200px; float: left;margin-right:5px;' /><a id='btn_AddCondition" + flag + "' class='btn btn-default search' onclick='AddDiv(this)'><i class='fa fa-plus'></i>&nbsp;</a></div>";
+        $("#divSearchCondition").append(divHtml);
+        $.each(comboxData, function (i) {
+            var field = comboxData[i].f_column.toLocaleLowerCase();;
+            var remark = comboxData[i].f_remark;
+            $("#switchWhere" + flag).append($("<option title=" + remark + "></option>").val(remark).html(remark));
+        });
+    }
+</script>
+<div style="border: 0px;">
+    <div id="divSearchCondition" style="height:200px;overflow-y:scroll;padding:10px 10px;">
+        <div id="divCondition" class="select-bottom">
+            <a class="auto_border" style="white-space: nowrap; font-weight: normal; float: left;line-height:34px;">查询条件：</a>
+            <select id="switchWhere" class="form-control auto_border" style="width: 100px;float:left;margin-right:5px;"></select>
+            <select id="logic" class="form-control auto_border" style="float: left;width: 200px;margin-right:5px;">
+                <option value="Equal">等于</option>
+                <option value="NotEqual">不等于</option>
+                <option value="Greater">大于</option>
+                <option value="GreaterThan">大于等于</option>
+                <option value="Less">小于</option>
+                <option value="LessThan">小于等于</option>
+                <option value="Null">为空</option>
+                <option value="NotNull">不为空</option>
+                <option value="Like">包含</option>
+            </select>
+            <input id="txt_Keyword" type="text" class="form-control auto_border" placeholder="请输入要查询关键字" style="width: 200px; float: left;margin-right:5px;" />
+            <a id="btn_Search" class="btn btn-primary search "><i class="fa fa-search "></i>&nbsp;查询</a>
+        </div>
+        <div id="divCondition1" class="select-bottom">
+            <select id="Condition1" class="form-control auto_border" style="width:65px;float:left;margin-right:5px;">
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+            </select>
+            <select id="switchWhere1" class="form-control auto_border" style="width: 100px; float: left;margin-right:5px;"></select>
+            <select id="logic1" class="form-control auto_border" style="width:200px;float: left;margin-right:5px;">
+                <option value="Equal">等于</option>
+                <option value="NotEqual">不等于</option>
+                <option value="Greater">大于</option>
+                <option value="GreaterThan">大于等于</option>
+                <option value="Less">小于</option>
+                <option value="LessThan">小于等于</option>
+                <option value="Null">为空</option>
+                <option value="NotNull">不为空</option>
+                <option value="Like">包含</option>
+            </select>
+            <input id="txt_Keyword1" type="text" class="form-control auto_border" placeholder="请输入要查询关键字" style="width: 200px; float: left;margin-right:5px;" />
+            <a id="btn_AddCondition1" class="btn btn-default search" onclick="AddDiv(this)"><i class="fa fa-plus"></i>&nbsp;</a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<style>
+    .search {
+        padding:6px 16px;
+    }
+    body {
+        margin: 0px;
+    }
+
+    .ui-widget-content {
+        border-left: 0px;
+        border-right: 0px;
+        border-bottom: 0px;
+    }
+    
+    .select-bottom {
+        padding-bottom:5px;
+    }
+    .auto_border {
+       
+        border-radius:4px;
+        box-shadow: none;
+        border-color:darkgrey;
+    }
+</style>

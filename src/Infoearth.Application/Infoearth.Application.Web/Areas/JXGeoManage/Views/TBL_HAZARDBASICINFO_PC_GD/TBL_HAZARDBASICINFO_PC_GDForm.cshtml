@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .form {
+        width: 96%;
+        margin: 0 auto;
+    }
+
+        .form td {
+            border: 1px solid #ddd;
+            height: 38px;
+        }
+
+    .formValue input[type=text] {
+        border-top: 0;
+        border-right: 0;
+        border-left: 0;
+    }
+</style>
+<div style="padding-top:20px;">
+    <div style="float:right;margin-right:25px;" id="li_close">
+        <a class="btn btn-default" style="border:1px solid #ccc;border-radius:4px;margin-top:5px;padding:5px 10px;" onclick="thisClose('DZLSSJCX')"><i class="fa fa-close"></i> 关闭</a>
+    </div>
+    <table class="form">
+        <tr>
+            <td class="formTitle">灾害体类型</td>
+            <td class="formValue">
+                <input id="DISASTERTYPE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">排查编号</td>
+            <td class="formValue">
+                <input id="PCUNIFIEDCODE" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">统一编号</td>
+            <td class="formValue">
+                <input id="UNIFIEDCODE" type="text" class="form-control" />
+            </td>
+        </tr>       
+        <tr>
+            <td class="formTitle" rowspan="2">地理位置</td>
+            <td class="formValue" rowspan="2" colspan="2"><input id="LOCATION" type="text" class="form-control" /></td>
+            <td class="formTitle" rowspan="2">坐标</td>
+            <td class="formTitle">经度</td>
+            <td class="formValue"><input id="LONGITUDE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">纬度</td>
+            <td class="formValue"><input id="LATITUDE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">X</td>
+            <td class="formValue"><input id="X" type="text" class="form-control" /></td>
+            <td class="formTitle">Y</td>
+            <td class="formValue"><input id="Y" type="text" class="form-control" /></td>          
+        </tr>
+        <tr>
+            <td class="formTitle">市</td>
+            <td class="formValue"><input id="CITYNAME" type="text" class="form-control" /></td>
+            <td class="formValue" style="display:none;"><input id="CITY" type="text" class="form-control" /></td>
+            <td class="formTitle">县/区</td>
+            <td class="formValue"><input id="COUNTYNAME" type="text" class="form-control" /></td>
+            <td class="formValue" style="display:none;"><input id="COUNTY" type="text" class="form-control" /></td>
+            <td class="formTitle">街道</td>
+            <td class="formValue"><input id="STREET" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测责任人</td>
+            <td class="formValue"><input id="MONITORINGPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">联系电话</td>
+            <td class="formValue"><input id="TELEPHONE" type="text" class="form-control" /></td>
+            <td class="formTitle">手机</td>
+            <td class="formValue"><input id="PHONE" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测人</td>
+            <td class="formValue"><input id="JCPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">联系电话</td>
+            <td class="formValue"><input id="TELEPHONE1" type="text" class="form-control" /></td>
+            <td class="formTitle">手机</td>
+            <td class="formValue"><input id="PHONE1" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">灾害体规模</td>
+            <td class="formValue"><input id="SCALE" type="text" class="form-control" /></td>          
+            <td class="formTitle">威胁人员</td>
+            <td class="formValue"><input id="THREATENPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">潜在经济损失/万元</td>
+            <td class="formValue"><input id="INDIRECTLOSS" type="text" class="form-control" /></td>        
+        </tr>
+        <tr>
+            <td class="formTitle">隐患点状态</td>
+            <td class="formValue"><input id="YHSTATE" type="text" class="form-control" /></td>
+            <td class="formTitle">危害性</td>
+            <td class="formValue"><input id="DESTROYEDOBJECT" type="text" class="form-control" /></td>
+            <td class="formTitle">稳定性</td>
+            <td class="formValue"><input id="CURSTABLESTATUS" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">有没应急预案</td>
+            <td class="formValue"><input id="YJPLAN" type="text" class="form-control" /></td>
+            <td class="formTitle">防治对策</td>
+            <td class="formValue"><input id="COUNTERMEASURES" type="text" class="form-control" /></td>
+            <td class="formTitle">工作措施</td>
+            <td class="formValue"><input id="WORKMEASURES" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">上传人</td>
+            <td class="formValue"><input id="UPLOADER" type="text" class="form-control" /></td>
+            <td class="formTitle">上报来源（1为手机端）</td>
+            <td class="formValue"><input id="REPORTLY" type="text" class="form-control" /></td>
+            <td class="formTitle">发生时间</td>
+            <td class="formValue"><input id="HAPPENDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">填报人</td>
+            <td class="formValue"><input id="FILLTABLEPEOPLE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+            <td class="formTitle">填报时间</td>
+            <td class="formValue"><input id="FILETIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">审核人</td>
+            <td class="formValue"><input id="VERIFYPEOPLE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+            <td class="formTitle">审核时间</td>
+            <td class="formValue"><input id="SHTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">审核意见</td>
+            <td class="formValue" colspan="5"><input id="SHOPINION" type="text" class="form-control" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">排查时间</td>
+            <td class="formValue"><input id="PCTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+            <td class="formTitle" >发现时间</td>
+            <td class="formValue"><input id="OCCURREDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">填表人</td>
+            <td class="formValue"><input id="FILLTABLEPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">复核人</td>
+            <td class="formValue"><input id="VERIFYPEOPLE" type="text" class="form-control" /></td>
+            <td class="formTitle">填表日期</td>
+            <td class="formValue"><input id="FILLTABLEDATE" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" /></td>
+        </tr>
+        <tr>
+            <td class="formTitle">备注</td>
+            <td class="formValue" colspan="5"><input id="REMARKS" type="text" class="form-control" /></td>
+        </tr>
+      
+    </table>
+</div>
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/plugins/infoearthcustom/dictionaryControl.js"
+)
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    function initControl() {
+
+        $("textarea").attr("disabled", "disabled");
+        $("input").attr("disabled", "disabled");
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_HAZARDBASICINFO_PC_GD/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_HAZARDBASICINFO_PC_GD/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+</script>
+}

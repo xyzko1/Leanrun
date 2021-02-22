@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "经纬度选择页";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+
+<input id="LONGITUDE" type="hidden"  />
+<input id="LATITUDE" type="hidden" />
+<div id="mapControl"></div>
+@section Scripts{
+    <script>
+        var lat = request('lat'), lon = request('lon');
+        $(function () {
+            GetMapData();
+        });
+        //加载地图
+        var mapCtlExt = null;
+        function GetMapData() {
+            var center = null;
+            if (lat && lon) {
+                center = [Number(lon), Number(lat)]
+            }
+            mapCtlExt = $("#mapControl").mapCtl(
+                cfGetMapData({
+                    mapheight: 380,
+                    center: center,
+                    zoom: 8,
+                    clickCallBack: function (lon, lat) {
+                        $('#LONGITUDE').val(lon);
+                        $('#LATITUDE').val(lat);
+                        mapCtlExt.flashCss([lon, lat]);
+                    }
+                }));
+        };
+
+        //保存表单;
+        function AcceptClick() {
+            learun.dialogClose();
+        }
+    </script>
+}

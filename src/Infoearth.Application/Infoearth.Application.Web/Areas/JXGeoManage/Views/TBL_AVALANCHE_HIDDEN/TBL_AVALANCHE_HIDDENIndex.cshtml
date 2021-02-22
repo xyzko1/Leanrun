@@ -1,0 +1,334 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<div class="titlePanel">
+    <div class="title-search">
+        <table>
+            <tr>
+                <td>
+                    <input id="txt_Keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" />
+                </td>
+                <td style="padding-left: 5px;">
+                    <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>&nbsp;编辑</a>
+            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+
+@section Scripts{
+<script>;
+    $(function () {
+        InitialPage();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5);
+            }, 200);
+            e.stopPropagation();
+        });
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5,
+            url: "../../JXGeoManage/TBL_AVALANCHE/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: '统一编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: 'CGH系统灾害点编码', name: 'CGHUNIFIEDCODE', index: 'CGHUNIFIEDCODE', width: 100, align: 'left',sortable: true  },
+                { label: '名称', name: 'DISASTERUNITNAME', index: 'DISASTERUNITNAME', width: 100, align: 'left',sortable: true  },
+                { label: '野外编号', name: 'OUTDOORCODE', index: 'OUTDOORCODE', width: 100, align: 'left',sortable: true  },
+                { label: '室内编号', name: 'INDOORCODE', index: 'INDOORCODE', width: 100, align: 'left',sortable: true  },
+                { label: '省', name: 'PROVINCE', index: 'PROVINCE', width: 100, align: 'left',sortable: true  },
+                { label: '市（县）', name: 'CITY', index: 'CITY', width: 100, align: 'left',sortable: true  },
+                { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left',sortable: true  },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left',sortable: true  },
+                { label: '经度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left',sortable: true  },
+                { label: '纬度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left',sortable: true  },
+                { label: 'X坐标', name: 'X', index: 'X', width: 100, align: 'left',sortable: true  },
+                { label: 'Y坐标', name: 'Y', index: 'Y', width: 100, align: 'left',sortable: true  },
+                { label: 'Z坐标', name: 'Z', index: 'Z', width: 100, align: 'left',sortable: true  },
+                { label: '坡顶标高', name: 'ALTTOP', index: 'ALTTOP', width: 100, align: 'left',sortable: true  },
+                { label: '坡脚标高', name: 'ALTBOTOM', index: 'ALTBOTOM', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌类型', name: 'AVALANCHETYPE', index: 'AVALANCHETYPE', width: 100, align: 'left',sortable: true  },
+                { label: '地层时代', name: 'STRATIGRAPHICTIME', index: 'STRATIGRAPHICTIME', width: 100, align: 'left',sortable: true  },
+                { label: '地层岩性', name: 'LITHOLOGY', index: 'LITHOLOGY', width: 100, align: 'left',sortable: true  },
+                { label: '构造部位', name: 'TECTONICREGION', index: 'TECTONICREGION', width: 100, align: 'left',sortable: true  },
+                { label: '地震烈度', name: 'EARTHQUAKEINTENSITY', index: 'EARTHQUAKEINTENSITY', width: 100, align: 'left',sortable: true  },
+                { label: '地层倾向', name: 'STRATUMDIRECTION', index: 'STRATUMDIRECTION', width: 100, align: 'left',sortable: true  },
+                { label: '地层倾角', name: 'STRATUMANGLE', index: 'STRATUMANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '微地貌', name: 'MICROTOPOGRAPHY', index: 'MICROTOPOGRAPHY', width: 100, align: 'left',sortable: true  },
+                { label: '地下水类型', name: 'GROUNDWATERTYPE', index: 'GROUNDWATERTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '年均降雨量', name: 'AVERAGEYEARRAINFALL', index: 'AVERAGEYEARRAINFALL', width: 100, align: 'left',sortable: true  },
+                { label: '日最大降雨', name: 'MAXDAYRAINFALL', index: 'MAXDAYRAINFALL', width: 100, align: 'left',sortable: true  },
+                { label: '时最大降雨', name: 'MAXHOURRAINFALL', index: 'MAXHOURRAINFALL', width: 100, align: 'left',sortable: true  },
+                { label: '洪水位', name: 'MAXWATERLEVEL', index: 'MAXWATERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '枯水位', name: 'MINWATERLEVEL', index: 'MINWATERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '相对河流位置', name: 'POSITIONTORIVER', index: 'POSITIONTORIVER', width: 100, align: 'left',sortable: true  },
+                { label: '土地利用', name: 'LANDUSAGE', index: 'LANDUSAGE', width: 100, align: 'left',sortable: true  },
+                { label: '坡高', name: 'SLOPEHEIGHT', index: 'SLOPEHEIGHT', width: 100, align: 'left',sortable: true  },
+                { label: '坡长', name: 'SLOPELENGTH', index: 'SLOPELENGTH', width: 100, align: 'left',sortable: true  },
+                { label: '坡宽', name: 'SLOPEWIDTH', index: 'SLOPEWIDTH', width: 100, align: 'left',sortable: true  },
+                { label: '体积（立方米）', name: 'SCALE', index: 'SCALE', width: 100, align: 'left',sortable: true  },
+                { label: '规模等级', name: 'SCALELEVEL', index: 'SCALELEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '坡度', name: 'SLOPEANGLE', index: 'SLOPEANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '坡向', name: 'SLOPEDIRECTION', index: 'SLOPEDIRECTION', width: 100, align: 'left',sortable: true  },
+                { label: '岩体结构类型', name: 'ROCKARCHTYPE', index: 'ROCKARCHTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '岩体厚度', name: 'ROCKDEPTH', index: 'ROCKDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '岩体裂隙组数', name: 'FRACTUREGROUPNUM', index: 'FRACTUREGROUPNUM', width: 100, align: 'left',sortable: true  },
+                { label: '岩体块长', name: 'ROCKLENGTH', index: 'ROCKLENGTH', width: 100, align: 'left',sortable: true  },
+                { label: '岩体块宽', name: 'ROCKWIDTH', index: 'ROCKWIDTH', width: 100, align: 'left',sortable: true  },
+                { label: '岩体块高', name: 'ROCKHEIGHT', index: 'ROCKHEIGHT', width: 100, align: 'left',sortable: true  },
+                { label: '斜坡结构类型', name: 'SLOPEARCHTYPE', index: 'SLOPEARCHTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '斜坡结构类型-', name: 'SLOPEASPECTARCHTYPE', index: 'SLOPEASPECTARCHTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面类型1', name: 'CTRLSURFTYPE1', index: 'CTRLSURFTYPE1', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾向1', name: 'CTRLSURFDIRECTION1', index: 'CTRLSURFDIRECTION1', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾角1', name: 'CTRLSURFANGLE1', index: 'CTRLSURFANGLE1', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面长度1', name: 'CTRLSURFLENGTH1', index: 'CTRLSURFLENGTH1', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面间距1', name: 'CTRLSURFSPACE1', index: 'CTRLSURFSPACE1', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面类型2', name: 'CTRLSURFTYPE2', index: 'CTRLSURFTYPE2', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾向2', name: 'CTRLSURFDIRECTION2', index: 'CTRLSURFDIRECTION2', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾角2', name: 'CTRLSURFANGLE2', index: 'CTRLSURFANGLE2', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面长度2', name: 'COCTRLSURFLENGTH2', index: 'COCTRLSURFLENGTH2', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面间距2', name: 'CTRLSURFSPACE2', index: 'CTRLSURFSPACE2', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面类型3', name: 'CTRLSURFTYPE3', index: 'CTRLSURFTYPE3', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾向3', name: 'CTRLSURFDIRECTION3', index: 'CTRLSURFDIRECTION3', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面倾角3', name: 'CTRLSURFANGLE3', index: 'CTRLSURFANGLE3', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面长度3', name: 'CTRLSURFLENGTH3', index: 'CTRLSURFLENGTH3', width: 100, align: 'left',sortable: true  },
+                { label: '控制结构面间距3', name: 'CTRLSURFSPACE3', index: 'CTRLSURFSPACE3', width: 100, align: 'left',sortable: true  },
+                { label: '全风化带深度(M)', name: 'WEATHEREDZONEDEPTH', index: 'WEATHEREDZONEDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '卸荷裂缝深度(M)', name: 'UNLOADCRACKDEPTH', index: 'UNLOADCRACKDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '土体名称', name: 'SOILTEXTURENAME', index: 'SOILTEXTURENAME', width: 100, align: 'left',sortable: true  },
+                { label: '土地密实度', name: 'SOILDENSITYDEGREE', index: 'SOILDENSITYDEGREE', width: 100, align: 'left',sortable: true  },
+                { label: '土地稠度', name: 'SOILCONSISTENCY', index: 'SOILCONSISTENCY', width: 100, align: 'left',sortable: true  },
+                { label: '下伏基岩时代', name: 'BEDROCKTIME', index: 'BEDROCKTIME', width: 100, align: 'left',sortable: true  },
+                { label: '下伏基岩岩性', name: 'BEDROCKLITHOLOGY', index: 'BEDROCKLITHOLOGY', width: 100, align: 'left',sortable: true  },
+                { label: '下伏基岩倾角', name: 'BEDROCKANGLE', index: 'BEDROCKANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '下伏基岩倾向', name: 'BEDROCKDIRECTION', index: 'BEDROCKDIRECTION', width: 100, align: 'left',sortable: true  },
+                { label: '下伏基岩埋深(M)', name: 'BEDROCKDEPTH', index: 'BEDROCKDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称1', name: 'DISTORTIONSIGN1', index: 'DISTORTIONSIGN1', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位1', name: 'DISTORTIONPLACE1', index: 'DISTORTIONPLACE1', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征1', name: 'DISTORTIONCHARACTER1', index: 'DISTORTIONCHARACTER1', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间1', name: 'DISTORTIONINITDATE1', index: 'DISTORTIONINITDATE1', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称2', name: 'DISTORTIONSIGN2', index: 'DISTORTIONSIGN2', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位2', name: 'DISTORTIONPLACE2', index: 'DISTORTIONPLACE2', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征2', name: 'DISTORTIONCHARACTER2', index: 'DISTORTIONCHARACTER2', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间2', name: 'DISTORTIONINITDATE2', index: 'DISTORTIONINITDATE2', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称3', name: 'DISTORTIONSIGN3', index: 'DISTORTIONSIGN3', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位3', name: 'DISTORTIONPLACE3', index: 'DISTORTIONPLACE3', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征3', name: 'DISTORTIONCHARACTER3', index: 'DISTORTIONCHARACTER3', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间3', name: 'DISTORTIONINITDATE3', index: 'DISTORTIONINITDATE3', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称4', name: 'DISTORTIONSIGN4', index: 'DISTORTIONSIGN4', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位4', name: 'DISTORTIONPLACE4', index: 'DISTORTIONPLACE4', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征4', name: 'DISTORTIONCHARACTER4', index: 'DISTORTIONCHARACTER4', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间4', name: 'DISTORTIONINITDATE4', index: 'DISTORTIONINITDATE4', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称5', name: 'DISTORTIONSIGN5', index: 'DISTORTIONSIGN5', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位5', name: 'DISTORTIONPLACE5', index: 'DISTORTIONPLACE5', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征5', name: 'DISTORTIONCHARACTER5', index: 'DISTORTIONCHARACTER5', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间5', name: 'DISTORTIONINITDATE5', index: 'DISTORTIONINITDATE5', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称6', name: 'DISTORTIONSIGN6', index: 'DISTORTIONSIGN6', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位6', name: 'DISTORTIONPLACE6', index: 'DISTORTIONPLACE6', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征6', name: 'DISTORTIONCHARACTER6', index: 'DISTORTIONCHARACTER6', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间6', name: 'DISTORTIONINITDATE6', index: 'DISTORTIONINITDATE6', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称7', name: 'DISTORTIONSIGN7', index: 'DISTORTIONSIGN7', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位7', name: 'DISTORTIONPLACE7', index: 'DISTORTIONPLACE7', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征7', name: 'DISTORTIONCHARACTER7', index: 'DISTORTIONCHARACTER7', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间7', name: 'DISTORTIONINITDATE7', index: 'DISTORTIONINITDATE7', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象名称8', name: 'DISTORTIONSIGN8', index: 'DISTORTIONSIGN8', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象部位8', name: 'DISTORTIONPLACE8', index: 'DISTORTIONPLACE8', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象特征8', name: 'DISTORTIONCHARACTER8', index: 'DISTORTIONCHARACTER8', width: 100, align: 'left',sortable: true  },
+                { label: '变形迹象初现时间8', name: 'DISTORTIONINITDATE8', index: 'DISTORTIONINITDATE8', width: 100, align: 'left',sortable: true  },
+                { label: '危岩体可能失稳因素', name: 'DANGERROCKASTABLEFACTOR', index: 'DANGERROCKASTABLEFACTOR', width: 100, align: 'left',sortable: true  },
+                { label: '危岩体目前稳定程度', name: 'DANGERROCKSTABLESTATUS', index: 'DANGERROCKSTABLESTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '危岩体今后变化趋势', name: 'DANGERROCKSTABLETREND', index: 'DANGERROCKSTABLETREND', width: 100, align: 'left',sortable: true  },
+                { label: '地下水埋深(M)', name: 'GROUNDWATERDEPTH', index: 'GROUNDWATERDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '地下水露头', name: 'GROUNDWATEROUTCROP', index: 'GROUNDWATEROUTCROP', width: 100, align: 'left',sortable: true  },
+                { label: '地下水补给类型', name: 'GROUNDWATERSUPPLYTYPE', index: 'GROUNDWATERSUPPLYTYPE', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体长度', name: 'ACCUMULATIONBODYLENGTH', index: 'ACCUMULATIONBODYLENGTH', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体宽度', name: 'ACCUMULATIONBODYWIDTH', index: 'ACCUMULATIONBODYWIDTH', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体厚度', name: 'ACCUMULATIONBODYDEPTH', index: 'ACCUMULATIONBODYDEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体体积', name: 'ACCUMULATIONBODYVOLUME', index: 'ACCUMULATIONBODYVOLUME', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体坡度', name: 'ACCUMULATIONBODYANGLE', index: 'ACCUMULATIONBODYANGLE', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体坡向', name: 'ACCUMULATIONBODYDIRECTION', index: 'ACCUMULATIONBODYDIRECTION', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体坡面形态', name: 'ACCUMULATIONBODYFLATSHAPE', index: 'ACCUMULATIONBODYFLATSHAPE', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体稳定性', name: 'ACCUMULATIONBODYSTABILITY', index: 'ACCUMULATIONBODYSTABILITY', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体可能失稳因素', name: 'ACCUMULATIONBODYASTABLEFACTOR', index: 'ACCUMULATIONBODYASTABLEFACTOR', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体目前稳定状态', name: 'ACCUMULATIONBODYSTABLESTATUS', index: 'ACCUMULATIONBODYSTABLESTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '堆积体今后变化趋势', name: 'ACCUMULATIONBODYSTABLETREND', index: 'ACCUMULATIONBODYSTABLETREND', width: 100, align: 'left',sortable: true  },
+                { label: '隐患点', name: 'HIDDENDANGER', index: 'HIDDENDANGER', width: 100, align: 'left',sortable: true  },
+                { label: '防灾预案', name: 'PREVENTIONPLAN', index: 'PREVENTIONPLAN', width: 100, align: 'left',sortable: true  },
+                { label: '死亡人口', name: 'DEATHSPEOPLE', index: 'DEATHSPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '毁坏房屋', name: 'DESTROYEDHOME', index: 'DESTROYEDHOME', width: 100, align: 'left',sortable: true  },
+                { label: '毁路', name: 'DESTROYEDROAD', index: 'DESTROYEDROAD', width: 100, align: 'left',sortable: true  },
+                { label: '毁渠', name: 'DESTROYEDCHANNEL', index: 'DESTROYEDCHANNEL', width: 100, align: 'left',sortable: true  },
+                { label: '其它危害', name: 'DESTROYEDOTHERS', index: 'DESTROYEDOTHERS', width: 100, align: 'left',sortable: true  },
+                { label: '直接损失', name: 'DIRECTLOSS', index: 'DIRECTLOSS', width: 100, align: 'left',sortable: true  },
+                { label: '灾情等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '威胁人口', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '威胁财产', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 100, align: 'left',sortable: true  },
+                { label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 100, align: 'left',sortable: true  },
+                { label: '监测建议', name: 'MONITORSUGGESTION', index: 'MONITORSUGGESTION', width: 100, align: 'left',sortable: true  },
+                { label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 100, align: 'left',sortable: true  },
+                { label: '群测人员', name: 'MONITORMASS', index: 'MONITORMASS', width: 100, align: 'left',sortable: true  },
+                { label: '村长', name: 'VILLAGEHEADER', index: 'VILLAGEHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '电话', name: 'PHONE', index: 'PHONE', width: 100, align: 'left',sortable: true  },
+                { label: '调查负责人', name: 'SURVEYHEADER', index: 'SURVEYHEADER', width: 100, align: 'left',sortable: true  },
+                { label: '填表人', name: 'FILLTABLEPEOPLE', index: 'FILLTABLEPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '审核人', name: 'VERIFYPEOPLE', index: 'VERIFYPEOPLE', width: 100, align: 'left',sortable: true  },
+                { label: '调查单位', name: 'SURVEYDEPT', index: 'SURVEYDEPT', width: 100, align: 'left',sortable: true  },
+                { label: '填表日期', name: 'FILLTABLEDATE', index: 'FILLTABLEDATE', width: 100, align: 'left',sortable: true  },
+                { label: '发生时间', name: 'HAPPENSTIME', index: 'HAPPENSTIME', width: 100, align: 'left',sortable: true  },
+                { label: '更新时间', name: 'UPDATETIME', index: 'UPDATETIME', width: 100, align: 'left',sortable: true  },
+                { label: '记录状态', name: 'RECORDSTATUS', index: 'RECORDSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '导出状态', name: 'EXPSTATUS', index: 'EXPSTATUS', width: 100, align: 'left',sortable: true  },
+                { label: '防灾情况', name: 'CONTROLSTATE', index: 'CONTROLSTATE', width: 100, align: 'left',sortable: true  },
+                { label: '创建者ID', name: 'CREATORUSERID', index: 'CREATORUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '创建时间', name: 'CREATORTIME', index: 'CREATORTIME', width: 100, align: 'left',sortable: true  },
+                { label: '更新者ID', name: 'UPDATEUSERID', index: 'UPDATEUSERID', width: 100, align: 'left',sortable: true  },
+                { label: '更新次数', name: 'UPDATETIMES', index: 'UPDATETIMES', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌情况', name: 'AVALANCHEDESC', index: 'AVALANCHEDESC', width: 100, align: 'left',sortable: true  },
+                { label: '项目编号', name: 'PROJECTID', index: 'PROJECTID', width: 100, align: 'left',sortable: true  },
+                { label: '图幅编号', name: 'MAPID', index: 'MAPID', width: 100, align: 'left',sortable: true  },
+                { label: '图幅名称', name: 'MAPNAME', index: 'MAPNAME', width: 100, align: 'left',sortable: true  },
+                { label: '县市编号', name: 'COUNTYCODE', index: 'COUNTYCODE', width: 100, align: 'left',sortable: true  },
+                { label: '分布高程（米）', name: 'DISTRIBUTEALTITUDE', index: 'DISTRIBUTEALTITUDE', width: 100, align: 'left',sortable: true  },
+                { label: '厚度(米)', name: 'DEPTH', index: 'DEPTH', width: 100, align: 'left',sortable: true  },
+                { label: '变形发育史形成时间', name: 'DISTORTIONFORMDATE', index: 'DISTORTIONFORMDATE', width: 100, align: 'left',sortable: true  },
+                { label: '发生崩塌次数', name: 'AVALANCHETIMES', index: 'AVALANCHETIMES', width: 100, align: 'left',sortable: true  },
+                { label: '变形发育史序号1', name: 'AVALANCHENO1', index: 'AVALANCHENO1', width: 100, align: 'left',sortable: true  },
+                { label: '发生时间1', name: 'OCCURREDTIME1', index: 'OCCURREDTIME1', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌规模1（立方米）', name: 'OCCURREDVOLUME1', index: 'OCCURREDVOLUME1', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌诱发因素1', name: 'INDUCEDFACTOR1', index: 'INDUCEDFACTOR1', width: 100, align: 'left',sortable: true  },
+                { label: '死亡人数1', name: 'DEATHPEOPLE1', index: 'DEATHPEOPLE1', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌直接经济损失1', name: 'DIRECTLOSS1', index: 'DIRECTLOSS1', width: 100, align: 'left',sortable: true  },
+                { label: '变形发育史序号2', name: 'AVALANCHENO2', index: 'AVALANCHENO2', width: 100, align: 'left',sortable: true  },
+                { label: '发生时间2', name: 'OCCURREDTIME2', index: 'OCCURREDTIME2', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌规模2（立方米）', name: 'OCCURREDVOLUME2', index: 'OCCURREDVOLUME2', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌诱发因素2', name: 'INDUCEDFACTOR2', index: 'INDUCEDFACTOR2', width: 100, align: 'left',sortable: true  },
+                { label: '死亡人数2', name: 'DEATHPEOPLE2', index: 'DEATHPEOPLE2', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌直接经济损失2', name: 'DIRECTLOSS2', index: 'DIRECTLOSS2', width: 100, align: 'left',sortable: true  },
+                { label: '变形发育史序号3', name: 'AVALANCHENO3', index: 'AVALANCHENO3', width: 100, align: 'left',sortable: true  },
+                { label: '发生时间3', name: 'OCCURREDTIME3', index: 'OCCURREDTIME3', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌规模3（立方米）', name: 'OCCURREDVOLUME3', index: 'OCCURREDVOLUME3', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌诱发因素3', name: 'INDUCEDFACTOR3', index: 'INDUCEDFACTOR3', width: 100, align: 'left',sortable: true  },
+                { label: '死亡人数3', name: 'DEATHPEOPLE3', index: 'DEATHPEOPLE3', width: 100, align: 'left',sortable: true  },
+                { label: '崩塌直接经济损失3', name: 'DIRECTLOSS3', index: 'DIRECTLOSS3', width: 100, align: 'left',sortable: true  },
+                { label: '损坏房屋（间）', name: 'DESTROYEDHOUSE', index: 'DESTROYEDHOUSE', width: 100, align: 'left',sortable: true  },
+                { label: '威胁房屋（户）', name: 'THREATENHOME', index: 'THREATENHOME', width: 100, align: 'left',sortable: true  },
+                { label: '间接损失（万元）', name: 'INDIRECTLOSS', index: 'INDIRECTLOSS', width: 100, align: 'left',sortable: true  },
+                { label: '危害对象', name: 'DESTROYEDOBJECT', index: 'DESTROYEDOBJECT', width: 100, align: 'left',sortable: true  },
+                { label: '诱发灾害类型', name: 'INDUCEDDAMAGETYPE', index: 'INDUCEDDAMAGETYPE', width: 100, align: 'left',sortable: true  },
+                { label: '诱发灾害波及范围', name: 'INDUCEDDAMAGERANGE', index: 'INDUCEDDAMAGERANGE', width: 100, align: 'left',sortable: true  },
+                { label: '诱发灾害造成损失', name: 'INDUCEDDAMAGELOSS', index: 'INDUCEDDAMAGELOSS', width: 100, align: 'left',sortable: true  },
+                { label: '潜在危害威胁对象', name: 'THREATENOBJECT', index: 'THREATENOBJECT', width: 100, align: 'left',sortable: true  },
+                { label: '遥感解译点（0：否；1：是）', name: 'ISRSPNT', index: 'ISRSPNT', width: 100, align: 'left',sortable: true  },
+                { label: '勘查点（0：否；1：是）', name: 'ISSURVEYPNT', index: 'ISSURVEYPNT', width: 100, align: 'left',sortable: true  },
+                { label: '测绘点（0：否；1：是）', name: 'ISMEASURINGPNT', index: 'ISMEASURINGPNT', width: 100, align: 'left',sortable: true  },
+                { label: '野外记录信息', name: 'OUTDOORRECORD', index: 'OUTDOORRECORD', width: 100, align: 'left',sortable: true  },
+                { label: '村', name: 'VILLAGE', index: 'VILLAGE', width: 100, align: 'left',sortable: true  },
+                { label: '组', name: 'TEAM', index: 'TEAM', width: 100, align: 'left',sortable: true  },
+                { label: '群测群防', name: 'MASSMONITORING', index: 'MASSMONITORING', width: 100, align: 'left',sortable: true  },
+                { label: '搬迁避让', name: 'RELOCATION', index: 'RELOCATION', width: 100, align: 'left',sortable: true  },
+                { label: '专业监测', name: 'PROFESSIONMONITORING', index: 'PROFESSIONMONITORING', width: 100, align: 'left',sortable: true  },
+                { label: '工程治理', name: 'ENGINEERINGMANAGEMENT', index: 'ENGINEERINGMANAGEMENT', width: 100, align: 'left',sortable: true  },
+                { label: '斜坡类型', name: 'SLOPETYPE', index: 'SLOPETYPE', width: 100, align: 'left',sortable: true  },
+                { label: '流域', name: 'RIVERBASIN', index: 'RIVERBASIN', width: 100, align: 'left',sortable: true  },
+                { label: '失踪人数', name: 'MISSINGPERSON', index: 'MISSINGPERSON', width: 100, align: 'left',sortable: true  },
+                { label: '受伤人数', name: 'INJUREDPERSON', index: 'INJUREDPERSON', width: 100, align: 'left',sortable: true  },
+                { label: '是否治理工程', name: 'ISZLGCPNT', index: 'ISZLGCPNT', width: 100, align: 'left',sortable: true  },
+                { label: '是否有监测点', name: 'ISMONITORPNT', index: 'ISMONITORPNT', width: 100, align: 'left',sortable: true  },
+                { label: '遥感解译', name: 'DISASTERSID', index: 'DISASTERSID', width: 100, align: 'left',sortable: true  },
+                { label: '更新人(最近)', name: 'UPDATEUSER', index: 'UPDATEUSER', width: 100, align: 'left',sortable: true  },
+                { label: '调查负责人ID', name: 'SURVEYHEADERID', index: 'SURVEYHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '填表人ID', name: 'FILLTABLEPEOPLEID', index: 'FILLTABLEPEOPLEID', width: 100, align: 'left',sortable: true  },
+                { label: '审核人ID', name: 'VERIFYPEOPLEID', index: 'VERIFYPEOPLEID', width: 100, align: 'left',sortable: true  },
+                { label: '群测人员ID', name: 'MONITORMASSID', index: 'MONITORMASSID', width: 100, align: 'left',sortable: true  },
+                { label: '村长ID', name: 'VILLAGEHEADERID', index: 'VILLAGEHEADERID', width: 100, align: 'left',sortable: true  },
+                { label: '调查单位ID', name: 'SURVEYDEPTID', index: 'SURVEYDEPTID', width: 100, align: 'left',sortable: true  },
+                { label: 'CTRLSURFLENGTH2', name: 'CTRLSURFLENGTH2', index: 'CTRLSURFLENGTH2', width: 100, align: 'center',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加崩塌调查表',
+            url: '/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm',
+            width: 'px',
+            height: 'px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑崩塌调查表',
+                url: '/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm?keyValue=' + keyValue,
+                width: 'px',
+                height: 'px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('UNIFIEDCODE');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_AVALANCHE/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的崩塌调查表！', 0);
+        }
+    }
+</script>
+}

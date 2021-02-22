@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6CE11FF9-1CB7-494E-89C7-5F06BEA94211}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Infoearth.Application.IService</RootNamespace>
+    <AssemblyName>Infoearth.Application.IService</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.1.3.1\lib\net40\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Infoearth.Application.Code, Version=1.0.6785.26086, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Infoearth.Application.Code.1.0.6785.26086\lib\net462\Infoearth.Application.Code.dll</HintPath>
+    </Reference>
+    <Reference Include="Infoearth.Data.Repository, Version=1.0.6652.33577, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Infoearth.Data.Repository.1.0.6652.33577\lib\net462\Infoearth.Data.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="Infoearth.Util, Version=1.0.6712.25615, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Infoearth.Util.1.0.6712.25615\lib\net462\Infoearth.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="Infoearth.Util.WebControl, Version=1.0.6682.30367, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Infoearth.Util.WebControl.1.0.6682.30367\lib\net462\Infoearth.Util.WebControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.1.3.1\lib\net40\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats, Version=2.1.3.1, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NPOI.2.1.3.1\lib\net40\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="RazorGenerator.Mvc">
+      <HintPath>..\..\packages\RazorGenerator.Mvc.2.4.9\lib\net40\RazorGenerator.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppManage\AppTemplatesIService.cs" />
+    <Compile Include="AppManage\AppProjectIService.cs" />
+    <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
+    <Compile Include="AuthorizeManage\IAuthorizeService.T.cs" />
+    <Compile Include="AuthorizeManage\IAuthorizeService.cs" />
+    <Compile Include="AuthorizeManage\IModuleButtonService.cs" />
+    <Compile Include="AuthorizeManage\IModuleColumnService.cs" />
+    <Compile Include="AuthorizeManage\IModuleService.cs" />
+    <Compile Include="AuthorizeManage\IPermissionService.cs" />
+    <Compile Include="BaseManage\Demo_ApplyIService.cs" />
+    <Compile Include="BaseManage\IDepartmentService.cs" />
+    <Compile Include="BaseManage\IOrganizeService.cs" />
+    <Compile Include="BaseManage\IUserService.cs" />
+    <Compile Include="BaseManage\IRoleService.cs" />
+    <Compile Include="BaseManage\IPostService.cs" />
+    <Compile Include="BaseManage\IJobService.cs" />
+    <Compile Include="BaseManage\IUserGroupService.cs" />
+    <Compile Include="CustomerManage\ICashBalanceService.cs" />
+    <Compile Include="CustomerManage\IChanceService.cs" />
+    <Compile Include="CustomerManage\IExpensesService.cs" />
+    <Compile Include="CustomerManage\IInvoiceService.cs" />
+    <Compile Include="CustomerManage\IReceivableService.cs" />
+    <Compile Include="CustomerManage\ITrailRecordService.cs" />
+    <Compile Include="CustomerManage\ICustomerContactService.cs" />
+    <Compile Include="CustomerManage\ICustomerService.cs" />
+    <Compile Include="CustomerManage\IOrderEntryService.cs" />
+    <Compile Include="CustomerManage\IOrderService.cs" />
+    <Compile Include="CustomerManage\IReceivableReportService.cs" />
+    <Compile Include="DemoManage\Base_AreaIService.cs" />
+    <Compile Include="DemoManage\Base_ModuleIService.cs" />
+    <Compile Include="DemoManage\Base_UserIService.cs" />
+    <Compile Include="DemoManage\Client_OrderIService.cs" />
+    <Compile Include="DMCJManage\TBL_DMCJ_BASEINFOIService.cs" />
+    <Compile Include="DMCJManage\TBL_DMCJ_BASEINFO_SUBIService.cs" />
+    <Compile Include="FlowManage\IWFDelegateRecordService.cs" />
+    <Compile Include="FlowManage\IWFDelegateRuleService.cs" />
+    <Compile Include="FlowManage\IWFProcessInstanceService.cs" />
+    <Compile Include="FlowManage\IWFProcessOperationHistoryService.cs" />
+    <Compile Include="FlowManage\IWFProcessSchemeService.cs" />
+    <Compile Include="FlowManage\IWFProcessTransitionHistoryService.cs" />
+    <Compile Include="FlowManage\IWFSchemeInfoService.cs" />
+    <Compile Include="FormManage\Form_ModuleContentIService.cs" />
+    <Compile Include="FormManage\IFormModuleInstanceService.cs" />
+    <Compile Include="FormManage\IFormModeleService.cs" />
+    <Compile Include="FormManage\IFormModuleRelationService.cs" />
+    <Compile Include="IAccountService.cs" />
+    <Compile Include="JXGeoManage\HarzardTrendAnalyseIService.cs" />
+    <Compile Include="JXGeoManage\JYGC_PROJECTBASEINFOIService.cs" />
+    <Compile Include="JXGeoManage\PastHAZARDBASICINFO.cs" />
+    <Compile Include="JXGeoManage\PastHAZARDBASICINFO_2.cs" />
+    <Compile Include="JXGeoManage\TBL_ACHIEVEMENT_PREPLANIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AUDITAREAIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AUDITINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AUDITORSIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AVALANCHEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AVALANCHE_HIDDEN_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_AVALANCHE_HIDDEN_IService.cs" />
+    <Compile Include="JXGeoManage\TBL_AVALANCHE_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_BQBRIService.cs" />
+    <Compile Include="JXGeoManage\TBL_COLLAPSEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_COLLAPSE_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DEBRISFLOWIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DEBRISFLOW_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DZHJSB_CGBRDZZHQKMONTHIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DZHJSB_DZZHFZYEARIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DZHJSB_DZZHQKMONTHIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DZHJSB_DZZHQKMONTH_GDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_DZHJSB_DZZHZQYEARIService.cs" />
+    <Compile Include="JXGeoManage\TBL_HAZARDBASICINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_HAZARDBASICINFO_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_HAZARDBASICINFO_PC_GDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDCRACKIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDCRACK_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSETTLEMENTIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSETTLEMENT_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSLIPIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSLIP_HIDDENIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSLIP_HIDDEN_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_LANDSLIP_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_ADMINISTRATIVEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_AROUNDRECORDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_DISASTERPREVENTIONIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_ESCUNDERSTANDCARDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_LAYOUTPOINTINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_OBSERVATIONIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_POINTOBSERVATIONIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_POINTRECORDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_VILLAGEINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_QCQF_WORKUNDERSTANDCARDIService.cs" />
+    <Compile Include="JXGeoManage\TBL_REPORTIService.cs" />
+    <Compile Include="JXGeoManage\TBL_RWJJ_ENTERPRISEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_RWJJ_GOVERNMENTIService.cs" />
+    <Compile Include="JXGeoManage\TBL_RWJJ_HOSPITALIService.cs" />
+    <Compile Include="JXGeoManage\TBL_RWJJ_RESIDENTIALAREAIService.cs" />
+    <Compile Include="JXGeoManage\TBL_RWJJ_SCHOOLIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SENSEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SENSE_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SLOPEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SLOPE_HISTORYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SPATIALEDITLAYERIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SPATIALINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_SPATIALRENDERSTYLEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_WHAA07CIService.cs" />
+    <Compile Include="JXGeoManage\TBL_XIAOHAOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_DISASTERREPORTIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_EMERGENCYSURVEYIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_QIANDAOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_RISKASSESSMANAGEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_SURVEYMEMBERIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_TRAINPRACTICEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_YJDCMANAGEIService.cs" />
+    <Compile Include="JXGeoManage\TBL_YJDC_YJDCMANAGEMENTIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_BASEINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_JLINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_KCINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_SGINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_SJINFOIService.cs" />
+    <Compile Include="JXGeoManage\TBL_ZLGC_YSINFOIService.cs" />
+    <Compile Include="MONITORPOINT\TBL_DMCJ_MONITORDATAIService.cs" />
+    <Compile Include="MONITORPOINT\TBL_DMCJ_MONITORPOINTIService.cs" />
+    <Compile Include="PublicInfoManage\IScheduleService.cs" />
+    <Compile Include="ReportManage\IRptTempService.cs" />
+    <Compile Include="SystemManage\IDataSourceService.cs" />
+    <Compile Include="SystemManage\IFileAnnexesService.cs" />
+    <Compile Include="SystemManage\ICodeRuleService.cs" />
+    <Compile Include="PublicInfoManage\IFileFolderService.cs" />
+    <Compile Include="PublicInfoManage\IFileInfoService.cs" />
+    <Compile Include="PublicInfoManage\IEmailCategoryService.cs" />
+    <Compile Include="PublicInfoManage\IEmailContentService.cs" />
+    <Compile Include="PublicInfoManage\INewsService.cs" />
+    <Compile Include="PublicInfoManage\INoticeService.cs" />
+    <Compile Include="SystemManage\IDataBaseBackupService.cs" />
+    <Compile Include="AuthorizeManage\IFilterIPService.cs" />
+    <Compile Include="AuthorizeManage\IFilterTimeService.cs" />
+    <Compile Include="SystemManage\IDataBaseLinkService.cs" />
+    <Compile Include="SystemManage\IDataBaseTableService.cs" />
+    <Compile Include="SystemManage\IDataItemDetailService.cs" />
+    <Compile Include="SystemManage\IDataItemService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemManage\System_SetExcelExportIService.cs" />
+    <Compile Include="SystemManage\System_SetExcelImportFiledIService.cs" />
+    <Compile Include="SystemManage\System_SetExcelImprotIService.cs" />
+    <Compile Include="WeChatManage\IWeChatAppService.cs" />
+    <Compile Include="WeChatManage\IWeChatOrganizeService.cs" />
+    <Compile Include="WeChatManage\IWeChatUserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infoearth.WorkFlow\Infoearth.WorkFlow.csproj">
+      <Project>{2db6492a-3cda-40cb-9bab-51f00510b0c2}</Project>
+      <Name>Infoearth.WorkFlow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infoearth.Application.Entity\Infoearth.Application.Entity.csproj">
+      <Project>{c10920fe-8c74-4993-a7f4-1da189da842c}</Project>
+      <Name>Infoearth.Application.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

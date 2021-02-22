@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        margin:0;
+    }
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 100px;
+    }
+    .ui-widget-content td a:hover {
+        color:#fff !important;
+        background:#337ab7;
+    }
+    		#popmenu {
+			display: none;
+			position: absolute;
+			padding: 5px;
+			border: 1px solid black;
+			background-color: white
+		}
+</style>
+<div class="titlePanel">
+    <div class="panel-Title" style="background-color: rgba(236, 247, 255, 1);color:#000;height:35px"><i class="fa fa-bars"></i>查询条件</div>
+    <div class="title-search" style="width: 100%; height: 40px;color:#000;display: flex; align-items: center;flex-wrap:wrap;padding:0">
+        <span class="spans">灾害点名称:</span><input id="DISASTERNAME" type="text" class="form-control" placeholder="请输入灾害点名称" style="width: 16%" />
+        <span class="spans">监测类型:</span><div id="MONITORPOINTTYPE" type="select" class="ui-select" placeholder="请选择" style="width: 16%"></div>
+        <span class="spans">监测部位:</span><input id="MONITORPOINTPOSITION" type="text" class="form-control" placeholder="请输入监测部位" style="width: 16%" />
+        <a id="btn_Search" class="btn btn-primary" style="margin-bottom:0;margin-left:30px"><i class="fa fa-search"></i> 查询</a>
+       <a id="btn_Reset" class="btn btn-primary" style="margin-bottom:0;margin-left:30px;background:gray;border-color:gray;cursor: pointer;"><i class="fa fa-search"></i> 重置</a>&nbsp;  
+    </div>
+    <div style="background-color: rgba(236, 247, 255, 1);width:100%;height:35px;color:#000;display:flex;align-items: center;">
+        <span style="flex:1;font-weight:700;padding-left:9px;height:35px;line-height:35px">数据列表</span>
+    </div>
+    <div style="clear:both;"></div>
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+<div id="popmenu" style="display:none;width:100px;"></div>
+
+@section Scripts{
+<script>
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        initControl();
+        GetGrid();
+    });
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#gridTable').setGridHeight($(window).height() - 136.5 - 34);
+            }, 200);
+            e.stopPropagation();
+        });
+        $("#MONITORPOINTTYPE").ComboBox({
+            id: "label",
+            text: "value",
+            description: "请选择",
+            height: "170px",
+            data: [
+                  { label: "DG", value: "地鼓" },
+                { label: "DL", value: "地裂" },
+                { label: "QL", value: "墙裂" },
+                { label: "JS", value: "井水" },
+                { label: "QS", value: "泉水" },
+            ]
+        });
+    }
+    //初始化控件
+    function initControl() {
+        $("#btn_Search").click(SearchEvent);
+        $("#btn_Reset").click(ClearEvent);
+    }
+    function SearchEvent() {
+        var queryJson = $(".title-search").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetSJSBPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    function ClearEvent() {
+        $(".title-search").find("input[type='text']").val("");
+        $("#MONITORPOINTTYPE").ComboBoxSetValue(" ");
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        var queryJson = $(".title-search").getWebControls();
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 136.5 - 34,
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetSJSBPageListJson",
+            datatype: "json",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: 'UNIFIEDCODE', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 100, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a onclick=\"openXQ(\'' + rowObject.UNIFIEDCODE + '\')\" style=\"color: #378ece;cursor: pointer;font-size:14px;display: inline-block;height:100%;padding:0 5px\">' + cellvalue + '</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                    }
+                },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 350, align: 'left', sortable: true },//（DG:地鼓;DL:地裂;QL:墙裂;JS:井水;QS:泉水;+两位顺序号）
+                {
+                    label: '上报操作', name: 'ACTION', index: 'ACTION', width: 150, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<a onclick=\"openHGXC(\'' + rowObject.UNIFIEDCODE + '\')\" style=\"color: #378ece;cursor: pointer;font-size:14px;display: inline-block;height:100%;padding:0 5px\">宏观巡查</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="jcdsjsb" onclick=\"openSJSB(\'' + rowObject.UNIFIEDCODE + '\')\" style=\"color: #378ece;display: inline-block;;cursor: pointer;font-size:14px;height:100%;padding:0 5px\">监测点数据上报</a>';
+                    }
+                },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    function openXQ(keyValue) {
+        var url = document.location.protocol + "//" + document.location.host + '/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEForm?keyValue=' + keyValue + '&IdetIfrem=Idetnew&UNIFIEDCODE=' + keyValue + '&Readonaly=01&XQing=01' + "&details=01" + "&callback=" + document.URL;
+        document.location.href = url;
+    }
+    function openHGXC(UNIFIEDCODE) {
+        dialogOpen({
+            id: 'HGXCForm',
+            title: '宏观巡查',
+            url: '/JXGeoManage/TBL_QCQF_AROUNDRECORD/TBL_QCQF_AROUNDRECORDForm?keyValue=' + UNIFIEDCODE,
+            width: '800px',
+            height: '500px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    function getPointerX(event) {
+        return event.pageX || (event.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft));
+    }
+
+    function getPointerY(event) {
+        return event.pageY || (event.clientY + (document.documentElement.scrollTop || document.body.scrollTop));
+    }
+    function openSJSB(UNIFIEDCODE) {
+        var menu = document.getElementById("popmenu");
+        e = event ? event : window.event;
+        t = e.target || e.srcElement;
+        menu.style.left = (getPointerX(e)-10) + "px";
+        menu.style.top = (getPointerY(e)-10) + "px";
+        menu.style.display = "block";
+        $.ajax({
+            url: "../../api/TBL_QCQF_LAYOUTPOINTINFOApi/GetListByUNIFIEDCODE",
+            type: "GET",
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            async: false,
+            data: { UNIFIEDCODE: UNIFIEDCODE },
+            success: function (data) {
+                var strhtml = "";
+                for (var i = 0; i < data.length; i++) {
+                    var strMONITORPOINTTYPE = "";
+                    //添加if判断防止substring字段处理为null、undefined时报错
+                    if (data[i]["MONITORPOINTCODE"] !=undefined || data[i]["MONITORPOINTCODE"] != null) {
+                        switch (data[i]["MONITORPOINTCODE"].substring(0, 2)) {
+                            case "DG":
+                                strMONITORPOINTTYPE = "地鼓" + data[i]["MONITORPOINTCODE"].substring(2)
+                                break;
+                            case "DL":
+                                strMONITORPOINTTYPE = "地裂" + data[i]["MONITORPOINTCODE"].substring(2)
+                                break;
+                            case "QL":
+                                strMONITORPOINTTYPE = "墙裂" + data[i]["MONITORPOINTCODE"].substring(2)
+                                break;
+                            case "JS":
+                                strMONITORPOINTTYPE = "井水" + data[i]["MONITORPOINTCODE"].substring(2)
+                                break;
+                            case "QS":
+                                strMONITORPOINTTYPE = "泉水" + data[i]["MONITORPOINTCODE"].substring(2)
+                                break;
+                            default:
+                                break;
+                        }
+                        strhtml += '<a onclick=\"openJCDSJ(\'' + data[i]["GUID"] + '\',\'' + data[i]["MONITORPOINTCODE"].substring(0, 2) + '\')\" style=\"color: #378ece;cursor: pointer;font-size:14px;display: inline-block;padding:0 5px\">' + strMONITORPOINTTYPE + '</a>';
+                    }
+                }
+                $("#popmenu").html(strhtml);
+            }
+        });
+        $("#popmenu").mouseover(function () {
+            $("#popmenu").show();
+        })
+        $("#popmenu").mouseleave(function () {
+            $("#popmenu").hide();
+        })
+    }
+    function openJCDSJ(guid,type) {
+        dialogOpen({
+            id: 'JCDSJForm',
+            title: '监测点数据上报',
+            url: '/JXGeoManage/TBL_QCQF_POINTRECORD/TBL_QCQF_POINTRECORDForm?keyValue=' + guid+"&TYPE="+type,
+            width: '1000px',
+            height: '600px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+</script>
+}

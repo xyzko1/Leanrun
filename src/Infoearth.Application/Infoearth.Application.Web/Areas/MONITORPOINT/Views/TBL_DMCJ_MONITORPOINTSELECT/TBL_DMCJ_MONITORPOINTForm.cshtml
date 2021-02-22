@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">监测点编号</td>
+            <td class="formValue">
+                <input id="MONITORPOINTID" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">监测点名称</td>
+            <td class="formValue">
+                <input id="MONITORPOINTNAME" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">地面沉降编号</td>
+            <td class="formValue">
+                <input id="DMCJBH" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">监测点类别</td>
+            <td class="formValue">
+                <input id="MONITORPOINTTYPE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">监测点等级</td>
+            <td class="formValue">
+                <input id="MONITORPOINTLEVEL" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">建设单位</td>
+            <td class="formValue">
+                <input id="BUILDDEPT" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">建设时间</td>
+            <td class="formValue">
+                <input id="BUILDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">监测点位置</td>
+            <td class="formValue">
+                <input id="LOCATION" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">行政区划编号</td>
+            <td class="formValue">
+                <input id="AREACODE" type="text" class="form-control"  />
+            </td>
+            <td class="formTitle">纬度</td>
+            <td class="formValue">
+                <input id="LATITUDE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">经度</td>
+            <td class="formValue">
+                <input id="LONGITUDE" type="text" class="form-control"  />
+            
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../MONITORPOINT/TBL_DMCJ_MONITORPOINT/GetFormJson",
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#form1").SetWebControls(data);
+                }
+            })
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../MONITORPOINT/TBL_DMCJ_MONITORPOINT/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                      try {
+                            getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+</script>
+}

@@ -1,0 +1,282 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        height: auto;
+        margin: 0;
+    }
+
+    .form .formTitle {
+        background: #fff;
+    }
+</style>
+<div style="margin: 10px;">
+    <table class="form" id="ZLGC_JL">
+        <tr>
+            <td class="formTitle">监理费用</td>
+            <td class="formValue">
+                <input id="JLCOST" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">合同签订时间</td>
+            <td class="formValue">
+                <input id="QDTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">发包形式</td>
+            <td class="formValue">
+                <input id="FBTYPE" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">监理单位<span class="required" style="color: red">*</span></td>
+            <td class="formValue" colspan="5">
+                <textarea id="JLDEPT" class="form-control" style="height: 30px;"></textarea>
+                <input id="MEDIAGUID" type="text" class="form-control" style="display: none;" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">合同签订地点</td>
+            <td class="formValue" colspan="5">
+                <textarea id="QDPLACE" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">招标地点</td>
+            <td class="formValue" colspan="5">
+                <textarea id="ZBPLACE" class="form-control" style="height: 30px;"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">招标日期</td>
+            <td class="formValue">
+                <input id="ZBTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">中标时间</td>
+            <td class="formValue">
+                <input id="GETTIME" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />
+            </td>
+            <td class="formTitle">联系人</td>
+            <td class="formValue">@*<input id="HTQDSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />*@
+                <input id="HTQDSJ" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">联系电话</td>
+            <td class="formValue">
+                <input id="ZHAOBIAOSJ" type="text" class="form-control" />
+                @*<input id="ZHAOBIAOSJ" type="text" class="form-control input-wdatepicker" onfocus="WdatePicker()" />*@
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">项目内容</td>
+            <td class="formValue" colspan="5">
+                <textarea id="GCCONTENT" class="form-control" style="height: 100px;"></textarea>
+            </td>
+        </tr>
+        @*暂时不需要显示字段*@
+        <tr style="display: none">
+            <td class="formTitle">治理工程名称</td>
+            <td class="formValue">
+                <input id="ZLGCNAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">治理工程编号</td>
+            <td class="formValue">
+                <input id="ZLGCID" type="text" class="form-control" />
+            </td>
+        </tr>
+    </table>
+    <div style="width: 100%; height: 28px; background: rgba(233,240,253,1); color: #006D97; line-height: 28px; padding-left: 15px">资质清单</div>
+    <div class="titlePanel" style="height: 40px; line-height: 40px">
+        <div class="toolbar" style="height: 40px; display: flex; align-items: center;">
+            <div class="btn-group">
+                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+                <a id="lr-add" class="btn btn-default" onclick="GCJL_btn_add()"><i class="fa fa-plus"></i>新增</a>
+                <a id="lr-edit" class="btn btn-default" onclick="GCJL_btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                <a id="lr-delete" class="btn btn-default" onclick="GCJL_btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+    <div class="gridPanel" id="GCJLZZQDTable">
+        <table id="gridTable_JL_ZZQD"></table>
+    </div>
+    <div style="height: 300px; width: 100%;">
+        <iframe class="LRADMS_iframe" id="QCQFLmedia5" frameborder="0" src="" style="border: none; width: 100%; height: 100%;"></iframe>
+    </div>
+</div>
+
+
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var xq = request('xq');
+    $(function () {
+        initControl();
+        GetGrid_JL_ZZQD();
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable_JL_ZZQD').setGridWidth(($(window).width()));
+                $('#gridTable_JL_ZZQD').setGridHeight($(window).height() - 424);
+            }, 200);
+            e.stopPropagation();
+        });
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                //url: "../../JXGeoManage/TBL_ZLGC_JLINFO/GetFormJson",
+                url: "../../api/TBL_ZLGC/GetGCJL",
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $("#ZLGC_JL").SetWebControls(data);
+                }
+            })
+        }
+        if (readonly == 01 || xq == 02) {
+            $("input").attr("disabled", "disabled");
+            $("textarea").attr("disabled", "disabled");
+            $(".titlePanel").css("display", "none");
+        }
+    }
+    //保存表单;
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var postData = $("#form1").GetWebControls(keyValue);
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_ZLGC_JLINFO/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                } catch (e) {
+                    window.parent.$('#gridTable').trigger('reloadGrid');
+                }
+            }
+        })
+    }
+
+
+    //《工程监理》--- 资质清单:新增
+    function GCJL_btn_add() {
+        //获取对应对应资质清单列表存在数据的总数
+        var total = $("#gridTable_JL_ZZQD").jqGrid('getGridParam', 'records');
+        var NEW_KeyValue = total + 1;
+        dialogOpen({
+            id: 'FormJLZZQD_ADD',
+            title: '治理工程施工设计资质清单',
+            url: '/JXGeoManage/TBL_ZLGC_JLINFO/TBL_ZLGC_JLZZQDList?NewkeyValue=' + NEW_KeyValue,
+            width: '600px',
+            height: '400px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    $("#GCJLZZQDTable .unwritten").hide();
+                    $("#GCJLZZQDTable .unwritten").css('display', 'none');
+                    data = JSON.parse(data);
+                    $("#gridTable_JL_ZZQD").jqGrid('addRowData', NEW_KeyValue, data);
+                });
+            }
+        });
+    }
+
+    //《工程监理》--- 资质清单:编辑
+    function GCJL_btn_edit() {
+        var keyValueZZQD = $("#gridTable_JL_ZZQD").jqGridRowValue('JLZZQDID');
+        var keyValueZZQD_name = $("#gridTable_JL_ZZQD").jqGridRowValue('JLZZNAME');
+        var keyValueZZQD_leve = $("#gridTable_JL_ZZQD").jqGridRowValue('JLZZLEVE');
+        var keyValueZZQD_mark = $("#gridTable_JL_ZZQD").jqGridRowValue('JLBZ');
+        var ZZQD_info = keyValueZZQD + "," + keyValueZZQD_name + "," + keyValueZZQD_leve + "," + keyValueZZQD_mark;
+        if (checkedRow(keyValueZZQD)) {
+            dialogOpen({
+                id: 'FormZZQD_EDIT',
+                title: '治理工程施工设计资质清单',
+                url: '/JXGeoManage/TBL_ZLGC_JLINFO/TBL_ZLGC_JLZZQDList?&keyValue=' + keyValueZZQD + '&ZLGCID=' + keyValue + '&info=' + ZZQD_info,
+                width: '600px',
+                height: '400px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                        $("#gridTable_JL_ZZQD").jqGrid().delRowData($('#gridTable_JL_ZZQD .ui-state-highlight').attr('id'));
+                        data = JSON.parse(data);
+                        var newRow = data.JLZZQDID;
+                        $("#gridTable_JL_ZZQD").jqGrid('addRowData', newRow, data);
+                    });
+                }
+            })
+        }
+
+    }
+    //《工程监理》--- 资质清单:删除
+    function GCJL_btn_delete() {
+        var keyValueZZQD = $("#gridTable_JL_ZZQD").jqGridRowValue('JLZZQDID');
+        if (keyValueZZQD) {
+            $("#gridTable_JL_ZZQD").jqGrid().delRowData($('#gridTable_JL_ZZQD .ui-state-highlight').attr('id'));
+            var resultDel = $("#gridTable_JL_ZZQD").jqGrid('getRowData');
+            var newResult = [];
+            for (var i = 0; i < resultDel.length; i++) {
+                if (resultDel[i].JLZZQDID < keyValueZZQD) {
+                    newResult[i] = { JLZZQDID: resultDel[i].JLZZQDID, JLZZNAME: resultDel[i].JLZZNAME, JLZZLEVE: resultDel[i].JLZZLEVE, JLBZ: resultDel[i].JLBZ }
+                }
+                if (resultDel[i].JLZZQDID > keyValueZZQD) {
+                    newResult[i] = { JLZZQDID: resultDel[i].JLZZQDID - 1, JLZZNAME: resultDel[i].JLZZNAME, JLZZLEVE: resultDel[i].JLZZLEVE, JLBZ: resultDel[i].JLBZ }
+                }
+            }
+            $('#gridTable_JL_ZZQD').jqGrid("clearGridData");
+            $('#gridTable_JL_ZZQD').jqGrid('setGridParam', {
+                datatype: 'local',
+                data: newResult,
+
+            }).trigger("reloadGrid");
+        } else {
+            dialogMsg('请选择需要删除的资质清单信息！', 0);
+        }
+    }
+
+    //工程监理-资质清单
+    function GetGrid_JL_ZZQD() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable_JL_ZZQD');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 424,
+            url: "../../api/TBL_ZLGC/GCJL_GetZZQDList",
+            postData: { keyValue: keyValue },
+            datatype: "json",
+            colModel: [
+                { label: '资质清单ID', name: 'JLZZQDID', index: 'JLZZQDID', width: 300, align: 'left', sortable: true, hidden: true },
+                { label: '资质名称', name: 'JLZZNAME', index: 'JLZZNAME', width: 300, align: 'left', sortable: true },
+                { label: '资质等级', name: 'JLZZLEVE', index: 'JLZZLEVE', width: 200, align: 'left', sortable: true },
+                { label: '备注', name: 'JLBZ', index: 'JLBZ', width: 680, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            sortname: 'JLZZQDID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+</script>
+}

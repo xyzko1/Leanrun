@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+
+    <script type='text/javascript'>window.BWEUM || (BWEUM = {}); BWEUM.info = { "stand": true, "agentType": "browser", "agent": "browsercollector.oneapm.com/static/js/bw-send-416.7.31.js", "beaconUrl": "browsercollector.oneapm.com/beacon", "licenseKey": "Jrq2e~u3MQZ6IuMV", "applicationID": 9991162 };</script>
+    <script type="text/javascript" src="//browsercollector.oneapm.com/static/js/bw-loader-416.7.31.js"></script>
+</head>
+<body>
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
+        <img src="~/Content/images/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div id="loading_background" class="loading_background" style="display: none;"></div>
+    <div id="loading_manage">
+        正在拼了命为您加载…
+    </div>
+    @System.Web.Optimization.Styles.Render("~/Content/styles/base.css")
+    @System.Web.Optimization.Scripts.Render("~/Content/scripts/base.js")
+    @RenderBody()
+    @System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/datepicker/WdatePicker.js")    
+   @System.Web.Optimization.Scripts.Render("~/Content/MultMedia.js")
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .panel-Title {
+            border-color: #c5c5c5;
+            background-color: #fff;
+            color: #666;
+            height: 32px;
+            line-height: 32px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-left: 9px;
+        }
+
+        .ui-layout .panel-Title {
+            border-color: #c5c5c5;
+            background-color: #fff;
+            color: #666;
+            height: 32px;
+            line-height: 32px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: bold;
+            border-bottom: 1px solid #ccc;
+            padding-left: 9px;
+        }
+
+        .ui-layout .west-Panel {
+            /*margin-left: 10px;*/
+            /*margin-bottom: 10px;*/
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 0px;
+        }
+
+        .ui-layout .east-Panel {
+            /*margin-right: 10px;
+            margin-top: 10px;*/
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 0px;
+        }
+
+        .ui-layout .center-Panel {
+            /*margin-right: 10px;*/
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+
+            .ui-layout .center-Panel .titlePanel {
+                border-left: none;
+                border-right: none;
+                border-top: none;
+            }
+
+            .ui-layout .center-Panel .ui-widget-content {
+                border: none;
+                border-top: 1px solid #ccc;
+            }
+
+        #loading_manage {
+            color: #666;
+            font-size: 20px;
+            position: absolute;
+            z-index: 10001;
+            left: 0%;
+            top: 40%;
+            border: 1px solid rgb(187, 187, 187);
+            width: auto;
+            height: 80px;
+            line-height: 78px;
+            padding-left: 80px;
+            padding-right: 20px;
+            background: #fff;
+            display: none;
+            cursor: pointer;
+            border-radius: 8px;
+            background-image: url(../Images/loading.gif);
+            background-repeat: no-repeat;
+            background-position: 8px 50%;
+            box-shadow: 0 1px 15px rgba(0,0,0,.175);
+        }
+
+            #loading_manage span {
+                font-size: 12pt;
+            }
+    </style>
+</body>
+</html>
+@System.Web.Optimization.Styles.Render(
+   "~/Content/styles/zTree.css")
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/utils/learun.js",
+    "~/Content/scripts/utils/learunEx.js",
+    "~/Content/scripts/utils/clientdata",
+    "~/Content/scripts/plugins/validator/js",
+            "~/Content/scripts/plugins/dialog/js",
+                   "~/Content/scripts/utils/zTreejs"
+    )
+<script>
+    var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+    var Account = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().Account';
+    var XZQHCode = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode';
+    (function ($, learun) {
+        $(function () {
+            learun.childInit();
+        })
+    })(window.jQuery, window.learun)
+</script>
+@System.Web.Optimization.Scripts.Render("~/Content/business/comForm.js")
+@RenderSection("scripts", false)

@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutIndexMD.cshtml";
+}
+@section Scripts{
+<script>
+    var nodeInfos = { id: "", name: "" };
+    var mediaPath = "";
+    $(function () {
+        //$("#mediaBrowserLook").attr("src", request("iframeSrc"));
+        var strSrc = window.location.href;
+        nodeInfos.id = request("fileGuid");
+        nodeInfos.name = request("fileName");
+        $.ajax({
+            url:contentPath+ "/SystemManage/MultMedia/GetMultMediaWebPath",
+            async: false,
+            type: "GET",
+            success: function (data) {
+                mediaPath = data;
+            }, error: function (e) {
+            },
+            cache: false
+        });
+
+        var strSrc = mediaPath + "/page/redirectToDetail.aspx?Guid=" + nodeInfos.id + "&webform=true";
+        $('#documentViewer').html('<iframe id="mediaBrowserLook" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="auto" style="height:98%;width:100%;"></iframe>');
+        $('#documentViewer').find('iframe').height($(window).height() - 70);
+        learun.loadSystemForm('mediaBrowserLook', strSrc);
+    });
+    function btn_download() { 
+        if (nodeInfos.id) {
+            var downLoadUrl = mediaPath + "/page/download.ashx?Guid=" + nodeInfos.id + "&Filename=" + nodeInfos.name;
+            window.location.href = downLoadUrl;
+        }
+    }
+</script>
+    }
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="titlePanel">
+                <div class="btn-group">
+                    <a id="filedownload2" class="btn btn-default" onclick="btn_download()"><i class="fa fa-download"></i>&nbsp;下载</a>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="docPanel" id="docPanel">
+                <div id="documentViewer"> </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mapData>
+  <!--
+   1.作为默认底图的数据在此处“级数”应比实际数据“级数大一些”
+   2.二维地图的 name属性必须为“二维地图” 该属性用于区别影像地图
+ -->
+  <baseLayer name="二维地图" dataserverkey="全国天地图地图" url="http://192.168.1.66/Itelluro.Server/Service/DOM/dom.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="11" opacity="1">
+    <VectorLayer name="二维地图标注" dataserverkey="全国天地图地图注记" url="http://192.168.1.66/Itelluro.Server/Service/DOM/dom.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="11" opacity="1"></VectorLayer>
+  </baseLayer>
+  <baseLayer name="卫星地图"  dataserverkey="全国天地图影像" url="http://192.168.1.66/Itelluro.Server/Service/DOM/dom.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="11" opacity="1">
+    <VectorLayer name="影像地图标注" dataserverkey="全国天地图影像注记" url="http://192.168.1.66/Itelluro.Server/Service/DOM/dom.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="11" opacity="1"></VectorLayer>
+  </baseLayer>
+  <baseLayer name="省界" dataserverkey="省界" url="http://192.168.1.66/Itelluro.Server/Service/GIS/gis.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="6" opacity="1"></baseLayer>
+  <layerNodes name="基础地质">
+    <layer name="50W地质灾害S" dataserverkey="50W地质灾害S" url="http://192.168.1.66:8081/Itelluro.Server/Service/GIS/gis.ashx" tilesize="512"  zerolevelsize="36" zoomlevel="10" checked="false" opacity="0.6"></layer>
+  </layerNodes>
+</mapData>

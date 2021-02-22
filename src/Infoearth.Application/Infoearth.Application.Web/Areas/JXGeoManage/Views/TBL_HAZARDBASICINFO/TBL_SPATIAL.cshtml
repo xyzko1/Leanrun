@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMapEditor.cshtml";
+}
+<div class="ui-layout-center" id="ui_center">
+    <div class="center-Panel">
+        <div id="mapControl"></div>
+    </div>
+</div>
+@section Scripts{
+<script>
+    var keyValue='';
+    var rowData = JSON.parse(unescape(request('rowData')));
+    var SUBCODE = rowData.keyValue;
+    var LAYERID = rowData.LAYERID;
+    var SPATIALNAME = rowData.SPATIALNAME;
+    var DISASTERTYPE = rowData.DISASTERTYPE;
+    $(function () {
+        GetMapData(SPATIALNAME);
+        if (SUBCODE) {
+            $.SetForm({
+                url: "../../JXGeoManage/TBL_SPATIALINFO/GetDataLayer",
+                param: { subcode: SUBCODE, layerid: LAYERID },
+                success: function (data) {
+                    console.log(data);
+                    if (data.length>0) {
+                        keyValue = data[0].SPATIALID
+                        for (var i = 0; i < data.length; i++) {
+                            var getFeatrues = JSON.parse(data[i].BOUNDARY);
+                            mapCtlExt.addDrawDataFeatrues(getFeatrues)
+                        }
+                    }
+                }
+            });
+            var longitude = Number(rowData.LONGITUDE);
+            var latitude = Number(rowData.LATITUDE);
+            var returnValue = [{ id: "all", url: "../../Content/images/" + DISASTERTYPE + "-16.png", location: [longitude, latitude] }];
+            mapCtlExt.addMarker(returnValue);
+        }
+    })
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData(name) {
+        var color = 'rgba(255,255,0,0.8)'
+        switch (name) {
+            case '灾害体范围':
+                color ='rgba(255,0,0,0.8)'
+                break;
+            case '威胁范围':
+                color = 'rgba(255,193,0,0.8)'
+                break;
+            case '撤离路线':
+                color = 'rgba(255,255,0,0.8)'
+                break;
+        }
+        var config = getInfoTop().learun.data.get(["globalConfig"]);
+        mapCtlExt = $("#mapControl").mapVectorEditorCtl({
+            mapWidth: 1500,
+            mapHeight: 700,
+            zoom: 8,
+            color:color,
+            center: [Number(rowData.LONGITUDE), Number(rowData.LATITUDE)],
+            baseLayerList: [config.mapData.statelliteMap.map, config.mapData.statelliteMap.note],
+            customZIndex: 10000
+        });
+        $('.ui-layout-west').hide();
+        mapCtlExt.updateSize();
+    }
+    //保存表单;
+    function AcceptClick() {
+        var getFeatrues = mapCtlExt.getFeatrues();
+        postData = { SPATIALNAME: SPATIALNAME, LAYERID: LAYERID, SUBCODE: SUBCODE, SUBTYPE: DISASTERTYPE, BOUNDARY: JSON.stringify(getFeatrues) }
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_SPATIALINFO/SaveEntity?keyValue=" + keyValue,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().spatial();
+                } catch (e) {
+                    window.parent.spatial();
+                }
+
+            }
+        })
+    }
+</script>
+}

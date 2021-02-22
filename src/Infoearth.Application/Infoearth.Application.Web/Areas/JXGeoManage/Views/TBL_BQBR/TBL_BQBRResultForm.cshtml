@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    .Ndispplay {
+        display: none;
+    }
+
+    #mainContent {
+        background: #fff;
+    }
+
+    .formTitle {
+        width: 110px !important;
+        background: #f6f6f6;
+    }
+
+    .haszard {
+        background: #C3C3C3;
+    }
+
+    .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+
+        .form td input {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .form td textarea {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+    .form-control:disabled {
+        background: #fff;
+    }
+
+    .formValue {
+        background: #fff;
+    }
+
+    .btn-group.open .dropdown-toggle {
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+
+    .readonly {
+        background: #f5f5f5 !important;
+    }
+
+    #DEVICETYPECODE, #MONITORPOINTCODE_DEVICE {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .ui-state-highlight a, .ui-widget-content .ui-state-highlight a {
+        color: #fff !important;
+        cursor: pointer;
+   
+
+    }
+    .zk {
+color:#0099ff !important;
+cursor:pointer;
+padding:8px;
+font-size:14px;
+    /*background-image: url(../../Content/images/arrow.png);*/
+   /*background-image: url(images/ui-icons_222222_256x240.png);*/
+    }
+    .aa .ui-jqgrid {
+margin-left:50px;
+    }
+</style>
+<div style="width: 100%; height: 100%">
+    <div style="height: 40px; width: 100%;">
+        <ul class="nav nav-tabs" style="padding-top: 2px">
+            <li class="active" id="li_XMXX"><a href="" data-toggle="tab">灾害点搬迁避让列表</a></li>
+            <li style="float: right; margin-right: 25px;" id="li_close">
+                <a class="btn btn-default" style="border: 1px solid #ccc; border-radius: 4px; margin-top: 5px; padding: 5px 10px;" onclick="thisClose('tjjgtjym')"><i class="fa fa-close"></i>关闭</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="ui-layout" id="layout" style="height: calc(100% - 40px); width: 100%;">
+        <div id="myTabContent" class="tab-content" style="height: 100%; width: 100%;">
+
+            <div class="gridPanel">
+                <table id="gridTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var code = request('code');
+    var authToken = getAuthorizationToken();
+    var readonly = request('readonly');
+    var details = request('details');
+    var callback = request('callback'), datas,shrdata=[];//"返回"跳转url
+    $(function () {
+        GetGrid();
+    });
+    //加载表格
+    function GetGrid() {
+        var queryJson = {}
+        queryJson["AreaCode"] = code;
+        var $gridTable = $("#gridTable");
+        $gridTable.jqGrid({
+            datatype: "local",
+            height: $(window).height() - 200,
+            autowidth: true,
+            colModel: [
+                { label: 'id', name: 'id', index: 'id', width: 150, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var html = '<a id="' + rowObject.id+'zk" onclick="opentable(\'' + rowObject.id +'\')" class="zk">+</a>'
+                        return html + cellvalue
+                    }
+                },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 150, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true },
+            ],
+            rowNum: 99999
+        });
+        $.ajax({
+            url: "../../api/TBL_BQBRApi/GetTJ",
+            type: 'GET',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            data: { queryJson: JSON.stringify(queryJson) },
+            async: false,
+            success: function (data) {
+                console.log(data);
+                var dataNew = [],datas=data;
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id.length < 36) {
+                        data[i].id = data[i].id.replace(/(^\s*)|(\s*$)/g, ""); 
+                        dataNew.push(data[i]);
+                    } else {
+                        shrdata.push(data[i]);
+                    }
+                }
+                $("#gridTable").jqGrid('setGridParam', {
+                    datatype: 'local',
+                    data: dataNew,
+                    page: 1
+                }).trigger("reloadGrid");
+            }
+        })
+    }
+    var dataObj = {};var a=0
+    function opentable(id) {
+        if ($("#" + id + "zk").html() == "+") {
+            $("#" + id + "zk").html("-");
+        } else if ($("#" + id + "zk").html() == "-") {
+            $("#" + id + "zk").html("+");
+        }
+        if ($("#" + id + "t")[0] != undefined) {
+            $("#" + id + "t").remove();
+            dataObj = {};
+            return;
+        }
+        if (!dataObj.hasOwnProperty(id)) {
+            var dataArr = [];
+            if (shrdata.length) {
+                for (var i = 0; i < shrdata.length; i++) {
+                    if (shrdata[i].parent == id) {
+                        dataArr.push(shrdata[i]);
+                    }
+                }
+                dataObj[id] = dataArr;
+            }
+            $('#' + id).after('<tr style="margin-left:50px;" role="row" id="' + id + 't" tabindex="-1" class="ui-widget-content jqgrow ui-row-ltr aa"><td colspan="3"  role="gridcell" style="text-align:left;" aria-describedby="gridTable_id"><table  id="' + id + 'h"></table></td></tr>')
+            subgridTable(id + 'h', dataArr);
+            a = id + "1";
+            }
+    }
+    function subgridTable(subgrid_table_id, dataArr) {
+        $("#" + subgrid_table_id).jqGrid({
+            autowidth: true,
+            height: "auto",
+            datatype: "local",
+            colModel: [
+                { label: '户主姓名', name: 'HOUSEHOLDERNAME', index: 'HOUSEHOLDERNAME', width: 250, align: 'left', sortable: true },
+                {label: '单户搬迁人数', name: 'RESETTLEMENT', index: 'RESETTLEMENT', width: 200, align: 'left', sortable: false,},
+                {
+                    label: '安置方式', name: 'RESETTLEMENT', index: 'RESETTLEMENT', width: 200, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") {
+                            return '集中安置';
+                        } else if (cellvalue == "2") {
+                            return '分散安置';
+                        } else if (cellvalue == "3") {
+                            return '购房安置';
+                        } else if (cellvalue == "4") {
+                            return '其它安置';
+                        } else
+                            return "";
+                    }
+                },
+                { label: '总安置补贴金额（万元）', name: 'ZAZBTJE', index: 'ZAZBTJE', width: 200, align: 'left', sortable: true },
+                { label: '已发金额（万元）', name: 'YFJE', index: 'YFJE', width: 150, align: 'left', sortable: true },
+                { label: '代发金额（万元）', name: 'DFJR', index: 'DFJR', width: 150, align: 'left', sortable: true },
+                {
+                    label: '是否完成', name: 'SFWC', index: 'SFWC', width: 100, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") {
+                            return '是';
+                        } else if (cellvalue == "0") {
+                            return '否';
+                        } else
+                            return "";
+                    }
+                },
+                 {
+                     label: '是否验收', name: 'SFYS', index: 'SFYS', width: 200, align: 'left', sortable: false,
+                     formatter: function (cellvalue, options, rowObject) {
+                         if (cellvalue == "1") {
+                             return '是';
+                         } else if (cellvalue == "0") {
+                             return '否';
+                         } else
+                             return "";
+                     }
+                 }
+
+
+            ],
+            pager: 'false',
+            onSelectRow: function (rowId, status) {
+            },
+            gridComplete: function () {
+                //$('#' + this.id).setSelection(selectedRowIndex, false);
+                //var data = $gridTable.getRowData();
+            }
+        });
+        $("#" + subgrid_table_id).jqGrid('setGridParam', {
+            datatype: 'local',
+            data: dataArr,
+            page: 1
+        }).trigger("reloadGrid");
+    }
+</script>
+}

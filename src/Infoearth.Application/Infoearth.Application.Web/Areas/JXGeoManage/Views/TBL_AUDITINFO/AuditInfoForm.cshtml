@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "审核信息页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">审核意见</td>
+            <td class="formValue">
+                <textarea id="comment" style="height:380px;" class="form-control"></textarea>
+            </td>
+        </tr>
+    </table>
+ </div>
+
+
+@section Scripts{
+<script>
+
+    //审核;
+    function AcceptClick() {
+        var postData = $("#form1").GetWebControls();
+        //getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+       // learun.dialogClose();
+        return postData;
+    }
+
+
+</script>
+}

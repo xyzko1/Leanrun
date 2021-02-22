@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "UploadifyForm";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@System.Web.Optimization.Styles.Render("~/Content/scripts/plugins/webuploader/css")
+@section Scripts{
+@System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/webuploader/js")
+<script>
+    //var folderId = request('folderId');
+    $(function () {
+        // uploadify();
+
+        //上传文件
+        $("#F_Files").uploadifyEx({
+            url: '/SystemManage/MultMedia/UploadifyFile?folderId=' + " ",
+            btnName: "添加附件", 
+            onUploadSuccess: function (data) {
+                //console.log(data);
+                var fileInfo =data.resultdata;
+                try {
+                    //console.log(getInfoTop().frames["FileSelectFormMultMedia"]);
+                    getInfoTop().frames["FileSelectFormMultMedia"].addSelectFileData({ GUID: fileInfo.GUID, FILENAME: fileInfo.FILENAME });
+                } catch (e) {
+                    //console.log(window.parent.frames["FileSelectFormMultMedia"]);
+                    window.parent.addSelectFileData({ GUID: fileInfo.GUID, FILENAME: fileInfo.FILENAME });
+                }
+            }
+        });
+    })
+    //上传文件 
+    function uploadify() {
+        $("#uploadify").uploadify({
+            method: 'post',
+            uploader: '/SystemManage/MultMedia/UploadifyFile?folderId=' + " ",
+            swf: top.contentPath + '/Content/scripts/plugins/uploadify/uploadify.swf',
+            buttonText: "添加文件",
+            height: 30,
+            width: 90,
+            fileTypeExts: '*.avi;*.mp3;*.mp4;*.bmp;*.ico;*.gif;*.jpeg;*.jpg;*.png;*.psd; *.rar;*.zip;*.swf;*.log;*.pdf;*.doc;*.docx;*.ppt;*.pptx;*.txt; *.xls; *.xlsx;',
+            removeCompleted: false,
+            onSelect: function (file) {
+                $("#" + file.id).prepend('<div style="float:left;width:50px;margin-right:2px;"><img src="/Content/images/filetype/' + file.type.replace('.', '') + '.png" style="width:40px;height:40px;" /></div>');
+                $('.border').hide();
+            },
+            onUploadSuccess: function (file,data,respone) {
+                $("#" + file.id).find('.uploadify-progress').remove();
+                $("#" + file.id).find('.data').html(' 恭喜您，上传成功！');
+                $("#" + file.id).prepend('<a class="succeed" title="成功"><i class="fa fa-check-circle"></i></a>');
+                learun.loading({ isShow: false });
+                try {
+                    getInfoTop().learun.currentIframe().$("#gridTable").trigger("reloadGrid");
+                } catch (e) {
+                    window.parent.$("#gridTable").trigger("reloadGrid");
+                }
+                //var tree = top.Form;
+                //top.frames["UploadifyForm"].filename = "123";
+
+                learun.loading({ isShow: false });
+
+
+            },
+            onUploadError: function (file) {
+                $("#" + file.id).removeClass('uploadify-error');
+                $("#" + file.id).find('.uploadify-progress').remove();
+                $("#" + file.id).find('.data').html(' 很抱歉，上传失败！');
+                $("#" + file.id).prepend('<span class="error" title="失败"><i class="fa fa-exclamation-circle"></i></span>');
+            },
+
+        });
+        $("#uploadify-button").prepend('<i style="opacity: 0.6;" class="fa fa-cloud-upload"></i>&nbsp;');
+        //$(document).scrollTop(300);
+    }
+
+
+</script>
+    }
+<div style="margin: 10px">
+    <div id="F_Files"></div>
+</div>

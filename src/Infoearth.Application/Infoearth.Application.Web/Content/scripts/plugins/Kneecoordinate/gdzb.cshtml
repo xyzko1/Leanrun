@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../../jquery/jquery-1.10.2.min.js"></script>
+    <script src="../../utils/base/learun.base.js"></script>
+    <script src="../../utils/base/learun.base.plugin.js"></script>
+    <script src="../../utils/base/learun.old.js"></script>
+    <script src="../../utils/base/learun.clientdata.js"></script>
+    <script src="../../utils/learun-im.js"></script>
+    <script src="../cookie/jquery.cookie.js"></script>
+    <link href="../uploadify/uploadify.css" rel="stylesheet" />
+    <link href="../uploadify/uploadify.extension.css" rel="stylesheet" />
+    <script src="../uploadify/jquery.uploadify.min.js"></script>
+    <link href="../../bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="../../bootstrap/bootstrap.min.js"></script>
+    <link href="../../bootstrap/bootstrap-table.css" rel="stylesheet" />
+    <script src="../../bootstrap/bootstrap-table.js"></script>
+    <link href="../../bootstrap/bootstrap-editable.css" rel="stylesheet" />
+    <script src="../../bootstrap/bootstrap-editable.min.js"></script>
+    <script src="../../bootstrap/bootstrap-table-editable.js"></script>
+    <script src="../../bootstrap/bootstrap-table-zh-CN.js"></script>
+    <link href="../webuploader/webuploader.css" rel="stylesheet" />
+    <script src="../webuploader/webuploader.nolog.js"></script>
+    <script src="../dialog/dialog.js"></script>
+    <script src="../datetime/moment.min.js"></script>
+    <title></title>
+    <script type="text/javascript">
+        //var GDZBID = request('GDZBID');
+        $(function () {
+            $("#kneecoor-Clear").click(function () {
+                $('#txtGDZB').val('');
+            });
+            $("#kneecoor-ok").click(function () {
+                AcceptClick();
+            });
+        });
+        function AcceptClick(callback) {
+            var coordinateValue = '', count = 0, gdzb = [{ coordinates: [] }];
+            //根据";"或"换行符"切割
+            var strArr2 = $("#txtGDZB").val().replace(/\t/g, " ");
+            strArr2 = (strArr2.indexOf(";") != -1) ? strArr2.split(';') : strArr2.split('\n');
+            var strArr = $.grep(strArr2, function (n) { return $.trim(n).length > 0; });//过滤数据为空的数据
+            for (var i = 0; i < strArr.length; i++) {
+                var strJWD2 = (strArr[i].indexOf(",") != -1) ? strArr[i].split(',') : strArr[i].split(' ');
+                //过滤数据为空的数据
+                var strJWD = $.grep(strJWD2, function (n) { return $.trim(n).length > 0; });
+                if (strJWD.length > 1) {
+                    var jd = DegreeConvertBack(strJWD[0]);
+                    var wd = DegreeConvertBack(strJWD[1]);
+                    //验证经纬度范围
+                    //var validValue = cfValidJWD(wd, jd);
+                    //if (validValue) {
+                    //    dialogAlert(validValue, 0);
+                    //    return false;
+                    //}
+                    gdzb[0].coordinates[i] = [jd, wd]
+                    coordinateValue += jd +' '+wd+ ',';
+                    count++;
+                }
+            }
+            if (count < 3) {
+                dialogAlert("拐点坐标至少输入3个点！", 0);
+                return false;
+            }
+            dbxgdzb = { WKTString: 'POLYGON((' + coordinateValue + coordinateValue.split(',')[0] + '))' }
+            callback(gdzb, dbxgdzb);
+            learun.dialogClose();
+        }
+        function ReplaceGDZB(obj) {
+            return obj.replace(/'/g, "′").replace(/"/g, '″').replace(/“/g, '″').replace(/”/g, '″').replace(/‘/g, "′").replace(/’/g, "′");
+        }
+
+        //度分秒转换成为度
+        function DegreeConvertBack(value) {
+            value = $.trim(value);
+            var du; var fen; var miao;
+            if (value.indexOf("°") != -1) {
+                value = value.replace(/'/g, "′").replace(/"/g, '″').replace(/“/g, '″').replace(/”/g, '″').replace(/‘/g, "′").replace(/’/g, "′");
+                return DegreeConvertBack2(value);
+            }
+            else {
+                if (value > 180) {
+                    if (value.indexOf('.') != -1) {
+                        miao = value.substr(value.indexOf('.') - 2, value.length - value.indexOf('.') + 2);
+                        fen = value.substr(value.indexOf('.') - 4, 2);
+                        du = value.substr(0, value.indexOf('.') - 4);
+                    }
+                    else {
+                        miao = value.substr(value.length - 2, 2);
+                        fen = value.substr(value.length - 4, 2);
+                        du = value.substr(0, value.length - 4);
+                    }
+                    return Math.abs(parseFloat((Math.abs(du) + Math.abs(fen) / 60 + Math.abs(miao) / 3600)).toFixed(8));
+                }
+                else {
+                    return parseFloat(value);
+                }
+            }
+        }
+        //验证数据有效性
+        function cfValidJWD(latitude, longitude) {
+            if (!isDouble(latitude) || !isDouble(longitude)) {
+                return "数据有误";
+            }
+            var returnValue = "";
+            if (latitude < 34.38277 || latitude > 38.208611) {
+                returnValue += "数据有误：";
+                returnValue += "纬度范围：34°22′58″~38°12′31″；";
+            }
+
+            if (longitude < 114.8 || longitude > 122.672222) {
+                returnValue += "经度范围：114°48′00″~122°40′20″；";
+            }
+            return returnValue;
+        }
+        //判断输入的字符是否为双精度 double
+        function isDouble(obj) {
+            if (obj.length != 0) {
+                reg = /^[-\+]?\d+(\.\d+)?$/;
+                if (!reg.test(obj)) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+        }
+        function DegreeConvertBack2(value) { ///<summary>度分秒转换成为度</summary>
+            var du = value.split("°")[0];
+            var fen = value.split("°")[1].split("′")[0];
+            var miao = value.split("°")[1].split("′")[1].split('″')[0];
+
+            return Math.abs(parseFloat((Math.abs(du) + Math.abs(fen) / 60 + Math.abs(miao) / 3600)).toFixed(8));
+
+        }
+    </script>
+</head>
+<body>
+    <div id="inputKneeExcel" style="width:100%;height:410px;">
+        <!--<ul class="nav nav-tabs">
+            <li class="active" id="LI_SDLU" title="手动录入"><a href="#SDLU" data-toggle="tab">手动录入</a></li>
+            <li id="LI_PLFZ" title="批量复制"><a href="#PLFZ" data-toggle="tab">批量粘贴</a></li>
+        </ul>-->
+        <div id="myTabContent" class="tab-content">
+            <!--<div class="tab-pane fade in active" id="SDLU">
+                <div style="overflow-y:scroll;height:370px;width:98%;">
+                    <table class="form" id="kneecoorTable"></table>
+                    <div style="padding:10px; color:#60A2DA;">
+                        <span style="font-weight:bold;">经纬度格式说明：</span>
+                        <p style="margin:0; padding:2px 25px;">1. 经纬度格式：DMS.S、 D.DD， 如1171536.47、 117.26013056</p>
+                        <p style="margin:0; padding:2px 25px;">2. 注意录入点的顺序，地图上显示拐点坐标范围时，会按照经纬度顺序连接</p>
+                        <p style="margin:0; padding:2px 25px;">3. 窗口底部的“导入”按钮用于Excel格式的经纬度的批量导入，可点击“导入模板下载”按钮获取Excel模板</p>
+                    </div>
+                </div>
+            </div>-->
+            <div id="PLFZ">
+                <div style="height:410px;width:100%;">
+                    <div style="float:left; width:42%;">
+                        <textarea id="txtGDZB" class="form-control" style="height:370px; resize:none;"></textarea>
+                    </div>
+                    <div style="float:left; width:54%; padding:10px; color:#60A2DA;">
+                        <span style="font-weight:bold;">经纬度格式说明：</span>
+                        <p style="margin:0; padding:2px 25px;">1. 经纬度格式：DMS.S、 D.DD，至少录入3个点 （<span style="color:red;">注意经纬度之间用“空格”隔开</span>）：</p>
+                        <div>
+                            <p style="margin:0;padding-left:30px;">117.0605 36.2065</p>
+                            <p style="margin:0;padding-left:30px;">117.0605 36.1390</p>
+                            <p style="margin:0;padding-left:30px;">117.1799 36.1390</p>
+                        </div>
+                        <div>
+                            <p style="margin:0;padding-left:25px;">或</p>
+                        </div>
+                        <div>
+                            <p style="margin:0;padding-left:30px;">117°3'37" 36°12'23"</p>
+                            <p style="margin:0;padding-left:30px;">117°3'37" 36°8'20"</p>
+                            <p style="margin:0;padding-left:30px;">117°10'48" 36°8'20"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<div style=" width: 100%; margin-top:5px;text-align:right;">
+                <div style="display:inline-block;">
+                    <a id="kneecoor-ok" class="btn btn-default" style="height:36px;background-color:#4E9C4E; color:#fff;">确 定</a>
+                </div>
+                <div style="display:inline-block;margin-left:5px;">
+                    <a id="kneecoor-Clear" class="btn btn-default" style="height:36px;">清 空</a>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</body>
+</html>

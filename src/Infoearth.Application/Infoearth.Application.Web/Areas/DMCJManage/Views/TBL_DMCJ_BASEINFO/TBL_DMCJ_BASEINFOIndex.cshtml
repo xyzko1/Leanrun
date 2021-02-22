@@ -1,0 +1,485 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+ <style>
+    .ui-layout-center {
+       overflow-x: hidden !important;
+    }
+    .ui-layout-resizer {
+        background-color:#f0f3f4 !important;
+    }
+    .bbit-tree-node a:hover{
+        text-decoration:none !important;
+    }
+     .fa-folder-open {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -16px;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-folder {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px 0;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-file-o {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -32px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+    .bbit-tree-arrows .bbit-tree-elbow-end-plus{
+        margin-top: 5px !important;
+    }
+    .bbit-tree-arrows .bbit-tree-elbow-minus{
+         margin-top: 5px !important;
+    }
+    .color:hover{
+            color:#23527c !important;
+        }
+    #ui_center{
+        overflow:hidden!important;
+    }
+</style>
+      
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel">
+            <div class="panel-Title">行政区划信息</div>
+            <div id="itemTree" style="overflow:auto;"></div>
+        </div>
+    </div>
+
+    <div class="ui-layout-center" id="ui_center" style="height: 100%;overflow-y:hidden!important;">
+        <div class="center-Panel" style="height: 100%;overflow-y:hidden">
+            <div class="ui-layout" id="layout2" style="height: 100%; width: 100%;">
+                <div class="ui-layout-north" id="ui_map" style="">
+                    <div id="mapControl" style=""></div>
+                </div>
+                <div class="ui-layout-center" id="ui_grid">
+                    <div class="titlePanel">
+                        <div class="title-search" id="filter-form">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <input id="MONITOROBJECTMH" type="text" class="form-control" placeholder="请输入地面沉降名称，编号" style="width: 200px;" />
+                                    </td>
+                                    <td style="padding-left: 5px;">
+                                        <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="toolbar">
+                            <div class="btn-group">
+                                <a id="lr-replace" class="btn btn-default" onclick="reload()"><i class="fa fa-refresh"></i>刷新</a>
+                                <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                                <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                                <a id="lr-edit1" class="btn btn-default" onclick="btn_detil()"><i class="fa fa-pencil-square-o"></i>详情</a>
+                                <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                            </div>
+                            <div class="btn-group">
+                                <a id="lr-colgrid" class="btn btn-default" onclick="ColDataGrid()"><i class="fa fa-chevron-down"></i>列表</a>
+                                <a id="lr-colmap" class="btn btn-default" onclick="ColMapDiv()"><i class="fa fa-chevron-up"></i>地图</a>
+                            </div>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </div>
+                    <div class="gridPanel">
+                        <table id="gridTable"></table>
+                        <div id="gridPager"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetMapData();
+        GetGrid();
+        BindMapMarker();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        $("#MONITOROBJECTMH").keydown(function (event) {
+            if (event.keyCode == "13") {
+                SearchEvent();
+            }
+        })
+    });
+    //初始化页面
+    function InitialPage() {
+        $('#ui_map').height($(window).height() * 0.6);
+        $('#mapControl').height($(window).height() * 0.6);
+        //layout布局
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 190,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                resize();
+            }
+        });
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $('#layout2').layout({
+            applyDemoStyles: true,
+            onresize: function () {
+                resize();
+                if (isResize > 1) {
+                    resized = 1;
+                } else {
+                    if (count == 1 || resized == 0) {
+                        $('#layout2 .ui-layout-center').height($('#layout2 .ui-layout-center').height() - 18);
+                    }
+                }
+                count++;
+            }
+        });
+        //resize重设布局;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            resize();
+            e.stopPropagation();
+        });
+        function resize() {
+            window.setTimeout(function () {
+                if (mapCtlExt != null) {
+                    mapCtlExt.setHeight($('#mapControl').parent().height() - 4);
+                }
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                $('#layout2 .ui-layout-center').width($('#layout2 .ui-layout-center').parent().width());
+                $('#layout2 .ui-layout-resizer').width($('#layout2 .ui-layout-center').parent().width());
+                $('.ui-jqgrid-bdiv').height($('#layout2 .ui-layout-center').height() - 60 - 60);
+                $('#layout2 .ui-layout-center').height($('#layout2').height() - $('#layout2 .ui-layout-north').height());
+                $('#gridTable').setGridHeight($('#layout2 .ui-layout-center').height() - 138 +8);
+                $('#layout2 .ui-layout-center').css('overflow', 'hidden');
+                $("#itemTree").height($('.ui-layout-west').height() - 45);
+            }, 200);
+        };
+        $(window).resize();
+        layout2NorthH = $("#layout2 .ui-layout-north").height();
+    }
+    //加载行政区划树
+    var PROVINCE = "", CITY = "", COUNTY = "";
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMap",
+            onnodeclick: function (item) {
+                AreaCode = item.id;
+                var level = item.value.split(',')[1];
+                var data = [{
+                    latitude: item.value.split(',')[3],
+                    longitude: item.value.split(',')[2],
+                }]
+                if (level == -1) {
+                    PROVINCE = "";
+                    CITY = "";
+                    COUNTY = "";
+                } else if (level == 1) {
+                    PROVINCE = item.id;
+                    CITY = "";
+                    COUNTY = "";
+                } else if (level == 2) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id;
+                    COUNTY = "";
+                } else if (level == 3) {
+                    PROVINCE = item.id.substring(0, 2) + "0000";
+                    CITY = item.id.substring(0, 4) + "00";
+                    COUNTY = item.id;
+                }
+                mapCtlExt.addLocation(data,false,level);
+                $('#btn_Search').trigger("click");
+            },
+        };
+        //初始化
+        $("#itemTree").treeview(item);
+    };
+    //加载地图
+    var mapCtlExt = null;
+    function GetMapData() {
+        mapCtlExt = $("#mapControl").mapCtl(
+            cfGetMapData({ gdzbdbx: true })
+        );
+     };
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 570 ,
+            url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetPageListJson",
+            loadBeforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            datatype: "json",
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 230, align: 'left', sortable: true, hidden: true },
+                { label: '地面沉降名称', name: 'DMCJMC', index: 'DMCJMC', width: 250, align: 'left',sortable: true  },
+                { label: '地面沉降编号', name: 'DMCJBH', index: 'DMCJBH', width: 250, align: 'left',sortable: true  },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left',sortable: true  },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left',sortable: true  },
+                { label: '调查人', name: 'DCR', index: 'DCR', width: 100, align: 'left',sortable: true  },
+                {
+                    label: '填表日期', name: 'TBSJ', index: 'TBSJ', width: 200, align: 'left', sortable: true,
+                    formatter: function (cellvalue) {
+                        if (cellvalue) { return learun.formatDate(cellvalue, 'yyyy-MM-dd'); } else { return '' }
+                    }
+                },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left',sortable: true  },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'DMCJBH',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: true,
+            gridview: true,
+            altRows: true,
+            onSelectRow: function (rowId, status) {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+                var dt = $gridTable.jqGrid("getRowData", rowId);
+                var objArr = { guid:dt.GUID,name: dt.DMCJMC, code: dt.DMCJBH, jd: dt.LONGITUDE, wd: dt.LATITUDE, };
+                var html = GetHtml(objArr);
+                var data = [];
+                data.push({ longitude: dt.LONGITUDE, latitude: dt.LATITUDE, popupHtml: html });
+                //map.getView().setZoom(8);
+                if (isMarkerClick) {
+                    isMarkerClick = false;
+                    //cfShowGDZBArea(dt.KQGD, mapCtlExt);
+                    return;
+                }
+                else if (dt.LONGITUDE && dt.LATITUDE) {
+                    mapCtlExt.addLocation(data,true);
+                    //cfShowGDZBArea(dt.KQGD, mapCtlExt);
+                }
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加地面沉降调查表',
+            url: '/DMCJManage/TBL_DMCJ_BASEINFO/TBL_DMCJ_BASEINFOForm',
+            width: '1200px',
+            height: '800px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                });
+            }
+        });
+    }
+    //编辑
+    function btn_edit(keyValue) {
+        if (!keyValue) {
+         keyValue = $("#gridTable").jqGridRowValue('DMCJBH');
+        }
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑地面沉降调查表',
+                url: '/DMCJManage/TBL_DMCJ_BASEINFO/TBL_DMCJ_BASEINFOForm?keyValue=' + keyValue + "&formType=Edit",
+                width: '1200px',
+                height: '800px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                        $('#gridTable').trigger('reloadGrid');
+                    });
+                }
+            })
+        }
+    }
+    //详情
+    function btn_detil(keyValue) {
+        if (!keyValue) {
+            keyValue = $("#gridTable").jqGridRowValue('DMCJBH');
+        }
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '查看地面沉降调查表',
+                url: '/DMCJManage/TBL_DMCJ_BASEINFO/TBL_DMCJ_BASEINFOForm?keyValue=' + keyValue + "&formType=Detail",
+                width: '1200px',
+                height: '800px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('DMCJBH');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/RemoveForm?keyValue=' + keyValue,
+                authToken: authToken,
+                //param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的地面沉降调查表！', 0);
+        }
+    }
+      //查询表格函数
+    function SearchEvent() {
+        BindMapMarker();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify($.extend($('.titlePanel').getWebControls(), { PROVINCE: PROVINCE, CITY: CITY, COUNTY: COUNTY })), condition: JSON.stringify(WKTString) },
+            url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetPageListJson",
+            page: 1
+        }).trigger('reloadGrid');
+      }
+      function ColDataGrid() {
+        var centerHeight = $("#layout2").height();
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colgrid i").hasClass("fa-chevron-down")) {
+             var northH = centerHeight - 65;
+             layout2.sizePane("north", northH);
+             $("#lr-colgrid i").removeClass("fa-chevron-down");
+             $("#lr-colgrid i").addClass("fa-chevron-up");
+             if ($("#lr-colmap i").hasClass("fa-chevron-down")) {
+                  $("#lr-colmap i").removeClass("fa-chevron-down");
+                  $("#lr-colmap i").addClass("fa-chevron-up");
+             }
+        }
+        else {
+             layout2.sizePane("north", layout2NorthH);
+             $("#lr-colgrid i").removeClass("fa-chevron-up");
+             $("#lr-colgrid i").addClass("fa-chevron-down");
+        }
+        map.updateSize();
+      }
+      function ColMapDiv() {
+        var layout2 = $('#layout2').layout();
+        if ($("#lr-colmap i").hasClass("fa-chevron-up")) {
+            layout2.sizePane("north", 1);
+            $("#lr-colmap i").removeClass("fa-chevron-up");
+            $("#lr-colmap i").addClass("fa-chevron-down");
+            if ($("#lr-colgrid i").hasClass("fa-chevron-up")) {
+                $("#lr-colgrid i").removeClass("fa-chevron-up");
+                $("#lr-colgrid i").addClass("fa-chevron-down");
+            }
+        }
+        else {
+            layout2.sizePane("north", layout2NorthH);
+            $("#lr-colmap i").removeClass("fa-chevron-down");
+            $("#lr-colmap i").addClass("fa-chevron-up");
+            if (mapCtlExt != null) {
+                mapCtlExt.setHeight($("#mapControl").parent().height() - 32 - 4);
+            }
+        }
+        map.updateSize();
+      }
+      function GetHtml(objArr) {
+          var divhtml = '<div style="font-weight: bold;"></div>';
+          divhtml += '<div style="font-weight: bold;margin-bottom:5px;"><span style="margin-left:10px;">地面沉降名称：</span><span>' + objArr.name + '</span></div>';
+          divhtml += '<div><input type="hidden" id="keyID" value="' + objArr.code + '"/></div>';
+          divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">地面沉降编号：</span><span>' + objArr.code + '</span></div>';
+          divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">经度：</span><span>' + objArr.jd + '</span></div>';
+          divhtml += '<div style="margin-bottom:5px;"><span style="margin-left:10px;">纬度：</span><span>' + objArr.wd + '</span></div>';
+          divhtml += '<span style="margin-right:20px; float:right; cursor: pointer;"><a onclick="btn_detil(\'' + objArr.guid + '\')" href="#" style="text-decoration: underline !important;" class="color">详细信息</a></span>';
+
+          return divhtml;
+
+      }
+      //加载地图标记
+      function BindMapMarker() {
+          var queryJson = $("#filter-form").getWebControls();
+          $.ajax({
+              url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetListJson",
+              beforeSend: function (request) {
+                  request.setRequestHeader("Authorization", authToken);
+              },
+              data: { queryJson: JSON.stringify(queryJson), condition: JSON.stringify(WKTString) },
+              type: "GET",
+              success: function (dataList) {
+                  var data = eval(dataList);
+                  var returnValue = [];
+                  var img = "../../../../Content/images/地面沉降16.png";
+                  for (var i = 0; i < data.length; i++) {
+                      //var pointtype = top.learun.data.get(["dataItem", "POINTTYPE", data[i].POINTTYPE]);
+                      var objArr = { guid: data[i].DMCJBH, code: data[i].DMCJBH, name: data[i].DMCJMC, jd: data[i].LONGITUDE, wd: data[i].LATITUDE };
+                      var html = GetHtml(objArr);
+                      //if (data[i].MEASURETYPE) {
+                      //    img = "../../../../Content/DXSCJ/images/MonitorObject/" + data[i].MEASURETYPE + ".png";
+                      //}
+                      returnValue.push({ id: "all", url: img, location: [data[i].LONGITUDE, data[i].LATITUDE], popupHtml: html, tybh: objArr.code });
+                  }
+                  mapCtlExt.addMarker(returnValue);
+              }, error: function (e) {
+              },
+              cache: false
+          });
+
+      };
+      //获取点击Marker时对应的数据
+      var isMarkerClick = false;
+      function getMarkerData(DMCJBH) {
+          isMarkerClick = true;
+          var datas = $('#gridTable').jqGrid("getRowData");
+          var count = 0;
+          $.each(datas, function (i, e) {
+              if (e.DMCJBH.trim().indexOf(DMCJBH) > -1) {
+                  count = 1;
+                  $('#gridTable').setSelection(i + 1);
+                  $('#gridTable tr').eq(i + 1).focus();
+              }
+          });
+          if (count == 0) {
+              $.ajax({
+                  url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetFormJson",
+                  beforeSend: function (request) {
+                      request.setRequestHeader("Authorization", authToken);
+                  },
+                  data: { keyValue: DMCJBH },
+                  type: "get",
+                  dataType: "json",
+                  success: function (res) {
+                      var rowId = datas.length + 1;
+                      $("#gridTable").addRowData(rowId.toString(), res);
+                      window.setTimeout(function () { $('#gridTable').setSelection(rowId); }, 200);
+                      $('#gridTable tr:last').focus();
+                  },
+              });
+          };
+      };
+</script>
+}

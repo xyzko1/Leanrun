@@ -1,0 +1,482 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+
+@section Scripts{
+<script>
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    var AreaCode = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode';
+    $(function () {
+        InitialPage();
+        GetTree();
+        GetDefaultInfo();
+    });
+    //初始化页面
+    function InitialPage() {
+        $("#DISTRICTCODE").val(DefalutCode);
+        $("#PROVINCENAME").val(DefalutName);
+        //layout布局
+        $('#layout').layout({
+            west__size: 230,
+            applyDemoStyles: true,
+            onresize: function () {
+                if (isResize < 10) {
+                    isResize++;
+                }
+                $('#gridTable').setGridWidth(($('.gridPanel').width()));
+            }
+        });
+        var isResize = 0;
+        //resize重设布局;
+        $(window).resize(function (e) {
+            $("#itemTree").height($('.ui-layout-west').height() - 45);
+            e.stopPropagation();
+        });
+    }
+    //加载行政区划树
+    var TOWNNAME;
+    function GetTree() {
+        var item = {
+            height: $(window).height() - 52,
+            isAllExpand: false,
+            url: "../../Map/GetTreeJsonForMaps",
+            onnodeclick: function (item) {
+                $('.XZQH').css('display', 'none');
+                var level = item.value.split(',')[1];
+                if (level == -1) {
+                    $('#PROVINCENAME').val("全国");
+                    $('#PROVINCENAME').css('display', 'inline-block');
+                    $('#zjxztx').css('display', 'none');
+                    AreaCode = item.id +"00000";
+                } else if (level == 1) {
+                    $('#PROVINCENAME').val(item.text);
+                    $('#PROVINCENAME').css('display', 'inline-block');
+                    $('#zjxztx').css('display', 'none');
+                    AreaCode = item.id + "000";
+                } else if (level == 2) {
+                    $('#CITYNAME').val(item.text)
+                    $('#PROVINCENAME').val(item.parent.text)
+                    $('#CITYNAME').css('display', 'inline-block');
+                    $('#zjxztx').css('display', 'none');
+                    AreaCode = item.id;
+                } else if (level == 3) {
+                    $('#COUNTYNAME').val(item.text)
+                    $('#CITYNAME').val(item.parent.text)
+                    $('#PROVINCENAME').val(item.parent.parent.text)
+                    $('#COUNTYNAME').css('display', 'inline-block');
+                    $('#zjxztx').css('display', 'none');
+                    AreaCode = item.id + "000";
+                } else if (level == 4) {
+                    TOWNNAME = item.text;
+                    $('#TOWNNAME').val(item.text)
+                    $('#COUNTYNAME').val(item.parent.text)
+                    $('#CITYNAME').val(item.parent.parent.text)
+                    $('#PROVINCENAME').val(item.parent.parent.parent.text)
+                    $('#TOWNNAME').css('display', 'inline-block');
+                    $('#zjxztx').css('display', 'block');
+                    AreaCode = item.id;
+                    upTable(AreaCode);
+                }
+                $('#DISTRICTCODE').val(AreaCode);
+                if (AreaCode) {
+                    $.SetForm({
+                        //url: "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/GetDISTRICTCODEEntity",
+                        url: "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/GetTBL_QCQF_ADMINISTRATIVEEntity",                       
+                        param: { DISTRICTCODE: AreaCode },
+                        success: function (data) {
+                            $("#NAME").val("");
+                            $("#TELPHONE").val("");
+                            $("#DEPTNAME").val("");
+                            $("#LATITUDE").val("");
+                            $("#LONGITUDE").val("");
+                            $("#PHONE").val("");
+                            if (data)
+                            {
+                                $("#DZHJManage").SetWebControls(data);
+                            }
+                          
+                            //$("#DZHJManage").SetWebControls(data);
+                            //$("#UserName").val("");
+                            //$("#DeptName").val("");
+                            //$("#CONTACTPEOPLEID").val("");
+                            //$("#Mobile").val("");
+                            //$("#Telephone").val("");
+                            //$("#LONGITUDE").val("");
+                            //$("#LATITUDE").val("");
+                            //if (data) {
+                            //    $("#LONGITUDE").val(data.LONGITUDE);
+                            //    $("#LATITUDE").val(data.LATITUDE);
+                            //    if (data.UsreInfo != null && data.UsreInfo != "null") {
+                            //        data = JSON.parse(data.UsreInfo);
+                            //        $("#UserName").val(data.UserName);
+                            //        $("#DeptName").val(data.DeptName);
+                            //        $("#CONTACTPEOPLEID").val(data.ContactPeopleID);
+                            //        $("#Mobile").val(data.Mobile);
+                            //        $("#Telephone").val(data.Telephone);
+                            //    }
+                            //}
+                        }
+                    })
+                }
+            },
+        }    //初始化
+        $("#itemTree").treeview(item);
+    };
+    //加载默认行政区划责任人信息
+    function GetDefaultInfo() {
+        $.SetForm({
+            //url: "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/GetDISTRICTCODEEntity",
+            url: "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/GetTBL_QCQF_ADMINISTRATIVEEntity",              
+            param: { DISTRICTCODE: DefalutCode },
+            success: function (data) {
+                $("#NAME").val("");
+                $("#TELPHONE").val("");
+                $("#DEPTNAME").val("");
+                $("#LATITUDE").val("");
+                $("#LONGITUDE").val("");
+                $("#PHONE").val("");
+                if (data) {
+                    $("#DZHJManage").SetWebControls(data);
+                }
+                //$("#UserName").val("");
+                //$("#DeptName").val("");
+                //$("#CONTACTPEOPLEID").val("");
+                //$("#Mobile").val("");
+                //$("#Telephone").val("");
+                //$("#LONGITUDE").val("");
+                //$("#LATITUDE").val("");
+                //if (data) {
+                //    $("#LONGITUDE").val(data.LONGITUDE);
+                //    $("#LATITUDE").val(data.LATITUDE);
+                //    if (data.UsreInfo != null && data.UsreInfo != "null") {
+                //        data = JSON.parse(data.UsreInfo);
+                //        $("#UserName").val(data.UserName);
+                //        $("#DeptName").val(data.DeptName);
+                //        $("#CONTACTPEOPLEID").val(data.ContactPeopleID);
+                //        $("#Mobile").val(data.Mobile);
+                //        $("#Telephone").val(data.Telephone);
+                //    }
+                //}
+            }
+        });
+    }
+
+    //加载村表格
+    var queryJson = {}, flag = true;
+    function GetGrid(AreaCode) {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        queryJson.DISTRICTCODE = AreaCode;
+        $gridTable.jqGrid({
+            autowidth: true,
+            height: $(window).height() - 400,
+            url: "../../JXGeoManage/TBL_QCQF_VILLAGEINFO/GetPageListJson?queryJson=" + JSON.stringify(queryJson),
+            datatype: "json",
+            colModel: [
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 200, align: 'left', sortable: true, hidden: true },
+                { label: '村组名称', name: 'VILLAGENAME', index: 'VILLAGENAME', width: 200, align: 'left', sortable: true },
+                {
+                    label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 200, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                        return TOWNNAME
+                    }
+                },
+                { label: '乡镇编码', name: 'TOWNCODE', index: 'TOWNNAME', width: 200, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '联系人名称', name: 'USERNAME', index: 'USERNAME', width: 200, align: 'left', sortable: true},
+                {
+                    label: '联系人电话', name: 'Telephone', index: 'Telephone', width: 200, align: 'left', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue
+                    }
+                },
+                { label: '描述', name: 'MEMO', index: 'MEMO', width: 200, align: 'left', sortable: true }
+            ],
+            viewrecords: true,
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //表格更新
+    function upTable(AreaCode) {
+        if (flag == true) {
+            GetGrid(AreaCode);
+            flag = false;
+        } else {
+            queryJson.DISTRICTCODE = AreaCode;
+            $("#gridTable").jqGrid('setGridParam', {
+                loadBeforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                postData: { queryJson: JSON.stringify(queryJson) },
+                url: "../../JXGeoManage/TBL_QCQF_VILLAGEINFO/GetPageListJson",
+                page: 1
+            }).trigger('reloadGrid');
+        }
+    }
+    function xzzrr() {
+        dialogOpen({
+            id: 'ContactPersonForm',
+            title: '选择行政体系责任人',
+            url: '../../ContactPerson/ContactPersonForm',
+            width: '800px',
+            height: "500px",
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                $("#UserName").val(data.UserName);
+                $("#DeptName").val(data.DeptName);
+                $("#CONTACTPEOPLEID").val(data.ContactPeopleID);
+                $("#Mobile").val(data.Mobile);
+                $("#Telephone").val(data.Telephone);
+            }
+        });
+    }
+    //保存表单;
+    function AcceptClick() {
+        var postData = $("#DZHJManage").GetWebControls();
+        $.SaveForm({
+            url: "../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/UpdateForm?DISTRICTCODE=" + AreaCode,
+            param: postData,
+            loading: "正在保存数据...",
+            success: function () {
+
+            }
+        })
+    }
+    //获取经纬度
+    function position_select() {
+        var lon = $('#LONGITUDE').val();
+        var lat = $('#LATITUDE').val();
+        if (!lon || !lat) {
+            var UNIFIEDCODE = $('#DISTRICTCODE').val();
+            if (UNIFIEDCODE) {
+                $.ajax({
+                    url: SSOURL + "/api/AdministrativeApi/GetDistrctByCodes/" + UNIFIEDCODE.slice(0, 6),
+                    beforeSend: function (request) {
+                        request.setRequestHeader("Authorization", authToken);
+                    },
+                    async: false,
+                    data: { keyValue: UNIFIEDCODE },
+                    type: "GET",
+                    success: function (res) {
+                        res = res.Result[0];
+                        if (res.F_LONGITUDE != null && res.F_LATITUDE != null) {
+                            lon = res.F_LONGITUDE; lat = res.F_LATITUDE;
+                        } else {
+                            var UNIFIEDCODE1 = $('#DISTRICTCODE').val();
+                            if (UNIFIEDCODE1) {
+                                $.ajax({
+                                    url: SSOURL + "/api/AdministrativeApi/GetDistrctByCodes/" + UNIFIEDCODE1.slice(0, 2)+"0000",
+                                    beforeSend: function (request) {
+                                        request.setRequestHeader("Authorization", authToken);
+                                    },
+                                    async: false,
+                                    data: { keyValue: UNIFIEDCODE1 },
+                                    type: "GET",
+                                    success: function (res) {
+                                        res = res.Result[0];
+                                        if (res.F_LONGITUDE != null && res.F_LATITUDE != null) {
+                                            lon = res.F_LONGITUDE; lat = res.F_LATITUDE;
+                                        }
+
+                                    },
+                                });
+                            }
+                        }
+                       
+                    },
+                });
+            }
+        }
+        dialogOpen({
+            id: 'TBL_YJBZ_POSITIONSelect',
+            title: '获取经纬度信息',
+            url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_YJBZ_POSITIONSelect?lon=' + lon + '&lat=' + lat,
+            width: '970px',
+            height: "450px",
+            isClose: true,
+            callBack: function (iframeId) {
+                var dt1 = getInfoTop().frames[iframeId].$('#LONGITUDE').val();
+                var dt2 = getInfoTop().frames[iframeId].$('#LATITUDE').val();
+                $('#LONGITUDE').val(dt1);
+                $('#LATITUDE').val(dt2);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加村组级行政体系基本信息',
+            url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVE_XZZRTXFrom?TOWNCODE=' + AreaCode + "&TOWNNAME=" + escape(TOWNNAME),
+            width: '800px',
+            height: '400px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'FormZLGCLIST',
+                title: '编辑村组级行政体系基本信息',
+                url: '../../JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVE_XZZRTXFrom?&keyValue=' + keyValue + '&TOWNCODE=' + AreaCode + "&TOWNNAME=" + escape(TOWNNAME),
+                width: '800px',
+                height: '400px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_QCQF_VILLAGEINFO/RemoveForm?keyValue=' + keyValue,
+                authToken: authToken,
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的村组级行政体系基本信息！', 0);
+        }
+    }
+</script>
+}
+<style>
+    .center_div {
+        line-height: 40px;
+        text-align: center;
+        padding-right: 15%;
+    }
+
+    .spans {
+        display: inline-block;
+        padding-right: 20px;
+        width: 16%;
+        text-align: right;
+        line-height: 40px;
+        white-space: nowrap;
+    }
+
+    #DZHJManage input {
+        width: 17%!important;
+        min-width: 170px!important;
+    }
+
+    #aposition {
+        margin-top: 8px;
+        padding: 3px 6px;
+        margin-left: 10px;
+        position: absolute;
+    }
+
+    .fa-folder-open {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -16px;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-folder {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px 0;
+        margin-right: 2px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+
+    .fa-file-o {
+        color: transparent !important;
+        background: url("../../Content/images/zTreeStandard.png") no-repeat;
+        background-position: -110px -32px;
+        width: 16px !important;
+        height: 16px !important;
+    }
+</style>
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west" style="height:100%;">
+        <div class="west-Panel" style="margin:0px;height:100%";>
+            <div class="panel-Title" style="height:40px;line-height:40px;background-color: rgba(236, 247, 255, 1);color:#000">行政区划</div>
+            <div id="itemTree"></div>
+        </div>
+    </div>
+    <div class="ui-layout-center" id="ui_center">
+        <div class="center-Panel" style="height: 100%;width:100%;margin-top:0px;">
+            <div id="DZHJManage" class="" style="width: 100%;background: #fff; padding: 0">
+                <div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+                    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                        <i class="fa fa-bars" style="margin: 0 5px;font-weight:900"></i><span>行政体系责任人</span>
+                    </div>
+                </div>
+                <div class="center_div">
+                    <span class="spans">行政区划名称:</span>
+                    <input id="PROVINCENAME" type="text" class="form-control XZQH" style="display:inline-block;" value="" disabled/> 
+                    <input id="CITYNAME" type="text" class="form-control XZQH"  style="display:none;" disabled/>
+                    <input id="COUNTYNAME" type="text" class="form-control XZQH"  style="display:none;" disabled/> 
+                    <input id="TOWNNAME" type="text" class="form-control XZQH"  style="display:none;" disabled/>
+                    <input id="CONTACTPEOPLEID" type="text" class="form-control"  style="display:none;"/>
+                    @*<span class="spans">责任人:</span><input id="UserName" type="text" class="form-control" style="display:inline-block;"  readonly="readonly" placeholder="点击选择行政体系责任人" onclick="xzzrr()"/>*@
+                    @*<span class="spans">责任人:</span><input id="UserName" type="text" class="form-control" style="display:inline-block;"/>*@
+                    <span class="spans">责任人:</span><input id="NAME" type="text" class="form-control" style="display:inline-block;" />
+                </div> 
+                <div class="center_div">
+                    <span class="spans">电话:</span><input id="PHONE" type="text" class="form-control" style="display:inline-block;"/>
+                    <span class="spans">手机:</span><input id="TELPHONE" type="text" class="form-control" style="display:inline-block;"/>
+                </div> 
+                <div class="center_div">
+                    <span class="spans">经度:</span><input id="LONGITUDE" type="text" class="form-control" style="display:inline-block;"/>
+                    <span class="spans">纬度:</span><input id="LATITUDE" type="text" class="form-control" style="display:inline-block;"/>
+                    <a id="aposition" class="btn btn-primary" onclick="position_select()"><i class="fa fa-map-marker"></i> 拾取点</a>
+                </div> 
+                <div class="center_div">
+                    <span class="spans">工作单位:</span><input id="DEPTNAME" type="text" class="form-control" style="display:inline-block;"/>
+                    <input id="CONTACTDEPTID" type="text" class="form-control" style="display:none;"/>
+                    <span class="spans">行政区划编码:</span><input id="DISTRICTCODE" type="text" class="form-control" placeholder="" style="display:inline-block;" value="" disabled/>
+                </div>
+                <div style="text-align:center;">
+                    <a id="btn_Search" class="btn btn-primary" style="cursor: pointer; color: white; padding: 4px 20px; margin-top:30px;" onclick="AcceptClick()">保存</a>
+                </div>
+            </div>
+            <div id="zjxztx" class="" style="width: 100%;background: #fff; padding: 0;display:none;">
+                <div style="width: 100%; height: 40px; background: rgba(236, 247, 255, 1); display: flex; align-items: center; justify-content: start; padding-left: 9px">
+                    <div style="width: 7%;font-weight: 900;min-width:80px;white-space:nowrap;">
+                        <i class="fa fa-bars" style="margin: 0 5px;font-weight:900"></i><span>村组级行政体系基本信息</span>
+                    </div>
+                </div>
+                <div class="titlePanel" style="height:40px;line-height:40px">
+                    <div class="toolbar2" style="float:right;margin-right:30px;height:40px;line-height:40px;display:flex;align-items: center;">
+                        <div class="btn-group">
+                            <a id="lr-add" class="btn btn-default" onclick="btn_add()"><i class="fa fa-plus"></i>新增</a>
+                            <a id="lr-edit" class="btn btn-default" onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>编辑</a>
+                            <a id="lr-delete" class="btn btn-default" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除</a>
+                        </div>
+                    </div>
+                    <div style="clear:both"></div>
+                </div> 
+                <div class="gridPanel">
+                    <table id="gridTable"></table>
+                    <div id="gridPager"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

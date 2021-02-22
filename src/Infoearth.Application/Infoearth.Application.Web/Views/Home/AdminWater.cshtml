@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type='text/javascript'>
+        window.BWEUM || (BWEUM = {}); BWEUM.info =
+        { "stand": true, "agentType": "browser", "agent": "browsercollector.oneapm.com/static/js/bw-send-416.7.31.js", "beaconUrl": "browsercollector.oneapm.com/beacon", "licenseKey": "iqBfe~ENfrjy6RmR", "applicationID": 9991080 };</script>
+   @* <script type="text/javascript" src="//browsercollector.oneapm.com/static/js/bw-loader-416.7.31.js"></script>*@
+    <title>@Infoearth.Util.Config.GetValue("SystemName").ToString()</title>
+    <link rel="icon" href="~/Content/images/favicon.ico">
+    <link href="~/Content/styles/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/scripts/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+    <link href="~/Content/scripts/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Content/scripts/bootstrap/respond.min.js"></script>
+    <script src="~/Content/scripts/bootstrap/html5shiv.min.js"></script>
+    <link href="~/Content/styles/learun-im.css" rel="stylesheet" />
+    @System.Web.Optimization.Styles.Render("~/Content/styles/learun-ui.css")
+    <link href="~/Content/adminWater/css/index.css" rel="stylesheet" />
+    <link href="~/Content/adminWater/css/skins/_all-skins.css" rel="stylesheet" />
+    <style type="text/css">
+        .message_item {
+            text-decoration: none;
+            color: #999999;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 0px;
+            border-bottom: 1px dashed #ededed;
+            margin-left: 15px;
+        }
+
+        .message_menu {
+            color: #13a0ff !important;
+        }
+
+        .abc:hover {
+            background: #d5edfe !important;
+        }
+
+        #dvNotice a:hover {
+            color: #13a0ff !important;
+        }
+        .page-tabs-content a:nth-child(n+2) {
+            background:#d5edfe !important;
+        }
+        .ui-layout-resizer {
+            background:#f5f5f5 !important;
+        }
+    </style>
+</head>
+<body class="hold-transition skin-blue sidebar-mini" style="overflow: hidden;">
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
+        <img src="~/Content/images/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div class="wrapper">
+        <!--头部信息-->
+        <header class="main-header">
+            <a href="#" class="logo" id="logo">
+                <span class="logo-mini"></span>
+                <span class="logo-lg"><strong></strong></span>
+            </a>
+            <nav class="navbar navbar-static-top" style="margin-left: 329px;">
+                <ul class="menu" id="top-menu">
+
+                </ul>
+                <div class="navbar-custom-menu" style="padding-top: 8px;" id="top-menu1">
+
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="@Infoearth.Application.Code.OperatorProvider.Provider.Current().HeadIcon" onerror="javascript:this.src='../../Content/images/head/user2-160x160.jpg'" class="user-image" alt="User-Image"/>
+                                <span class="hidden-xs">@Infoearth.Application.Code.OperatorProvider.Provider.Current().UserName</span>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a class="menuItem" data-id="userInfo" href="javascript:;" onclick="$.learuntab.addTab(this)" data-href="/PersonCenter/Index"><i class="fa fa-user"></i>个人信息</a></li>
+                                <li><a href="javascript:void();"><i class="fa fa-trash-o"></i>清空缓存</a></li>
+                                <li class="divider"></li>
+                                <li><a href="javascript:void();" onclick="$.learunindex.indexOut()"><i class="ace-icon fa fa-power-off"></i>安全退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="ui-layout" id="layout_parent" style="height: 100%; width: 100%;background:#f5f5f5">
+            @*<a class="sidebar-showon" title="展开">
+                <i class="fa fa-forward" style="color: #999;"></i>
+            </a>*@
+           <div class="ui-layout-west">
+                <!--左边导航-->
+                <div class="main-sidebar">
+                    <div class="sidebar">
+                        @*<a class="sidebar-shutup" title="收缩">
+                            <i class="fa fa-backward" style="color: #999;"></i>
+                        </a>*@
+                        <ul class="sidebar-menu" id="sidebar-menu">
+                            <!--<li class="header" style="background-color: #008cee;">导航菜单</li>-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-layout-center">
+                <!--中间内容-->
+                <div id="content-wrapper" class="content-wrapper" style="width: 100%">
+                    <div class="content-tabs" style="height:39px;display:block">
+                       
+                        <!--<button class="roll-nav roll-left tabLeft">
+                            <i class="fa fa-backward"></i>
+                        </button>-->
+                        <nav class="page-tabs menuTabs" style="height:39px;background:#fff;box-sizing: unset;border-bottom:1px solid #eee;line-height:39px">
+                            <div class="page-tabs-content" style="height:39px;">
+                                <a href="javascript:;" class="active menuTab" onclick="showDefault()">首页</a>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="content-iframe" style="overflow: hidden;">
+                        <div class="mainContent" id="content-main" style="background:#fff">
+                            <iframe class="LRADMS_iframe" width="100%" height="100%" src="~/Home/AdminWaterDesktop" frameborder="0" data-id="~/Home/AdminWaterDesktop"></iframe>
+                        </div>
+                        <div class="footer" style="width: 100%; background-color: white; height: 25px; text-align: center; line-height: 25px; position: absolute; bottom: 0; left: 0; display: none;">
+                            <div style="float: left; width: 30%; display: none;">
+                                &nbsp;技术支持：<a href="" target="_blank" style="color: black;">武汉地大信息工程股份有限公司</a>
+                            </div>
+                            <div style="float: left; width: 40%; text-align: center; display: none;">
+                                Copyright © 2017 By Infoearth
+                            </div>
+                            <div style="float: left; width: 30%; text-align: right;">
+                                <i id="btn_message" class="fa fa-comments" title="消息通知" style="width: 30px; font-size: 22px; vertical-align: middle; cursor: pointer;margin-top:-1px;margin-right:5px;display:none;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <div id="loading_background" class="loading_background" style="display: none;"></div>
+</body>
+</html>
+
+<style>
+    .ui-layout-resizer {
+        background-color: #C0E5F1 !important;
+    }
+
+    .ui-layout-center {
+        overflow: hidden !important;
+    }
+    .ui-layout-resizer-west {
+        display: none !important;
+    }
+    .ui-layout-toggler-west {
+        display:none !important;  
+    }
+    .main-header .logo {
+        background-size: auto;
+    }
+    .active menuTab {
+        text-align: center !important;
+        display: inline-block !important;
+    }
+
+        .active menuTab span {
+            text-align: center !important;
+            display: inline-block !important;
+        }
+</style>
+<script src="~/Content/scripts/jquery/jquery-1.10.2.min.js"></script>
+<script src="~/Content/scripts/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/Content/scripts/bootstrap/bootstrap.min.js"></script>
+<script src="~/Content/scripts/plugins/layout/jquery.layout.js"></script>
+@System.Web.Optimization.Scripts.Render(
+"~/Content/scripts/plugins/cookie/js",
+"~/Content/scripts/plugins/dialog/js",
+"~/Content/scripts/utils/learun.js",
+"~/Content/adminWater/js")
+<script>
+    var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+    var contentWebUrl = "";
+    var ssoPath = "";
+    var queryUrl = "/Home/GetWebPath";
+    $.ajax({
+        url: queryUrl,
+        async: false,
+        type: "GET",
+        success: function (data) {
+            var info = JSON.parse(data);
+            ssoPath = info.ssoUrl;
+            contentWebUrl = info.webUrl;
+        }, error: function (e) {
+        },
+        cache: false
+    });
+    function showDefault() {
+        $('.mainContent .LRADMS_iframe').each(function () {
+            if ($(this).data('id') == "~/Home/AdminWaterDesktop") {
+                $(this).show().siblings('.LRADMS_iframe').hide();
+                return false;
+            }
+        });
+    }
+    //初始化页面
+    function InitialPage() {
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                var iH = $(window).height();
+                $("#layout_parent").height(iH - 65);
+            }, 200);
+            e.stopPropagation();
+        });
+        $("#ServerSendMessage").click(function () {
+            $.ajax({
+                url: "http://localhost:4066/api/V1/MessageNotice/SendMsgOne",
+                type: "POST",
+                data: {
+                    FromUser: "10215",
+                    ToUser: "10001",
+                    MsgContent: "发送消息测试",
+                    IsUesrAccount:true
+                    //MsgTitle: "发送消息测试",
+                    //MsgUrl: "发送消息测试"
+                },
+                success: function () {
+                    alert("发送成功！");
+                },
+                error: function (e) {
+                    alert(e);
+                }
+            });
+        });
+    }
+    $(function () {
+        InitialPage();
+        var layOut=$('#layout_parent').layout({
+            applyDemoStyles: true,
+            west__size: 230,
+            west__closable: true,
+            onresize: function () {
+                $(window).resize();
+            }
+        });
+        layOut.sizePane('west',1);
+        $(window).resize();
+    });
+</script>

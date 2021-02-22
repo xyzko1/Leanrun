@@ -1,0 +1,308 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    html, body, #form1 {
+        height: 100%;
+    }
+
+    .nav-tabs {
+        padding-top: 2px;
+    }
+    .xxx {
+background-color:#fff;
+color:#666;
+border:1px solid #d8d8d8;
+    }
+</style>
+    <div id="test" style="width:100%;height:100%;background:#fff">
+        <ul class="nav nav-tabs" style="background-color: rgba(236, 247, 255, 1);border-bottom:1px solid #ccc">
+            <li class="active" id="li_XXXX"><a href="#XXXX" data-toggle="tab" class="xxx">详细信息</a></li>
+            <li id="li_QCQF"><a href="#QCQF" data-toggle="tab">群测群防</a></li>
+            <li id="li_BQBR"><a href="#BQBR" data-toggle="tab">搬迁避让</a></li>
+            <li id="li_ZLGC"><a href="#ZLGC" data-toggle="tab">治理工程</a></li>
+            <li id="li_JCXX"><a href="###" data-toggle="tab" style="color:#b6b6b6;background:#dedcdc;">监测信息</a></li>
+            <li id="li_LSXX"><a href="#LSXX" data-toggle="tab" >历史险情</a></li>
+            <li id="li_LSYJ"><a href="###" data-toggle="tab" style="color:#b6b6b6;background:#dedcdc;">历史预警</a></li>
+            <li id="li_LSSJ"><a href="#LSSJ" data-toggle="tab">历史数据</a></li>
+            <li id="li_XHXQ" style="display:none;"><a href="#XHXQ" data-toggle="tab">销号详情</a></li>
+            <li style="float:right;margin-right:25px;display:none" id="li_close" onclick="thisClose('DZDCCXXQ')">
+                <a class="btn btn-default" style="background:#107fff;color:#fff;border:1px solid #ccc;border-radius:4px;margin-top:2px;padding:6px 10px;"><i class="fa fa-close"></i> 返回</a>
+            </li>
+        </ul>
+    <div id="myTabContent" class="tab-content" style="height:calc(100% - 38px); width: 100%;background:#fff;overflow:hidden">
+        <div class="tab-pane fade in active" id="XXXX" style="width:100%;height:100%">
+            <iframe id="XXXXS" width="100%"  onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="BQBR" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="BQBRS" width="100%"  src=""  onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="ZLGC" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="ZLGCS" width="100%"   src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="JCXX" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="JCXXS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="QCQF" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="QCQFS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="LSXX" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="LSXXS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="LSYJ" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="LSYJS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="DMT" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="DMTS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="LSSJ" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="LSSJS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+        <div class="tab-pane fade in" id="XHXQ" style="height: 100%; width: 100%;background:#fff">
+            <iframe id="XHXQS" width="100%" src="" onscroll="no" style="border:none;height:100%"></iframe>
+        </div>
+    </div>
+</div>
+    @section Scripts{
+    <script>
+        var keyValue = request('keyValue');
+        var keyNAME = request('keyNAME');
+        var types = request('types');
+        var xhguid = request('xhguid');//销号点的guid       
+        var authToken = getAuthorizationToken();
+        var callback = request('callback');//"返回"跳转url
+        var qcqfState = "", bqbrState = "", zlgcState = "", lsState = "";
+        var yjURL = ""; var lsxqState =0;
+        $(function () {
+            $.ajax({
+                url: "../../Utility/GetAppSetting",
+                async: false, //同步请求
+                data: { key: "YJDCUrl" },
+                type: "GET",
+                success: function (data) {
+                    yjURL = data;
+                    aa();
+                    pdsta();
+                }
+            });
+            $("#XXXX").height($("layui-layer-content").height())
+            $('#XXXXS').attr('src', GetUrl(types) + "?keyValue=" + keyValue + "&details=01&XQing=01");
+            if (callback) {
+                $("#li_close").show();
+            }
+            if (xhguid != null && xhguid != "") {
+                $("#li_XHXQ").show();
+            }
+        });
+        function aa() {
+            var queryJson = {};
+            queryJson["DISASTERCODE"] = keyValue;
+            $.ajax({
+                type: "get",
+                async: true,
+                url: yjURL + "../../api/TBL_YJZH_DANGECASEINFOApi/GetListJson",
+                data: { queryJson: JSON.stringify(queryJson) },
+                beforeSend: function (XHR) {
+                    XHR.setRequestHeader('Authorization', getAuthorizationToken());
+                },
+                success: function (data) {
+                    if (data.length > 0) {
+                        lsxqState = 1;
+                    }
+
+                },
+                error: function (e) {
+                },
+                complete: function () {
+                }
+            });
+        }
+        function pdsta() {
+            $.ajax({
+                url: '../../api/TBL_QCQF_ADMINISTRATIVEApi/PdState',
+                type: 'get',
+                datatype: 'json',
+                data: { id: keyValue },
+                beforeSend: function (a) {
+                    a.setRequestHeader("Authorization", authToken);
+                },
+                success: function (data) {
+                    console.log(data.qcqfState);
+                    qcqfState = data.qcqfState; bqbrState = data.bqbrState;
+                    zlgcState = data.zlgcState; lsState = data.lsState;
+                    if (qcqfState == "0") {
+                        $("#li_QCQF a").css("background-color", "#dedcdc");
+                        $("#li_QCQF a").css("color", "#b6b6b6");
+                    } else {
+                        $("#li_QCQF a").css("background-color", "#fff");
+                        $("#li_QCQF a").css("color", "#666");
+                        $("#li_QCQF a").css("border", "1px solid #d8d8d8");
+                    }
+                    if (bqbrState == "0") {
+                        $("#li_BQBR a").css("background-color", "#dedcdc");
+                        $("#li_BQBR a").css("color", "#b6b6b6");
+                    } else {
+                        $("#li_BQBR a").css("background-color", "#fff");
+                        $("#li_BQBR a").css("color", "#666");
+                        $("#li_BQBR a").css("border", "1px solid #d8d8d8");
+                    }
+                    if (zlgcState == "0") {
+                        $("#li_ZLGC a").css("background-color", "#dedcdc");
+                        $("#li_ZLGC a").css("color", "#b6b6b6");
+                    } else {
+                        $("#li_ZLGC a").css("background-color", "#fff");
+                        $("#li_ZLGC a").css("color", "#666");
+                        $("#li_ZLGC a").css("border", "1px solid #d8d8d8");
+                    }
+                    if (lsState == "0") {
+                        $("#li_LSSJ a").css("background-color", "#dedcdc");
+                        $("#li_LSSJ a").css("color", "#b6b6b6");
+                    } else {
+                        $("#li_LSSJ a").css("background-color", "#fff");
+                        $("#li_LSSJ a").css("color", "#666");
+                        $("#li_LSSJ a").css("border", "1px solid #d8d8d8");
+                    }
+                    if (lsxqState == "0") {
+                        $("#li_LSXX a").css("background-color", "#dedcdc");
+                        $("#li_LSXX a").css("color", "#b6b6b6");
+                    } else {
+                        $("#li_LSXX a").css("background-color", "#fff");
+                        $("#li_LSXX a").css("color", "#666");
+                        $("#li_LSXX a").css("border", "1px solid #d8d8d8");
+                    }
+                    $(".nav-tabs li").click(function () {
+                        var id = $(this).attr('id').replace("li_", "");
+                        switch (id) {
+                            case "BQBR":
+                                if (bqbrState == "0") {
+                                    event.stopPropagation();
+                                }
+                                if ($('#BQBRS').attr("src") == "") {
+                                    $('#BQBRS').attr("src", "/JXGeoManage/TBL_BQBR/TBL_BQBRHZForm?keyValue=" + keyValue + "&IdetIfrem=Idetnew" + "&readonly=01" + "&details=01&bj=01");
+                                   // $('#BQBRS').attr("src", "/JXGeoManage/TBL_BQBR/TBL_BQBRForm?keyValue=" + keyValue + "&IdetIfrem=Idetnew" + "&readonly=01" + "&details=01&bj='yincang'");
+                                    }
+                                
+                                break;
+                            case "ZLGC"://治理工程
+                                if (zlgcState == "0") {
+                                    event.stopPropagation();
+                                }
+                                if (zlgcState != "0") {
+                                    if ($('#ZLGCS').attr('src') == "") {
+                                        //keyValue = keyValue.substring(0, 6);
+                                        $('#ZLGCS').attr('src', "/JXGeoManage/TBL_ZLGC_BASEINFO/TBL_ZLGC_TJResultForm" + "?compparam=" + keyValue + "&readonly=01&bj='yincang'&details=01");
+                                       // $('#ZLGCS').attr('src', "/JXGeoManage/TBL_ZLGC_BASEINFO/TBL_ZLGC_BASICAMANAGE" + "?keyValue=" + keyValue + "&readonly=01&details=01");
+                                    }
+                                }
+                                break;
+                            case "JCXX":
+                                event.stopPropagation();
+                                //if ($('#JCXXS').attr('src') == "") {
+                                //    var url = "http://192.168.1.49:8882/JXGeoManage/TBL_JC_MONITORPOINTINFO/JCDXQ?DISASTERUNITCODE=" + keyValue + "&IdetIfrem=Idetnew" + "&readonly=01&IsDetail=true&details=01";
+                                //    $('#JCXXS').attr('src', url);
+                                //}
+                                break;
+                            case "QCQF":
+                                if (qcqfState == "0"||qcqfState == "") {
+                                    event.stopPropagation();
+                                }
+                                if (qcqfState != "0") {
+                                    window.setTimeout(function () {
+                                        $('#QCQFS').attr('src', "/JXGeoManage/TBL_QCQF_ADMINISTRATIVE/TBL_QCQF_ADMINISTRATIVEForm" + "?keyValue=" + keyValue + "&UNIFIEDCODE=" + keyValue + "&readonaly=01&details=01");
+                                    }, 200);
+                                }
+                                break;
+                            case "LSXX":
+                                if (lsxqState == "0" || qcqfState == "") {
+                                    event.stopPropagation();
+                                }
+                                if ($('#LSXXS').attr('src') == "") {
+                                    $('#LSXXS').attr("src", "/JXGeoManage/TBL_BQBR/TBL_LSXQ?keyValue=" + keyValue + "&IdetIfrem=Idetnew" + "&readonly=01" + "&details=01");
+                                }
+                                break;
+                            case "LSYJ":
+                                event.stopPropagation();
+                                //if ($('#LSYJS').attr('src') == "") {
+                                //    $('#LSYJS').attr('src', GetUrl(types) + "?keyValue=" + keyValue + "&details=01");
+                                //}
+                                break;
+                            case "LSSJ"://历史数据
+                                if (lsState == "0") {
+                                    event.stopPropagation();
+                                }
+                                if (lsState != "0") {
+                                    if ($('#LSSJS').attr('src') == "") {
+                                        $('#LSSJS').attr('src', GetUrl(types) + "?TYBH=" + keyValue + "&details=01&XQing=01&flag=true&callback=callback");
+                                        //$('#LSSJS').attr('src', "/JXGeoManage/TBL_HAZARDBASICINFO/TBL_LSSJIndex?keyValue=" + keyValue + "&readonly=01&details=01" + '&types=' + types);
+                                    }
+                                }
+                                break;
+                            case "XHXQ"://销号详情
+                                if (lsState == "0") {
+                                    event.stopPropagation();
+                                }
+                                if (lsState != "0") {
+                                    if ($('#XHXQS').attr('src') == "") {
+                                        $('#XHXQS').attr('src', "/JXGeoManage/TBL_HAZARDBASICINFO/DeleteInfo?guid=" + xhguid + "&callback=callback");
+                                    }
+                                }
+                                break;
+                                //case "DMT":
+                                //    if ($('#DMTS').attr('src') == "") {
+                                //        window.setTimeout(function () {
+                                //            $('#DMTS').attr('src', contentPath + "/SystemManage/MultMedia/Index?moduleID=dcd1d0aa-1d51-4142-ae82-db812158b0da&belongObjectGuid=" + keyValue + "&details=01");
+                                //        }, 300);
+                                //    }
+                                //    break;
+                                case "close":
+                                    if (callback && window.parent) {
+                                        document.location.href = callback;
+                                    }
+                                break;
+                            default:
+                        }
+                    });
+
+                },
+                cache: false
+
+            });
+        }
+        //function Close() {
+        //    var layout = parent.window.document.getElementById("layout");
+        //    layout.style.display = "block";
+        //    $("#test").css("display", "none");
+        //}
+        //获取地址
+        function GetUrl(v) {
+            var url = null;
+            switch (v) {
+                case "001":
+                    url = "/JXGeoManage/TBL_LANDSLIP/TBL_LANDSLIPForm";
+                    break;
+                case "002":
+                    url = "/JXGeoManage/TBL_AVALANCHE/TBL_AVALANCHEForm";
+                    break;
+                case "003":
+                    url = "/JXGeoManage/TBL_DEBRISFLOW/TBL_DEBRISFLOWForm";
+                    break;
+                case "004":
+                    url = "/JXGeoManage/TBL_LANDSETTLEMENT/TBL_LANDSETTLEMENTForm";
+                    break;
+                case "005":
+                    url = "/JXGeoManage/TBL_COLLAPSE/TBL_COLLAPSEForm";
+                    break;
+                case "006":
+                    url = "/JXGeoManage/TBL_LANDCRACK/TBL_LANDCRACKForm";
+                    break;
+                case "007":
+                    url = "/JXGeoManage/TBL_SLOPE/TBL_SLOPEForm";
+                    break;
+                default:
+                    break;
+            }
+            return url;
+        }
+    </script>
+    }

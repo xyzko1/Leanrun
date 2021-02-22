@@ -1,0 +1,211 @@
+﻿@{
+    ViewBag.Title = "审核人管理";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style>
+    #DISTRICTCODE > div > span {
+        padding: 0 0 0 5px !important;
+    }
+</style>
+<style>
+    body {
+        overflow:hidden;
+    }
+</style>
+<div style="margin-top: 20px; margin-right: 30px;">
+    <table class="form">
+        <tr>
+            <td class="formTitle">行政区划<font face="宋体">*</font></td>
+            <td class="formValue">
+                <div id="DISTRICTCODE"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">审核人<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="NAME" type="text" class="form-control" readonly="readonly" onclick="SelectUser()" placeholder="请输入名称" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">登录名<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="LOGINNAME" type="text" class="form-control" isvalid="yes" checkexpession="NotNull" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">业务类型<font face="宋体">*</font></td>
+            <td class="formValue">
+                <div id="BUSSNESSTYPE" type="select" class="ui-select" isvalid="yes" checkexpession="NotNull"></div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">是否有效<font face="宋体">*</font></td>
+            <td class="formValue">
+                <input id="ISAUDIT" type="checkbox" class="form-control" style="height:20px;width:9%;" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/districts.js"></script>
+<script>
+    var keyValue = learun.request('keyValue');
+    var parentId = learun.request('parentId');
+    var authToken = getAuthorizationToken();
+    var provinceId = "", cityId = "", countyId = "";
+    var usercode = "@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode";
+    $(function () {
+        initControl();
+    })
+    //初始化控件
+    function initControl() {
+        if (parentId.length == 6) {
+            if (parentId.substr(2, 4) == "0000") {
+                provinceId = parentId;
+            } else if (parentId.substr(4, 2) == "00") {
+                provinceId = parentId.substr(0, 2) + "0000";
+                cityId= parentId.substr(0, 4) + "00";
+            } else {
+                provinceId = parentId.substr(0, 2) + "0000";
+                cityId = parentId.substr(0, 4) + "00";
+                countyId = parentId;
+            }
+        } else {
+            if (usercode.length == 6 && usercode != "000000") {
+                if (usercode.substr(2, 4) == "0000") {
+                    provinceId = usercode;
+                } else if (usercode.substr(2, 4) == "00") {
+                    provinceId = usercode.substr(0, 2) + "0000";
+                    cityId = usercode.substr(0, 4) + "00";
+                } else {
+                    provinceId = usercode.substr(0, 2) + "0000";
+                    cityId = usercode.substr(0, 4) + "00";
+                    countyId = usercode;
+                }
+            }
+        }
+        
+        $('#DISTRICTCODE').districtsCtl({
+            type: 'T',
+            provinceId: provinceId,
+            selectProviceId: provinceId,//默认选中的省
+            selectCityId: cityId,//默认选中的市
+            selectCounty: countyId,//默认选中的区县
+            cityId: cityId,
+            countyId: countyId
+        });
+        
+        $("#BUSSNESSTYPE").ComboBox({
+            url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=AuditBusType",
+            id: "value",
+            text: "text",
+            height: '200px'
+        });
+
+        //获取表单
+        if (!!keyValue) {
+            $.SetForm({
+                url: "../../api/TBL_AUDITORSApi/GetFormJson",
+                param: { keyValue: keyValue },
+                authToken: authToken,
+                success: function (data) {
+                    $("#form1").setWebControls(data);
+                    if (data.ISAUDIT == "0")
+                        $('#ISAUDIT')[0].checked = true;
+                    else {
+                        $('#ISAUDIT')[0].checked = false;
+                    }
+                    $('#DISTRICTCODE').setDistrictCode(data.DISTRICTCODE);
+                }
+            });
+        } 
+            
+    }
+
+
+    //保存表单
+    function AcceptClick() {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var reg = /[\u4e00-\u9fa5]/g;
+        var postData = $("#form1").getWebControls(keyValue);
+        var bb = $("#DISTRICTCODE").getDistrictValue();
+        var AreaCode = 0;
+        //乡镇
+        if (bb.townId != "" && bb.townId != undefined) {
+            AreaCode = bb.townId;
+            postData["PROVINCE"] = bb.provinceName.match(reg).join("");
+            postData["CITY"] = bb.cityName.match(reg).join("");
+            postData["COUNTY"] = bb.countyName.match(reg).join("");
+            postData["TOWN"] = bb.townName.match(reg).join("");
+        }
+        else if (bb.countyName != "" && bb.countyName != undefined) {
+            AreaCode = bb.countyId
+            postData["PROVINCE"] = bb.provinceName.match(reg).join("");
+            postData["CITY"] = bb.cityName.match(reg).join("");
+            postData["COUNTY"] = bb.countyName.match(reg).join("");
+        } else if (bb.cityId != "" && bb.cityId != undefined) {
+            AreaCode = bb.cityId
+            postData["PROVINCE"] = bb.provinceName.match(reg).join("");
+            postData["CITY"] = bb.cityName.match(reg).join("");
+        } else if (bb.provinceId != "" && bb.provinceId != undefined) {
+            AreaCode = bb.provinceId
+            postData["PROVINCE"] = bb.provinceName.match(reg).join("");
+        }
+        postData["DISTRICTCODE"] = AreaCode;
+        //postData["ISAUDIT"] = "0"; //默认开启审核
+        if ($('#ISAUDIT')[0].checked == true)
+            postData.ISAUDIT = "0";
+        else
+            postData.ISAUDIT = "1";
+        learun.saveForm({
+            url: "../../api/TBL_AUDITORSApi/SaveForm?keyValue=" + keyValue,
+            param: postData,
+            authToken: authToken,
+            loading: "正在保存数据...",
+            success: function () {
+                try {
+                    getInfoTop().learun.currentIframe().$("#gridTable").trigger("reloadGrid");
+                } catch (e) {
+                    window.parent.$("#gridTable").trigger("reloadGrid");
+                }
+            }
+        })
+    }
+    var pcode = "";
+    function SelectUser() {
+        var bcode = $("#DISTRICTCODE").getDistrictValue();
+        var AreaCode = 0;
+        //乡镇
+        if (bcode.townId != "" && bcode.townId != undefined) {
+            pcode = bcode.townId;
+        }
+        else if (bcode.countyName != "" && bcode.countyName != undefined) {
+            pcode = bcode.countyId
+        } else if (bcode.cityId != "" && bcode.cityId != undefined) {
+            pcode = bcode.cityId
+        } else if (bcode.provinceId != "" && bcode.provinceId != undefined) {
+            pcode = bcode.provinceId
+        }
+        dialogOpen({
+            id: 'ContactPersonForm',
+            title: '选择审核人',
+            url: '../../ContactPerson/ContactPersonForm?AreaId=' + pcode,
+            width: '800px',
+            height: '500px',
+            callBack: function (iframeId) {
+                var data = getInfoTop().frames[iframeId].AcceptClick();
+                if (data) {
+                    var webData = {};
+                    webData["NAME"] = data["UserName"];
+                    webData["LOGINNAME"] = data["LoginName"];
+                    $("#form1").SetWebControls(webData);
+                }
+            }
+        });
+    }
+
+</script>
+}

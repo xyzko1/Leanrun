@@ -1,0 +1,1476 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<link href="~/Content/styles/report.css" rel="stylesheet" />
+<style>
+    body, html {
+        background: #fff;
+    }
+
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .diaochabiao {
+        text-align: center;
+    }
+
+    .table-top, .table-main, table-bottom {
+        margin: 0 20px;
+    }
+
+        .table-main td {
+            border: 1px solid #D6D6D6;
+        }
+
+    .formValue input[type=text] {
+        border: 0;
+        border-bottom: 1px solid #E0E0E0;
+    }
+
+    .diaochabiao .formValue textarea {
+        /*height:80px;*/
+        border: none;
+    }
+
+    .diaochabiao .formTitle {
+        text-align: center !important;
+        /*width: 135px !important;*/
+        background-color: #F5F5F5;
+        white-space: inherit;
+    }
+
+    .diaochabiao .formCategory {
+        font-size: 15px;
+        /*color: #3F549E;*/
+    }
+
+    .diaochabiao .required {
+        color: red;
+        padding-left: 5px;
+        vertical-align: middle;
+    }
+
+    .diaochabiao select {
+        border: none;
+    }
+
+    .diaochabiao label {
+        margin: 0 2px;
+    }
+    /****************** td中的多个标签并列 START *************/
+    .diaochabiao .multi-label-48 {
+        width: 48%;
+    }
+
+        .diaochabiao .multi-label-48 input {
+            float: right;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-40 {
+        width: 40%;
+    }
+
+    .diaochabiao .multi-label-30 {
+        width: 30%;
+    }
+
+        .diaochabiao .multi-label-30 input {
+            float: left;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-10 {
+        width: 10%;
+    }
+
+        .diaochabiao .multi-label-10 input {
+            float: left;
+        }
+
+    .diaochabiao .multi-label-15 {
+        width: 15%;
+    }
+
+        .diaochabiao .multi-label-15 input {
+            float: left;
+            width: 20%;
+            margin: 0 2px;
+        }
+    /*新增*/
+    .formValue input[type=text] .diaochabiao .label-1 {
+        width: 5%;
+    }
+
+    .diaochabiao .label-1 input {
+        float: left;
+    }
+
+    .diaochabiao .form-control[readonly], fieldset[readonly] .form-control {
+        background-color: #fff;
+        border: none;
+        cursor: default;
+    }
+
+    .diaochabiao .form-control {
+        border: none;
+    }
+    /*新增*/
+    /****************** td中的多个标签并列 START *************/
+
+    /****************** 保持标题文字两边对其的样式 START *************/
+    .KONG {
+        padding-left: 24px;
+    }
+
+    .diaochabiao .multi-label-rigth-30 {
+        width: 30%;
+    }
+
+        .diaochabiao .multi-label-rigth-30 input {
+            float: right;
+            width: 70%;
+            margin: 0 2px;
+        }
+
+    .diaochabiao .multi-label-rigth-25 {
+        width: 20%;
+        /*display:none;*/
+    }
+
+        .diaochabiao .multi-label-rigth-25 input {
+            float: right;
+            width: 90%;
+            margin: 0 2px;
+        }
+    /****************** td中的2个input并列 START *************/
+
+    /****************** 保持标题文字两边对其的样式 END *************/
+    .ui-priority-secondary {
+        background-color: #DCDCDC;
+        color: #222222;
+    }
+
+    .titlePanel {
+        height: 55px;
+    }
+
+    .spansa {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px;
+    }
+
+    .divselect {
+        width: 16%;
+    }
+
+    .form-control, .ui-select, .ui-select-text {
+        border-radius: 3px;
+    }
+
+    .spans {
+        padding: 0 20px !important;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 113px;
+    }
+
+    #gridTable td, #gridTableA td {
+        border-right: 1px solid #ccc !important;
+    }
+
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        /*background:#DCDCDC*/
+    }
+
+    .linkName {
+        width: 180px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        float: left;
+    }
+
+    .delIcon {
+        display: inline;
+    }
+    /*tab*/
+    .lea-tabs {
+        height: 38px;
+        width: 100%;
+        background: #fff;
+        border-bottom: solid #ccc 1px;
+        padding-left: 15px;
+    }
+
+        .lea-tabs .tabs-right-tool {
+            position: absolute;
+            width: 236px !important;
+            height: 37px;
+            right: 0;
+            background-color: #fff;
+        }
+
+        .lea-tabs .roll-nav {
+            float: left;
+            width: 20px;
+            height: 37px;
+            line-height: 37px;
+            text-align: center;
+            color: #878EC3;
+            z-index: 2;
+            background: #fff;
+            border: 0;
+            outline: 0;
+            cursor: pointer;
+        }
+
+            .lea-tabs .roll-nav:hover {
+                color: #4c58a4;
+            }
+
+        .lea-tabs .user-menu {
+            float: left;
+            padding-top: 4px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+    .menuTabs {
+        width: 100000px;
+    }
+
+    .menuTab i {
+        margin-right: 4px;
+        font-size: 13px;
+    }
+
+    .page-tabs-content .tab_close {
+        width: 12px;
+        height: 13px;
+        position: absolute;
+        top: 17px;
+        right: 13px;
+        cursor: pointer;
+        display: block;
+        background: url(../../../../Content/adminDefault/img/tab_close.png) no-repeat;
+    }
+
+        .page-tabs-content .tab_close:hover {
+            background-position: 0 -12px;
+        }
+
+    .page-tabs-content {
+        overflow: hidden;
+        height: 38px;
+        float: left;
+    }
+
+        .page-tabs-content .menuTab {
+            display: block;
+            float: left;
+            text-decoration: none;
+            color: #878EC3;
+            border: 1px solid #ccc;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 8px;
+            font-size: 14px;
+            margin-right: 8px;
+            padding: 0 22px 0 10px;
+        }
+
+            .page-tabs-content .menuTab.active {
+                border-bottom: 0;
+                background: #d5edfe;
+                font-weight: 700;
+                border-top: solid #4c58a4 2px;
+                color: #4c58a4;
+            }
+
+    .zk {
+        color: #0099ff !important;
+        cursor: pointer;
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .aa .ui-jqgrid {
+        margin-left: 50px;
+    }
+</style>
+<div id="layout" style="height: 100%;">
+    <div style="width: 100%; height: 40px; background: #fff">
+        <ul class="nav nav-tabs" style="width: 100%; background-color: rgba(236, 247, 255, 1); padding-top: 2px">
+            <li class="active" id=""><a href="#JCTJ" data-toggle="tab">基础统计</a></li>
+            <li id="li_BTGL"><a href="#YBCTJ" data-toggle="tab">已保存统计报表</a></li>
+        </ul>
+    </div>
+
+    <div id="myTabContent" class="tab-content" style="height: calc(100% - 40px)">
+        <div class="tab-pane fade in active" id="JCTJ" style="height: 100%;">
+            <div id="TjItem">
+                <div style="width: 100%; border: 1px solid #ccc; border-top: none; height: 40px; line-height: 40px; background: #fff; display: flex; align-items: center;">
+                    <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">行政区划:</span>
+                    <div id="districtsCtls" style="width: 90%;"></div>
+                </div>
+                <div style="width: 100%; border: 1px solid #ccc; border-top: none; height: 40px; line-height: 40px; background: #fff; display: flex; align-items: center;">
+                    <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">筛选条件:</span>
+                    <div style="width: 90%; height: 40px; display: flex; align-items: center;">
+                        <span class="spans">立项年度：</span>
+                        <input style="width: 20%" type="text" id="Static_Year" class="form-control input-wdatepicker" onfocus="WdatePicker({dateFmt:'yyyy'})" />
+                        <span class="spans">项目名称：</span>
+                        <input id="XMMC" type="text" style="width: 20%" class="form-control" />
+                        <span class="spans">统计单位：</span>
+                        <div style="width: 20%" id="Static_Unit" type="selectTree" class="ui-select"></div>
+                        <a style="margin-left: 30px" id="btn_genercode" onclick="" class="btn btn-primary" style="float: right"><i class="fa fa-save"></i>&nbsp;统计</a>
+                    </div>
+                </div>
+            </div>
+            <div id="tabListContentDiv"></div>
+            <div id="" class="tab-content" style="height: 100%">
+                <div class="tab-pane fade in active" id="TJJG" style="height: 100%;">
+                    <div class="gridPanel">
+                        <table id="gridTable"></table>
+                    </div>
+                </div>
+                <div class="tab-pane fade in active" id="TJTB" style="height: 100%; width: 100%">
+                    @*<div style="width: 10%; float: right;">
+                        <div id="TBtype" type="select" style="width: 140px; margin: 1px 4px 8px 4px; float: right" class="ui-select"></div>
+                    </div>*@
+                    <div id="TBtype" type="select" style="width: 140px;float:right; top: 0; position:relative; right: 0" class="ui-select"></div>
+                    <div id="chartsdata" style="width: 90%; height: calc(100% - 248px); margin-top: 30px;position:absolute;"></div>
+                </div>
+                <div class="tab-pane fade in active" id="XZQHTJ" style="height: 100%;">
+                    <div class="gridPanel">
+                        <table id="gridTableXZQH"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade in" id="YBCTJ" style="height: 100%">
+            <ul id="YBCTJ_UI" style="display: flex; flex-wrap: wrap; height: 100px; overflow-y: scroll"></ul>
+            <div style="width: 100%; height: 36px; background-color: rgba(236, 247, 255, 1); line-height: 36px">
+                <ul class="nav nav-tabs" style="float: left; width: 100%; padding-top: 0; padding-bottom: 1px">
+                    <li id="li_YBTJJG" class="active"><a href="#YBTJJG" data-toggle="tab" class="active">统计结果</a></li>
+                    <li id="li_YBTJTB"><a href="#YBTJTB" data-toggle="tab">统计图表</a></li>
+                </ul>
+            </div>
+
+            <div id="tab_contents" class="tab-content" style="width: 100%; height: 100%">
+                <div class="tab-pane fade in active" id="YBTJJG" style="height: 100%;">
+                    <div class="gridPanel">
+                        <table id="gridTableA"></table>
+                        <div id="gridPagerA"></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="YBTJTB" style="height: 100%; width: 100%; display: block">
+                    <div style="width: 10%; float: right;">
+                        <div id="TBtypeA" type="select" style="width: 140px; margin: 1px 4px 8px 4px; display: inline-block; float: right; z-index: 10" class="ui-select"></div>
+                    </div>
+                    <div id="chartsdataA" style="width: 100%; height: calc(100% - 248px); margin-top: 30px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">请输入报表名称
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    @*在这里添加一些文本*@
+                    <input type="text" class="clo" id="tablename" style="width: 90%; line-height: 26px; border-radius: 4px;" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="btn_save()">
+                        确定保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalCondition" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalCondition">报表详情
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div style="width: 100%; height: 45px; line-height: 45px; background: #fff; display: flex; align-items: center;">
+                        <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">行政区划:</span>
+                        <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px" id="bbssx">
+                            <span class="spans" style="white-space: nowrap;">省:</span>
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="PROVINCENAME2" class="form-control" disabled="disabled" />
+                            <span class="spans" style="white-space: nowrap;">市:</span>
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="CITYNAME2" class="form-control" disabled="disabled" />
+                            <span class="spans" style="white-space: nowrap;">县（区）:</span>
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="COUNTRYNAME2" class="form-control" disabled="disabled" />
+                        </div>
+                        <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px; padding-top: 10px; display: none;" id="quanguo">
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="qg" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div style="width: 100%; height: 45px; line-height: 45px; background: #fff; display: flex">
+                        <span style="font-size: 14px; padding-left: 20px; font-family: 微软雅黑; color: #000;">统计条件:</span>
+                        <div style="width: 90%; height: 100%; display: flex; align-items: center; padding-left: 30px">
+                            <span class="spans" style="white-space: nowrap;">统计年度:</span>
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="Static_Year2" class="form-control" disabled="disabled" />
+                            <span class="spans" style="white-space: nowrap;">统计单位:</span>
+                            <input style="width: 16%; border-radius: 4px;" type="text" id="Static_Unit2" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script src="~/Content/scripts/plugins/echarts/echarts.min.js"></script>
+<script src="~/Content/report.js"></script>
+<script src="~/Content/scripts/plugins/infoearthcustom/tabControl.js"></script>
+<script>
+    var parmProvince = "";
+    var parmCity = "";
+    var parmCountry = "";
+    var parmTown = "";
+    var parmYear = "";
+    var echartedatajson = {};
+    var authToken = getAuthorizationToken();
+    var codeType = "省"; var codeValue = "";
+    var xmmc = "";
+    var static_Unit = "";
+    var annual = "";
+    var provincecol = [
+                                {
+                                    label: '省', name: '省', index: '省', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                        if (cellvalue) {
+                                            return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                        } else {
+                                            return "";
+                                        }
+                                    }
+                                },
+                                { label: '搬迁灾害点数量（个）', name: '灾害点个数', index: '灾害点个数', width: 150, align: 'center', sortable: true },
+                                { label: '搬迁户数（户）', name: '搬迁户数', index: '搬迁户数', width: 100, align: 'center', sortable: true },
+                                { label: '搬迁人数（人）', name: '搬迁人数', index: '搬迁人数', width: 100, align: 'center', sortable: true },
+                                { label: '集中安置户数', name: '集中安置个数', index: '集中安置个数', width: 120, align: 'center', sortable: true },
+                                { label: '分散安置户数', name: '分散安置个数', index: '分散安置个数', width: 120, align: 'center', sortable: true },
+                                { label: '购房安置户数', name: '购房安置个数', index: '购房安置个数', width: 120, align: 'center', sortable: true },
+                                { label: '其它安置户数', name: '其它安置个数', index: '其它安置个数', width: 120, align: 'center', sortable: true },
+                                { label: '总安置补贴金额（万元）', name: '总安置补贴金额', index: '总安置补贴金额', width: 150, align: 'center', sortable: true },
+                                { label: '已完成（个）', name: '已完成个数', index: '已完成个数', width: 100, align: 'center', sortable: true },
+                                { label: '已验收（个）', name: '已验收个数', index: '已验收个数', width: 100, align: 'center', sortable: true },
+    ];
+    var shicol = [
+                                    {
+                                        label: '省', name: '省', index: '省', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                            if (cellvalue) {
+                                                return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                            } else {
+                                                return "";
+                                            }
+                                        }
+                                    },
+                                    {
+                                        label: '市', name: '市', index: '市', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                            if (cellvalue) {
+                                                return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                            } else {
+                                                return "";
+                                            }
+                                        }
+                                    },
+                                    { label: '搬迁灾害点数量（个）', name: '灾害点个数', index: '灾害点个数', width: 150, align: 'center', sortable: true },
+                                    { label: '搬迁户数（户）', name: '搬迁户数', index: '搬迁户数', width: 100, align: 'center', sortable: true },
+                                    { label: '搬迁人数（人）', name: '搬迁人数', index: '搬迁人数', width: 100, align: 'center', sortable: true },
+                                    { label: '集中安置户数', name: '集中安置个数', index: '集中安置个数', width: 120, align: 'center', sortable: true },
+                                    { label: '分散安置户数', name: '分散安置个数', index: '分散安置个数', width: 120, align: 'center', sortable: true },
+                                    { label: '购房安置户数', name: '购房安置个数', index: '购房安置个数', width: 120, align: 'center', sortable: true },
+                                    { label: '其它安置户数', name: '其它安置个数', index: '其它安置个数', width: 120, align: 'center', sortable: true },
+                                    { label: '总安置补贴金额（万元）', name: '总安置补贴金额', index: '总安置补贴金额', width: 150, align: 'center', sortable: true },
+                                    { label: '已完成（个）', name: '已完成个数', index: '已完成个数', width: 100, align: 'center', sortable: true },
+                                    { label: '已验收（个）', name: '已验收个数', index: '已验收个数', width: 100, align: 'center', sortable: true },
+    ];
+    var xiancol = [
+                                       {
+                                           label: '省', name: '省', index: '省', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                               if (cellvalue) {
+                                                   return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                               } else {
+                                                   return "";
+                                               }
+                                           }
+                                       },
+                                       {
+                                           label: '市', name: '市', index: '市', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                               if (cellvalue) {
+                                                   return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                               } else {
+                                                   return "";
+                                               }
+                                           }
+                                       }, {
+                                           label: '县', name: '县', index: '县', width: 150, align: 'center', sortable: true, formatter: function (cellvalue, options, rowObject) {
+                                               if (cellvalue) {
+                                                   return '<a onclick=tjResult("' + cellvalue + '"); style="cursor:pointer;text-decoration:underline;color:#0099ff !important;">' + cellvalue + '</a>';
+                                               } else {
+                                                   return "";
+                                               }
+                                           }
+                                       },
+                                       { label: '搬迁灾害点数量（个）', name: '灾害点个数', index: '灾害点个数', width: 150, align: 'center', sortable: true },
+                                       { label: '搬迁户数（户）', name: '搬迁户数', index: '搬迁户数', width: 100, align: 'center', sortable: true },
+                                       { label: '搬迁人数（人）', name: '搬迁人数', index: '搬迁人数', width: 100, align: 'center', sortable: true },
+                                       { label: '集中安置户数', name: '集中安置个数', index: '集中安置个数', width: 120, align: 'center', sortable: true },
+                                       { label: '分散安置户数', name: '分散安置个数', index: '分散安置个数', width: 120, align: 'center', sortable: true },
+                                       { label: '购房安置户数', name: '购房安置个数', index: '购房安置个数', width: 120, align: 'center', sortable: true },
+                                       { label: '其它安置户数', name: '其它安置个数', index: '其它安置个数', width: 120, align: 'center', sortable: true },
+                                       { label: '总安置补贴金额（万元）', name: '总安置补贴金额', index: '总安置补贴金额', width: 150, align: 'center', sortable: true },
+                                       { label: '已完成（个）', name: '已完成个数', index: '已完成个数', width: 100, align: 'center', sortable: true },
+                                       { label: '已验收（个）', name: '已验收个数', index: '已验收个数', width: 100, align: 'center', sortable: true },
+    ];
+    $(function () {
+        tabCtl = $("#tabListContentDiv").tabCtlInit({ hasReport: true, toolWidth: 270 });
+        if (DefalutName == "全国") {
+            parmProvince = "";
+        }
+        $('#gridTableXZQH').setGridWidth($(window).width());
+        $('#gridTableA').setGridWidth($(window).width());
+        changeTabs();
+        getAreaCode(0);
+        initControl();
+        InitialPage();
+        CityGetGrid();
+        CityGetGridNEW();
+        GetGridXZQH(0)
+        //查询点击事件
+        $("#btn_genercode").click(function () {
+            SearchEvent();
+        });
+        //导出点击事件
+        $("#Exl_export").click(function () {
+            EXL_Export();
+        });
+        $('#YBCTJ_UI').report({
+            module: 'TBL_BQBRIndexCountAnalyse',
+            viewReport: function (data) {
+                if (data != null) {
+                    queryJson = JSON.parse(data.QUERYSTRING);
+                    showDta = JSON.parse(data.CONDITION);
+                    excelinfo(queryJson)
+                }
+
+            },
+            ViewModal: function (data) {
+                queryJson = JSON.parse(data.QUERYSTRING);
+                $("#PROVINCENAME2").val(queryJson.PROVINCENAME);
+                $("#CITYNAME2").val(queryJson.CITYNAME);
+                $("#COUNTRYNAME2").val(queryJson.COUNTRYNAME);
+                $("#Static_Year2").val(queryJson.Static_Year);
+                $("#Static_Unit2").val(queryJson.Static_Unit);
+                if (queryJson.PROVINCE == "" && queryJson.PROVINCENAME == "") {
+                    $("#bbssx").hide();
+                    $("#quanguo").show();
+                    $("#qg").val("全国");
+                } else {
+                    $("#bbssx").show();
+                    $("#quanguo").hide();
+                }
+                $("#myModal2").modal("show");
+            },
+            success: function (data) {
+                $("#myModal").modal("hide");
+            }
+        });
+    });
+    //显示隐藏结果列表tab
+    function changeTabs() {
+        var removeId = [];
+        bindDataGridList({ value: "tab_zhd", title: "统计结果", aClick: "changeTo('TJJG')" });
+        bindDataGridList({ value: "tab_chart", title: "统计图表", aClick: "changeTo('TJTB')" });
+        //关闭没有数据的tab页
+        for (var i = 0; i < removeId.length; i++) {
+            var dom = $("#tabListContentDiv .menuTab[data-id=tab_" + removeId[i] + "]").children(":last");
+            dom.trigger("click");
+        }
+        $("#tabListContentDiv .menuTab:first").trigger("click");
+        $($(".tab_close")[0]).hide();
+        $($(".tab_close")[1]).hide();
+    }
+    //tab标签切换到统计图
+    function changeTo(type) {
+        if (type == 'TJTB') {
+            var myChart = echarts.init(document.getElementById("chartsdata"));
+            $("#TJJG").hide();
+            $("#XZQHTJ").hide();
+            $("#TJTB").show();
+            window.setTimeout(function () {
+                myChart.resize();
+            }, 200);
+        } else if (type == 'TJJG') {
+            $("#TJTB").hide();
+            $("#XZQHTJ").hide();
+            $("#TJJG").show();
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth($('.gridPanel').width());
+                $('#gridTable').setGridHeight($(window).height() - 240);
+            }, 200);
+        } else if (type == 'XZQHTJ') {
+            $("#TJTB").hide();
+            $("#TJJG").hide();
+            $("#XZQHTJ").show();
+            window.setTimeout(function () {
+                $('#gridTableXZQH').setGridWidth($(window).width());
+                $('#gridTableXZQH').setGridHeight($(window).height() - 240);
+            }, 200);
+        }
+    }
+
+    //添加tab页
+    function bindDataGridList(item) {
+        var exists = tabCtl.newTab({ id: item.value, title: item.title, closed: true, icon: '', url: item.value, isTab: true, noNextTab: true, aClick: item.aClick, newUnActive: true });
+    }
+    //存入报表库
+    function btn_save() {
+        var queryJson = $("#TjItem").getWebControls();
+        queryJson['PROVINCENAME'] = parmProvince;
+        queryJson['CITYNAME'] = parmCity;
+        queryJson['COUNTRYNAME'] = parmCountry;
+        queryJson['TOWNNAME'] = parmTown;
+        queryJson['codeType'] = codeType;
+        queryJson['codeValue'] = codeValue;
+        queryJson['static_Unit'] = static_Unit;
+        queryJson['xmmc'] = xmmc;
+        queryJson['annual'] = annual;
+        $('#YBCTJ_UI').SaveReport($('#tablename').val(), JSON.stringify(queryJson), "");
+    }
+
+    //初始化控件
+    function initControl() {
+        //行政区划加载
+        var usercode = usercodes();
+        var district = $("#districtsCtls").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            showTown: false,
+            type: 'B',
+        });
+
+        //统计单位
+        $("#Static_Unit").ComboBox({
+            id: "value",
+            text: "label",
+            height: "170px",
+            data: [
+                { label: "省", value: "省" },
+                { label: "市", value: "市" },
+                { label: "县", value: "县" },
+
+            ],
+            Itemindex: 1,
+        });
+        if ($("#PROVINCE .ui-select-text").html() != undefined) {
+            parmProvince = $("#PROVINCE .ui-select-text").html();
+        }
+        if ($("#PROVINCE .ui-select-text").html() == "选择省" || $("#PROVINCE .ui-select-text").html() == "") {
+            parmProvince = "";
+            $("#Static_Unit").ComboBoxSetValue("省");
+        } else if ($("#CITY .ui-select-text").html() == "选择市" || $("#CITY .ui-select-text").html() == "") {
+            $("#Static_Unit").ComboBoxSetValue("市");
+        } else {
+            $("#Static_Unit").ComboBoxSetValue("县");
+        }
+
+        //统计图表类型
+        $("#TBtype").ComboBox({
+            data: eval("([{'text':'柱状图','value':'bar'},{'text':'折线图','value':'line'}])"),
+            id: "value",
+            text: "text",
+            height: '200px',
+            selectOne: true,
+            description: ""
+        }).bind("change", function () {
+            LoadChart(echartedatajson, echartedatajson.dataX, $(this).attr('data-value'));
+        });
+        $("#TBtypeA").ComboBox({
+            data: eval("([{'text':'柱状图','value':'bar'},{'text':'折线图','value':'line'}])"),
+            id: "value",
+            text: "text",
+            height: '200px',
+            selectOne: true,
+            description: ""
+        }).bind("change", function () {
+            LoadChartA(echartedatajson, echartedatajson.dataX, $(this).attr('data-value'));
+        });
+    }
+
+    //点击查询事件
+    function SearchEvent() {
+        $("#gridTable").jqGrid('GridUnload');
+        //获得省、市、县的内容
+        if ($("#PROVINCE .ui-select-text").html() != undefined && $("#PROVINCE .ui-select-text").html() != "选择省") {
+            parmProvince = $("#PROVINCE .ui-select-text").html();
+            codeValue = $("#PROVINCE").attr("data-value");
+            codeType = "省";
+        }
+        if ($("#PROVINCE .ui-select-text").html() == "选择省") {
+            parmProvince = "";
+        }
+        if ($("#CITY .ui-select-text").html() != undefined && $("#CITY .ui-select-text").html() != "选择市") {
+            parmCity = $("#CITY .ui-select-text").html();
+            codeValue = $("#CITY").attr("data-value");
+            codeType = "市";
+        }
+        if ($("#CITY .ui-select-text").html() == "选择市") {
+            parmCity = "";
+        }
+        if ($("#COUNTY .ui-select-text").html() != undefined && $("#COUNTY .ui-select-text").html() != "选择县/区") {
+            parmCountry = $("#COUNTY .ui-select-text").html();
+            codeValue = $("#COUNTY").attr("data-value");
+            codeType = "县";
+        }
+        if ($("#COUNTY .ui-select-text").html() == "选择县/区") {
+            parmCountry = "";
+        }
+        xmmc = $("#XMMC").val();
+        annual = $("#Static_Year").val();
+        CityGetGrid();
+    }
+
+
+    function InitialPage() {
+        var isResize = 0;
+        var count = 0;
+        var resized = 0;
+        $(window).resize(function (e) {
+            if (isResize < 10) {
+                isResize++;
+            }
+            resize();
+            e.stopPropagation();
+        });
+        //resize重设布局;
+        $(window).resize(function (e) {
+            window.setTimeout(function () {
+                $('#gridTable').setGridWidth($('.gridPanel').width());
+                $('#gridTable').setGridHeight($(window).height() - 136.5 + 75 - 150);
+                $('#gridTableXZQH').setGridWidth($(window).width());
+                $('#gridTableXZQH').setGridHeight($(window).height() - 136.5 + 75 - 150);
+            }, 200);
+            e.stopPropagation();
+        });
+        function resize() {
+            window.setTimeout(function () {
+                $('#chartsdata').width($(window).width());
+                $('#chartsdata').height($(window).height() - 215);
+                $('#chartsdataA').width($(window).width());
+                $('#chartsdataA').height($(window).height() - 275);
+                $('#gridTable').setGridWidth(($(window).width() - 22));
+                $('#gridTableA').setGridWidth(($(window).width() - 22));
+                $('#gridTableXZQH').setGridWidth(($(window).width() - 22));
+                $('#gridTable').setGridHeight($(window).height() - 136.5 + 75);
+                $('#gridTableA').setGridHeight($(window).height() - 263.5 + 56);
+                $('#gridTableXZQH').setGridHeight($(window).height() - 136.5 + 75);
+                var myChart = echarts.init(document.getElementById("chartsdata"));
+                myChart.resize();
+                var myChartA = echarts.init(document.getElementById("chartsdataA"));
+                myChartA.resize();
+            }, 200);
+        };
+        //调整图表大小
+        $('#chartsdata').width($(window).width());
+        $('#chartsdata').height($(window).height() - 215);
+        $('#chartsdataA').width($(window).width());
+        $('#gridTableXZQH').setGridWidth(($(window).width() - 22));
+        $('#chartsdataA').height($(window).height() - 275);
+        $('#gridTable').setGridHeight($(window).height() - 136.5 + 75);
+        $('#gridTableA').setGridHeight($(window).height() - 263.5 + 56);
+        $('#gridTableXZQH').setGridHeight($(window).height() - 136.5 + 75);
+    }
+
+    //市不带年加载表格
+    function CityGetGrid() {
+        var selectedRowIndex = 0;
+        var $gridTable = $('#gridTable');
+        static_Unit = $("#Static_Unit").text();
+        if ($("#PROVINCE .ui-select-text").html() != undefined && $("#PROVINCE .ui-select-text").html() != "选择省") {
+            parmProvince = $("#PROVINCE .ui-select-text").html();
+            codeValue = $("#PROVINCE").attr("data-value");
+            codeType = "省";
+        }
+        if ($("#PROVINCE .ui-select-text").html() == "选择省") {
+            parmProvince = "";
+        }
+        if ($("#CITY .ui-select-text").html() != undefined && $("#CITY .ui-select-text").html() != "选择市") {
+            parmCity = $("#CITY .ui-select-text").html();
+            codeValue = $("#CITY").attr("data-value");
+            codeType = "市";
+        }
+        if ($("#CITY .ui-select-text").html() == "选择市") {
+            parmCity = "";
+        }
+        if ($("#COUNTY .ui-select-text").html() != undefined && $("#COUNTY .ui-select-text").html() != "选择县/区") {
+            parmCountry = $("#COUNTY .ui-select-text").html();
+            codeValue = $("#COUNTY").attr("data-value");
+            codeType = "县";
+        }
+        if ($("#COUNTY .ui-select-text").html() == "选择县/区") {
+            parmCountry = "";
+        }
+        if (static_Unit == "省") {
+            newcol = provincecol;
+        } else if (static_Unit == "市") {
+            newcol = shicol;
+        } else if (static_Unit == "县") {
+            newcol = xiancol;
+        }
+        $gridTable.jqGrid({
+
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 263.5 + 75,
+            rowNum: 0,//一页显示所有数据
+            url: "../../JXGeoManage/TBL_BQBR/GetDataBqbrTj",
+            datatype: "json",
+            postData: { codeValue: codeValue, codeType: codeType, xmmc: xmmc, annual: annual, static_Unit: static_Unit },
+            colModel: newcol,
+            viewrecords: true,
+            autowidth: true,
+            rownumbers: false,
+            shrinkToFit: false,
+            gridview: true,
+            viewrecords: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+                //if (static_Unit == "省") {
+                //   // $('#' + this.id).jqGrid("hideCol", "市");
+
+                //    $('#' + this.id).jqGrid("hideCol", "县");
+                //    $('#' + this.id).setGridParam().hideCol("市").trigger("reloadGrid");
+                //} else if (static_Unit == "市") {
+                //    $('#' + this.id).jqGrid("hideCol", "县");
+                //}
+
+            },
+            loadComplete: function (jsondata) {
+                //每次重新加载都要清空变量
+                LoadTb();
+            }
+        });
+        $gridTable.jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
+            groupHeaders: [
+            { startColumnName: '集中安置个数', numberOfColumns: 4, titleText: '安置方式' },
+            ]
+        });
+        $gridTable.setGridWidth(($(window).width()));
+
+    }
+
+    function LoadTb() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#TjItem").getWebControls();
+        queryJson['PROVINCENAME'] = parmProvince;
+        queryJson['CITYNAME'] = "";
+        queryJson['COUNTRYNAME'] = "";
+        $.ajax({
+            url: "../../JXGeoManage/TBL_BQBR/GetDataBqbrTj",
+            data: { codeValue: codeValue, codeType: codeType, xmmc: xmmc, annual: annual, static_Unit: static_Unit },
+            type: "get",
+            dataType: 'json',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (jsondata) {
+                var dataX = [];
+                var data_disastercount = [];
+                var data_bqbrcount = [];
+                if (jsondata != null && jsondata.length > 0) {
+                    for (var i = 0; i < jsondata.length; i++) {
+                        //if (jsondata[i].cityname == "" || jsondata[i].cityname == null) {
+                        //}
+                        //else {
+                        //    dataX.push(jsondata[i].cityname);
+                        //    data_disastercount.push(jsondata[i].discount);
+                        //    data_bqbrcount.push(jsondata[i].bqbrcount);
+                        //}
+                        if (queryJson.Static_Unit == "省") {
+                            if (jsondata[i].省 != null && jsondata[i].省 != "") {
+                                dataX.push(jsondata[i].省);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        } else if (queryJson.Static_Unit == "市") {
+                            if (jsondata[i].市 != null && jsondata[i].市 != "") {
+                                dataX.push(jsondata[i].市);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        } else if (queryJson.Static_Unit == "县") {
+                            if (jsondata[i].县 != null && jsondata[i].县 != "") {
+                                dataX.push(jsondata[i].县);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        }
+                    };
+                }
+                var echartedatajsonA = { "dataX": "", "data_disastercount": "", "data_monitorcount": "" };
+                echartedatajsonA['dataX'] = dataX;
+                echartedatajsonA['data_discount'] = data_disastercount;
+                echartedatajsonA['data_bqbrcount'] = data_bqbrcount;
+                echartedatajson = echartedatajsonA;
+                LoadChart(echartedatajson, echartedatajson.dataX, $("#TBtype").attr('data-value'));
+            }
+        })
+    }
+    function LoadTbNEW() {
+        var selectedRowIndex = 0;
+        $.ajax({
+            url: "../../JXGeoManage/TBL_BQBR/GetDataBqbrTj",
+            data: { codeValue: codeValue, codeType: codeType, xmmc: xmmc, annual: annual, static_Unit: static_Unit },
+            type: "get",
+            dataType: 'json',
+            beforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            success: function (jsondata) {
+                var dataX = [];
+                var data_disastercount = [];
+                var data_bqbrcount = [];
+                if (jsondata != null && jsondata.length > 0) {
+                    for (var i = 0; i < jsondata.length ; i++) {
+                        if (queryCityJson.static_Unit == "省") {
+                            if (jsondata[i].省 != null && jsondata[i].省 != "") {
+                                dataX.push(jsondata[i].省);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        } else if (queryCityJson.static_Unit == "市") {
+                            if (jsondata[i].市 != null && jsondata[i].市 != "") {
+                                dataX.push(jsondata[i].市);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        } else if (queryCityJson.static_Unit == "县") {
+                            if (jsondata[i].县 != null && jsondata[i].县 != "") {
+                                dataX.push(jsondata[i].县);
+                                data_disastercount.push(jsondata[i].灾害点个数);
+                                data_bqbrcount.push(jsondata[i].搬迁户数);
+                            }
+                        }
+                    };
+                }
+                var echartedatajsonA = { "dataX": "", "data_disastercount": "", "data_monitorcount": "" };
+                echartedatajsonA['dataX'] = dataX;
+                echartedatajsonA['data_discount'] = data_disastercount;
+                echartedatajsonA['data_bqbrcount'] = data_bqbrcount;
+                echartedatajson = echartedatajsonA;
+                LoadChartA(echartedatajson, echartedatajson.dataX, $("#TBtypeA").attr('data-value'));
+            }
+        })
+    }
+    //获取所有行政区划
+    function getAreaCode(code) {
+        subordinateArea = [];
+        $.ajax({
+
+            url: SSOURL + "/api/AdministrativeApi/GetAllDistrictsToCountry",
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", getAuthorizationToken());
+            },
+            async: false,
+            type: "GET",
+            success: function (data) {
+                if (data && data.Result.length > 0) {
+                    subordinateArea = subordinateArea.concat(data.Result);
+                }
+            }, error: function (e) {
+            },
+            cache: false
+        });
+    }
+
+    //根据汉字返回编码
+    function changeNameToCode(str) {
+        for (var i = 0; i < subordinateArea.length; i++) {
+            if (str === subordinateArea[i]["F_AreaName"]) {
+                return subordinateArea[i]["F_AreaCode"];
+            }
+        }
+        return "";
+    }
+
+    function tjResult(name) {
+        var doms = $("#tabListContentDiv .menuTab");
+        var code = changeNameToCode(name);
+        for (var i = 0; i < doms.length; i++) {
+            var domI = $("#tabListContentDiv .menuTab:eq(" + i + ")");
+            if (domI.text().indexOf("统计内容") > -1) {
+                domI.next().trigger("click");
+            }
+        }
+        var title = $('.menuTab.active')[0].innerText;
+        if (name) {
+            bindDataGridList({ value: "tab_" + code, title: "统计内容-" + name, aClick: "changeTo('XZQHTJ')", newUnActive: true });
+            $("#tabListContentDiv .menuTab:last").trigger("click");
+        }
+        //if (a == 0) {
+        GetGridXZQH(code);
+        //} else if (a == 1) {
+        //    var queryJson = {}
+        //    queryJson["AreaCode"] = code;
+        //    $("#gridTableXZQH").jqGrid('setGridParam', {
+        //        postData: { queryJson: JSON.stringify(queryJson) },
+        //        loadBeforeSend: function (a) {
+        //            a.setRequestHeader("Authorization", authToken);
+        //        },
+        //        url: "../../api/TBL_ZLGC/GetTJ",
+        //        page: 1,
+        //    }).trigger('reloadGrid');
+        //}
+        //a = 1;
+    }
+    //点击表格弹框
+    //加载表格
+    var shrdata = [];
+    function GetGridXZQH1(ccode) {
+        var selectedRowIndex = 0;
+        var queryJson = {}
+        queryJson["AreaCode"] = ccode;
+        var $gridTable = $('#gridTableXZQH');
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 200,
+            url: "../../api/TBL_BQBRApi/GetTJ",
+            postData: { queryJson: JSON.stringify(queryJson) },
+            datatype: "json",
+            colModel: [
+                { label: 'id', name: 'id', index: 'id', width: 150, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var html = '<a id="' + rowObject.id + 'zk" onclick="opentable(\'' + rowObject.id + '\')" class="zk">+</a>'
+                        return html + cellvalue
+                    }
+                },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 150, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+
+            }
+        });
+    }
+    var a = 0;
+    function GetGridXZQH(ccode) {
+        var queryJson = {}
+        queryJson["AreaCode"] = ccode;
+        var $gridTable = $("#gridTableXZQH");
+        $gridTable.jqGrid("GridUnload");
+        $("#gridTableXZQH").jqGrid({
+            datatype: "local",
+            height: $(window).height() - 200,
+            autowidth: true,
+            colModel: [
+                { label: 'id', name: 'id', index: 'id', width: 150, align: 'left', sortable: true, hidden: true },
+                {
+                    label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 250, align: 'left', sortable: true,
+                    formatter: function (cellvalue, options, rowObject) {
+                        var html = '<a id="' + rowObject.id + 'zk" onclick="opentable(\'' + rowObject.id + '\')" class="zk">+</a>'
+                        return html + cellvalue
+                    }
+                },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: 150, align: 'left', sortable: true },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true },
+            ],
+            rowNum: 99999
+        });
+        $.ajax({
+            url: "../../api/TBL_BQBRApi/GetTJ",
+            type: 'GET',
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            data: { queryJson: JSON.stringify(queryJson) },
+            async: false,
+            success: function (data) {
+                var dataNew = [];
+                shrdata = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id.length < 36) {
+                        data[i].id = data[i].id.replace(/(^\s*)|(\s*$)/g, "");
+                        dataNew.push(data[i]);
+                    } else {
+                        shrdata.push(data[i]);
+                    }
+                }
+                var data = dataNew;
+                window.setTimeout(function () {
+                    $("#gridTableXZQH").jqGrid('setGridParam', {
+                        datatype: 'local',
+                        data: data,
+                        page: 1
+                    }).trigger("reloadGrid");
+                }, 200);
+
+                a = 1;
+            }
+        });
+    }
+    var dataObj = {}; var a = 0
+    function opentable(id) {
+        if ($("#" + id + "zk").html() == "+") {
+            $("#" + id + "zk").html("-");
+        } else if ($("#" + id + "zk").html() == "-") {
+            $("#" + id + "zk").html("+");
+        }
+        if ($("#" + id + "t")[0] != undefined) {
+            $("#" + id + "t").remove();
+            dataObj = {};
+            return;
+        }
+        //if (!dataObj.hasOwnProperty(id)) {
+        var dataArr = [];
+        if (shrdata.length) {
+            for (var i = 0; i < shrdata.length; i++) {
+                if (shrdata[i].parent == id) {
+                    dataArr.push(shrdata[i]);
+                }
+            }
+            dataObj[id] = dataArr;
+        }
+        $('#' + id).after('<tr style="margin-left:50px;" role="row" id="' + id + 't" tabindex="-1" class="ui-widget-content jqgrow ui-row-ltr aa"><td colspan="3"  role="gridcell" style="text-align:left;" aria-describedby="gridTable_id"><table  id="' + id + 'h"></table></td></tr>')
+        subgridTable(id + 'h', dataArr);
+        a = id + "1";
+        //}
+    }
+    function subgridTable(subgrid_table_id, dataArr) {
+        $("#" + subgrid_table_id).jqGrid({
+            autowidth: true,
+            height: "auto",
+            datatype: "local",
+            colModel: [
+                { label: '户主姓名', name: 'HOUSEHOLDERNAME', index: 'HOUSEHOLDERNAME', width: 250, align: 'left', sortable: true },
+                { label: '单户搬迁人数', name: 'RESETTLEMENT', index: 'RESETTLEMENT', width: 200, align: 'left', sortable: false, },
+                {
+                    label: '安置方式', name: 'RESETTLEMENT', index: 'RESETTLEMENT', width: 200, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") {
+                            return '集中安置';
+                        } else if (cellvalue == "2") {
+                            return '分散安置';
+                        } else if (cellvalue == "3") {
+                            return '购房安置';
+                        } else if (cellvalue == "4") {
+                            return '其它安置';
+                        } else
+                            return "";
+                    }
+                },
+                { label: '总安置补贴金额（万元）', name: 'ZAZBTJE', index: 'ZAZBTJE', width: 200, align: 'left', sortable: true },
+                { label: '已发金额（万元）', name: 'YFJE', index: 'YFJE', width: 150, align: 'left', sortable: true },
+                { label: '代发金额（万元）', name: 'DFJR', index: 'DFJR', width: 150, align: 'left', sortable: true },
+                {
+                    label: '是否完成', name: 'SFWC', index: 'SFWC', width: 100, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") {
+                            return '是';
+                        } else if (cellvalue == "0") {
+                            return '否';
+                        } else
+                            return "";
+                    }
+                },
+                {
+                    label: '是否验收', name: 'SFYS', index: 'SFYS', width: 200, align: 'left', sortable: false,
+                    formatter: function (cellvalue, options, rowObject) {
+                        if (cellvalue == "1") {
+                            return '是';
+                        } else if (cellvalue == "0") {
+                            return '否';
+                        } else
+                            return "";
+                    }
+                }
+
+
+            ],
+            pager: 'false',
+            onSelectRow: function (rowId, status) {
+            },
+            gridComplete: function () {
+                //$('#' + this.id).setSelection(selectedRowIndex, false);
+                //var data = $gridTable.getRowData();
+            }
+        });
+        $("#" + subgrid_table_id).jqGrid('setGridParam', {
+            datatype: 'local',
+            data: dataArr,
+            page: 1
+        }).trigger("reloadGrid");
+    }
+    //
+
+    //市不带年加载表格
+    function CityGetGridNEW() {
+        $("#gridTableA").jqGrid('GridUnload');
+        var selectedRowIndex1 = 0;
+        var $gridTable = $('#gridTableA');
+        if (static_Unit == "省") {
+            newcol = provincecol;
+        } else if (static_Unit == "市") {
+            newcol = shicol;
+        } else if (static_Unit == "县") {
+            newcol = xiancol;
+        }
+        $gridTable.jqGrid({
+            autowidth: true,
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            height: $(window).height() - 263.5 + 75,
+            rowNum: 0,//一页显示所有数据
+            url: "../../JXGeoManage/TBL_BQBR/GetDataBqbrTj",
+            datatype: "json",
+            postData: { codeValue: codeValue, codeType: codeType, xmmc: xmmc, annual: annual, static_Unit: static_Unit },
+            colModel: newcol,
+            viewrecords: true,
+            rownumbers: false,
+            shrinkToFit: false,
+            gridview: true,
+            viewrecords: true,
+            onSelectRow: function () {
+                selectedRowIndex1 = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex1, false);
+                LoadTbNEW();
+            },
+            loadComplete: function (jsondata) {
+                //每次重新加载都要清空变量
+                //if (static_Unit == "省") {
+                //    $('#' + this.id).jqGrid("hideCol", "市");
+                //    $('#' + this.id).jqGrid("hideCol", "县");
+                //} else if (static_Unit == "市") {
+                //    $('#' + this.id).jqGrid("hideCol", "县");
+                //}
+            }
+        });
+        $gridTable.jqGrid('setGroupHeaders', {
+            useColSpanStyle: true,
+            groupHeaders: [
+            { startColumnName: '集中安置个数', numberOfColumns: 4, titleText: '安置方式' },
+            ]
+        });
+    }
+    //加载图表
+    function LoadChart(data, name, pictype) {
+        //console.log(name)
+        var myChart = echarts.init(document.getElementById("chartsdata"));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['灾害点数量', '搬迁避让户数'],
+                x: 'center',
+                y: 30,
+                padding: [5, 35, 5, 5]
+            },
+            grid: {
+                "borderWidth": 0,
+                top: 100,
+                containLabel: true
+            },
+            xAxis: {
+                data: name,
+                name: '行政区划',
+                axisLabel: {
+                    interval: 0,
+                    rotate: -30
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '个数'
+            },
+
+            series: [{
+                name: '灾害点数量', type: pictype, data: data.data_discount,
+                itemStyle: { normal: { label: { show: true, position: 'top' } } }
+            },
+                   {
+                       name: '搬迁避让户数', type: pictype, data: data.data_bqbrcount,
+                       itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                   }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option, true);
+    }
+    //加载图表
+    function LoadChartA(data, name, pictype) {
+        //console.log(name)
+        var myChart = echarts.init(document.getElementById("chartsdataA"));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data: ['灾害点数量', '搬迁避让户数'],
+                x: 'center',
+                y: 30,
+                padding: [5, 35, 5, 5]
+            },
+            grid: {
+                "borderWidth": 0,
+                top: 100,
+                containLabel: true
+            },
+            xAxis: {
+                data: name,
+                name: '行政区划',
+                axisLabel: {
+                    interval: 0,
+                    rotate: -30
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '个数'
+            },
+
+            series: [{
+                name: '灾害点数量', type: pictype, data: data.data_discount,
+                itemStyle: { normal: { label: { show: true, position: 'top' } } }
+            },
+                       {
+                           name: '搬迁避让户数', type: pictype, data: data.data_bqbrcount,
+                           itemStyle: { normal: { label: { show: true, position: 'top' } } }
+                       }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option, true);
+    }
+
+    function setReportName(reportTitle) {
+        if (reportTitle == "" || reportTitle == undefined) {
+            var time = new Date();
+            var month = time.getMonth() + 1;
+            if (month < 10)
+                month = '0' + month;
+            var day = time.getDate();
+            if (day < 10)
+                day = '0' + day;
+            $("#tablename")[0].value = "搬迁避让统计分析 " + time.getFullYear() + "年" + month + "月" + day + "日";
+        }
+        else {
+            $("#tablename")[0].value = reportTitle;
+        }
+        $("#myModal").modal("show");
+    }
+    //对应导出
+    function btn_export() {
+        codeValue = ""; codeType = "省";
+        if ($("#PROVINCE .ui-select-text").html() != undefined && $("#PROVINCE .ui-select-text").html() != "选择省") {
+            codeValue = $("#PROVINCE").attr("data-value");
+            codeType = "省";
+        }
+        if ($("#CITY .ui-select-text").html() != undefined && $("#CITY .ui-select-text").html() != "选择市") {
+            parmCity = $("#CITY .ui-select-text").html();
+            codeValue = $("#CITY").attr("data-value");
+            codeType = "市";
+        }
+        if ($("#COUNTY .ui-select-text").html() != undefined && $("#COUNTY .ui-select-text").html() != "选择县/区") {
+            parmCountry = $("#COUNTY .ui-select-text").html();
+            codeValue = $("#COUNTY").attr("data-value");
+            codeType = "县";
+        }
+        var queryJson = {};
+        queryJson['codeValue'] = codeValue;
+        queryJson['codeType'] = codeType;
+        queryJson['xmmc'] = $("#XMMC").val();
+        queryJson['static_Unit'] = $("#Static_Unit").attr("data-value");;
+        queryJson['annual'] = $("#Static_Year").val();;
+        location.href = "../../JXGeoManage/TBL_BQBR/GetBQBRStaticsExcelDownNEW?queryJson=" + JSON.stringify(queryJson);
+    }
+
+    var queryCityJson = {};
+    queryCityJson.static_Unit = "省";
+    function excelinfo(duixiang) {
+        queryCityJson = duixiang;
+        xmmc = duixiang.xmmc;
+        annual = duixiang.annual;
+        codeType = duixiang.codeType;
+        codeValue = duixiang.codeValue;
+        static_Unit = duixiang.static_Unit;
+        CityGetGridNEW();
+    }
+</script>
+}

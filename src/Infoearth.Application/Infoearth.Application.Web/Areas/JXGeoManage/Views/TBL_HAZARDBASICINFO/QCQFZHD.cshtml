@@ -1,0 +1,208 @@
+﻿@{
+    ViewBag.Title = "列表页面";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    #SearchDT tr {
+        margin-top: 5px;
+    }
+
+        #SearchDT tr td {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            margin-left: 5px;
+        }
+
+    #SearchDT .form td {
+        border: 1px solid #d6d6d6;
+        text-align: center !important;
+    }
+    /*.ui-jqgrid-bdiv {
+            height: 250px !important;
+        }*/
+    .ui-th-ltr, .ui-jqgrid .ui-jqgrid-htable th.ui-th-ltr {
+        border-bottom: 1px solid #ccc;
+    }
+
+    .spans {
+        padding: 0 10px;
+        width: 9%;
+        text-align: center;
+        height: 28px;
+        line-height: 28px;
+        min-width: 80px;
+        float: left;
+    }
+</style>
+
+<div class="ui-layout" id="layout" style="height: 100%; width: 100%;">
+    <div class="ui-layout-west">
+        <div class="west-Panel" id="DZHJManage" style="border:0px;margin:0">
+            <div class="title-search" id="filter-form">
+                <div class="panel-Title">查询内容</div>
+                <div style="width: 100%; padding-top: 10px; padding-left: 5px;">
+                    <div id="XZQHCODE"></div>
+                    <table id="SearchDT" style="width:100%">
+                        <div style="width: 100%; height: 40px;">
+                            <span class="spans" style="display: inline-block; width: 29%; text-align: center">灾害名称:</span>
+                            <input id="DISASTERNAME" type="text" class="form-control" placeholder="请输入灾害名称" style="display: inline-block; width: 66%" />
+                        </div>
+                        <div style="width: 100%; height: 40px;">
+                            <span class="spans" style="display: inline-block; width: 29%; text-align: center">灾害类型:</span>
+                            <div id="DISASTERTYPE" type="select" class="ui-select" placeholder="请输入灾害点类型" style="display: inline-block; width: 66%"></div>
+                        </div>
+                        <div style="width: 100%; height: 40px;">
+                            <span class="spans" style="display: inline-block; width: 29%; text-align: center">灾害编号:</span>
+                            <input id="UNIFIEDCODE" type="text" class="form-control" placeholder="请输入灾害编号" style="display: inline-block; width: 66%" />
+                        </div>
+                        <div style="width: 100%; height: 40px;text-align:center">
+                            <a id="btn_Search" class="btn btn-primary"><i class="fa fa-search"></i>查询</a>
+                        </div>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui-layout-center">
+        <div class="center-Panel">
+            <div class="panel-Title">数据列表</div>
+            <div class="gridPanel">
+                <table id="gridTable" style="width:580px;"></table>
+                <div id="gridPager"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script>
+    var layout2NorthH = 1;
+    var authToken = getAuthorizationToken();
+    $(function () {
+        $('#layout').layout({
+            applyDemoStyles: true,
+            west__size: 265,
+            west__resizable: false,
+            onresize: function () {
+                $(window).resize();
+            }
+        });
+        initControl();
+        GetGrid();
+    });
+    function initControl() {
+        var usercode = usercodes();
+        var district = $("#XZQHCODE").mulDistrictsCtl({
+            provinceId: usercode.provinceId,
+            selectProviceId: usercode.provinceId,
+            selectCityId: usercode.selectCityId,
+            type: 'Z',
+            showTown: false
+        });
+        $("#DISASTERTYPE").ComboBox({
+            url: contentPath + "/SystemManage/DataItemDetail/GetDataItemTreeJson",
+            param: { EnCode: "HazardType" },
+            id: "text",
+            text: "text",
+            height: '200px',
+            description: "全部"
+        });
+    }
+    $("#btn_Search").click(function () {
+        SearchEvent();
+    });
+    //查询表格函数
+    function SearchEvent() {
+        var queryJson = $("#DZHJManage").getWebControls();
+        $("#gridTable").jqGrid('setGridParam', {
+            postData: { queryJson: JSON.stringify(queryJson) },
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            url: contentPath + "/api/TBL_HAZARDBASICINFOApi/GetPageListJsonNoQCQF",
+            page: 1
+        }).trigger('reloadGrid');
+    }
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: 280,
+            url: contentPath + "/api/TBL_HAZARDBASICINFOApi/GetPageListJsonNoQCQF",
+            datatype: "json",
+            loadBeforeSend: function (a) {
+                a.setRequestHeader("Authorization", authToken);
+            },
+            colModel: [
+                { label: '灾害点编号', name: 'UNIFIEDCODE', index: 'UNIFIEDCODE', width: 200, align: 'center', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 260, align: 'left', sortable: true },
+                { label: '灾害点类型', name: 'DISASTERTYPE', index: 'DISASTERTYPE', width: '156', align: 'left', sortable: true },
+                { label: '野外编号', name: 'OUTDOORCODE', index: 'OUTDOORCODE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '室内编号', name: 'INDOORCODE', index: 'INDOORCODE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '省', name: 'PROVINCE', index: 'PROVINCE', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '省名称', name: 'PROVINCENAME', index: 'PROVINCENAME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '市', name: 'CITY', index: 'CITY', width: 100, align: 'left', sortable: true, hidden: true },
+                { label: '市名称', name: 'CITYNAME', index: 'CITYNAME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '乡镇', name: 'TOWN', index: 'TOWN', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '乡镇名称', name: 'TOWNNAME', index: 'TOWNNAME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '地理位置', name: 'LOCATION', index: 'LOCATION', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '经度', name: 'LONGITUDE', index: 'LONGITUDE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '纬度', name: 'LATITUDE', index: 'LATITUDE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: 'X', name: 'X', index: 'X', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: 'Y', name: 'Y', index: 'Y', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: 'Z', name: 'Z', index: 'Z', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '坡顶/最大标高', name: 'ALTTOP', index: 'ALTTOP', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '坡底/最小标高', name: 'ALTBOTOM', index: 'ALTBOTOM', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '治理情况', name: 'CONTROLSTATE', index: 'CONTROLSTATE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '地下水类型', name: 'GROUNDWATERTYPE', index: 'GROUNDWATERTYPE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '构造部位', name: 'TECTONICREGION', index: 'TECTONICREGION', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '地震烈度', name: 'EARTHQUAKEINTENSITY', index: 'EARTHQUAKEINTENSITY', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '目前稳定程度', name: 'CURSTABLESTATUS', index: 'CURSTABLESTATUS', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '今后变化趋势', name: 'STABLETREND', index: 'STABLETREND', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '威胁人口', name: 'THREATENPEOPLE', index: 'THREATENPEOPLE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '威胁财产', name: 'THREATENASSETS', index: 'THREATENASSETS', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '险情等级', name: 'DANGERLEVEL', index: 'DANGERLEVEL', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '灾害等级', name: 'DISASTERLEVEL', index: 'DISASTERLEVEL', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '防治建议', name: 'TREATMENTSUGGESTION', index: 'TREATMENTSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '隐患点', name: 'HIDDENDANGER', index: 'HIDDENDANGER', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '监测建议', name: 'MONITORSUGGESTION', index: 'MONITORSUGGESTION', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '毁坏房屋', name: 'DESTROYEDHOME', index: 'DESTROYEDHOME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '毁路', name: 'DESTROYEDROAD', index: 'DESTROYEDROAD', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '毁渠', name: 'DESTROYEDCANAL', index: 'DESTROYEDCANAL', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: 'GUID', name: 'GUID', index: 'GUID', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '工程编号', name: 'PROJECTID', index: 'PROJECTID', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '县', name: 'COUNTY', index: 'COUNTY', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '县名称', name: 'COUNTYNAME', index: 'COUNTYNAME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '调查类型(详查、巡查、排查)', name: 'SURVEYTYPE', index: 'SURVEYTYPE', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '调查时间', name: 'SURVEYTIME', index: 'SURVEYTIME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '是否为重要灾害点', name: 'ISIMPORTANT', index: 'ISIMPORTANT', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '创建时间', name: 'CREATETIME', index: 'CREATETIME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '创建人', name: 'CREATEUSER', index: 'CREATEUSER', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '修改时间', name: 'MODIFYTIME', index: 'MODIFYTIME', width: 100, align: 'left', sortable: true, hidden: true, },
+                { label: '修改人', name: 'MODIFYUSER', index: 'MODIFYUSER', width: 100, align: 'left', sortable: true, hidden: true, },
+            ],
+            viewrecords: false,
+            rowNum: 10,
+            rowList: [10, 20, 30],
+            pager: "#gridPager",
+            sortname: 'UNIFIEDCODE',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+
+
+</script>
+}

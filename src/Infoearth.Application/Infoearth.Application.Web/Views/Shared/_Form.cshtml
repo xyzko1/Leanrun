@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewBag.Title</title>
+    <style>
+        #LAST table {
+            margin-top:5px;
+        }
+        .form .formTitle {
+            white-space:pre-wrap !important;
+            background:#F2F2F2;
+        }
+        .title .formTitle {
+            background:#fff
+        }
+        .form-control[disabled], fieldset[disabled] .form-control {
+            background:#dedcdc !important;
+        }
+        .form-control {
+            border-radius:4px;
+        }
+        .ui-select-text {
+            border-radius:4px
+        }
+        label {
+            margin:0 5px;
+        }
+        .nav-tabs {
+            padding-top:0!important;
+        }
+        html, body, #form1 {
+            height: 100%;
+        }
+      .required {
+        color: red;
+        /*padding-left: 5px;*/
+        vertical-align: middle;
+    }
+    </style>
+</head>
+<body>
+    <div id="ajax-loader" style="cursor: progress; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%; background: #fff; z-index: 10000; overflow: hidden;">
+        <img src="~/Content/images/ajax-loader.gif" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto;" />
+    </div>
+    <div id="loading_background" class="loading_background" style="display: none;"></div>
+    <div id="loading_manage">
+        正在拼了命为您加载…
+    </div>
+    <form id="form1">
+        @System.Web.Optimization.Styles.Render("~/Content/styles/base.css")
+        @System.Web.Optimization.Scripts.Render("~/Content/scripts/base.js")
+        @RenderBody()
+        @System.Web.Optimization.Scripts.Render("~/Content/scripts/plugins/datepicker/WdatePicker.js") 
+    </form>
+</body>
+</html>
+@System.Web.Optimization.Styles.Render(
+    "~/Content/scripts/plugins/tree/css",
+    "~/Content/scripts/plugins/datetime/css",
+    "~/Content/scripts/plugins/wizard/css",
+"~/Content/scripts/plugins/jqgrid/css",
+    "~/Content/styles/learun.css")
+@System.Web.Optimization.Scripts.Render(
+    "~/Content/scripts/utils/learun.js",
+    "~/Content/scripts/utils/clientdata",
+    "~/Content/scripts/plugins/tree/js",
+    "~/Content/scripts/plugins/validator/js",
+    "~/Content/scripts/plugins/wizard/js",
+    "~/Content/scripts/plugins/dialog/js",
+    "~/Content/scripts/plugins/jqgrid/js",
+    "~/Content/scripts/plugins/districts/districts.js"
+
+    )
+<script>
+    var contentPath = '@Url.Content("~")'.substr(0, '@Url.Content("~")'.length - 1);
+    var Account = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().Account';
+    var XZQHCode = '@Infoearth.Application.Code.OperatorProvider.Provider.Current().XZQHCode';
+    //经纬度验证
+    function isJD(thisObj) {
+        var _this = thisObj;
+        var k = /^[EW]?((\d|[1-9]\d|1[0-7]\d)[s\-,;°度](\d|[0-5]\d)[s\-,;′＇’′'分](\d|[0-5]\d)(\.\d{1,2})?[s\-,;/"＂”″秒]?$)/;
+        var l = /^[EW]?((\d|[1-9]\d|1[0-7]\d)[s\-,;°度]?$)/;
+        var m = /^[EW]?((\d|[1-9]\d|1[0-7]\d)[s\-,;°度](\d|[0-5]\d)[s\-,;′＇’′'分 ]?$)/;
+        var g = /^\d+(\.\d+)?$/;
+        var thisValue = $(_this).val().replace(/\s/g, "").replace('"', "″");//清空所有空格替换最后的英文状态引号
+        if (thisValue != "") {
+            if (k.test(thisValue) || g.test(thisValue) || l.test(thisValue) || m.test(thisValue)) {
+                $(_this).val(thisValue);//返回值
+            } else {
+                dialogMsg('请输入度分秒或者小数点！', 0);
+                $(_this).val("");
+            }
+        }
+    }
+    (function ($, learun) {
+        $(function () {
+            learun.childInit();
+            $("#PROVINCENAME").prop("disabled", "disabled");
+            $("#CITYNAME").prop("disabled", "disabled");
+            //$("#TOWNNAME").prop("disabled", "disabled");
+        })
+    })(window.jQuery, window.learun)
+</script>
+@System.Web.Optimization.Scripts.Render("~/Content/business/comForm.js")
+@RenderSection("scripts", false)

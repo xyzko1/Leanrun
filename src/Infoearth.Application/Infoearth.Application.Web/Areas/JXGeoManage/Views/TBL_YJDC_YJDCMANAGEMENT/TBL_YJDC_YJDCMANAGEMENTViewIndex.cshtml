@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "TBL_YJDC_YJDCMANAGEMENTViewIndex";
+    Layout = "~/Views/Shared/_IndexMap.cshtml";
+}
+<style>
+    .ui-layout-center {
+        overflow-x: hidden !important;
+    }
+
+    .ui-layout-resizer {
+        background-color: #f0f3f4 !important;
+    }
+
+    .titlePanel {
+        line-height:0px !important;
+    }
+    .spans {
+        padding: 0 10px;
+        width:9%;
+        text-align:center;
+        height:28px;
+        line-height:28px;
+        min-width:100px
+    }
+    .divselect {
+        width:16%
+    }
+    #gridTable td {
+        border-right: 1px solid #ccc !important;
+    }
+    .ui-jqgrid-btable tr:nth-child(odd) {
+        /*background:#DCDCDC*/
+    }
+</style>
+
+<div class="titlePanel">
+    <div style="font-size:14px; font-weight: bold; padding-left: 15px;background: #ECF7FF;height: 40px;line-height: 40px;"><i class="fa fa-bars" style="margin-right:10px;"></i>查询条件:</div>
+    <div id="filter-form" style="overflow: hidden;">
+        <div class="title-search" style="width:100%;height:40px;display:flex;align-items: center">
+            <div id="XZQHCODE" style="width: 100%;"></div>
+        </div>
+    <div class="title-search" style="width: 100%; height: 40px;background-color: #fff;color:#000; display: flex; align-items: center; position: relative;">
+        <span class="spans">灾险情名称:</span><input id="NAME" type="text" class="form-control" style="width: 16%"/>
+        <span class="spans">灾害点名称:</span><input id="DISASTERNAME" type="text" class="form-control" style="width: 16%"/>
+        <span class="spans">灾害类型:</span><input id="TYPE" type="text" class="form-control" style="width: 16%"/>
+    </div>
+    <div class="title-search" style="width: 100%; height: 40px;background-color: #fff;color:#000; display: flex; align-items: center; position: relative;">
+        <span class="spans">开始时间:</span><input id="StartTime" type="text" style="width: 16%" class="form-control input-wdatepicker" datefmt="yyyy" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowToday:false,isShowClear:false,maxDate:'#F{$dp.$D(\'EndTime\')}'})"  />
+        <span class="spans">结束时间:</span><input id="EndTime" type="text" style="width: 16%" class="form-control input-wdatepicker" datefmt="yyyy" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd',isShowToday:false,isShowClear:false,minDate:'#F{$dp.$D(\'StartTime\')}',maxDate:'%y-%M-%d'})"  />
+        <a id="btn_Search" class="btn btn-primary" style="margin:0 30px"><i class="fa fa-search"></i>查询</a>
+        <a id="btn_Clear" class="btn btn-primary" style="background:gray;border-color:gray"><i class="fa fa-search"></i>重置</a>
+    </div>
+
+    </div>
+    <div style="padding-left: 15px; background: #ECF7FF;height: 40px; line-height: 40px; border-bottom: 1px solid #ccc">
+        <span style="padding-right: 10px; font-weight: bold; font-size: 14px; display: inline-block;">数据列表</span>
+        <div class="toolbar" style="display:none">
+            <div class="btn-group" style="padding-bottom: 13px;">
+                <a id="btn_export" class="btn btn-default" onclick="btn_export()" href="/Grw_WaterLevel/ExcelExport"><i class=" fa fa-sign-in"></i>&nbsp;导出</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="gridPanel">
+    <table id="gridTable"></table>
+    <div id="gridPager"></div>
+</div>
+@section Scripts{
+<script src="~/Content/scripts/plugins/districts/multiDistricts.js"></script>
+<script>
+    var layout2NorthH = 1;
+    $(function () {
+        InitialPage();
+        initControl()
+        GetGrid();
+        //查询点击事件
+        $("#btn_Search").click(function () {
+            SearchEvent();
+        });
+        $("#btn_Clear").click(function () {
+            ClearEvent();
+        });
+    });
+    //初始化页面
+    function InitialPage() {
+         var isResize = 0;
+          //resize重设布局;
+         $(window).resize(function (e) {
+              //if (isResize<10) {
+              //   isResize ++;
+              //}
+             //resize();
+             window.setTimeout(function () {
+                 $('#gridTable').setGridWidth(($('.gridPanel').width()));
+                 $('#gridTable').setGridHeight($(window).height() - 274);
+             }, 200);
+              e.stopPropagation();
+         });
+     }
+
+    //加载表格
+    function GetGrid() {
+        var selectedRowIndex = 0;
+        var queryJson = $("#filter-form").getWebControls();
+        var $gridTable = $('#gridTable');
+        $gridTable.jqGrid({
+            autowidth: true,
+            postData: { queryJson: JSON.stringify(queryJson) },
+            height: $(window).height() - 274,
+            url: "../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/GetPageListJson",
+            datatype: "json",
+            colModel: [
+                { label: 'guid', name: 'GUID', index: 'GUID', width: 160, align: 'center', sortable: true, hidden: true },
+                { label: '灾险情名称', name: 'NAME', index: 'NAME', width: 160, align: 'center', sortable: true },
+                { label: '灾害点名称', name: 'DISASTERNAME', index: 'DISASTERNAME', width: 160, align: 'center', sortable: true },
+                { label: '灾害类型', name: 'TYPE', index: 'TYPE', width: 160, align: 'center', sortable: true },
+                { label: '发生时间', name: 'OCCURRENCETIME', index: 'OCCURRENCETIME', width: 160, align: 'center', sortable: true },
+                { label: '灾害规模（m2）', name: 'DISASTERSCALE', index: 'DISASTERSCALE', width: 160, align: 'center', sortable: true },
+                { label: '威胁户数（户）', name: 'DANGERTHREATFAMILY', index: 'DANGERTHREATFAMILY', width: 160, align: 'center', sortable: true },
+                { label: '威胁人口（人）', name: 'DANGERTHREATPEOPLENUM', index: 'DANGERTHREATPEOPLENUM', width: 160, align: 'center', sortable: true },
+                { label: '威胁财产（万元）', name: 'DANGERPOTENTIALECONOMICLOSSES', index: 'DANGERPOTENTIALECONOMICLOSSES', width: 160, align: 'center', sortable: true },
+            ],
+            viewrecords: true,
+            rowNum: 30,
+            rowList: [30, 50, 100],
+            pager: "#gridPager",
+            sortname: 'GUID',
+            sortorder: 'desc',
+            rownumbers: true,
+            shrinkToFit: false,
+            gridview: true,
+            onSelectRow: function () {
+                selectedRowIndex = $('#' + this.id).getGridParam('selrow');
+            },
+            gridComplete: function () {
+                $('#' + this.id).setSelection(selectedRowIndex, false);
+            }
+        });
+    }
+    //新增
+    function btn_add() {
+        dialogOpen({
+            id: 'Form',
+            title: '添加地质灾害应急调查数据',
+            url: '/JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/TBL_YJDC_YJDCMANAGEMENTForm ',
+            width: '1200px',
+            height: '500px',
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick();
+            }
+        });
+    }
+    //编辑
+    function btn_edit() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (checkedRow(keyValue)) {
+            dialogOpen({
+                id: 'Form',
+                title: '编辑地质灾害应急调查数据',
+                url: '/JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/TBL_YJDC_YJDCMANAGEMENTForm?keyValue=' + keyValue + '&FormType=Edit',
+                width: '1200px',
+                height: '500px',
+                callBack: function (iframeId) {
+                    getInfoTop().frames[iframeId].AcceptClick();
+                }
+            })
+        }
+    }
+    //删除
+    function btn_delete() {
+        var keyValue = $("#gridTable").jqGridRowValue('GUID');
+        if (keyValue) {
+            $.RemoveForm({
+                url: '../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/RemoveForm',
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    $('#gridTable').trigger('reloadGrid');
+                }
+            })
+        } else {
+            dialogMsg('请选择需要删除的地质灾害应急调查数据！', 0);
+        }
+    }
+      //查询表格函数
+      function SearchEvent() {
+        var queryJson = $("#filter-form").getWebControls();
+            $("#gridTable").jqGrid('setGridParam', {
+                 postData: { queryJson: JSON.stringify(queryJson) },
+                 url: "../../JXGeoManage/TBL_YJDC_YJDCMANAGEMENT/GetPageListJson",
+                 page: 1
+            }).trigger('reloadGrid');
+        }
+    //重置控件赋值 
+      function ClearEvent() {
+          $("#filter-form").find("input[type='text']").val("");
+      }
+      //初始化控件
+      function initControl() {
+          var usercode = usercodes();
+          var district = $("#XZQHCODE").mulDistrictsCtl({
+              provinceId: usercode.provinceId,
+              selectProviceId: usercode.provinceId,
+              selectCityId: usercode.selectCityId,
+              showTown: false,
+              type: 'B',
+          });
+      }
+</script>
+}

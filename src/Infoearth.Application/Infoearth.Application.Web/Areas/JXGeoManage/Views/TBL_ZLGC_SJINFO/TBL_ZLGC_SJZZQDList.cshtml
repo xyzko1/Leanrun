@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "治理工程-施工设计-资质清单";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<style>
+    body {
+        height:auto
+    }
+</style>
+<div style="margin: 10px;">
+    <table class="form" id="gridTable_SJZZQD">
+        <tr style="display:none">
+            <td class="formTitle">ZZQDID</td>
+            <td class="formValue">
+                <input id="ZZQDID" type="text" class="form-control" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">资质名称</td>
+            <td class="formValue">
+                <input id="NAME" type="text" class="form-control" />
+            </td>
+            <td class="formTitle">资质等级</td>
+            <td class="formValue">
+                <input id="ZZLEVE" type="text" class="form-control"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formTitle">备注</td>
+            <td class="formValue">
+                <input id="BZ" type="text" class="form-control"  />
+            </td> 
+        </tr>
+    </table>
+</div>
+
+@section Scripts{
+<script>
+    var keyValue = request('keyValue');
+    var ZLGCID = request("ZLGCID");
+    var NewkeyValue = request("NewkeyValue");
+
+    var ulrinfo = window.location.href;
+    var Info_ZZQDID = "";
+    var Info_NAME = "";
+    var Info_Leve = "";
+    var Info_BZ = "";
+    if (ulrinfo.split("&")[3] != undefined && ulrinfo.split("&")[3] != "")
+    {
+        var infoS = ulrinfo.split("&")[3].split("=")[1];
+        var info = decodeURI(infoS);
+        if (info != "" || info != undefined)
+        {
+            var infoArrry = info.split(',');
+            Info_ZZQDID = infoArrry[0];
+            Info_NAME = infoArrry[1];
+            Info_Leve = infoArrry[2];
+            Info_BZ = infoArrry[3];
+        }
+    }
+   
+
+    var authToken = getAuthorizationToken();
+    $(function () {
+        initControl();
+    });
+    //初始化控件
+    function initControl() {
+        //获取表单
+        var queryJson = {};
+        queryJson["keyValue"] = keyValue;
+        queryJson["ZLGCID"] = ZLGCID;
+        
+        if (keyValue) {
+            //$.SetForm({
+            //    url: "../../api/TBL_ZLGC/GetZZQDForm",
+            //    authToken: authToken,
+            //    param: { queryJson:  JSON.stringify(queryJson) },
+            //    success: function (data) {
+            //        $("#gridTable_SJZZQD").SetWebControls(data);
+            //    }
+            //})
+            $('#ZZQDID').val(Info_ZZQDID);
+            $('#NAME').val(Info_NAME);
+            $('#ZZLEVE').val(Info_Leve);
+            $('#BZ').val(Info_BZ);  
+        }
+        else
+        {
+            //新增keyValue的值为空
+            //获取根据ZLGCID获取对应存在的
+            $('#ZZQDID').val(NewkeyValue);
+        }
+    }
+    //保存表单;
+    function AcceptClick(callback) {
+        if (!$('#gridTable_SJZZQD').Validform()) {
+            return false;
+        }
+        data = JSON.stringify($("#gridTable_SJZZQD").GetWebControls(keyValue));
+        callback(data);
+        learun.dialogClose();
+    }
+</script>
+}

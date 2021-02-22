@@ -1,0 +1,551 @@
+﻿@{
+    ViewBag.Title = "表单页面";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<style> 
+.p_herd {
+    margin-bottom:4px!important;
+}
+.p_herd div {
+    width:33%;
+    float:left;   
+ }
+.form ,.p_herd,.p_end{  
+    width:100%;
+}
+.form td,.form th {
+    border:1px solid #d6d6d6; 
+    height:40px;
+    vertical-align:middle;
+}
+.form th {
+   font-weight:100;
+   padding:0 4px;
+   background: #f5f5f5;   
+} 
+.form td {
+    padding-left:4px;    
+}
+input[type="text"] {
+    border: 0;
+    border-bottom: 1px solid #E0E0E0;
+    width:98%;
+    outline:none;
+    display:inline-block;
+}
+input[type="checkbox"] {
+    margin-left:4px; 
+    outline:none;
+}
+input[type="text"]:focus {
+    border-bottom:1px solid #3B50B9;
+}
+input[disabled]{
+    background:#fff;
+    color:#A2A2A2;
+}
+.table-z{
+    width:100%;
+}
+.table-z tr td {
+    border-left:none;
+    border-top:none; 
+    text-align:center;    
+}
+.table-z tr td:last-child {
+    border-right:none;
+}
+.table-z tr:last-child td {
+    border-bottom:none;
+}
+.left {
+    text-align:left;
+    margin-left:6px;
+}
+.input-wdatepicker {
+    background-position-y:-7px;
+}
+.p_end {
+    width:100%;
+    margin:6px 0 10px 0;
+}
+.p_end input {
+    margin-right:1%;    
+}
+.border-none {
+    border:none!important;
+}
+#XMMC,#DCDW{
+    position:relative;
+    z-index:2;
+    width:100%;
+    height:28px;
+    line-height:28px;
+    border-radius:4px 0 0 4px;
+    margin-left:5px;
+    border-right:none;
+}
+.dropdown-menu{
+    min-width:275px!important;
+}
+</style>
+<div style="margin: 20px auto;width:96%" id="form1">
+    <div class="p_herd" style="height:44px;">
+        <div class="formValue" style="padding:0px;line-height:28px;margin-top:8px;">
+            @*<span>项目名称<span class="required">*</span></span><input type="text" id="XMMC" style="width:80%" isvalid="yes" checkexpession="NotNull" class="form-control"/>*@
+
+            <span class="" style="float:left;line-height:28px;">项目名称</span><span class="required" style="float:left;line-height:28px;"></span>
+            <div class="" style="float:left;width:300px;height:28px;line-height:28px;">
+                <div class="input-group" style="width:100%;">
+                    <input id="XMMC" type="text" class="form-control" style="width:240px;border:1px solid #ccc;" />
+                    <div class="input-group-btn" style="display:table-cell;float:left;width:auto;">
+                        <button type="button" class="btn btn-default dropdown-toggle" style="padding-bottom: 10px; padding-top: 9px;" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" id="XMMC_tree"></ul>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <div class="formValue">
+            <span style="margin-left:2%">地面沉降编号<span class="required">*</span></span>
+             <input class="border-none" type="text" id="DMCJBH" class="form-control" style="width:70%;cursor:pointer;height:28px;" isvalid="yes" checkexpession="NotNull" readonly="readonly" placeholder="单击生成编号" onclick="btn_Create('../../DMCJManage/TBL_DMCJ_BASEINFO/CreateCodeWaterIndex', '#DMCJBH', '#AREACODE', '#LOCATION')"/>
+        </div>
+        <div class="formValue" style="padding:0px;line-height:28px;margin-top:8px;">
+            <span class="" style="float:left;line-height:28px;">调查单位</span><span class="required" style="float:left;line-height:28px;"></span>
+            <div class="" style="float:left;width:300px;height:28px;line-height:28px;">
+                <div class="input-group" style="width:100%;">
+                    <input id="DCDW" type="text" class="form-control" style="width:240px;border:1px solid #ccc;" />
+                    <div class="input-group-btn" style="display:table-cell;float:left;width:auto;">
+                        <button type="button" class="btn btn-default dropdown-toggle" style="padding-bottom: 10px; padding-top: 9px;" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" id="DCDW_tree"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>         
+    </div>
+    <table class="form">
+        <tr>
+            <th style="width:8%">名称</th>
+            <td class="formValue"><input type="text" id="DMCJMC" class="form-control"/></td>
+            <th rowspan="3">地理位置</th>
+            <td colspan="3"><input type="text" id="LOCATION" style="width:250px"  class="form-control"/><span>省市县村组</span></td>
+            <td colspan="2"><span>省市县编号<span class="required">*</span></span><input id="AREACODE" type="text"  style="width:120px" disabled  class="form-control"/></td>
+        </tr>
+        <tr>
+            <th rowspan="2">编号</th>
+            <td>野外：<input type="text" id="OUTDOORCODE" style="width:70%" class="form-control"/></td>
+            <th rowspan="2">坐标</th>
+            <td>经度：<input type="text" id="LONGITUDE" style="width:70%"  class="form-control"/></td>    
+            <td>X：<input type="text" id="X" style="width:70%"  class="form-control"/></td>
+            <th rowspan="2">标高</th>
+            <td rowspan="2"><input type="text" id="ALTITUDE"  class="form-control"/></td>
+        </tr>
+        <tr>
+            <td>室内：<input type="text" id="INDOORCODE" style="width:70%"  class="form-control"/></td>  
+            <td>纬度：<input type="text" id="LATITUDE" style="width:70%"  class="form-control"/></td>
+            <td>Y：<input type="text" id="Y" style="width:70%"  class="form-control"/></td>
+        </tr>
+        <tr>
+            <th rowspan="5">地质环境条件</th>
+            <th colspan="2">沉降历史及变化规律</th>
+            <td colspan="5"><input type="text" id="DZHJTJCJLS"  class="form-control"/></td>
+        </tr> 
+        <tr>
+            <th colspan="2">地形地貌</th>
+            <td colspan="5"><input type="text" id="DZHJTJDXDM"  class="form-control"/></td>    
+        </tr> 
+        <tr>
+            <th colspan="2">地质构造及活动情况</th> 
+            <td colspan="5"><input type="text" id="DZHJTJDZGZ"  class="form-control"/></td>
+        </tr>
+        <tr>
+            <th colspan="2">第四纪沉积环境和沉积物工程地质特征</th> 
+            <td colspan="5"><input type="text" id="DZHJTJCJHJ"  class="form-control"/></td>  
+        </tr>  
+        <tr>
+            <th colspan="2">水文地质特征</th> 
+            <td colspan="5"><input type="text" id="DZHJTJSWDZ"  class="form-control"/></td>   
+        </tr>
+        <tr>
+            <th rowspan="2">地面沉降现象</th>
+            <td colspan="2" class="left">
+                  <div id="DMCJXX1"></div>
+            </td>
+            <td  colspan="3">                                    
+                  <div id="DMCJXX2"></div>
+            </td>
+            <td colspan="2">                                
+                  <div id="DMCJXX3"></div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="text" id="DMCJXXMS1"  class="form-control" style="overflow:hidden;text-overflow:ellipsis;"/></td>
+            <td colspan="3"><input type="text" id="DMCJXXMS2" class="form-control" /></td>   
+            <td colspan="2"><input type="text" id="DMCJXXMS3" class="form-control" /></td>        
+        </tr>
+        <tr>
+            <th>沉降区地下水开采概况</th>
+            <td colspan="7" style="padding-left:0">
+                <table class="table-z">
+                      <tr>
+                           <td colspan="5">地下水开采</td>  
+                           <td colspan="2">地下水位</td>
+                           <td colspan="5">地下水回灌</td>
+                      </tr> 
+                      <tr id="DWKCGK">
+                           <td style="width:8%;">开采层位</td>  
+                           <td style="width:11%;">开采时间</td>
+                           <td style="width:8%;">开采井数量(眼)</td>  
+                           <td style="width:8%;">开采井深度(m)</td>  
+                           <td style="width:8%;">开采量(m3/a或m3/d)</td>
+                           <td style="width:8%;">开采前水位（头）高程(m)</td>
+                           <td style="width:8%;">漏斗中心水位（头）高程(m)</td>  
+                           <td style="width:7%;">回灌层位</td>
+                           <td style="width:11%;">回灌时间</td>
+                           <td style="width:9%;">回灌井数量(眼)</td>  
+                           <td style="width:7%;">回灌井深度(m)</td>
+                           <td style="width:7%;">操作</td>
+                      </tr>
+                      <tr>
+                           <td colspan="2">其他（油丶气固体矿产等）</td>  
+                           <td colspan="9"><input type="text" id=""  class="form-control"/></td>
+                      </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+             <th>沉降区人类活动特征</th>
+             <td colspan="7"><input type="text" id="CJQRLHDTZ"  class="form-control"/></td>
+        </tr>
+        <tr>
+             <th>沉降原因</th>
+             <td colspan="7"><input type="text" id="CJYY"  class="form-control"/></td>
+        </tr>
+        <tr>
+             <th>发展趋势</th>
+             <td colspan="7"><input type="text" id="FZQS"  class="form-control"/></td>
+        </tr>
+        <tr> 
+             <th>灾害现状及预测</th>
+             <td colspan="7"><input type="text" id="ZAXZJYC"  class="form-control"/></td>
+        </tr>
+        <tr>
+            <th rowspan="2">预防现状及建议</th>
+            <th colspan="2">已采取的预防措施及效果</th>
+            <td colspan="5"><input type="text" id="YCQFZCS"  class="form-control"/></td>
+        </tr>
+        <tr>
+            <th colspan="2">今后防治建议</th>
+            <td colspan="5"><input type="text" id="JHFZCS"  class="form-control"/></td>
+        </tr>
+        <tr>  
+            <th rowspan="2">现场图像</th>
+            <th>平（剖）面图</th>
+            <td colspan="6">
+                <div id="PMT" style="float:left;width:80%;">
+                </div>
+                <div style="float:right;margin-right:15px;">
+                    <a id="lr-add" class="btn btn-default" onclick="cfupfile('PMT')"><i class="fa fa-plus"></i>添加</a>
+                </div>
+            </td>
+        </tr>
+        <tr> 
+            <th>图像及编号</th>
+            <td colspan="2">
+                <div id="TPBH" style="float:left;width:218px;"></div>
+                <div style="float:right;margin-right:15px;width:60px;">
+                    <a id="lr-add" class="btn btn-default" onclick="cfupfile('TPBH')"><i class="fa fa-plus"></i>添加</a>
+                </div>
+            </td> 
+            <th>影像及编号</th>
+            <td colspan="3">
+                <div id="YXBH" style="float:left;width:365px;"></div>
+                <div style="float:right;margin-right:15px;width:60px;">
+                    <a id="lr-add" class="btn btn-default" onclick="cfupfile('YXBH')"><i class="fa fa-plus"></i>添加</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <p class="p_end">
+        <span>调查人</span><input type="text" id="DCR" style="width:20%;"  class="form-control"/>
+        <span>记录人</span><input type="text" id="JLR" style="width:20%;"  class="form-control"/>
+        <span>审核人</span><input type="text" id="SHR" style="width:20%;"  class="form-control"/>
+        <span>填表日期</span><input id="TBSJ" type="text" class="input-wdatepicker form-control" onfocus="WdatePicker()" style="width:18%"/>
+    </p>
+</div>
+<div>
+     <div class="tab-pane fade in active" id="MultMedia" style="display:none;"><iframe id="frmMultimedia"></iframe></div>
+</div>
+@section Scripts{
+<script>
+    var authToken = getAuthorizationToken();
+    var keyValue = request('keyValue');
+    var belongGuid = keyValue == "" ? null : keyValue;
+    var formType = request('formType');
+    //var rowIndex = request('GRIDROWIDEX');
+    //var searchCondition = request('SEARCHCONDITION');
+    $(function () {
+        cfInitControlRadioOrCheck("DMCJXX1", "DMCJXX", "radio");
+        cfInitControlRadioOrCheck("DMCJXX2", "DMCJXX2", "radio");
+        cfInitControlRadioOrCheck("DMCJXX3", "DMCJXX3", "radio");
+        initControl();
+        if (formType == "Detail") { 
+            $("textarea").attr("disabled", "disabled");
+            $("input").attr("disabled", "disabled");
+            $(".ui-select").attr("readonly", "readonly");
+            //$('.tab2 .titlePanel').css("display", "none");
+            $($(".layui-layer-iframe .layui-layer-btn")[0]).css("display", "none");
+        }
+    });
+    //初始化控件
+    function initControl() {
+        //$("#DMCJXXMS").ComboBox({
+        //    url: "../../SystemManage/DataItemDetail/GetDataItemTreeJson?EnCode=DMCJXX",
+        //    id: "value",
+        //    text: "text",
+        //    height: '200px'
+        //});
+        //获取表单
+        if (formType != "Edit" && formType != "Detail") {
+            var html = '';
+                html += "<tr class='kcgk'>" +
+                    '<td><input type="text" id="CJQDXSKCCW" class="form-control"></td> ' +
+                             '<td><input id="CJQDXSKCSJ" type="text" class="input-wdatepicker form-control" onfocus="WdatePicker()"></td>' +
+                             '<td><input type="text" id="CJQDXSKCJSL" class="form-control"></td>' +
+                             '<td><input type="text" id="CJQDXSKCJSD" class="form-control"></td>' +
+                             '<td><input type="text" id="CJQDXSKCL1" style="width:46%;" class="form-control">|<input type="text" id="CJQDXSKCL2" style="width:46%;" class="form-control"></td>' +
+                                   '<td><input type="text" id="CJQDXSKCQSW" class="form-control"></td>' +
+                                   '<td><input type="text" id="CJQDXSLDZXSW" class="form-control"></td>' +
+                                   '<td><input type="text" id="CJQDXSHGCW" class="form-control"></td>' +
+                                   '<td><input id="CJQDXSHGSJ" type="text" class="input-wdatepicker form-control" onfocus="WdatePicker()"></td>' +
+                                   '<td><input type="text" id="CJQDXSHGJSL" class="form-control"></td>' +
+                                   '<td><input type="text" id="CJQDXSHGJSD" class="form-control"></td>' +
+                                   '<td class="cz">'+
+                                       '<div class="toolbar">'+
+                                           '<div class="btn-group">'+
+                                               '<a id="lr-add" class="btn btn-default" onclick="btn_add($(this))" style="margin-top:-2px;padding:0 7px;"><i class="fa fa-plus"></i></a>'+
+                                               '<a id="lr-delete" class="btn btn-default" onclick="btn_delete($(this))" style="margin-top:-2px;padding:0 7px;"><i class="fa fa-trash-o"></i></a>'+
+                                           '</div>'+
+                                       '</div>'+
+                                   '</td>'+
+                                   '</tr>'
+            
+            $("#DWKCGK").after(html);
+        }
+        if (keyValue) {
+            $('#DMCJBH').attr('disabled','true');
+            $.SetForm({
+                url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetFormJson",
+                authToken: authToken,
+                param: { keyValue: keyValue },
+                success: function (data) {
+                    var cz = $('.cz');
+                    $("#form1").SetWebControls(data);
+                }
+            })
+            var queryJson = $("#DMCJBH").getWebControls()
+            queryJson.DMCJBH = $("#DMCJBH").val();
+            $.SetForm({
+                url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetSubList?queryJson=" + JSON.stringify(queryJson),
+                authToken: authToken,
+                // param: { queryJson: queryJson },
+                success: function (data) {
+                    if (data != null && data.length > 0) {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            html += "<tr class='kcgk' id='kcgk"+ i +"'>" +
+                                '<td><input type="text" id="CJQDXSKCCW" class="form-control"></td> ' +
+                                         '<td><input id="CJQDXSKCSJ" type="text" class="input-wdatepicker form-control" onfocus="WdatePicker()"></td>' +
+                                         '<td><input type="text" id="CJQDXSKCJSL" class="form-control"></td>' +
+                                         '<td><input type="text" id="CJQDXSKCJSD" class="form-control"></td>' +
+                                         '<td><input type="text" id="CJQDXSKCL1" style="width:46%;" class="form-control">|<input type="text" id="CJQDXSKCL2" style="width:46%;" class="form-control"></td>' +
+                                               '<td><input type="text" id="CJQDXSKCQSW" class="form-control"></td>' +
+                                               '<td><input type="text" id="CJQDXSLDZXSW" class="form-control"></td>' +
+                                               '<td><input type="text" id="CJQDXSHGCW" class="form-control"></td>' +
+                                               '<td><input id="CJQDXSHGSJ" type="text" class="input-wdatepicker form-control" onfocus="WdatePicker()"></td>' +
+                                               '<td><input type="text" id="CJQDXSHGJSL" class="form-control"></td>' +
+                                               '<td><input type="text" id="CJQDXSHGJSD" class="form-control"></td>' +
+                                               '<td class="cz">'+
+                                                   '<div class="toolbar">'+
+                                                       '<div class="btn-group">'+
+                                                           '<a id="lr-add" class="btn btn-default" onclick="btn_add($(this))" style="margin-top:-2px;padding:0 7px;"><i class="fa fa-plus"></i></a>'+
+                                                           '<a id="lr-delete" class="btn btn-default" onclick="btn_delete($(this))" style="margin-top:-2px;padding:0 7px;"><i class="fa fa-trash-o"></i></a>'+
+                                                       '</div>'+
+                                                   '</div>'+
+                                               '</td>'+
+                                               '</tr>'
+                        }
+                        $("#DWKCGK").after(html);
+                    }
+                    var cz = $('.cz');
+                    $("#form1").SetWebControls(data);
+                    for (var i = 0; i < data.length; i++) {
+                        $(".kcgk").eq(i).find("input").eq(0).val(data[i].CJQDXSKCCW);
+                        if (data[i].CJQDXSKCSJ) {
+                            $(".kcgk").eq(i).find("input").eq(1).val(data[i].CJQDXSKCSJ.substr(0, 10));
+                        };
+                        
+                        $(".kcgk").eq(i).find("input").eq(2).val(data[i].CJQDXSKCJSL)
+                        $(".kcgk").eq(i).find("input").eq(3).val(data[i].CJQDXSKCJSD)
+                        $(".kcgk").eq(i).find("input").eq(4).val(data[i].CJQDXSKCL1)
+                        $(".kcgk").eq(i).find("input").eq(5).val(data[i].CJQDXSKCL2)
+                        $(".kcgk").eq(i).find("input").eq(6).val(data[i].CJQDXSKCQSW)
+                        $(".kcgk").eq(i).find("input").eq(7).val(data[i].CJQDXSLDZXSW)
+                        $(".kcgk").eq(i).find("input").eq(8).val(data[i].CJQDXSHGCW)
+                        if (data[i].CJQDXSHGSJ) {
+                            $(".kcgk").eq(i).find("input").eq(9).val(data[i].CJQDXSHGSJ.substr(0, 10))
+                        }
+                        
+                        $(".kcgk").eq(i).find("input").eq(10).val(data[i].CJQDXSHGJSL)
+                        $(".kcgk").eq(i).find("input").eq(11).val(data[i].CJQDXSHGJSD)
+                    }
+                    if ($("input[name='DMCJXX1']").val(data.DMCJXX1)) {
+                        $("input[name='DMCJXX1']").attr("checked", true)
+                    }
+                    if ($("input[name='DMCJXX2']").val(data.DMCJXX2)) {
+                        $("input[name='DMCJXX2']").attr("checked", true)
+                    }
+                    if ($("input[name='DMCJXX3']").val(data.DMCJXX3)) {
+                        $("input[name='DMCJXX3']").attr("checked", true)
+                    }
+                }
+            })
+            
+        }
+        WriteAndDrop("XMMC", "TBL_DMCJ_BASEINFO"); 
+        WriteAndDrop("DCDW", "TBL_DMCJ_BASEINFO");
+        cfInitMultiMedia("MultMedia", modeId_BaseInfo, belongGuid);
+    }
+    //输入框+按钮下拉框初始化
+    function WriteAndDrop(id, tableName) {
+        $.ajax({
+            async: false,
+            cache: false,
+            type: "GET",
+            dataType: "json",
+            url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/GetValueList?queryJson=" + JSON.stringify({ FIELDNAME: id, TABLENAME: tableName }),
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            error: function () {
+                alert("请求失败");
+            },
+            success: function (data) {
+                if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var html = "<li><a href=\"javascript:;\" onclick=\"changeText('" + id + "','" + data[i] + "')\">" + data[i] + "</a></li>";
+                        $("#" + id + "_tree").append(html);
+                    }
+                }
+            }
+        });
+    }
+    function changeText(id, value) {
+        if (id) {
+            $("#" + id).val(value);
+        }
+    }
+    //保存表单;
+    function AcceptClick(callback) {
+        if (!$('#form1').Validform()) {
+            return false;
+        }
+        var cz = $('.cz');
+        var postData = $("#form1").GetWebControls(keyValue);
+        var postData1 = [];
+        for (var i = 0; i < cz.length; i++) {
+            var j = {};
+            j.CJQDXSKCCW = CJQDXSKCCW[i].value
+            j.CJQDXSKCSJ = CJQDXSKCSJ[i].value
+            j.CJQDXSKCJSL = CJQDXSKCJSL[i].value
+            j.CJQDXSKCJSD = CJQDXSKCJSD[i].value
+            j.CJQDXSKCL1 = CJQDXSKCL1[i].value
+            j.CJQDXSKCL2 = CJQDXSKCL2[i].value
+            j.CJQDXSKCQSW = CJQDXSKCQSW[i].value
+            j.CJQDXSLDZXSW = CJQDXSLDZXSW[i].value
+            j.CJQDXSHGCW = CJQDXSHGCW[i].value
+            j.CJQDXSHGSJ = CJQDXSHGSJ[i].value
+            j.CJQDXSHGJSL = CJQDXSHGJSL[i].value
+            j.CJQDXSHGJSD = CJQDXSHGJSD[i].value
+            postData1.push(j);
+        }
+        var postData2 = { "TBL_DMCJ_BASEINFOEntity": postData, "TBL_DMCJ_BASEINFO_SUBList": postData1 }
+        $.SaveForm({
+            url: "../../api/MONITORPOINT/TBL_DMCJ_BASEINFO/SaveForm?keyValue=" + keyValue,
+            // authToken: authToken,
+            beforeSend: function (request) {
+                request.setRequestHeader("Authorization", authToken);
+            },
+            param: postData2,
+            loading: "正在保存数据...",
+            success: function (data) {
+                callback(data);
+                      try {
+                          if (!belongGuid) {
+                              belongGuid = data.resultdata;
+                          }
+                          $("#frmMultimedia")[0].contentWindow.SaveFileInfo(belongGuid);
+                          getInfoTop().learun.currentIframe().$('#gridTable').trigger('reloadGrid');
+                      } catch (e) {
+                            window.parent.$('#gridTable').trigger('reloadGrid');
+                      }
+            }
+        })
+    }
+    function btn_add(_this) {
+        var i = $('.cz').length;
+        //if ($('.cz').length > 22) {
+        //    alert('抱歉，你已超过最大值请勿新增！');
+        //    return;
+        //}
+        var trhtml = _this.parents('.kcgk').html();
+        
+        _this.parents('.kcgk').after("<tr class='kcgk'>" + trhtml + '</tr>');
+    }
+    function btn_delete(_this) {
+        if ($('.cz').length < 2) {
+            alert('抱歉，你最少保留一行数据请勿删除！');
+            return;
+        }
+        _this.parents('.kcgk').remove();
+
+    }
+    //单击生成编码
+    function btn_Create() {
+        if (formType == 'Edit' || formType == 'Detail') {
+            return;
+        }
+        learun.dialogOpen({
+            id: 'Form2',
+            title: '获取地面沉降编号',
+            url: '/DMCJManage/TBL_DMCJ_BASEINFO/CreateCodeWaterIndex',
+            width: '400px',
+            height: '400px',
+            //isClose: true,
+            callBack: function (iframeId) {
+                getInfoTop().frames[iframeId].AcceptClick(function (data) {
+                    //buttonJson.push(data);
+                    //ButtonListToListTreeJson(buttonJson);
+                    //var fileKSXZ = data["KSXZ"];
+                    var fileXZQHCode = data["DISTRICTCODE"];
+                    var fileCode = data["F_ItemCode"];
+                    $("#DMCJBH").val(fileXZQHCode + fileCode);
+                    $("#AREACODE").val(fileXZQHCode);
+                    //$("#PROVINCENAME").val(data["F_ProvinceName"]);
+                    //$("#CITYNAME").val(data["F_CityName"]);
+                    //$("#COUNTYNAME").val(data["F_CountyName"]);
+
+                    //$("#PROVINCECODE").val(data["PROVINCE"]);
+                    //$("#CITYCODE").val(data["CITY"]);
+                    //$("#COUNTYCODE").val(data["COUNTY"]);
+
+
+                });
+            }
+        });
+    }
+</script>
+}
